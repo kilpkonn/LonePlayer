@@ -12,6 +12,8 @@ public class B2DVars {
     public static final float PLAYER_DASH_FORCE_SIDE = 200;
     public static final float ShiftX = 1.60f;
     public static final float ShiftY = 2.00f;
+    public static final int V_WIDTH = 960;
+    public static final int V_HEIGHT = 540;
 
     // category bits
     public static final short BIT_ALL = -1;

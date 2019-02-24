@@ -11,11 +11,12 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyInputProcessor;
 
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
+
 
 public class Game extends ApplicationAdapter {
     public static final String TITLE = "";
-    public static final int V_WIDTH = 960;
-    public static final int V_HEIGHT = 540;
     public static final int SCALE = 2;
 
     public static final float STEP = 1 / 60f;
@@ -68,6 +69,7 @@ public class Game extends ApplicationAdapter {
             gsm.update(STEP);
             gsm.render();
             MyInput.update();
+            //System.out.println(Gdx.graphics.getFramesPerSecond());
         }
 
     }

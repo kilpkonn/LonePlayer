@@ -10,7 +10,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+// import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -31,11 +31,13 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_F
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 
 public class Play extends GameState {
 
     private World world;
-    private Box2DDebugRenderer b2dr;
+    //private Box2DDebugRenderer b2dr; // for showing hitboxes
     private OrthographicCamera b2dcam;
     private MyContactListener cl;
     private TiledMap tiledMap;
@@ -47,7 +49,7 @@ public class Play extends GameState {
     private PolygonShape shape;
     private FixtureDef fdef;
 
-    public Play(GameStateManager gsm) {
+    public Play(GameStateManager gsm, int act, int map) {
 
         super(gsm);
 
@@ -55,13 +57,12 @@ public class Play extends GameState {
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
-        b2dr = new Box2DDebugRenderer();
+        //b2dr = new Box2DDebugRenderer();
 
         // create shapes
         bdef = new BodyDef();
         shape = new PolygonShape();
         fdef = new FixtureDef();
-        // Body body = world.createBody(bdef);
 
 
         // create player dynamic always gets affected
@@ -69,7 +70,7 @@ public class Play extends GameState {
 
         //set up box2d cam
         b2dcam = new OrthographicCamera();
-        b2dcam.setToOrtho(false, game.V_WIDTH / PPM, game.V_HEIGHT / PPM);
+        b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////

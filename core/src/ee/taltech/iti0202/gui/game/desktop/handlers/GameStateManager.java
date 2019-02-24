@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.states.GameState;
+import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 public class GameStateManager {
@@ -12,12 +13,14 @@ public class GameStateManager {
 
     private Stack<GameState> gameStates;
 
-    public static final int PLAY = 1;
+    public enum State {
+        PLAY, MENU
+    }
 
     public GameStateManager(Game game) {
         this.game = game;
         gameStates = new Stack<GameState>();
-        pushState(PLAY);
+        pushState(State.MENU);
     }
 
     public Game game() {
@@ -33,20 +36,35 @@ public class GameStateManager {
 
     }
 
-    private GameState getState(int state) {
-        if (state == PLAY) {
-            return new Play(this);
+    private GameState getState(State state) {
+        if (state == State.MENU) {
+            return new Menu(this);
         }
+        System.out.println("desired state was no found!");
         return null;
     }
 
-    public void setState(int state) {
+    private GameState getState(State state, int act, int level) {
+        if (state == State.PLAY) {
+            return new Play(this, act, level);
+        }
+        System.out.println("desired state was no found!");
+        return null;
+    }
+
+    public void setState(State state) {
         popState();
         pushState(state);
     }
 
-    public void pushState(int state) {
+    public void pushState(State state) {
         gameStates.push(getState(state));
+        System.out.println(state);
+    }
+
+    public void pushState(State state, int act, int level){
+        gameStates.push(getState(state, act, level));
+        System.out.println(state);
     }
 
     public void popState() {
