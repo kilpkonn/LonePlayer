@@ -10,7 +10,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-// import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -31,13 +32,18 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_F
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SQUARE_CORNERS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_LEFT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_RIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_LEFT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_RIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 
 public class Play extends GameState {
 
     private World world;
-    //private Box2DDebugRenderer b2dr; // for showing hitboxes
+    private Box2DDebugRenderer b2dr; // for showing hitboxes
     private OrthographicCamera b2dcam;
     private MyContactListener cl;
     private TiledMap tiledMap;
@@ -47,6 +53,7 @@ public class Play extends GameState {
     private Vector2 current_force;
     private BodyDef bdef;
     private PolygonShape shape;
+    private CircleShape circle;
     private FixtureDef fdef;
 
     public Play(GameStateManager gsm, int act, int map) {
@@ -57,16 +64,17 @@ public class Play extends GameState {
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
-        //b2dr = new Box2DDebugRenderer();
+        b2dr = new Box2DDebugRenderer();
 
         // create shapes
         bdef = new BodyDef();
         shape = new PolygonShape();
+        circle = new CircleShape();
         fdef = new FixtureDef();
 
 
         // create player dynamic always gets affected
-        InitPlayer(bdef, shape, fdef);
+        InitPlayer(bdef, fdef);
 
         //set up box2d cam
         b2dcam = new OrthographicCamera();
@@ -77,7 +85,8 @@ public class Play extends GameState {
 
 
         // load tiled map
-        tiledMap = new TmxMapLoader().load("android/res/maps/level1.tmx");
+        String path = "android/res/maps/level_" + act + "_" + map + ".tmx";
+        tiledMap = new TmxMapLoader().load(path);
         tmr = new OrthoCachedTiledMapRenderer(tiledMap);
 
         drawLayers();
@@ -87,20 +96,74 @@ public class Play extends GameState {
     private void drawLayers() {
         TiledMapTileLayer layer;
 
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("red");
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_squares");
         tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.BIT_RED);
+        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
 
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("green");
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("background");
         tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.BIT_GREED);
+        ReadPolygonVertices(layer, B2DVars.BACKGROUND);
 
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("blue");
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_bottom_right");
         tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.BIT_BLUE);
+        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
+
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_bottom_left");
+        tileSize = layer.getTileWidth();
+        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
+
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_top_left");
+        tileSize = layer.getTileWidth();
+        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
+
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_top_right");
+        tileSize = layer.getTileWidth();
+        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
+
+
+
+
     }
 
     private void ReadPolygonVertices(TiledMapTileLayer layer, short bits) {
+
+        int[] corner_coords = new int[8];
+        System.out.println(layer.getProperties().get("1"));
+        String type = layer.getProperties().get("1").toString();
+
+        switch (type) {
+            case "square":
+                corner_coords = SQUARE_CORNERS;
+                break;
+            case "background":
+                corner_coords = SQUARE_CORNERS;
+                break;
+            case "triangle":
+                String triangle = layer.getProperties().get("2").toString();
+                switch (triangle) {
+                    case "bottom_left":
+                        corner_coords = TRIANGLE_BOTTOM_LEFT;
+                        break;
+
+                    case "bottom_right":
+                        corner_coords = TRIANGLE_BOTTOM_RIGHT;
+                        break;
+
+                    case "top_left":
+                        corner_coords = TRIANGLE_TOP_LEFT;
+                        break;
+
+                    case "top_right":
+                        corner_coords = TRIANGLE_TOP_RIGHT;
+                        break;
+
+                    default:
+                        System.out.println("failed to determine layer");
+                        break;
+                }
+
+        }
+
 
         for (int row = 0; row < layer.getHeight(); row++) {
 
@@ -128,35 +191,36 @@ public class Play extends GameState {
                 float mapPosRow = (row + 0.5f) * tileSize / PPM - B2DVars.ShiftY;
 
                 if (lastWasThere) {
+
                     v[2] = new Vector2(
-                            mapPosCol + corner,
-                            mapPosRow + corner
+                            mapPosCol + corner_coords[4] * corner,
+                            mapPosRow + corner_coords[5] * corner
                     );
 
                     v[3] = new Vector2(
-                            mapPosCol + corner,
-                            mapPosRow - corner
+                            mapPosCol + corner_coords[6] * corner,
+                            mapPosRow + corner_coords[7] * corner
                     );
 
                 } else {
                     v[0] = new Vector2(
-                            mapPosCol - corner,
-                            mapPosRow - corner
+                            mapPosCol + corner_coords[0] * corner,
+                            mapPosRow + corner_coords[1] * corner
                     );
 
                     v[1] = new Vector2(
-                            mapPosCol - corner,
-                            mapPosRow + corner
+                            mapPosCol + corner_coords[2] * corner,
+                            mapPosRow + corner_coords[3] * corner
                     );
 
                     v[2] = new Vector2(
-                            mapPosCol + corner,
-                            mapPosRow + corner
+                            mapPosCol + corner_coords[4] * corner,
+                            mapPosRow + corner_coords[5] * corner
                     );
 
                     v[3] = new Vector2(
-                            mapPosCol + corner,
-                            mapPosRow - corner
+                            mapPosCol + corner_coords[6] * corner,
+                            mapPosRow + corner_coords[7] * corner
                     );
 
                 }
@@ -176,22 +240,32 @@ public class Play extends GameState {
     }
 
 
-    private void InitPlayer(BodyDef bdef, PolygonShape shape, FixtureDef fdef) {
-        bdef.position.set(160 / PPM, 200 / PPM);
+    private void InitPlayer(BodyDef bdef, FixtureDef fdef) {
+        circle = new CircleShape();
+        bdef.position.set(160 / PPM, 210 / PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
-        shape.setAsBox(8 / PPM, 8 / PPM);
-        fdef.shape = shape;
+        circle.setRadius(5 / PPM);
+        //shape.setAsBox(8 / PPM, 8 / PPM);
+        fdef.shape = circle;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_ALL;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
         body.createFixture(fdef).setFriction(FRICTION);
         body.setFixedRotation(false);
-        body.setUserData("player");
+        body.setUserData("playerBottom");
+
+        shape = new PolygonShape();
+        shape.setAsBox(4 / PPM, 6 / PPM, new Vector2(0, 4 / PPM), 0);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        fdef.isSensor = false;
+        body.createFixture(fdef).setUserData("playerBottom");
 
         shape.setAsBox(2 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_ALL;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
 
@@ -248,7 +322,7 @@ public class Play extends GameState {
 
         handleInput();
 
-        world.step(dt, 6, 2); // recommended values
+        world.step(dt, 10, 2); // recommended values
 
         player.update(dt);
     }
@@ -274,7 +348,7 @@ public class Play extends GameState {
         player.render(sb);
 
         //draw boxes around stuff
-        //b2dr.render(world, b2dcam.combined);
+        b2dr.render(world, b2dcam.combined);
 
     }
 

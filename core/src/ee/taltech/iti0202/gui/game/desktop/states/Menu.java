@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
@@ -21,7 +20,7 @@ public class Menu extends GameState {
     @Override
     public void handleInput() {   // TODO: MAKE A MAIN SCREEN THATS VISUALLY ENJOYABLE AND A ACT SELECTOR
         if(MyInput.isPressed(MyInput.JUMP)) {
-            gsm.pushState(GameStateManager.State.PLAY, 1, 1);
+            gsm.pushState(GameStateManager.State.PLAY, 1, 2);
         }
 
     }

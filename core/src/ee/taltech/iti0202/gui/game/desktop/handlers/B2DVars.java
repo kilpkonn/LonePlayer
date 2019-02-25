@@ -17,9 +17,17 @@ public class B2DVars {
 
     // category bits
     public static final short BIT_ALL = -1;
-    public static final short BIT_PLAYER = 2;
-    public static final short BIT_RED = 4;
-    public static final short BIT_GREED = 8;
-    public static final short BIT_BLUE = 16;
+    public static final short BIT_PLAYER = 255;
+    public static final short TERRA_SQUARES = 4;
+    public static final short TERRA_OBJECTS = 8;
+    public static final short BACKGROUND = 256;
+
+    // corner coords
+    public static final int[] SQUARE_CORNERS = {-1, -1, -1, 1, 1, 1, 1, -1};
+    public static final int[] TRIANGLE_BOTTOM_LEFT = {-1, -1, -1, 1, 1, -1, 1, -1};
+    public static final int[] TRIANGLE_BOTTOM_RIGHT = {-1, -1, -1, -1, 1, 1, 1, -1};
+    public static final int[] TRIANGLE_TOP_RIGHT = {-1, 1, -1, 1, 1, 1, 1, -1};
+    public static final int[] TRIANGLE_TOP_LEFT = {-1, -1, -1, 1, 1, 1, 1, 1};
+
 
 }
