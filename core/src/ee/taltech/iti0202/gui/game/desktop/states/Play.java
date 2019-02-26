@@ -26,6 +26,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
 import ee.taltech.iti0202.gui.game.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.entities.Player;
 
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.CORNER_LOCATION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.MAX_SPEED;
@@ -40,6 +41,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTT
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_RIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_LEFT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_RIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TYPE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 
@@ -61,6 +63,8 @@ public class Play extends GameState {
     private CircleShape circle;
     private FixtureDef fdef;
 
+    ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
+
     public Play(GameStateManager gsm, int act, int map) {
 
         super(gsm);
@@ -80,7 +84,6 @@ public class Play extends GameState {
         // create player dynamic always gets affected
         player = InitPlayer();
 
-
         //set up box2d cam
         b2dcam = new OrthographicCamera();
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
@@ -98,6 +101,46 @@ public class Play extends GameState {
 
     }
 
+    ////////////////////////////////////////////////////////////////////   Create Animated bodies   ////////////////////////////////////////////////////////////////////
+
+    private Player InitPlayer() {
+
+        circle = new CircleShape();
+        if (checkpoint == null) {
+            bdef.position.set(160 / PPM, 210 / PPM);
+        } else {
+            bdef.position.set(new Vector2(checkpoint.getPosition().x, checkpoint.getPosition().y + 60 / PPM));
+        }
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        Body body = world.createBody(bdef);
+        fdef.isSensor = false;
+        circle.setRadius(5 / PPM);
+        fdef.shape = circle;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        body.createFixture(fdef).setFriction(FRICTION);
+        body.setFixedRotation(false);
+        body.setUserData("playerBall");
+
+        shape = new PolygonShape();
+        shape.setAsBox(4 / PPM, 6 / PPM, new Vector2(0, 4 / PPM), 0);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        body.createFixture(fdef).setUserData("playerBody");
+
+        shape.setAsBox(4 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("foot");
+
+        player = new Player(body);
+
+        return player;
+    }
+
     private void createCheckpoints(Vector2 pos) {
         bdef = new BodyDef();
         bdef.position.set(pos);
@@ -112,6 +155,8 @@ public class Play extends GameState {
         body.createFixture(fdef).setUserData("checkpoint");
         checkpoint = new Checkpoint(body);
     }
+
+    ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
     private void drawLayers() {
         TiledMapTileLayer layer;
@@ -175,9 +220,12 @@ public class Play extends GameState {
     private void ReadPolygonVertices(TiledMapTileLayer layer, short bits, boolean isSensor) {
 
         int[] corner_coords = new int[8];
-        String type = layer.getProperties().get("1").toString();
+        String type = layer.getProperties().get(TYPE).toString();
 
         switch (type) {
+            default:
+                System.out.println("failed to determine layer");
+                break;
             case "square":
                 corner_coords = SQUARE_CORNERS;
                 break;
@@ -191,7 +239,7 @@ public class Play extends GameState {
                 corner_coords = SQUARE_CORNERS;
                 break;
             case "triangle":
-                String triangle = layer.getProperties().get("2").toString();
+                String triangle = layer.getProperties().get(CORNER_LOCATION).toString();
                 switch (triangle) {
                     case "bottom_left":
                         corner_coords = TRIANGLE_BOTTOM_LEFT;
@@ -212,8 +260,8 @@ public class Play extends GameState {
                     default:
                         System.out.println("failed to determine layer");
                         break;
-                }
 
+                }
         }
 
         createMap(layer, bits, isSensor, corner_coords);
@@ -300,44 +348,7 @@ public class Play extends GameState {
         }
     }
 
-
-    private Player InitPlayer() {
-
-        circle = new CircleShape();
-        if (checkpoint == null) {
-            bdef.position.set(160 / PPM, 210 / PPM);
-        } else {
-            bdef.position.set(new Vector2(checkpoint.getPosition().x, checkpoint.getPosition().y + 60 / PPM));
-        }
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        Body body = world.createBody(bdef);
-        fdef.isSensor = false;
-        circle.setRadius(5 / PPM);
-        fdef.shape = circle;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-        body.createFixture(fdef).setFriction(FRICTION);
-        body.setFixedRotation(false);
-        body.setUserData("playerBall");
-
-        shape = new PolygonShape();
-        shape.setAsBox(4 / PPM, 6 / PPM, new Vector2(0, 4 / PPM), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-        body.createFixture(fdef).setUserData("playerBody");
-
-        shape.setAsBox(2 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("foot");
-
-        player = new Player(body);
-
-        return player;
-    }
+    ////////////////////////////////////////////////////////////////////      Handle I/O devices    ////////////////////////////////////////////////////////////////////
 
     public void handleInput() {
 
@@ -384,13 +395,16 @@ public class Play extends GameState {
         }
     }
 
-
     public void update(float dt) {
 
         handleInput();
 
         world.step(dt, 10, 2); // recommended values
+        UpdateProps(dt);
 
+    }
+
+    private void UpdateProps(float dt) {
         //call update animation
         if (!cl.IsPlayerDead()) {
             player.update(dt);
@@ -401,12 +415,21 @@ public class Play extends GameState {
             player = InitPlayer();
             cl.setPlayerDead(false);
         }
+        // create a new checkpoint if needed
         if (checkpoint != null) {
             if (cl.isNewCheckpoint()) {
                 cl.setNewCheckpoint(false);
                 createCheckpoints(cl.getCurCheckpoint());
             }
             checkpoint.update(dt);
+        }
+
+        // dispose of old bodies
+        Body temp = cl.removeOldCheckpoint();
+        if (temp != null) {
+            world.destroyBody(temp);
+            cl.resetOldCheckpoint();
+            System.out.println("Number of bodeies:" + world.getBodyCount());
         }
     }
 

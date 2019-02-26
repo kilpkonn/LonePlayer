@@ -69,14 +69,13 @@ public class Game extends ApplicationAdapter {
             gsm.update(STEP);
             gsm.render();
             MyInput.update();
-            System.out.println(Gdx.graphics.getFramesPerSecond());
+            //addSystem.out.println(Gdx.graphics.getFramesPerSecond());
         }
 
     }
 
     @Override
     public void dispose() {
-
     }
 
     public void resize(int w, int h) {

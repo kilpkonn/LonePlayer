@@ -20,7 +20,7 @@ public class MyInput {
     }
 
     public static void update() {
-        for(int i = 0; i < NUM_KEYS; i++) {
+        for (int i = 0; i < NUM_KEYS; i++) {
             pkeys[i] = keys[i];
         }
     }

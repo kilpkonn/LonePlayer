@@ -16,6 +16,7 @@ public class B2DSprite {
     private float height;
 
     public B2DSprite(Body body) {
+        System.out.println("New body: " + body.toString());
         this.body = body;
         animation = new Animation();
     }

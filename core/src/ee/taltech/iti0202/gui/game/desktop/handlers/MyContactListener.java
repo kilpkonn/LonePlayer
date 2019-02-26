@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -13,7 +14,8 @@ public class MyContactListener implements ContactListener {
     private boolean doubleJump;
     private boolean dash;
     private boolean newCheckpoint = false;
-    private Vector2 curCheckpoint;
+    private Body curCheckpoint;
+    private Body toBeDeleted;
     private boolean isPlayerDead = false;
 
     // called when 2 fixtures start to collide
@@ -22,16 +24,21 @@ public class MyContactListener implements ContactListener {
         Fixture fb = c.getFixtureB();
         //System.out.println(fa.getUserData() + ", " + fb.getUserData());
 
+        // set up a new checkpoint
         if (fa.getUserData() != null && fa.getUserData().equals("foot")) {
             playerOnGround = true;
-
             if (fb.getUserData().equals("checkpoint")) {
-                setCurCheckpoint(fb.getBody().getPosition());
+                if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x && curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
+                    setCurCheckpoint(fb.getBody());
+                }
             }
         }
         if (fb.getUserData() != null && fb.getUserData().equals("foot")) {
+            playerOnGround = true;
             if (fa.getUserData().equals("checkpoint")) {
-                setCurCheckpoint(fa.getBody().getPosition());
+                if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x && curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
+                    setCurCheckpoint(fa.getBody());
+                }
             }
         }
 
@@ -98,6 +105,13 @@ public class MyContactListener implements ContactListener {
         dash = a;
     }
 
+    public Body removeOldCheckpoint() {
+        return toBeDeleted;
+    }
+
+    public void resetOldCheckpoint() {
+        toBeDeleted = null;
+    }
     // detection
     //presolve
     public void preSolve(Contact c, Manifold m) {
@@ -107,15 +121,14 @@ public class MyContactListener implements ContactListener {
     public void postSolve(Contact c, ContactImpulse ci) {
     }
 
-    public void setCurCheckpoint(Vector2 new_vec) {
+    public void setCurCheckpoint(Body new_vec) {
         newCheckpoint = true;
+        toBeDeleted = curCheckpoint;
         curCheckpoint = new_vec;
-        System.out.println(curCheckpoint);
     }
 
     public Vector2 getCurCheckpoint() {
-        return curCheckpoint;
+        return curCheckpoint.getPosition();
     }
-
 
 }

@@ -15,6 +15,10 @@ public class B2DVars {
     public static final int V_WIDTH = 960;
     public static final int V_HEIGHT = 540;
 
+    // map variables
+    public static final String TYPE = "1";
+    public static final String CORNER_LOCATION = "2";
+
     // category bits
     public static final short BIT_ALL = -1;
     public static final short BIT_PLAYER = 255;
