@@ -15,7 +15,7 @@ public class Player extends B2DSprite {
 
         super(body);
 
-        Texture tex = Game.res.getTexture("Test");
+        Texture tex = Game.res.getTexture("Player");
         TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
 
         setAnimation(sprites, 1 / 12f);
@@ -37,6 +37,5 @@ public class Player extends B2DSprite {
     public int getTotalCrystals() {
         return totalCrystals;
     }
-
 
 }

@@ -35,8 +35,8 @@ public class Game extends ApplicationAdapter {
 
         // load textures
         res = new Content();
-        res.loadTexture("android/res/images/Player/Test.png", "Test");
-
+        res.loadTexture("android/res/images/Player/Player.png", "Player");
+        res.loadTexture("android/res/maps/Flag.png", "Checkpoint");
         sb = new SpriteBatch();
 
         cam = new OrthographicCamera();
@@ -69,7 +69,7 @@ public class Game extends ApplicationAdapter {
             gsm.update(STEP);
             gsm.render();
             MyInput.update();
-            //System.out.println(Gdx.graphics.getFramesPerSecond());
+            System.out.println(Gdx.graphics.getFramesPerSecond());
         }
 
     }

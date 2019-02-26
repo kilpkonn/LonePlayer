@@ -6,7 +6,7 @@ public class B2DVars {
     public static final float PPM = 100;
     public static final float GRAVITY = -9.81f;
     public static final float MAX_SPEED = 2.5f;
-    public static final float FRICTION = 1;
+    public static final float FRICTION = 0.4f;
     public static final float PLAYER_SPEED = 8;
     public static final float PLAYER_DASH_FORCE_UP = 250;
     public static final float PLAYER_DASH_FORCE_SIDE = 200;

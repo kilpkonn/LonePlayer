@@ -64,7 +64,6 @@ public class GameStateManager {
 
     public void pushState(State state, int act, int level){
         gameStates.push(getState(state, act, level));
-        System.out.println(state);
     }
 
     public void popState() {

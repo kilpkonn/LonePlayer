@@ -23,6 +23,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
+import ee.taltech.iti0202.gui.game.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.entities.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.FRICTION;
@@ -33,6 +34,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_F
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SQUARE_CORNERS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.ShiftX;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.ShiftY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_LEFT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_RIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_LEFT;
@@ -50,6 +53,8 @@ public class Play extends GameState {
     private float tileSize;
     private OrthoCachedTiledMapRenderer tmr;
     private Player player;
+    private Body body;
+    private Checkpoint checkpoint;
     private Vector2 current_force;
     private BodyDef bdef;
     private PolygonShape shape;
@@ -72,9 +77,9 @@ public class Play extends GameState {
         circle = new CircleShape();
         fdef = new FixtureDef();
 
-
         // create player dynamic always gets affected
-        InitPlayer(bdef, fdef);
+        player = InitPlayer();
+
 
         //set up box2d cam
         b2dcam = new OrthographicCamera();
@@ -93,42 +98,83 @@ public class Play extends GameState {
 
     }
 
+    private void createCheckpoints(Vector2 pos) {
+        bdef = new BodyDef();
+        bdef.position.set(pos);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bdef);
+        shape = new PolygonShape();
+        shape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_ALL;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("checkpoint");
+        checkpoint = new Checkpoint(body);
+    }
+
     private void drawLayers() {
         TiledMapTileLayer layer;
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_squares");
-        tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
+        }
+
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("border");
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.BIT_ALL, true);
+            layer.setVisible(true); // disable visibility here <--------------------------------------------
+        }
+
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("checkpoints");
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.BACKGROUND, true);
+        }
+
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("background");
-        tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.BACKGROUND);
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.BACKGROUND, false);
+        }
+
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_bottom_right");
-        tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
+        }
+
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_bottom_left");
-        tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
+        }
+
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_top_left");
-        tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
+        }
+
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_top_right");
-        tileSize = layer.getTileWidth();
-        ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES);
-
-
-
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
+        }
 
     }
 
-    private void ReadPolygonVertices(TiledMapTileLayer layer, short bits) {
+    private void ReadPolygonVertices(TiledMapTileLayer layer, short bits, boolean isSensor) {
 
         int[] corner_coords = new int[8];
-        System.out.println(layer.getProperties().get("1"));
         String type = layer.getProperties().get("1").toString();
 
         switch (type) {
@@ -136,6 +182,12 @@ public class Play extends GameState {
                 corner_coords = SQUARE_CORNERS;
                 break;
             case "background":
+                corner_coords = SQUARE_CORNERS;
+                break;
+            case "checkpoint":
+                corner_coords = SQUARE_CORNERS;
+                break;
+            case "border":
                 corner_coords = SQUARE_CORNERS;
                 break;
             case "triangle":
@@ -164,7 +216,10 @@ public class Play extends GameState {
 
         }
 
+        createMap(layer, bits, isSensor, corner_coords);
+    }
 
+    private void createMap(TiledMapTileLayer layer, short bits, boolean isSensor, int[] corner_coords) {
         for (int row = 0; row < layer.getHeight(); row++) {
 
             List<Vector2[]> polygonVertices = new ArrayList<Vector2[]>();
@@ -227,40 +282,50 @@ public class Play extends GameState {
                 lastWasThere = true;
 
             }
+
             for (Vector2[] polygon : polygonVertices) {
 
                 shape.set(polygon);
                 fdef.filter.categoryBits = bits;
                 fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-                fdef.isSensor = false;
-                world.createBody(bdef).createFixture(fdef).setUserData(layer.getName());
+                fdef.isSensor = isSensor;
+                if (layer.getName().equals("checkpoints")) {
+                    createCheckpoints(new Vector2(polygon[2].x - (tileSize / 2) / PPM + ShiftX, polygon[2].y + ShiftY));
+
+                } else {
+                    world.createBody(bdef).createFixture(fdef).setUserData(layer.getName());
+                }
 
             }
         }
     }
 
 
-    private void InitPlayer(BodyDef bdef, FixtureDef fdef) {
+    private Player InitPlayer() {
+
         circle = new CircleShape();
-        bdef.position.set(160 / PPM, 210 / PPM);
+        if (checkpoint == null) {
+            bdef.position.set(160 / PPM, 210 / PPM);
+        } else {
+            bdef.position.set(new Vector2(checkpoint.getPosition().x, checkpoint.getPosition().y + 60 / PPM));
+        }
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
+        fdef.isSensor = false;
         circle.setRadius(5 / PPM);
-        //shape.setAsBox(8 / PPM, 8 / PPM);
         fdef.shape = circle;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.BIT_PLAYER;
         body.createFixture(fdef).setFriction(FRICTION);
         body.setFixedRotation(false);
-        body.setUserData("playerBottom");
+        body.setUserData("playerBall");
 
         shape = new PolygonShape();
         shape.setAsBox(4 / PPM, 6 / PPM, new Vector2(0, 4 / PPM), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-        fdef.isSensor = false;
-        body.createFixture(fdef).setUserData("playerBottom");
+        body.createFixture(fdef).setUserData("playerBody");
 
         shape.setAsBox(2 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
         fdef.shape = shape;
@@ -270,6 +335,8 @@ public class Play extends GameState {
         body.createFixture(fdef).setUserData("foot");
 
         player = new Player(body);
+
+        return player;
     }
 
     public void handleInput() {
@@ -324,7 +391,23 @@ public class Play extends GameState {
 
         world.step(dt, 10, 2); // recommended values
 
-        player.update(dt);
+        //call update animation
+        if (!cl.IsPlayerDead()) {
+            player.update(dt);
+        } else {
+            world.destroyBody(player.getBody());
+            bdef = new BodyDef();
+            fdef = new FixtureDef();
+            player = InitPlayer();
+            cl.setPlayerDead(false);
+        }
+        if (checkpoint != null) {
+            if (cl.isNewCheckpoint()) {
+                cl.setNewCheckpoint(false);
+                createCheckpoints(cl.getCurCheckpoint());
+            }
+            checkpoint.update(dt);
+        }
     }
 
     public void render() {
@@ -333,10 +416,13 @@ public class Play extends GameState {
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //set camera to follow player
+        //if (!cl.IsPlayerDead()) {
         cam.position.set(
                 player.getPosition().x * PPM,
                 player.getPosition().y * PPM,
                 0);
+        //}
+
         cam.update();
 
         //draw tilemap
@@ -345,10 +431,17 @@ public class Play extends GameState {
 
         //draw player
         sb.setProjectionMatrix(cam.combined);
-        player.render(sb);
+        if (player != null) {
+            player.render(sb);
+        }
+
+        // draw checkpoint
+        if (checkpoint != null) {
+            checkpoint.render(sb);
+        }
 
         //draw boxes around stuff
-        b2dr.render(world, b2dcam.combined);
+        //b2dr.render(world, b2dcam.combined);
 
     }
 
