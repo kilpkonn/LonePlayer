@@ -21,12 +21,7 @@ public class MyInputProcessor extends InputAdapter {
         if (k == Input.Keys.SHIFT_LEFT) {
             MyInput.setKey(MyInput.MENU, true);
         }
-        if (k == Input.Keys.K) {
-            MyInput.setKey(MyInput.SHOOT_LEFT, true);
-        }
-        if (k == Input.Keys.L) {
-            MyInput.setKey(MyInput.SHOOT_RIGHT, true);
-        }
+
         return true;
     }
 
@@ -46,12 +41,25 @@ public class MyInputProcessor extends InputAdapter {
         if (k == Input.Keys.SHIFT_LEFT) {
             MyInput.setKey(MyInput.MENU, false);
         }
-        if (k == Input.Keys.K) {
-            MyInput.setKey(MyInput.SHOOT_LEFT, false);
+
+        return true;
+    }
+
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+
+        if (button == Input.Buttons.LEFT) {
+            MyInput.setKey(MyInput.SHOOT, true);
         }
-        if (k == Input.Keys.L) {
-            MyInput.setKey(MyInput.SHOOT_RIGHT, false);
+
+        return true;
+    }
+
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+
+        if (button == Input.Buttons.LEFT) {
+            MyInput.setKey(MyInput.SHOOT, false);
         }
+
         return true;
     }
 

@@ -171,7 +171,7 @@ public class Play extends GameState {
         if (layer != null) {
             tileSize = layer.getTileWidth();
             ReadPolygonVertices(layer, B2DVars.BIT_ALL, true);
-            layer.setVisible(true); // disable visibility here <--------------------------------------------
+            layer.setVisible(false); // disable visibility here <--------------------------------------------
         }
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("checkpoints");
@@ -367,14 +367,24 @@ public class Play extends GameState {
         //player move left
         if (MyInput.isDown(MyInput.MOVE_LEFT)) {
             if (current_force.x > -MAX_SPEED) {
-                player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
+                if (cl.isPlayerOnGround()) {
+                    player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
+                } else {
+                    player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
+                }
+
             }
         }
 
         //player dash left
         if (MyInput.isPressed(MyInput.MOVE_LEFT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
-                player.getBody().applyForceToCenter(-PLAYER_DASH_FORCE_SIDE, 0, true);
+                current_force = player.getBody().getLinearVelocity();
+                if (current_force.x > 0) {
+                    player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
+                } else {
+                    player.getBody().applyForceToCenter(-PLAYER_DASH_FORCE_SIDE, 0, true);
+                }
                 cl.setDash(false);
             }
         }
@@ -382,14 +392,22 @@ public class Play extends GameState {
         //player move right
         if (MyInput.isDown(MyInput.MOVE_RIGHT)) {
             if (current_force.x < MAX_SPEED) {
-                player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
+                if (cl.isPlayerOnGround()) {
+                    player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
+                } else {
+                    player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
+                }
             }
         }
 
         //player dash right
         if (MyInput.isPressed(MyInput.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
-                player.getBody().applyForceToCenter(PLAYER_DASH_FORCE_SIDE, 0, true);
+                if (current_force.x < 0) {
+                    player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
+                } else {
+                    player.getBody().applyForceToCenter(PLAYER_DASH_FORCE_SIDE, 0, true);
+                }
                 cl.setDash(false);
             }
         }
@@ -439,12 +457,10 @@ public class Play extends GameState {
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //set camera to follow player
-        //if (!cl.IsPlayerDead()) {
         cam.position.set(
                 player.getPosition().x * PPM,
                 player.getPosition().y * PPM,
                 0);
-        //}
 
         cam.update();
 

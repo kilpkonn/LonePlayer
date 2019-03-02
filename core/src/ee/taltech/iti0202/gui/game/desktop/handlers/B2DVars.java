@@ -12,8 +12,9 @@ public class B2DVars {
     public static final float PLAYER_DASH_FORCE_SIDE = 200;
     public static final float ShiftX = 1.60f;
     public static final float ShiftY = 2.00f;
-    public static final int V_WIDTH = 960;
-    public static final int V_HEIGHT = 540;
+    public static final int V_WIDTH = 1920;
+    public static final int V_HEIGHT = 1080;
+    public static final int SCALE = 1;
 
     // map variables
     public static final String TYPE = "1";
@@ -33,5 +34,12 @@ public class B2DVars {
     public static final int[] TRIANGLE_TOP_RIGHT = {-1, 1, -1, 1, 1, 1, 1, -1};
     public static final int[] TRIANGLE_TOP_LEFT = {-1, -1, -1, 1, 1, 1, 1, 1};
 
+    // main screen sections
+    public static final String[] MAIN_SCREENS = {
+            "android/res/images/game_background_0/layers/backgroundLayer",
+            "android/res/images/game_background_1/layers/backgroundLayer",
+            "android/res/images/game_background_2/layers/backgroundLayer",
+            "android/res/images/game_background_3/layers/backgroundLayer",
+    };
 
 }

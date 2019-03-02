@@ -16,8 +16,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 
 
 public class Game extends ApplicationAdapter {
-    public static final String TITLE = "";
-    public static final int SCALE = 2;
+    public static final String TITLE = "Alone at Night";
 
     public static final float STEP = 1 / 60f;
     private float accum;
@@ -35,8 +34,21 @@ public class Game extends ApplicationAdapter {
 
         // load textures
         res = new Content();
+
+        res.loadTexture("android/res/images/menu.png", "newGameTextureActive");
+        res.loadTexture("android/res/images/menu.png", "newGameTextureInactive");
+        res.loadTexture("android/res/images/menu.png", "loadGameTextureActive");
+        res.loadTexture("android/res/images/menu.png", "loadGameTextureInactive");
+        res.loadTexture("android/res/images/menu.png", "settingsTextureActive");
+        res.loadTexture("android/res/images/menu.png", "settingsTextureInactive");
+        res.loadTexture("android/res/images/menu.png", "exitTextureActive");
+        res.loadTexture("android/res/images/menu.png", "exitTextureInactive");
+        res.loadTexture("android/res/images/menu.png", "newGameTextureActive");
+        res.loadTexture("android/res/images/menu.png", "Logo");
+
         res.loadTexture("android/res/images/Player/Player.png", "Player");
         res.loadTexture("android/res/maps/Flag.png", "Checkpoint");
+
         sb = new SpriteBatch();
 
         cam = new OrthographicCamera();

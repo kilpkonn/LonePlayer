@@ -28,7 +28,7 @@ public class MyContactListener implements ContactListener {
         if (fa.getUserData() != null && fa.getUserData().equals("foot")) {
             playerOnGround = true;
             if (fb.getUserData().equals("checkpoint")) {
-                if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x && curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
+                if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
                     setCurCheckpoint(fb.getBody());
                 }
             }
@@ -36,7 +36,7 @@ public class MyContactListener implements ContactListener {
         if (fb.getUserData() != null && fb.getUserData().equals("foot")) {
             playerOnGround = true;
             if (fa.getUserData().equals("checkpoint")) {
-                if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x && curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
+                if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
                     setCurCheckpoint(fa.getBody());
                 }
             }
