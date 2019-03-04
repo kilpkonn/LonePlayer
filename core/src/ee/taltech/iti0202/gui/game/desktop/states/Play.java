@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +24,11 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
+import ee.taltech.iti0202.gui.game.entities.Boss;
 import ee.taltech.iti0202.gui.game.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.entities.Player;
 
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BOSS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.CORNER_LOCATION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.GRAVITY;
@@ -35,8 +38,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_F
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SQUARE_CORNERS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.ShiftX;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.ShiftY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_LEFT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_RIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_LEFT;
@@ -55,9 +56,10 @@ public class Play extends GameState {
     private float tileSize;
     private OrthoCachedTiledMapRenderer tmr;
     private Player player;
-    private Body body;
+    private Array<Boss> bossArray;
+    private Boss boss;
     private Checkpoint checkpoint;
-    private Vector2 current_force;
+    private Vector2 initPlayerLocation;
     private BodyDef bdef;
     private PolygonShape shape;
     private CircleShape circle;
@@ -81,8 +83,9 @@ public class Play extends GameState {
         circle = new CircleShape();
         fdef = new FixtureDef();
 
-        // create player dynamic always gets affected
-        player = InitPlayer();
+        // create array for bosses
+        initPlayer();
+        bossArray = new Array<>();
 
         //set up box2d cam
         b2dcam = new OrthographicCamera();
@@ -103,18 +106,22 @@ public class Play extends GameState {
 
     ////////////////////////////////////////////////////////////////////   Create Animated bodies   ////////////////////////////////////////////////////////////////////
 
-    private Player InitPlayer() {
+    private Player initPlayer() {
 
         circle = new CircleShape();
         if (checkpoint == null) {
-            bdef.position.set(160 / PPM, 210 / PPM);
+            if (initPlayerLocation == null)
+                bdef.position.set(0, 0); //incase you forgot to include player in the first place
+            else bdef.position.set(initPlayerLocation);
         } else {
-            bdef.position.set(new Vector2(checkpoint.getPosition().x, checkpoint.getPosition().y + 60 / PPM));
+            if (cl.isInitSpawn()) bdef.position.set(initPlayerLocation);
+            else
+                bdef.position.set(new Vector2(checkpoint.getPosition().x, checkpoint.getPosition().y));
         }
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
         fdef.isSensor = false;
-        circle.setRadius(5 / PPM);
+        circle.setRadius(6 / PPM);
         fdef.shape = circle;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.BIT_PLAYER;
@@ -123,7 +130,7 @@ public class Play extends GameState {
         body.setUserData("playerBall");
 
         shape = new PolygonShape();
-        shape.setAsBox(4 / PPM, 6 / PPM, new Vector2(0, 4 / PPM), 0);
+        shape.setAsBox(4 / PPM, 8 / PPM, new Vector2(0, 8 / PPM), 0);
         fdef.shape = shape;
         fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
         fdef.filter.maskBits = B2DVars.BIT_PLAYER;
@@ -141,31 +148,14 @@ public class Play extends GameState {
         return player;
     }
 
-    private void createCheckpoints(Vector2 pos) {
-        bdef = new BodyDef();
-        bdef.position.set(pos);
-        bdef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bdef);
-        shape = new PolygonShape();
-        shape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_ALL;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("checkpoint");
-        checkpoint = new Checkpoint(body);
-    }
-
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
     private void drawLayers() {
         TiledMapTileLayer layer;
 
+
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_squares");
-        if (layer != null) {
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
-        }
+        draw_solid(layer, B2DVars.TERRA_SQUARES, false);
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("border");
         if (layer != null) {
@@ -174,57 +164,60 @@ public class Play extends GameState {
             layer.setVisible(false); // disable visibility here <--------------------------------------------
         }
 
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("checkpoints");
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("bosses");
         if (layer != null) {
             tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.BACKGROUND, true);
+            ReadPolygonVertices(layer, B2DVars.NONE, false);
+            layer.setVisible(false);
+        }
+
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("checkpoints");
+        draw_solid(layer, B2DVars.BACKGROUND, true);
+
+        layer = (TiledMapTileLayer) tiledMap.getLayers().get("player");
+        if (layer != null) {
+            tileSize = layer.getTileWidth();
+            ReadPolygonVertices(layer, B2DVars.NONE, false);
+            layer.setVisible(false);
         }
 
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("background");
-        if (layer != null) {
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.BACKGROUND, false);
-        }
+        draw_solid(layer, B2DVars.NONE, false);
 
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_bottom_right");
-        if (layer != null) {
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
-        }
+        draw_solid(layer, B2DVars.TERRA_SQUARES, false);
 
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_bottom_left");
-        if (layer != null) {
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
-        }
+        draw_solid(layer, B2DVars.TERRA_SQUARES, false);
 
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_top_left");
-        if (layer != null) {
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
-        }
+        draw_solid(layer, B2DVars.TERRA_SQUARES, false);
 
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_triangle_top_right");
+        draw_solid(layer, B2DVars.TERRA_SQUARES, false);
+
+    }
+
+    private void draw_solid(TiledMapTileLayer layer, short terraSquares, boolean b) {
         if (layer != null) {
             tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.TERRA_SQUARES, false);
+            ReadPolygonVertices(layer, terraSquares, b);
         }
-
     }
 
     private void ReadPolygonVertices(TiledMapTileLayer layer, short bits, boolean isSensor) {
 
-        int[] corner_coords = new int[8];
+        int[] corner_coords;
         String type = layer.getProperties().get(TYPE).toString();
 
         switch (type) {
             default:
-                System.out.println("failed to determine layer");
+                corner_coords = SQUARE_CORNERS;
                 break;
             case "square":
                 corner_coords = SQUARE_CORNERS;
@@ -258,7 +251,7 @@ public class Play extends GameState {
                         break;
 
                     default:
-                        System.out.println("failed to determine layer");
+                        corner_coords = SQUARE_CORNERS;
                         break;
 
                 }
@@ -290,8 +283,8 @@ public class Play extends GameState {
 
                 bdef.type = BodyDef.BodyType.StaticBody;
                 float corner = tileSize / 2 / PPM;
-                float mapPosCol = (col + 0.5f) * tileSize / PPM - B2DVars.ShiftX;
-                float mapPosRow = (row + 0.5f) * tileSize / PPM - B2DVars.ShiftY;
+                float mapPosCol = (col + 0.5f) * tileSize / PPM;
+                float mapPosRow = (row + 0.5f) * tileSize / PPM;
 
                 if (lastWasThere) {
 
@@ -337,22 +330,82 @@ public class Play extends GameState {
                 fdef.filter.categoryBits = bits;
                 fdef.filter.maskBits = B2DVars.BIT_PLAYER;
                 fdef.isSensor = isSensor;
-                if (layer.getName().equals("checkpoints")) {
-                    createCheckpoints(new Vector2(polygon[2].x - (tileSize / 2) / PPM + ShiftX, polygon[2].y + ShiftY));
+                switch (layer.getName()) {
+                    case "checkpoints":
+                        createCheckpoints(new Vector2(polygon[1].x, polygon[0].y));
+                        break;
 
-                } else {
-                    world.createBody(bdef).createFixture(fdef).setUserData(layer.getName());
+                    case "bosses":
+                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get(BOSS).toString());
+                        break;
+
+                    case "player":
+                        initPlayerLocation = new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y);
+                        world.destroyBody(player.getBody());
+                        bdef = new BodyDef();
+                        fdef = new FixtureDef();
+                        player = initPlayer();
+                        break;
+
+                    default:
+                        world.createBody(bdef).createFixture(fdef).setUserData(layer.getName());
+                        break;
                 }
 
             }
         }
     }
 
+    private void createBosses(Vector2 position, String type) {
+
+        /*
+         *
+         * TYPE 1: MAGMA WORM, can flu through walls n shit
+         * TYPE 2: COLOSSEOS, net.dermetfan.gdx.physics.box2d.Breakable
+         * TYPE 3: idk
+         *
+         * */
+
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.position.set(position);
+        shape.setAsBox(10 / PPM, 10 / PPM);
+
+        fdef.shape = shape;
+        fdef.friction = 0.75f;
+        fdef.restitution = 0.1f;
+        fdef.density = 5;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+
+        Body body = world.createBody(bdef);
+        body.setUserData("boss");
+        body.createFixture(fdef);
+        boss = new Boss(body);
+        bossArray.add(boss);
+
+    }
+
+    private void createCheckpoints(Vector2 pos) {
+        bdef = new BodyDef();
+        bdef.position.set(pos);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bdef);
+        shape = new PolygonShape();
+        shape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_ALL;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("checkpoint");
+        checkpoint = new Checkpoint(body);
+    }
+
+
     ////////////////////////////////////////////////////////////////////      Handle I/O devices    ////////////////////////////////////////////////////////////////////
 
     public void handleInput() {
 
-        current_force = player.getBody().getLinearVelocity();
+        Vector2 current_force = player.getBody().getLinearVelocity();
 
         //player jump / double jump
         if (MyInput.isPressed(MyInput.JUMP)) {
@@ -430,7 +483,7 @@ public class Play extends GameState {
             world.destroyBody(player.getBody());
             bdef = new BodyDef();
             fdef = new FixtureDef();
-            player = InitPlayer();
+            player = initPlayer();
             cl.setPlayerDead(false);
         }
         // create a new checkpoint if needed
@@ -440,6 +493,10 @@ public class Play extends GameState {
                 createCheckpoints(cl.getCurCheckpoint());
             }
             checkpoint.update(dt);
+        }
+
+        if (bossArray != null) {
+            for (Boss boss : bossArray) boss.update(dt);
         }
 
         // dispose of old bodies
@@ -474,13 +531,17 @@ public class Play extends GameState {
             player.render(sb);
         }
 
+        if (bossArray != null) {
+            for (Boss boss : bossArray) boss.render(sb);
+        }
+
         // draw checkpoint
         if (checkpoint != null) {
             checkpoint.render(sb);
         }
 
         //draw boxes around stuff
-        //b2dr.render(world, b2dcam.combined);
+        b2dr.render(world, b2dcam.combined);
 
     }
 

@@ -74,8 +74,8 @@ public class GameButton {
 
     private void drawString(SpriteBatch sb, String s, float x, float y) {
         int len = s.length();
-        float xo = len * font[0].getRegionWidth() / 2;
-        float yo = font[0].getRegionHeight() / 2;
+        float xo = len * font[0].getRegionWidth() >> 1;
+        float yo = font[0].getRegionHeight() >> 1;
         for (int i = 0; i < len; i++) {
             char c = s.charAt(i);
             if (c == '/') c = 10;

@@ -35,8 +35,8 @@ public class B2DSprite {
         sb.begin();
         sb.draw(
                 animation.getFrame(),
-                body.getPosition().x * B2DVars.PPM - width / 2,
-                body.getPosition().y * B2DVars.PPM - height / 2);
+                body.getPosition().x * B2DVars.PPM,
+                body.getPosition().y * B2DVars.PPM);
 
         // may the distance between 2 stages be 20 blocks (32 x 32)
 
@@ -53,6 +53,7 @@ public class B2DSprite {
     public Vector2 getPosition() {
         return body.getPosition();
     }
+
 
     public float getWidth() {
         return width;

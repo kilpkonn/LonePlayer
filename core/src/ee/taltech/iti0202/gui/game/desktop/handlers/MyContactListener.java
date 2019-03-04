@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+
 public class MyContactListener implements ContactListener {
 
     private boolean playerOnGround;
@@ -17,42 +18,46 @@ public class MyContactListener implements ContactListener {
     private Body curCheckpoint;
     private Body toBeDeleted;
     private boolean isPlayerDead = false;
+    private boolean initSpawn = true;
 
     // called when 2 fixtures start to collide
     public void beginContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
         //System.out.println(fa.getUserData() + ", " + fb.getUserData());
+        if (fa.getUserData() != null && fb.getUserData() != null) {
 
-        // set up a new checkpoint
-        if (fa.getUserData() != null && fa.getUserData().equals("foot")) {
-            playerOnGround = true;
-            if (fb.getUserData().equals("checkpoint")) {
-                if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
-                    setCurCheckpoint(fb.getBody());
+            // set up a new checkpoint
+            if (fa.getUserData() != null && fa.getUserData().equals("foot")) {
+                playerOnGround = true;
+                if (fb.getUserData().equals("checkpoint")) {
+                    if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
+                        setCurCheckpoint(fb.getBody());
+                    }
                 }
             }
-        }
-        if (fb.getUserData() != null && fb.getUserData().equals("foot")) {
-            playerOnGround = true;
-            if (fa.getUserData().equals("checkpoint")) {
-                if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
-                    setCurCheckpoint(fa.getBody());
+            if (fb.getUserData() != null && fb.getUserData().equals("foot")) {
+                playerOnGround = true;
+                if (fa.getUserData().equals("checkpoint")) {
+                    if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
+                        setCurCheckpoint(fa.getBody());
+                    }
                 }
             }
-        }
 
 
-        // detection happens when player goes outside of initial game border
-        if (fa.getUserData() != null && fa.getUserData().equals("playerBody")) {
-            if (fb.getUserData().equals("border")) {
-                setPlayerDead(true);
+            // detection happens when player goes outside of initial game border
+            if (fa.getUserData() != null && fa.getUserData().equals("playerBody")) {
+                if (fb.getUserData().equals("border")) {
+                    setPlayerDead(true);
+                }
             }
-        }
-        if (fb.getUserData() != null && fb.getUserData().equals("playerBody")) {
-            if (fa.getUserData().equals("border")) {
-                setPlayerDead(true);
+            if (fb.getUserData() != null && fb.getUserData().equals("playerBody")) {
+                if (fa.getUserData().equals("border")) {
+                    setPlayerDead(true);
+                }
             }
+
         }
     }
 
@@ -112,6 +117,11 @@ public class MyContactListener implements ContactListener {
     public void resetOldCheckpoint() {
         toBeDeleted = null;
     }
+
+    public boolean isInitSpawn() {
+        return initSpawn;
+    }
+
     // detection
     //presolve
     public void preSolve(Contact c, Manifold m) {
@@ -122,6 +132,7 @@ public class MyContactListener implements ContactListener {
     }
 
     public void setCurCheckpoint(Body new_vec) {
+        initSpawn = false;
         newCheckpoint = true;
         toBeDeleted = curCheckpoint;
         curCheckpoint = new_vec;
