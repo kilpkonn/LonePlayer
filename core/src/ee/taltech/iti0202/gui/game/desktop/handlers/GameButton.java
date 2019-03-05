@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
 
 public class GameButton {
@@ -49,13 +50,8 @@ public class GameButton {
         return hoverOver;
     }
 
-    public void setText(String s) {
-        text = s;
-    }
-
     public void update(Vector2 mousePos) {
-        hoverOver = mousePos.x < this.x && V_HEIGHT - (mousePos.y) + 16 > this.y && mousePos.x > this.x - width && V_HEIGHT - (mousePos.y - 8) < this.y + height;
-
+        hoverOver = mousePos.x / SCALE < this.x && V_HEIGHT - (mousePos.y / SCALE) + 16 > this.y && mousePos.x / SCALE > this.x - width && V_HEIGHT - (mousePos.y / SCALE - 8) < this.y + height;
     }
 
     public void render(SpriteBatch sb) {

@@ -1,5 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers;
 
+import com.badlogic.gdx.Gdx;
+
 public class B2DVars {
 
     // pixel per meter
@@ -10,9 +12,10 @@ public class B2DVars {
     public static final float PLAYER_SPEED = 8;
     public static final float PLAYER_DASH_FORCE_UP = 250;
     public static final float PLAYER_DASH_FORCE_SIDE = 200;
-    public static final int V_WIDTH = 1920;
-    public static final int V_HEIGHT = 1080;
-    public static final int SCALE = 1;
+    public static String PATH = "";
+    public static int V_WIDTH = 1920;
+    public static int V_HEIGHT = 1080;
+    public static int SCALE = 1;
 
     // map variables
     public static final String TYPE = "1";
@@ -36,10 +39,10 @@ public class B2DVars {
 
     // main screen sections
     public static final String[] MAIN_SCREENS = {
-            "android/res/images/game_background_0/layers/backgroundLayer",
-            "android/res/images/game_background_1/layers/backgroundLayer",
-            "android/res/images/game_background_2/layers/backgroundLayer",
-            "android/res/images/game_background_3/layers/backgroundLayer",
+            "images/game_background_0/layers/backgroundLayer",
+            "images/game_background_1/layers/backgroundLayer",
+            "images/game_background_2/layers/backgroundLayer",
+            "images/game_background_3/layers/backgroundLayer",
     };
 
 }

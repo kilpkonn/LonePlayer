@@ -33,6 +33,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.CORNER_LOCATI
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.MAX_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_SIDE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
@@ -96,7 +97,7 @@ public class Play extends GameState {
 
 
         // load tiled map
-        String path = "android/res/maps/level_" + act + "_" + map + ".tmx";
+        String path = PATH + "maps/level_" + act + "_" + map + ".tmx";
         tiledMap = new TmxMapLoader().load(path);
         tmr = new OrthoCachedTiledMapRenderer(tiledMap);
 
@@ -147,6 +148,36 @@ public class Play extends GameState {
 
         return player;
     }
+
+    private void createBosses(Vector2 position, String type) {
+
+        /*
+         *
+         * TYPE 1: MAGMA WORM, can flu through walls n shit
+         * TYPE 2: COLOSSEOS, net.dermetfan.gdx.physics.box2d.Breakable
+         * TYPE 3: idk
+         *
+         * */
+
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        bdef.position.set(position);
+        shape.setAsBox(10 / PPM, 10 / PPM);
+
+        fdef.shape = shape;
+        fdef.friction = 0.75f;
+        fdef.restitution = 0.1f;
+        fdef.density = 5;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+
+        Body body = world.createBody(bdef);
+        body.setUserData("boss");
+        body.createFixture(fdef);
+        boss = new Boss(body);
+        bossArray.add(boss);
+
+    }
+
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
@@ -354,35 +385,6 @@ public class Play extends GameState {
 
             }
         }
-    }
-
-    private void createBosses(Vector2 position, String type) {
-
-        /*
-         *
-         * TYPE 1: MAGMA WORM, can flu through walls n shit
-         * TYPE 2: COLOSSEOS, net.dermetfan.gdx.physics.box2d.Breakable
-         * TYPE 3: idk
-         *
-         * */
-
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(position);
-        shape.setAsBox(10 / PPM, 10 / PPM);
-
-        fdef.shape = shape;
-        fdef.friction = 0.75f;
-        fdef.restitution = 0.1f;
-        fdef.density = 5;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
-
-        Body body = world.createBody(bdef);
-        body.setUserData("boss");
-        body.createFixture(fdef);
-        boss = new Boss(body);
-        bossArray.add(boss);
-
     }
 
     private void createCheckpoints(Vector2 pos) {

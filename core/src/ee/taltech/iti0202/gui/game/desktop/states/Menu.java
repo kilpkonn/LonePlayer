@@ -19,6 +19,8 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.ParallaxBackground;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.MAIN_SCREENS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 
@@ -52,6 +54,7 @@ public class Menu extends GameState {
 
     private Vector2 mouseInWorld2D;
     private block cur_block = block.DEFAULT;
+
     public Menu(GameStateManager gsm) {
 
         super(gsm);
@@ -98,11 +101,11 @@ public class Menu extends GameState {
     }
 
     private void addParallax(String path) {
-        backgroundTexture = new Texture(Gdx.files.internal(path + ".png"));
+        backgroundTexture = new Texture(Gdx.files.internal(PATH + path + ".png"));
         stage = new Stage(new ScreenViewport());
         Array<Texture> textures = new Array<Texture>();
         for (int i = 1; i <= 6; i++) {
-            textures.add(new Texture(Gdx.files.internal(path + i + ".png")));
+            textures.add(new Texture(Gdx.files.internal(PATH + path + i + ".png")));
             textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
 
@@ -156,7 +159,7 @@ public class Menu extends GameState {
         stage.draw();
 
         // draw button
-        if (mouseInWorld2D.x < V_WIDTH / 3) {
+        if (mouseInWorld2D.x < V_WIDTH * SCALE / 3) {
 
             if (newGameButtonInactive.hoverOver()) {
                 cur_block = block.NEW_GAME;
