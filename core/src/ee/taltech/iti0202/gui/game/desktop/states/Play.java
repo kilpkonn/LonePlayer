@@ -1,8 +1,10 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -39,6 +41,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_F
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SQUARE_CORNERS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_LEFT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_RIGHT;
@@ -56,6 +59,7 @@ public class Play extends GameState {
     private World world;
     private Box2DDebugRenderer b2dr; // for showing hitboxes
     private OrthographicCamera b2dcam;
+    private OrthographicCamera hudCam;
     private MyContactListener cl;
     private TiledMap tiledMap;
     private float tileSize;
@@ -69,8 +73,8 @@ public class Play extends GameState {
     private PolygonShape shape;
     private CircleShape circle;
     private FixtureDef fdef;
-    private B2DVars.pauseState paused = RUN;
     private PauseMenu pauseMenu;
+    private ShapeRenderer shapeRenderer;
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
@@ -99,7 +103,12 @@ public class Play extends GameState {
         //set up box2d cam
         b2dcam = new OrthographicCamera();
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
-        pauseMenu = new PauseMenu(act, map);
+
+        hudCam = new OrthographicCamera();
+        hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
+
+        pauseMenu = new PauseMenu(act, map, hudCam);
+        shapeRenderer = new ShapeRenderer();
 
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////
@@ -495,7 +504,7 @@ public class Play extends GameState {
 
             case PAUSE:
                 world.step(0, 10, 2); // recommended values
-                UpdateProps(dt);
+                pauseMenu.update(dt);
 
             case RESUME:
                 break;
@@ -544,9 +553,11 @@ public class Play extends GameState {
         switch (pauseMenu.getPauseState()) {
             case RUN:
                 drawAndSetCamera();
-                //b2dr.render(world, b2dcam.combined);
+                break;
 
             case PAUSE:
+                drawPauseScreen();
+                handlePauseInput();
                 break;
 
             case RESUME:
@@ -556,6 +567,33 @@ public class Play extends GameState {
                 break;
 
         }
+    }
+
+    private void handlePauseInput() {
+        if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME) {
+            gsm.pushState(GameStateManager.State.PLAY, 0, 0);
+        }
+
+        if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT) {
+            gsm.pushState(GameStateManager.State.MENU);
+        }
+    }
+
+    private void drawPauseScreen() {
+        //clear screen
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(new Color(0, 0, 0, 0.03f));
+        shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        //render pauseMenu
+
+        hudCam.update();
+
+        pauseMenu.render(sb);
     }
 
     private void drawAndSetCamera() {
@@ -568,6 +606,10 @@ public class Play extends GameState {
                 player.getPosition().y * PPM,
                 0);
 
+
+        //b2dr.render(world, b2dcam.combined);
+
+        //b2dcam.update();
         cam.update();
 
         //draw tilemap

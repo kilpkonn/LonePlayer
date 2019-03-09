@@ -8,33 +8,31 @@ import com.badlogic.gdx.math.Vector3;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 
 public class GameButton {
 
-    Vector3 vec;
     // center at x, y
     private float x;
     private float y;
     private float width;
     private float height;
     private TextureRegion reg;
-    private OrthographicCamera cam;
 
     private boolean hoverOver;
 
     private String text;
     private TextureRegion[] font;
 
-    public GameButton(TextureRegion reg, float x, float y, OrthographicCamera cam) {
+    public GameButton(TextureRegion reg, float x, float y) {
 
         this.reg = reg;
         this.x = x;
         this.y = y;
-        this.cam = cam;
 
         width = reg.getRegionWidth();
         height = reg.getRegionHeight();
-        vec = new Vector3();
+        Vector3 vec = new Vector3();
 
         font = new TextureRegion[11];
         for (int i = 0; i < 6; i++) {
@@ -51,7 +49,10 @@ public class GameButton {
     }
 
     public void update(Vector2 mousePos) {
-        hoverOver = mousePos.x / SCALE < this.x && V_HEIGHT - (mousePos.y / SCALE) + 16 > this.y && mousePos.x / SCALE > this.x - width && V_HEIGHT - (mousePos.y / SCALE - 8) < this.y + height;
+        hoverOver = (V_WIDTH - mousePos.x / SCALE >= x - width / 2
+                && V_WIDTH - mousePos.x / SCALE <= x + width / 2)
+                && (V_HEIGHT - mousePos.y / SCALE >= y - height / 2
+                && V_HEIGHT - mousePos.y / SCALE <= y + height / 2);
     }
 
     public void render(SpriteBatch sb) {

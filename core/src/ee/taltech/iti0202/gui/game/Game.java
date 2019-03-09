@@ -68,16 +68,8 @@ public class Game extends ApplicationAdapter {
         // load textures
         res = new Content();
 
-        res.loadTexture(PATH + "images/menu.png", "newGameTextureActive");
-        res.loadTexture(PATH + "images/menu.png", "newGameTextureInactive");
-        res.loadTexture(PATH + "images/menu.png", "loadGameTextureActive");
-        res.loadTexture(PATH + "images/menu.png", "loadGameTextureInactive");
-        res.loadTexture(PATH + "images/menu.png", "settingsTextureActive");
-        res.loadTexture(PATH + "images/menu.png", "settingsTextureInactive");
-        res.loadTexture(PATH + "images/menu.png", "exitTextureActive");
-        res.loadTexture(PATH + "images/menu.png", "exitTextureInactive");
-        res.loadTexture(PATH + "images/menu.png", "newGameTextureActive");
-        res.loadTexture(PATH + "images/menu.png", "Logo");
+        res.loadTexture(PATH + "images/menu.png", "buttons");
+        res.loadTexture(PATH + "images/backLayer.png", "backLayer");
 
         res.loadTexture(PATH + "images/Player/Player.png", "Player");
         res.loadTexture(PATH + "maps/Flag.png", "Checkpoint");
