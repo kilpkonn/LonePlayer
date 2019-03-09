@@ -24,6 +24,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.PauseMenu;
 import ee.taltech.iti0202.gui.game.entities.Boss;
 import ee.taltech.iti0202.gui.game.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.entities.Player;
@@ -46,6 +47,9 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TYPE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.PAUSE;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.RESUME;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.RUN;
 
 public class Play extends GameState {
 
@@ -65,6 +69,8 @@ public class Play extends GameState {
     private PolygonShape shape;
     private CircleShape circle;
     private FixtureDef fdef;
+    private B2DVars.pauseState paused = RUN;
+    private PauseMenu pauseMenu;
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
@@ -72,11 +78,13 @@ public class Play extends GameState {
 
         super(gsm);
 
+        System.out.println("Tere");
         // sey up box2d stuff
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
         b2dr = new Box2DDebugRenderer();
+
 
         // create shapes
         bdef = new BodyDef();
@@ -91,6 +99,7 @@ public class Play extends GameState {
         //set up box2d cam
         b2dcam = new OrthographicCamera();
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
+        pauseMenu = new PauseMenu(act, map);
 
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////
@@ -104,6 +113,7 @@ public class Play extends GameState {
         drawLayers();
 
     }
+
 
     ////////////////////////////////////////////////////////////////////   Create Animated bodies   ////////////////////////////////////////////////////////////////////
 
@@ -409,6 +419,12 @@ public class Play extends GameState {
 
         Vector2 current_force = player.getBody().getLinearVelocity();
 
+        //pause screen
+        if (MyInput.isPressed(MyInput.ESC)) {
+            if (pauseMenu.getPauseState() == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f) pauseMenu.setGameState(PAUSE);
+            else pauseMenu.setGameState(RUN);
+        }
+
         //player jump / double jump
         if (MyInput.isPressed(MyInput.JUMP)) {
             if (cl.isPlayerOnGround()) {
@@ -472,8 +488,21 @@ public class Play extends GameState {
 
         handleInput();
 
-        world.step(dt, 10, 2); // recommended values
-        UpdateProps(dt);
+        switch (pauseMenu.getPauseState()) {
+            case RUN:
+                world.step(dt, 10, 2); // recommended values
+                UpdateProps(dt);
+
+            case PAUSE:
+                world.step(0, 10, 2); // recommended values
+                UpdateProps(dt);
+
+            case RESUME:
+                break;
+
+            default:
+                break;
+        }
 
     }
 
@@ -512,6 +541,24 @@ public class Play extends GameState {
 
     public void render() {
 
+        switch (pauseMenu.getPauseState()) {
+            case RUN:
+                drawAndSetCamera();
+                //b2dr.render(world, b2dcam.combined);
+
+            case PAUSE:
+                break;
+
+            case RESUME:
+                break;
+
+            default:
+                break;
+
+        }
+    }
+
+    private void drawAndSetCamera() {
         //clear screen
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -541,10 +588,6 @@ public class Play extends GameState {
         if (checkpoint != null) {
             checkpoint.render(sb);
         }
-
-        //draw boxes around stuff
-        b2dr.render(world, b2dcam.combined);
-
     }
 
     public void dispose() {

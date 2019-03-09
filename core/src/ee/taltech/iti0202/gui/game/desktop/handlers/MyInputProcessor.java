@@ -22,6 +22,10 @@ public class MyInputProcessor extends InputAdapter {
             MyInput.setKey(MyInput.MENU, true);
         }
 
+        if (k == Input.Keys.ESCAPE) {
+            MyInput.setKey(MyInput.ESC, true);
+        }
+
         return true;
     }
 
@@ -40,6 +44,10 @@ public class MyInputProcessor extends InputAdapter {
         }
         if (k == Input.Keys.SHIFT_LEFT) {
             MyInput.setKey(MyInput.MENU, false);
+        }
+
+        if (k == Input.Keys.ESCAPE) {
+            MyInput.setKey(MyInput.ESC, false);
         }
 
         return true;

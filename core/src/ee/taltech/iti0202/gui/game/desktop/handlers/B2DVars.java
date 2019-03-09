@@ -45,4 +45,12 @@ public class B2DVars {
             "images/game_background_3/layers/backgroundLayer",
     };
 
+    // pause states
+    public enum pauseState
+    {
+        PAUSE,
+        RUN,
+        RESUME,
+        STOPPED
+    }
 }
