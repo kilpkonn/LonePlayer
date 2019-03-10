@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -12,20 +14,22 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.PauseMenu;
 import ee.taltech.iti0202.gui.game.entities.Boss;
 import ee.taltech.iti0202.gui.game.entities.Checkpoint;
@@ -43,6 +47,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SQUARE_CORNERS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.STEP;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_LEFT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_RIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_LEFT;
@@ -51,13 +56,12 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TYPE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.PAUSE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.RESUME;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.RUN;
 
 public class Play extends GameState {
 
     private World world;
-    private Box2DDebugRenderer b2dr; // for showing hitboxes
+    //private Box2DDebugRenderer b2dr; // for showing hitboxes
     private OrthographicCamera b2dcam;
     private OrthographicCamera hudCam;
     private MyContactListener cl;
@@ -75,6 +79,9 @@ public class Play extends GameState {
     private FixtureDef fdef;
     private PauseMenu pauseMenu;
     private ShapeRenderer shapeRenderer;
+    private Stage stage;
+    private ParallaxBackground parallaxBackground;
+    private Vector2 current_force = new Vector2(0, 0);
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
@@ -87,7 +94,7 @@ public class Play extends GameState {
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
-        b2dr = new Box2DDebugRenderer();
+        //b2dr = new Box2DDebugRenderer();
 
 
         // create shapes
@@ -110,6 +117,19 @@ public class Play extends GameState {
         pauseMenu = new PauseMenu(act, map, hudCam);
         shapeRenderer = new ShapeRenderer();
 
+        // set up background
+        Texture texture = Game.res.getTexture("starBackground");
+        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        TextureRegion textureRegion = new TextureRegion(Game.res.getTexture("starBackground"), 0, 0, V_WIDTH, V_HEIGHT);
+        Array<Texture> textures = new Array<>();
+        textures.add(texture);
+
+        parallaxBackground = new ParallaxBackground(textures);
+        stage = new Stage();
+
+        // draw background
+        parallaxBackground.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        stage.addActor(parallaxBackground);
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////
 
@@ -336,38 +356,17 @@ public class Play extends GameState {
                 float mapPosCol = (col + 0.5f) * tileSize / PPM;
                 float mapPosRow = (row + 0.5f) * tileSize / PPM;
 
+                // writing vertices for hit boxes
                 if (lastWasThere) {
 
-                    v[2] = new Vector2(
-                            mapPosCol + corner_coords[4] * corner,
-                            mapPosRow + corner_coords[5] * corner
-                    );
-
-                    v[3] = new Vector2(
-                            mapPosCol + corner_coords[6] * corner,
-                            mapPosRow + corner_coords[7] * corner
-                    );
+                    v[2] = new Vector2(mapPosCol + corner_coords[4] * corner, mapPosRow + corner_coords[5] * corner);
+                    v[3] = new Vector2(mapPosCol + corner_coords[6] * corner, mapPosRow + corner_coords[7] * corner);
 
                 } else {
-                    v[0] = new Vector2(
-                            mapPosCol + corner_coords[0] * corner,
-                            mapPosRow + corner_coords[1] * corner
-                    );
-
-                    v[1] = new Vector2(
-                            mapPosCol + corner_coords[2] * corner,
-                            mapPosRow + corner_coords[3] * corner
-                    );
-
-                    v[2] = new Vector2(
-                            mapPosCol + corner_coords[4] * corner,
-                            mapPosRow + corner_coords[5] * corner
-                    );
-
-                    v[3] = new Vector2(
-                            mapPosCol + corner_coords[6] * corner,
-                            mapPosRow + corner_coords[7] * corner
-                    );
+                    v[0] = new Vector2(mapPosCol + corner_coords[0] * corner, mapPosRow + corner_coords[1] * corner);
+                    v[1] = new Vector2(mapPosCol + corner_coords[2] * corner, mapPosRow + corner_coords[3] * corner);
+                    v[2] = new Vector2(mapPosCol + corner_coords[4] * corner, mapPosRow + corner_coords[5] * corner);
+                    v[3] = new Vector2(mapPosCol + corner_coords[6] * corner, mapPosRow + corner_coords[7] * corner);
 
                 }
                 lastWasThere = true;
@@ -401,7 +400,6 @@ public class Play extends GameState {
                         world.createBody(bdef).createFixture(fdef).setUserData(layer.getName());
                         break;
                 }
-
             }
         }
     }
@@ -426,11 +424,12 @@ public class Play extends GameState {
 
     public void handleInput() {
 
-        Vector2 current_force = player.getBody().getLinearVelocity();
+        current_force = player.getBody().getLinearVelocity();
 
         //pause screen
         if (MyInput.isPressed(MyInput.ESC)) {
-            if (pauseMenu.getPauseState() == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f) pauseMenu.setGameState(PAUSE);
+            if (pauseMenu.getPauseState() == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
+                pauseMenu.setGameState(PAUSE);
             else pauseMenu.setGameState(RUN);
         }
 
@@ -496,14 +495,14 @@ public class Play extends GameState {
     public void update(float dt) {
 
         handleInput();
+        world.step(dt, 10, 2); // recommended values
 
         switch (pauseMenu.getPauseState()) {
             case RUN:
-                world.step(dt, 10, 2); // recommended values
+
                 UpdateProps(dt);
 
             case PAUSE:
-                world.step(0, 10, 2); // recommended values
                 pauseMenu.update(dt);
 
             case RESUME:
@@ -517,9 +516,8 @@ public class Play extends GameState {
 
     private void UpdateProps(float dt) {
         //call update animation
-        if (!cl.IsPlayerDead()) {
-            player.update(dt);
-        } else {
+        if (!cl.IsPlayerDead()) player.update(dt);
+        else {
             world.destroyBody(player.getBody());
             bdef = new BodyDef();
             fdef = new FixtureDef();
@@ -535,17 +533,17 @@ public class Play extends GameState {
             checkpoint.update(dt);
         }
 
-        if (bossArray != null) {
-            for (Boss boss : bossArray) boss.update(dt);
-        }
+        if (bossArray != null) for (Boss boss : bossArray) boss.update(dt);
+
 
         // dispose of old bodies
         Body temp = cl.removeOldCheckpoint();
         if (temp != null) {
             world.destroyBody(temp);
             cl.resetOldCheckpoint();
-            System.out.println("Number of bodeies:" + world.getBodyCount());
+            System.out.println("Number of bodies:" + world.getBodyCount());
         }
+
     }
 
     public void render() {
@@ -556,8 +554,8 @@ public class Play extends GameState {
                 break;
 
             case PAUSE:
-                drawPauseScreen();
                 handlePauseInput();
+                drawPauseScreen();
                 break;
 
             case RESUME:
@@ -570,13 +568,10 @@ public class Play extends GameState {
     }
 
     private void handlePauseInput() {
-        if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME) {
-            gsm.pushState(GameStateManager.State.PLAY, 0, 0);
-        }
-
-        if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT) {
+        if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
+            pauseMenu.setGameState(B2DVars.pauseState.RUN);
+        if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
             gsm.pushState(GameStateManager.State.MENU);
-        }
     }
 
     private void drawPauseScreen() {
@@ -584,7 +579,7 @@ public class Play extends GameState {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(0, 0, 0, 0.03f));
+        shapeRenderer.setColor(new Color(0, 0, 0, 0.05f));
         shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
@@ -597,15 +592,19 @@ public class Play extends GameState {
     }
 
     private void drawAndSetCamera() {
+
         //clear screen
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        parallaxBackground.setSpeed(current_force.x);
+        stage.act();
+        stage.draw();
 
         //set camera to follow player
         cam.position.set(
                 player.getPosition().x * PPM,
                 player.getPosition().y * PPM,
                 0);
-
 
         //b2dr.render(world, b2dcam.combined);
 

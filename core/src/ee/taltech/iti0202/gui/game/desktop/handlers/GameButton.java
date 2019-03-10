@@ -1,10 +1,8 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
@@ -32,7 +30,6 @@ public class GameButton {
 
         width = reg.getRegionWidth();
         height = reg.getRegionHeight();
-        Vector3 vec = new Vector3();
 
         font = new TextureRegion[11];
         for (int i = 0; i < 6; i++) {

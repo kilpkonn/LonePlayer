@@ -46,14 +46,11 @@ public class PauseMenu {
     private GameButton saveButtonActive;
     private GameButton saveAndExitButtonActive;
 
-    private Texture backLayer;
     private Vector2 mouseInWorld2D;
     private List<List<GameButton>> buttons;
     @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private HashMap<GameButton, block> buttonType;
     private block cur_block = block.DEFAULT;
-    private int tw;
-    private int th;
 
     public PauseMenu(int act, int map, OrthographicCamera cam) {
 
@@ -65,9 +62,7 @@ public class PauseMenu {
         //hudCam.position.set(V_WIDTH / 2f, V_HEIGHT / 2f, 0);
         hudCam.update();
 
-        backLayer = Game.res.getTexture("backLayer");
-        tw = backLayer.getWidth();
-        th = backLayer.getHeight();
+        Texture backLayer = Game.res.getTexture("backLayer");
 
         resumeButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 416, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f + 40);
         GameButton resumeButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 384, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f + 40);
@@ -114,7 +109,7 @@ public class PauseMenu {
         sb.setProjectionMatrix(hudCam.combined);
         sb.begin();
         //Draw pause screen
-        sb.draw(backLayer, hudCam.position.x - (tw / 2f), hudCam.position.y - (th / 3f));
+        //sb.draw(backLayer, hudCam.position.x - (tw / 2f), hudCam.position.y - (th / 3f));
         sb.end();
 
         stage.act();

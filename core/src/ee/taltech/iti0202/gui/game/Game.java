@@ -15,9 +15,11 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.Content;
 import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.MyInputProcessor;
+import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.STEP;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 
@@ -25,7 +27,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
 public class Game extends ApplicationAdapter {
     public static final String TITLE = "Alone at Night";
 
-    public static final float STEP = 1 / 60f;
     private float accum;
 
     private SpriteBatch sb;
@@ -70,6 +71,7 @@ public class Game extends ApplicationAdapter {
 
         res.loadTexture(PATH + "images/menu.png", "buttons");
         res.loadTexture(PATH + "images/backLayer.png", "backLayer");
+        res.loadTexture(PATH + "images/BackgroundStars/Stars-Big_1_2_PC.png", "starBackground");
 
         res.loadTexture(PATH + "images/Player/Player.png", "Player");
         res.loadTexture(PATH + "maps/Flag.png", "Checkpoint");
@@ -101,7 +103,6 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void render() {
-
         accum += Gdx.graphics.getDeltaTime();
         while(accum >= STEP) {
             accum -= STEP;

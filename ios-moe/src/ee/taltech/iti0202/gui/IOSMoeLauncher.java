@@ -5,6 +5,7 @@ import com.badlogic.gdx.backends.iosmoe.IOSApplicationConfiguration;
 import org.moe.natj.general.Pointer;
 
 import apple.uikit.c.UIKit;
+import ee.taltech.iti0202.gui.game.Game;
 
 public class IOSMoeLauncher extends IOSApplication.Delegate {
 
