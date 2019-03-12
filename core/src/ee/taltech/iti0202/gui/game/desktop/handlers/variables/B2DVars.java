@@ -22,6 +22,10 @@ public class B2DVars {
     public static final String BOSS = "2";
     public static final String CORNER_LOCATION = "2";
 
+    // bosses
+    public static final String MAGMAWORM = "1";
+    public static final String COLOSSEOS = "2";
+
     // category bits
     public static final short BIT_ALL = 15;
     public static final short BIT_PLAYER = 1;

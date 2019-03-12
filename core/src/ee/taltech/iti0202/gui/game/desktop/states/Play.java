@@ -13,7 +13,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -25,17 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
+import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
-import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
-import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
-import ee.taltech.iti0202.gui.game.desktop.entities.Player;
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_ALL;
@@ -43,9 +42,11 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_PLAYER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.COLOSSEOS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.CORNER_LOCATION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAGMAWORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -69,7 +70,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pau
 public class Play extends GameState {
 
     private World world;
-    private Box2DDebugRenderer b2dr; // for showing hitboxes
+    //private Box2DDebugRenderer b2dr; // for showing hitboxes
     private OrthographicCamera b2dcam;
     private OrthographicCamera hudCam;
     private MyContactListener cl;
@@ -78,8 +79,6 @@ public class Play extends GameState {
     private OrthoCachedTiledMapRenderer tmr;
     private Player player;
     private Array<Boss> bossArray;
-    private MagmaWormProperties alias;
-    private Boss boss;
     private Checkpoint checkpoint;
     private Vector2 initPlayerLocation;
     private BodyDef bdef;
@@ -198,21 +197,33 @@ public class Play extends GameState {
 
     private void createBosses(Vector2 position, String type) {
 
-        /*
-         *
-         * TYPE 1: MAGMA WORM, can flu through walls n shit
-         * TYPE 2: COLOSSEOS, net.dermetfan.gdx.physics.box2d.Breakable
-         * TYPE 3: idk
-         *
-         * */
-        alias = new MagmaWormProperties(bdef, fdef, position); // add alias according to boss type
+        /////////////////////////////////////////////////////////////////////////
+        //                                                                     //
+        //   TYPE 1: MAGMA WORM, can flu through walls n shit                  //
+        //   TYPE 2: COLOSSEOS, net.dermetfan.gdx.physics.box2d.Breakable      //
+        //   TYPE 3: idk                                                       //
+        //                                                                     //
+        /////////////////////////////////////////////////////////////////////////
 
-        Body body = world.createBody(alias.getBdef());
-        body.setUserData("boss");
-        body.createFixture(alias.getFdef());
-        boss = new MagmaWorm(body, type);
-        bossArray.add(boss);
 
+        switch (type) {
+            case MAGMAWORM:
+                MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, position);
+
+                Body body = world.createBody(alias.getBdef());
+                body.setUserData("boss");
+                body.createFixture(alias.getFdef());
+                Boss boss = new MagmaWorm(body, type);
+                bossArray.add(boss);
+                break;
+
+            case COLOSSEOS:
+                break;
+
+            default:
+                break;
+
+        }
     }
 
     private void createCheckpoints(Vector2 pos) {
@@ -347,10 +358,6 @@ public class Play extends GameState {
                 }
         }
 
-        createMap(layer, bits, isSensor, corner_coords, maskBits);
-    }
-
-    private void createMap(TiledMapTileLayer layer, short bits, boolean isSensor, int[] corner_coords, short maskBits) {
         for (int row = 0; row < layer.getHeight(); row++) {
 
             List<Vector2[]> polygonVertices = new ArrayList<>();
