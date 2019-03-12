@@ -17,7 +17,7 @@
    <property name="2" value="1"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztzjEBAAAMAiC7r/hieAgJSAAAAAAAAAAA+q4dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAApj1GogCE
+   eJzt18kJAAAIAzB3d3Gn8IJkgkIfpREAAAAAAAC35XYAAGCEzQcAAKb5If/oDAAAAAAAAAAAAAAAAAAAAAAAAACATgXzcwIN
   </data>
  </layer>
  <layer id="16" name="player" width="130" height="64">
@@ -33,7 +33,7 @@
    <property name="1" value="border"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJzt3bENACAMBLHMxv5DoespaRC29Buc0mbNzDIbfqcDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDcqsDLb3NPSA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IKff7/bnNuyDY0M=
+   eJzt3EENACAQBLHThn9RZBwQntAmq4D5HmtmltnwOx0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB2Qmw78p/Ae70Z0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QE5ul+2PbVCpZVM=
   </data>
  </layer>
  <layer id="18" name="terra_triangle_bottom_right" width="130" height="64">

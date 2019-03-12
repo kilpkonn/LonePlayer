@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.entities;
+package ee.taltech.iti0202.gui.game.desktop.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;

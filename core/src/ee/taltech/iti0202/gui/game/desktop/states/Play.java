@@ -25,15 +25,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
-import ee.taltech.iti0202.gui.game.entities.Boss;
-import ee.taltech.iti0202.gui.game.entities.Checkpoint;
-import ee.taltech.iti0202.gui.game.entities.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
+import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_ALL;
@@ -76,6 +78,7 @@ public class Play extends GameState {
     private OrthoCachedTiledMapRenderer tmr;
     private Player player;
     private Array<Boss> bossArray;
+    private MagmaWormProperties alias;
     private Boss boss;
     private Checkpoint checkpoint;
     private Vector2 initPlayerLocation;
@@ -172,7 +175,7 @@ public class Play extends GameState {
         fdef.filter.maskBits = BIT_BOSSES | BIT_WORM | BIT_PLAYER | TERRA_SQUARES | BACKGROUND;
         body.createFixture(fdef).setFriction(FRICTION);
         body.setFixedRotation(false);
-        body.setUserData("playerBall");
+        body.setUserData("playerBody");
 
         shape = new PolygonShape();
         shape.setAsBox(4 / PPM, 8 / PPM, new Vector2(0, 8 / PPM), 0);
@@ -202,22 +205,12 @@ public class Play extends GameState {
          * TYPE 3: idk
          *
          * */
+        alias = new MagmaWormProperties(bdef, fdef, position); // add alias according to boss type
 
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.position.set(position);
-        shape.setAsBox(10 / PPM, 10 / PPM);
-
-        fdef.shape = shape;
-        fdef.friction = 0f;
-        fdef.restitution = 1f;
-        fdef.density = 5;
-        fdef.filter.categoryBits = BIT_ALL;
-        fdef.filter.maskBits = BACKGROUND | BIT_PLAYER;
-
-        Body body = world.createBody(bdef);
+        Body body = world.createBody(alias.getBdef());
         body.setUserData("boss");
-        body.createFixture(fdef);
-        boss = new Boss(body);
+        body.createFixture(alias.getFdef());
+        boss = new MagmaWorm(body, type);
         bossArray.add(boss);
 
     }

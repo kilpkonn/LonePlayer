@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.entities;
+package ee.taltech.iti0202.gui.game.desktop.entities;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,13 +15,13 @@ public class B2DSprite {
     private float width;
     private float height;
 
-    public B2DSprite(Body body) {
+    B2DSprite(Body body) {
         System.out.println("New body: " + body.toString());
         this.body = body;
         animation = new Animation();
     }
 
-    public void setAnimation(TextureRegion[] reg, float delay) {
+    void setAnimation(TextureRegion[] reg, float delay) {
         animation.setFrames(reg, delay);
         width = reg[0].getRegionWidth();
         height = reg[0].getRegionHeight();
@@ -52,15 +52,6 @@ public class B2DSprite {
 
     public Vector2 getPosition() {
         return body.getPosition();
-    }
-
-
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
     }
 
 }
