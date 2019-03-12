@@ -14,6 +14,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -35,11 +36,17 @@ import ee.taltech.iti0202.gui.game.entities.Boss;
 import ee.taltech.iti0202.gui.game.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.entities.Player;
 
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BIT_ALL;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BIT_PLAYER;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BIT_WORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BOSS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.CORNER_LOCATION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.MAX_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.NONE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_SIDE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_UP;
@@ -47,7 +54,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SQUARE_CORNERS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.STEP;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TERRA_SQUARES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_LEFT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_RIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_LEFT;
@@ -61,7 +68,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.RU
 public class Play extends GameState {
 
     private World world;
-    //private Box2DDebugRenderer b2dr; // for showing hitboxes
+    private Box2DDebugRenderer b2dr; // for showing hitboxes
     private OrthographicCamera b2dcam;
     private OrthographicCamera hudCam;
     private MyContactListener cl;
@@ -120,7 +127,6 @@ public class Play extends GameState {
         // set up background
         Texture texture = Game.res.getTexture("starBackground");
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
-        TextureRegion textureRegion = new TextureRegion(Game.res.getTexture("starBackground"), 0, 0, V_WIDTH, V_HEIGHT);
         Array<Texture> textures = new Array<>();
         textures.add(texture);
 
@@ -128,7 +134,7 @@ public class Play extends GameState {
         stage = new Stage();
 
         // draw background
-        parallaxBackground.setSize(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         stage.addActor(parallaxBackground);
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////
@@ -163,8 +169,8 @@ public class Play extends GameState {
         fdef.isSensor = false;
         circle.setRadius(6 / PPM);
         fdef.shape = circle;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        fdef.filter.categoryBits = BIT_PLAYER;
+        fdef.filter.maskBits = BIT_BOSSES | BIT_WORM | BIT_PLAYER | TERRA_SQUARES | BACKGROUND;
         body.createFixture(fdef).setFriction(FRICTION);
         body.setFixedRotation(false);
         body.setUserData("playerBall");
@@ -172,14 +178,14 @@ public class Play extends GameState {
         shape = new PolygonShape();
         shape.setAsBox(4 / PPM, 8 / PPM, new Vector2(0, 8 / PPM), 0);
         fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        fdef.filter.categoryBits = BIT_PLAYER;
+        fdef.filter.maskBits = BIT_BOSSES | BIT_WORM | BIT_PLAYER | TERRA_SQUARES | BACKGROUND;
         body.createFixture(fdef).setUserData("playerBody");
 
         shape.setAsBox(4 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
         fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        fdef.filter.categoryBits = BIT_PLAYER;
+        fdef.filter.maskBits = BIT_BOSSES | BIT_WORM | BIT_PLAYER | TERRA_SQUARES | BACKGROUND;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
 
@@ -203,11 +209,11 @@ public class Play extends GameState {
         shape.setAsBox(10 / PPM, 10 / PPM);
 
         fdef.shape = shape;
-        fdef.friction = 0.75f;
-        fdef.restitution = 0.1f;
+        fdef.friction = 0f;
+        fdef.restitution = 1f;
         fdef.density = 5;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+        fdef.filter.categoryBits = BIT_ALL;
+        fdef.filter.maskBits = BACKGROUND | BIT_PLAYER;
 
         Body body = world.createBody(bdef);
         body.setUserData("boss");
@@ -225,19 +231,19 @@ public class Play extends GameState {
 
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_squares");
-        draw_solid(layer, B2DVars.TERRA_SQUARES, false);
+        draw_solid(layer, TERRA_SQUARES, false);
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("border");
         if (layer != null) {
             tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.BIT_ALL, true);
+            ReadPolygonVertices(layer, BIT_ALL, false);
             layer.setVisible(false); // disable visibility here <--------------------------------------------
         }
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("bosses");
         if (layer != null) {
             tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.NONE, false);
+            ReadPolygonVertices(layer, NONE, false);
             layer.setVisible(false);
         }
 
@@ -247,7 +253,7 @@ public class Play extends GameState {
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("player");
         if (layer != null) {
             tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, B2DVars.NONE, false);
+            ReadPolygonVertices(layer, NONE, false);
             layer.setVisible(false);
         }
 
@@ -283,26 +289,33 @@ public class Play extends GameState {
     private void ReadPolygonVertices(TiledMapTileLayer layer, short bits, boolean isSensor) {
 
         int[] corner_coords;
+        short maskBits;
         String type = layer.getProperties().get(TYPE).toString();
 
         switch (type) {
             default:
                 corner_coords = SQUARE_CORNERS;
+                maskBits = BIT_BOSSES | BIT_PLAYER;
                 break;
             case "square":
                 corner_coords = SQUARE_CORNERS;
+                maskBits = BIT_BOSSES | BIT_PLAYER;
                 break;
             case "background":
                 corner_coords = SQUARE_CORNERS;
+                maskBits = NONE;
                 break;
             case "checkpoint":
                 corner_coords = SQUARE_CORNERS;
+                maskBits = BIT_PLAYER;
                 break;
             case "border":
                 corner_coords = SQUARE_CORNERS;
+                maskBits = BIT_ALL;
                 break;
             case "triangle":
                 String triangle = layer.getProperties().get(CORNER_LOCATION).toString();
+                maskBits = BIT_BOSSES | BIT_PLAYER;
                 switch (triangle) {
                     case "bottom_left":
                         corner_coords = TRIANGLE_BOTTOM_LEFT;
@@ -327,13 +340,13 @@ public class Play extends GameState {
                 }
         }
 
-        createMap(layer, bits, isSensor, corner_coords);
+        createMap(layer, bits, isSensor, corner_coords, maskBits);
     }
 
-    private void createMap(TiledMapTileLayer layer, short bits, boolean isSensor, int[] corner_coords) {
+    private void createMap(TiledMapTileLayer layer, short bits, boolean isSensor, int[] corner_coords, short maskBits) {
         for (int row = 0; row < layer.getHeight(); row++) {
 
-            List<Vector2[]> polygonVertices = new ArrayList<Vector2[]>();
+            List<Vector2[]> polygonVertices = new ArrayList<>();
             Vector2[] v = new Vector2[4];
             boolean lastWasThere = false;
 
@@ -377,7 +390,7 @@ public class Play extends GameState {
 
                 shape.set(polygon);
                 fdef.filter.categoryBits = bits;
-                fdef.filter.maskBits = B2DVars.BIT_PLAYER;
+                fdef.filter.maskBits = maskBits;
                 fdef.isSensor = isSensor;
                 switch (layer.getName()) {
                     case "checkpoints":
@@ -608,7 +621,7 @@ public class Play extends GameState {
 
         //b2dr.render(world, b2dcam.combined);
 
-        //b2dcam.update();
+        b2dcam.update();
         cam.update();
 
         //draw tilemap

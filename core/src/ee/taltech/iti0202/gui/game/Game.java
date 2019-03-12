@@ -62,8 +62,6 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
-        System.out.println(MAIN_SCREENS[3]);
-        System.out.println(PATH);
         Gdx.input.setInputProcessor(new MyInputProcessor());
 
         // load textures
@@ -109,7 +107,6 @@ public class Game extends ApplicationAdapter {
             gsm.update(STEP);
             gsm.render();
             MyInput.update();
-            //addSystem.out.println(Gdx.graphics.getFramesPerSecond());
         }
     }
 

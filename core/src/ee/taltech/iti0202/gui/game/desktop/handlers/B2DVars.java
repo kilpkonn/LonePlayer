@@ -23,11 +23,12 @@ public class B2DVars {
     public static final String CORNER_LOCATION = "2";
 
     // category bits
-    public static final short BIT_ALL = -1;
-    public static final short BIT_PLAYER = 255;
-    public static final short TERRA_SQUARES = 4;
-    public static final short TERRA_OBJECTS = 8;
-    public static final short BACKGROUND = 256;
+    public static final short BIT_ALL = 15;
+    public static final short BIT_PLAYER = 1;
+    public static final short TERRA_SQUARES = 2;
+    public static final short BIT_BOSSES = 4;
+    public static final short BIT_WORM = 8;
+    public static final short BACKGROUND = 16;
     public static final short NONE = 0;
 
     // corner coords
