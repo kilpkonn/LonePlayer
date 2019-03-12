@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -26,44 +25,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars;
-import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
-import ee.taltech.iti0202.gui.game.desktop.handlers.MyContactListener;
-import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.handlers.ParallaxBackground;
-import ee.taltech.iti0202.gui.game.desktop.handlers.PauseMenu;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.entities.Boss;
 import ee.taltech.iti0202.gui.game.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.entities.Player;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BACKGROUND;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BIT_ALL;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BIT_BOSSES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BIT_PLAYER;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.BOSS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.CORNER_LOCATION;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.FRICTION;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.GRAVITY;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.MAX_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.NONE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_SIDE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_DASH_FORCE_UP;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PLAYER_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PPM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SCALE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.SQUARE_CORNERS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TERRA_SQUARES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_LEFT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_BOTTOM_RIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_LEFT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TRIANGLE_TOP_RIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.TYPE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.PAUSE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.pauseState.RUN;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_ALL;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_PLAYER;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.CORNER_LOCATION;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.SCALE;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.SQUARE_CORNERS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_SQUARES;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TRIANGLE_BOTTOM_LEFT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TRIANGLE_BOTTOM_RIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TRIANGLE_TOP_LEFT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TRIANGLE_TOP_RIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TYPE;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.PAUSE;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.RUN;
 
 public class Play extends GameState {
 
@@ -221,6 +220,21 @@ public class Play extends GameState {
         boss = new Boss(body);
         bossArray.add(boss);
 
+    }
+
+    private void createCheckpoints(Vector2 pos) {
+        bdef = new BodyDef();
+        bdef.position.set(pos);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bdef);
+        shape = new PolygonShape();
+        shape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
+        fdef.shape = shape;
+        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
+        fdef.filter.maskBits = B2DVars.BIT_ALL;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("checkpoint");
+        checkpoint = new Checkpoint(body);
     }
 
 
@@ -415,21 +429,6 @@ public class Play extends GameState {
                 }
             }
         }
-    }
-
-    private void createCheckpoints(Vector2 pos) {
-        bdef = new BodyDef();
-        bdef.position.set(pos);
-        bdef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bdef);
-        shape = new PolygonShape();
-        shape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
-        fdef.shape = shape;
-        fdef.filter.categoryBits = B2DVars.BIT_PLAYER;
-        fdef.filter.maskBits = B2DVars.BIT_ALL;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("checkpoint");
-        checkpoint = new Checkpoint(body);
     }
 
 

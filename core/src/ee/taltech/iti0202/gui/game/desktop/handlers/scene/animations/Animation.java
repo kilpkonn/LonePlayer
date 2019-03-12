@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.handlers;
+package ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 

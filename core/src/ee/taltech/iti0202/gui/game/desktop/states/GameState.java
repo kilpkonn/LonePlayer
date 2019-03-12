@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 
 
 public abstract class GameState {

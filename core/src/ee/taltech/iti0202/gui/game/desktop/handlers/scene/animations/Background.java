@@ -1,11 +1,11 @@
-package ee.taltech.iti0202.gui.game.desktop.handlers;
+package ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 public class Background {
 

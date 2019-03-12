@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.handlers;
+package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,9 +15,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 
 public class PauseMenu {

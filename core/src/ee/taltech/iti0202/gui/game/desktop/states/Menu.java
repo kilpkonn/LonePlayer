@@ -16,16 +16,17 @@ import java.util.HashMap;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.handlers.Animation;
-import ee.taltech.iti0202.gui.game.desktop.handlers.GameButton;
-import ee.taltech.iti0202.gui.game.desktop.handlers.GameStateManager;
-import ee.taltech.iti0202.gui.game.desktop.handlers.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.handlers.ParallaxBackground;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Background;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.MAIN_SCREENS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 public class Menu extends GameState {
 
@@ -37,7 +38,7 @@ public class Menu extends GameState {
         DEFAULT
     }
 
-    private ee.taltech.iti0202.gui.game.desktop.handlers.Background bg;
+    private Background bg;
     private Animation animation;
     private Stage stage;
     private GameButton newGameButtonActive;
