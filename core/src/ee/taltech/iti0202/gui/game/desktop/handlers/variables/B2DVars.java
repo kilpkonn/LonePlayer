@@ -11,6 +11,7 @@ public class B2DVars {
     public static final float PLAYER_SPEED = 8;
     public static final float PLAYER_DASH_FORCE_UP = 250;
     public static final float PLAYER_DASH_FORCE_SIDE = 200;
+    public static final boolean DEBUG = true;
 
     public static String PATH = "";
     public static int V_WIDTH = 1920;
@@ -20,7 +21,6 @@ public class B2DVars {
     // map variables
     public static final String TYPE = "1";
     public static final String BOSS = "2";
-    public static final String CORNER_LOCATION = "2";
 
     // bosses
     public static final String MAGMAWORM = "1";

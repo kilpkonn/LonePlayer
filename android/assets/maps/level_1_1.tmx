@@ -1,91 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="130" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="24" nextobjectid="1">
- <tileset firstgid="1" source="DungeonCrawler.tsx"/>
- <tileset firstgid="3073" source="Neon.tsx"/>
- <tileset firstgid="3113" source="Flag.tsx"/>
- <layer id="14" name="background" width="130" height="64">
-  <properties>
-   <property name="1" value="background"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
-  </data>
- </layer>
- <layer id="15" name="bosses" width="130" height="64">
-  <properties>
-   <property name="1" value="boss"/>
-   <property name="2" value="1"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJzt18kJAAAIAzB3d3Gn8IJkgkIfpREAAAAAAAC35XYAAGCEzQcAAKb5If/oDAAAAAAAAAAAAAAAAAAAAAAAAACATgXzcwIN
-  </data>
- </layer>
- <layer id="16" name="player" width="130" height="64">
-  <properties>
-   <property name="1" value="player"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJztzgENAAAIA6DHs38iY9w5SEACAAAAAAAAAAAAAAAAAAAAAPDftAMAAAAAAAAAAAAAAAAAAMBpC4yfAEk=
-  </data>
- </layer>
- <layer id="17" name="border" width="130" height="64">
-  <properties>
-   <property name="1" value="border"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJzt3EENACAQBLHThn9RZBwQntAmq4D5HmtmltnwOx0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB2Qmw78p/Ae70Z0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QE5ul+2PbVCpZVM=
-  </data>
- </layer>
- <layer id="18" name="terra_triangle_bottom_right" width="130" height="64">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="256" height="128" tilewidth="16" tileheight="16" infinite="0" nextlayerid="55" nextobjectid="1">
+ <properties>
+  <property name="1" value="player"/>
+ </properties>
+ <tileset firstgid="1" source="tilesets/DungeonCrawler.tsx"/>
+ <tileset firstgid="3073" source="tilesets/base_1.tsx"/>
+ <layer id="31" name="terra_triangle_bottom_right" width="256" height="128">
   <properties>
    <property name="1" value="triangle"/>
    <property name="2" value="bottom_right"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T+1hDaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbgAeAAE=
   </data>
  </layer>
- <layer id="19" name="terra_triangle_bottom_left" width="130" height="64">
+ <layer id="32" name="terra_squares" width="256" height="128">
+  <properties>
+   <property name="1" value="square"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   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
+  </data>
+ </layer>
+ <layer id="36" name="player" width="256" height="128">
+  <properties>
+   <property name="1" value="player"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztzjEBAAAIA6DFs38iG+zUBxKQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA3JnvAAAAAFAtbToASQ==
+  </data>
+ </layer>
+ <layer id="33" name="terra_triangle_bottom_left" width="256" height="128">
   <properties>
    <property name="1" value="triangle"/>
    <property name="2" value="bottom_left"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T+1hDaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbgAeAAE=
   </data>
  </layer>
- <layer id="20" name="terra_triangle_top_left" width="130" height="64">
+ <layer id="34" name="terra_triangle_top_left" width="256" height="128">
   <properties>
    <property name="1" value="triangle"/>
    <property name="2" value="top_left"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T+1hDaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbgAeAAE=
   </data>
  </layer>
- <layer id="21" name="terra_triangle_top_right" width="130" height="64">
+ <layer id="35" name="terra_triangle_top_right" width="256" height="128">
   <properties>
    <property name="1" value="triangle"/>
    <property name="2" value="top_right"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
-  </data>
- </layer>
- <layer id="22" name="terra_squares" width="130" height="64">
-  <properties>
-   <property name="1" value="square"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJzt27ENwzAMAEGVLryEN/NoGcWjRb9BgFiAijuALRt+yzEAAADgf9c5nuMcw2w/z7zVvaqDY+Fu3jVv9Vm4+161m3fpgOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogKzs4Jq7N/jdMz/MvBUAAAAAAAAAAAAAAAAAwPa+1S8y/Q==
-  </data>
- </layer>
- <layer id="23" name="checkpoints" width="130" height="64">
-  <properties>
-   <property name="1" value="checkpoint"/>
-  </properties>
-  <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T+1hDaAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAbgAeAAE=
   </data>
  </layer>
 </map>
