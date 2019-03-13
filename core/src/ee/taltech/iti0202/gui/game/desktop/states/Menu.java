@@ -97,19 +97,17 @@ public class Menu extends GameState {
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         world = new World(new Vector2(0, -9.8f * 5), true);
-        //world = new World(new Vector2(0, 0), true);
 
     }
 
     private void addParallax(String path) {
         backgroundTexture = new Texture(Gdx.files.internal(PATH + path + ".png"));
         stage = new Stage(new ScreenViewport());
-        Array<Texture> textures = new Array<Texture>();
+        Array<Texture> textures = new Array<>();
         for (int i = 1; i <= 6; i++) {
             textures.add(new Texture(Gdx.files.internal(PATH + path + i + ".png")));
             textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
-
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures);
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         parallaxBackground.setSpeed(1f);
@@ -119,7 +117,7 @@ public class Menu extends GameState {
     @Override
     public void handleInput() {   // TODO: MAKE A ACT SELECTOR
         if (MyInput.isPressed(MyInput.SHOOT) && cur_block == block.NEW_GAME) {
-            gsm.pushState(GameStateManager.State.PLAY, 1, 1);
+            gsm.pushState(GameStateManager.State.PLAY, 0, 0);
         }
 
         if (MyInput.isPressed(MyInput.SHOOT) && cur_block == block.EXIT) {

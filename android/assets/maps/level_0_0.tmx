@@ -27,22 +27,22 @@
  </layer>
  <layer id="18" name="terra_triangle_bottom_right" width="130" height="64">
   <data encoding="base64" compression="zlib">
-   eJztzrEJAEAIBMFLBTGx/17/uzCZgc03AQAAAAAAAAAAAAAAAAAAAGA6qd/29QkAAAAAAAAAAAAAAAAAAABw4QEnhABP
+   eJzt0TEKACAMA8AOLkJx8f9/FREXd3HwDgLpVkgEAAAAAAAAAAAAAAAAAAAA/KtlRM/VS779hfvm3vXI3r8dNwAAAAAAAAAAAAAAAAAAAPCXAa/SASU=
   </data>
  </layer>
  <layer id="19" name="terra_triangle_bottom_left" width="130" height="64">
   <data encoding="base64" compression="zlib">
-   eJztzqERACAMBMGXiMTQf7EgqYCY3ZnzlwAAAAAAAAAAAAAAAAAAAADw6krWbdf0CQAAAAAAAAAAAAAAAAAAAPDLAWKJAEw=
+   eJzt0jEKwEAIBEDhmhSmiP9/bIQQuLxACDOwLHaCRgAAAAAAAAAAAAAAAAAAAACvlU9n95WzuzDn7NsfncrvvKf8BwAAAAAAAAAAAAAAAAAAAPzKDfgGARc=
   </data>
  </layer>
  <layer id="20" name="terra_triangle_top_left" width="130" height="64">
   <data encoding="base64" compression="zlib">
-   eJztzqERACAQA8E4TAz9NwuaAh6zO3P+EgAAAAAAAAAAAAAAAAAAAADg1Sbrtvv7BAAAAAAAAAAAAAAAAAAAgAkHDvYASQ==
+   eJzt0TEKACAMA8Di4tLF/39WF6H6hHIHGULGRAAAAAAAAAAAAAAAAAAAAAAAv8yIebLy7TV3o69R/vc3AAAAAAAAAAAAAAAAAAD0tgFBawEN
   </data>
  </layer>
  <layer id="21" name="terra_triangle_top_right" width="130" height="64">
   <data encoding="base64" compression="zlib">
-   eJztzrENACAMBLGvUaQ07D8rsARpbOn6SwAAAAAAAAAAAAAAAAAAAACApytZt13TJwAAAAAAAAAAAAAAAAAAAPx2AERkAFI=
+   eJzt0jEKACAMA8AuLlLo4v/f6iSoX+gdZCgZ0wgAAAAAAAAAAAAAAAAAAAAA6KMyYn5Z+Xbnpp+69h/+AAAAAAAAAAAAAAAAAAAAWtkd1gEx
   </data>
  </layer>
  <layer id="22" name="terra_squares" width="130" height="64">

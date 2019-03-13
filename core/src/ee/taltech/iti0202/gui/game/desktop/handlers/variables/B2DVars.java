@@ -19,7 +19,6 @@ public class B2DVars {
     public static int SCALE = 1;
 
     // map variables
-    public static final String TYPE = "1";
     public static final String BOSS = "2";
 
     // bosses
