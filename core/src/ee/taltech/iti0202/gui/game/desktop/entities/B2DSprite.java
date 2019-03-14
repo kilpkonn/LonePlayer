@@ -38,11 +38,6 @@ public class B2DSprite {
                 body.getPosition().x * B2DVars.PPM,
                 body.getPosition().y * B2DVars.PPM);
 
-        // may the distance between 2 stages be 20 blocks (32 x 32)
-
-        //System.out.println(body.getPosition().x);
-        //System.out.println(body.getPosition().y);
-        //System.out.println();
         sb.end();
     }
 

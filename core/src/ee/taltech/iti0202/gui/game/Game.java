@@ -5,8 +5,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.Content;
@@ -28,7 +26,7 @@ public class Game extends ApplicationAdapter {
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;
-    private Viewport viewport;
+
 
     private GameStateManager gsm;
     public static Content res;
@@ -73,7 +71,7 @@ public class Game extends ApplicationAdapter {
         sb = new SpriteBatch();
 
         cam = new OrthographicCamera();
-        viewport = new FitViewport(V_WIDTH, V_HEIGHT, cam);
+
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
@@ -111,7 +109,11 @@ public class Game extends ApplicationAdapter {
     }
 
     public void resize(int w, int h) {
-        viewport.update(w, h);
+        System.out.println(w);
+        System.out.println(h);
+        System.out.println();
+        V_HEIGHT = h;
+        V_WIDTH = w;
     }
 
     public void pause() {

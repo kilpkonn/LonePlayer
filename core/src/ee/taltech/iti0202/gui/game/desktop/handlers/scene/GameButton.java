@@ -11,10 +11,10 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 public class GameButton {
 
     // center at x, y
-    private float x;
-    private float y;
-    private float width;
-    private float height;
+    public float x;
+    public float y;
+    public float width;
+    public float height;
     private TextureRegion reg;
 
     private boolean hoverOver;

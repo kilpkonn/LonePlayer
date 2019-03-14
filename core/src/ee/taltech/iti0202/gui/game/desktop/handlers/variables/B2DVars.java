@@ -11,7 +11,7 @@ public class B2DVars {
     public static final float PLAYER_SPEED = 8;
     public static final float PLAYER_DASH_FORCE_UP = 250;
     public static final float PLAYER_DASH_FORCE_SIDE = 200;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static String PATH = "";
     public static int V_WIDTH = 1920;
@@ -26,13 +26,17 @@ public class B2DVars {
     public static final String COLOSSEOS = "2";
 
     // category bits
-    public static final short BIT_ALL = 15;
-    public static final short BIT_PLAYER = 1;
-    public static final short TERRA_SQUARES = 2;
-    public static final short BIT_BOSSES = 4;
-    public static final short BIT_WORM = 8;
-    public static final short BACKGROUND = 16;
     public static final short NONE = 0;
+    public static final short BIT_ALL = 255;
+    public static final short DIMENTSION_1 = 1;
+    public static final short DIMENTSION_2 = 2;
+    public static final short TERRA_SQUARES = 4;
+    public static final short BIT_BOSSES = 8;
+    public static final short BIT_WORM = 16;
+    public static final short BACKGROUND = 32;
+    public static final short TERRA_DIMENTSION_1 = 64;
+    public static final short TERRA_DIMENTSION_2 = 128;
+
 
     // corner coords
     public static final int[] SQUARE_CORNERS = {-1, -1, -1, 1, 1, 1, 1, -1};

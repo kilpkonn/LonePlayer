@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="130" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="24" nextobjectid="1">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="130" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="26" nextobjectid="1">
  <tileset firstgid="1" source="tilesets/DungeonCrawler.tsx"/>
  <tileset firstgid="3073" source="tilesets/Neon.tsx"/>
  <layer id="14" name="background" width="130" height="64">
@@ -42,7 +42,17 @@
  </layer>
  <layer id="21" name="terra_triangle_top_right" width="130" height="64">
   <data encoding="base64" compression="zlib">
-   eJzt0jEKACAMA8AuLlLo4v/f6iSoX+gdZCgZ0wgAAAAAAAAAAAAAAAAAAAAA6KMyYn5Z+Xbnpp+69h/+AAAAAAAAAAAAAAAAAAAAWtkd1gEx
+   eJzt2rEJACAMBMA0NiKkcf9ZrQRxAUXv4It0gXyZCAAAAAAAAAC4T2+nNwAAAAAAAAAAAF6VLaJumT9Luc38J5f7Fz0AAAAAAAAAAAAAAAAAAICvDIR+AVE=
+  </data>
+ </layer>
+ <layer id="24" name="terra_dimension_1" width="130" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt0jEKwCAQRUELC4vYpPH+t/FY0TJgUgnRMAPbL/wXAgAAAAAAAAAAAAAAAAAAu6rx6w9YgQ7odECng/8rx/1GdLCX3HZML3c+7AwAAAAAAAAAAAAAAAAAAMB8F65EBUw=
+  </data>
+ </layer>
+ <layer id="25" name="terra_dimension_2" width="130" height="64">
+  <data encoding="base64" compression="zlib">
+   eJzt1s0JgDAMBtDcRCxeXMDRXMVNHMXRbBFEwZ+bKLwHuYQUCv0KiQAAAAAAAAAAAAAAAAAA4Gv6FHOVIvaVe8PV/Ni8eDlek999OukNV/Ny8A9t/s/1TXXpOC8HFHJAIQcUeSecqnVX3KpPz+cAAAAAAAAAAAAAAAAAAAB4tgDlJA4p
   </data>
  </layer>
  <layer id="22" name="terra_squares" width="130" height="64">

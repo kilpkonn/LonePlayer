@@ -2,8 +2,8 @@ package ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input;
 
 public class MyInput {
 
-    public static boolean[] keys;
-    public static boolean[] pkeys;
+    private static boolean[] keys;
+    private static boolean[] pkeys;
 
     public static final int NUM_KEYS = 7;
     public static final int MOVE_LEFT = 0;

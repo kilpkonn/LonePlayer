@@ -48,8 +48,7 @@ public class PauseMenu {
     private GameButton saveAndExitButtonActive;
 
     private Vector2 mouseInWorld2D;
-    private List<List<GameButton>> buttons;
-    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    public List<List<GameButton>> buttons;
     private HashMap<GameButton, block> buttonType;
     private block cur_block = block.DEFAULT;
 
@@ -60,7 +59,6 @@ public class PauseMenu {
         stage = new Stage(new ScreenViewport());
         mouseInWorld2D = new Vector2();
 
-        //hudCam.position.set(V_WIDTH / 2f, V_HEIGHT / 2f, 0);
         hudCam.update();
 
         Texture backLayer = Game.res.getTexture("backLayer");
