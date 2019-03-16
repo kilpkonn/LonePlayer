@@ -269,12 +269,17 @@ public class Play extends GameState {
     private void drawLayers() {
         TiledMapTileLayer layer;
 
+        Short[] terra_masks = {TERRA_SQUARES, TERRA_DIMENTSION_1, TERRA_DIMENTSION_2};
+        String[] terra_dimentions = {"", "_1", "_2"};
         String[] terra_layers = {"terra_squares", "terra_triangle_bottom_right", "terra_triangle_bottom_left", "terra_triangle_top_left", "terra_triangle_top_right"};
 
-        for (String terra_layer : terra_layers) {
-            layer = (TiledMapTileLayer) tiledMap.getLayers().get(terra_layer);
-            draw_solid(layer, TERRA_SQUARES, false);
+        for (int i = 0; i < 3; i++) {
+            for (String terra_layer : terra_layers) {
+                layer = (TiledMapTileLayer) tiledMap.getLayers().get(terra_layer + terra_dimentions[i]);
+                draw_solid(layer, terra_masks[i], false);
+            }
         }
+
 
         layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_dimension_1");
         draw_solid(layer, TERRA_DIMENTSION_1, false);
@@ -473,9 +478,8 @@ public class Play extends GameState {
             dimentionJump = true;
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
-            System.out.println(player.getBody().getLinearVelocity());
             dimention =! dimention;
-            initPlayer();
+            cl.setPlayerDead(true);
         }
 
         //player jump / double jump
@@ -622,10 +626,10 @@ public class Play extends GameState {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(new Color(0, 0, 0, 0.03f));
         shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
-        shapeRenderer.setColor(new Color(0, 0, 0, 0.1f));
+        shapeRenderer.setColor(new Color(0, 0, 0, 0.2f));
         for (List<GameButton> buttons : pauseMenu.buttons) {
             GameButton button = buttons.get(1);
-            shapeRenderer.rect(button.x - button.width, button.y - 2, button.width, 2);
+            shapeRenderer.rect(button.x - button.width, button.y - 2, button.width, 4);
         }
         shapeRenderer.end();
 
