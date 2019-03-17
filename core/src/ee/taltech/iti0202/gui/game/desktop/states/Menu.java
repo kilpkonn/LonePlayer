@@ -60,7 +60,7 @@ public class Menu extends GameState {
         super(gsm);
 
         // get textures
-        player = Game.res.getTexture("Player");
+        player = Game.res.getTexture("Llama");
         logo = Game.res.getTexture("Logo");
 
         // init parallax background

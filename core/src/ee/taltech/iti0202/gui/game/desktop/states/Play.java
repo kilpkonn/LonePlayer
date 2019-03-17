@@ -16,7 +16,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
@@ -39,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.entities.B2DSprite;
 import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
@@ -55,6 +54,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBac
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_ALL;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
@@ -78,10 +78,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.SQU
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_SQUARES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TRIANGLE_BOTTOM_LEFT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TRIANGLE_BOTTOM_RIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TRIANGLE_TOP_LEFT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TRIANGLE_TOP_RIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.PAUSE;
@@ -96,7 +92,7 @@ public class Play extends GameState {
     private MyContactListener cl;
     private TiledMap tiledMap;
     private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
-    private OrthoCachedTiledMapRenderer tmr;
+    private OrthogonalTiledMapRenderer renderer;
     private Player player;
     private boolean dimension;
     private boolean dimensionJump;
@@ -114,6 +110,11 @@ public class Play extends GameState {
     private Stage stage;
     private ParallaxBackground parallaxBackground;
     private Vector2 current_force;
+    private TiledMapTileLayer background;
+    private TiledMapTileLayer foreground;
+    private TiledMapTileLayer dimension_2;
+    private TiledMapTileLayer dimension_1;
+
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
@@ -153,8 +154,8 @@ public class Play extends GameState {
 
         // set up background
         current_force = new Vector2(0, 0);
-        Texture texture = Game.res.getTexture("starBackground");
-        texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
+        Texture texture = Game.res.getTexture(BACKGROUND_SCREENS.get(act));
+        texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.ClampToEdge);
         Array<Texture> textures = new Array<>();
         textures.add(texture);
         parallaxBackground = new ParallaxBackground(textures);
@@ -170,9 +171,9 @@ public class Play extends GameState {
         // load tiled map
         String path = PATH + "maps/level_" + act + "_" + map + ".tmx";
         tiledMap = new TmxMapLoader().load(path);
-        tmr = new OrthoCachedTiledMapRenderer(tiledMap, 1, 8191);
-        List<TiledMapTileLayer.Cell> cellList = new ArrayList<>();
+        renderer = new OrthogonalTiledMapRenderer(tiledMap);
         animatedCells = new HashMap<>();
+
         drawLayers();
     }
 
@@ -186,19 +187,15 @@ public class Play extends GameState {
         circle = new CircleShape();
         polyShape = new PolygonShape();
 
-        if (checkpoint == null) {
-            if (initPlayerLocation == null)
-                bdef.position.set(0, 0);
-            else bdef.position.set(initPlayerLocation);
-        } else if (dimensionJump) {
+
+        if (dimensionJump) {
             dimensionJump = false;
             bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
-            bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
-        } else {
-            if (cl.isInitSpawn()) bdef.position.set(initPlayerLocation);
-            else
-                bdef.position.set(new Vector2(checkpoint.getPosition()));
-        }
+            bdef.linearVelocity.set(new Vector2(tempPlayerVelocity)); }
+        else if (checkpoint == null) if (initPlayerLocation == null) bdef.position.set(0, 0);
+        else bdef.position.set(initPlayerLocation);
+        else if (cl.isInitSpawn()) bdef.position.set(initPlayerLocation);
+        else bdef.position.set(new Vector2(checkpoint.getPosition()));
 
         // TODO: make user control 2 players same time
 
@@ -210,7 +207,7 @@ public class Play extends GameState {
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
         fdef.isSensor = false;
-        circle.setRadius(6 / PPM);
+        circle.setRadius(9 / PPM);
         fdef.shape = circle;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
@@ -218,13 +215,13 @@ public class Play extends GameState {
         body.setFixedRotation(false);
         body.setUserData("playerBody");
 
-        polyShape.setAsBox(4 / PPM, 8 / PPM, new Vector2(0, 8 / PPM), 0);
+        polyShape.setAsBox(8 / PPM, 16 / PPM, new Vector2(0, 12 / PPM), 0);
         fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
         body.createFixture(fdef).setUserData("playerBody");
 
-        polyShape.setAsBox(4 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
+        polyShape.setAsBox(8 / PPM, 4 / PPM, new Vector2(0, -13 / PPM), 0);
         fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
@@ -284,12 +281,11 @@ public class Play extends GameState {
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
     private void drawLayers() {
-
         for (MapLayer layer : tiledMap.getLayers()) {
-            switch(layer.getName()){
-                case "hitboxes":
-                    fdef.filter.categoryBits = TERRA_SQUARES;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+            switch (layer.getName()) {
+                case "barrier":
+                    fdef.filter.categoryBits = BIT_ALL;
+                    fdef.filter.maskBits = BIT_ALL;
                     determineMapObject(layer);
                     break;
                 case "hitboxes_1":
@@ -300,6 +296,11 @@ public class Play extends GameState {
                 case "hitboxes_2":
                     fdef.filter.categoryBits = TERRA_DIMENTSION_2;
                     fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_2;
+                    determineMapObject(layer);
+                    break;
+                case "hitboxes":
+                    fdef.filter.categoryBits = TERRA_SQUARES;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
                     determineMapObject(layer);
                     break;
                 default:
@@ -328,146 +329,40 @@ public class Play extends GameState {
     }
 
     private void ReadVertices(TiledMapTileLayer layer) {
-
-        short bits;
-        int[] corner_coords;
-        short maskBits;
+        int[] corner_coords = SQUARE_CORNERS;
         String type = layer.getName();
         boolean isSensor = false;
         float tileSize = layer.getTileWidth();
 
         switch (type) {
-            case "terra_squares":
-                corner_coords = SQUARE_CORNERS;
-                maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
-                bits = TERRA_SQUARES;
+
+            case "dimension_1":
+                dimension_1 = layer;
+                isSensor = true;
                 layer.setVisible(true);
+                background = layer;
                 break;
 
-            case "terra_dimension_1":
-                corner_coords = SQUARE_CORNERS;
-                maskBits = DIMENTSION_1;
-                bits = TERRA_DIMENTSION_1;
+            case "dimension_2":
+                dimension_2 = layer;
+                isSensor = true;
                 layer.setVisible(true);
-                break;
-
-            case "terra_dimension_2":
-                corner_coords = SQUARE_CORNERS;
-                maskBits = DIMENTSION_2;
-                bits = TERRA_DIMENTSION_2;
-                layer.setVisible(true);
+                background = layer;
                 break;
 
             case "background":
-                corner_coords = SQUARE_CORNERS;
-                maskBits = NONE;
-                bits = NONE;
                 isSensor = true;
                 layer.setVisible(true);
+                background = layer;
                 break;
 
-            case "border":
-                corner_coords = SQUARE_CORNERS;
-                maskBits = BIT_ALL;
-                bits = BIT_ALL;
-                layer.setVisible(false);
-                break;
-
-            case "terra_triangle_bottom_left":
-                corner_coords = TRIANGLE_BOTTOM_LEFT;
-                maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
-                bits = TERRA_SQUARES;
+            case "foreground":
+                isSensor = true;
                 layer.setVisible(true);
-                break;
-
-            case "terra_triangle_bottom_right":
-                corner_coords = TRIANGLE_BOTTOM_RIGHT;
-                maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
-                bits = TERRA_SQUARES;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_top_left":
-                corner_coords = TRIANGLE_TOP_LEFT;
-                maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
-                bits = TERRA_SQUARES;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_top_right":
-                corner_coords = TRIANGLE_TOP_RIGHT;
-                maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
-                bits = TERRA_SQUARES;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_bottom_left_1":
-                corner_coords = TRIANGLE_BOTTOM_LEFT;
-                maskBits = BIT_BOSSES | DIMENTSION_1;
-                bits = TERRA_DIMENTSION_1;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_bottom_right_1":
-                corner_coords = TRIANGLE_BOTTOM_RIGHT;
-                maskBits = BIT_BOSSES | DIMENTSION_1;
-                bits = TERRA_DIMENTSION_1;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_top_left_1":
-                corner_coords = TRIANGLE_TOP_LEFT;
-                maskBits = BIT_BOSSES | DIMENTSION_1;
-                bits = TERRA_DIMENTSION_1;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_top_right_1":
-                corner_coords = TRIANGLE_TOP_RIGHT;
-                maskBits = BIT_BOSSES | DIMENTSION_1;
-                bits = TERRA_DIMENTSION_1;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_bottom_left_2":
-                corner_coords = TRIANGLE_BOTTOM_LEFT;
-                maskBits = BIT_BOSSES | DIMENTSION_2;
-                bits = TERRA_DIMENTSION_2;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_bottom_right_2":
-                corner_coords = TRIANGLE_BOTTOM_RIGHT;
-                maskBits = BIT_BOSSES | DIMENTSION_2;
-                bits = TERRA_DIMENTSION_2;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_top_left_2":
-                corner_coords = TRIANGLE_TOP_LEFT;
-                maskBits = BIT_BOSSES | DIMENTSION_2;
-                bits = TERRA_DIMENTSION_2;
-                layer.setVisible(true);
-                break;
-
-            case "terra_triangle_top_right_2":
-                corner_coords = TRIANGLE_TOP_RIGHT;
-                maskBits = BIT_BOSSES | DIMENTSION_2;
-                bits = TERRA_DIMENTSION_2;
-                layer.setVisible(true);
-                break;
-
-            case "database":
-                corner_coords = SQUARE_CORNERS;
-                maskBits = NONE;
-                bits = NONE;
-                layer.setVisible(false);
+                foreground = layer;
                 break;
 
             default:
-                corner_coords = SQUARE_CORNERS;
-                maskBits = NONE;
-                bits = NONE;
                 layer.setVisible(false);
                 break;
         }
@@ -495,7 +390,7 @@ public class Play extends GameState {
                     continue;
                 }
 
-                if (cell.getTile().getProperties().containsKey("animation")){
+                if (cell.getTile().getProperties().containsKey("animation")) {
                     Texture tex = Game.res.getTexture("Player");
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
                     animatedCells.put(cell, new Animation(sprites, 1 / 12f));
@@ -525,8 +420,8 @@ public class Play extends GameState {
             for (Vector2[] polygon : polygonVertices) {
 
                 polyShape.set(polygon);
-                fdef.filter.categoryBits = bits;
-                fdef.filter.maskBits = maskBits;
+                fdef.filter.categoryBits = NONE;
+                fdef.filter.maskBits = NONE;
                 fdef.isSensor = isSensor;
                 switch (layer.getName()) {
                     case "checkpoints":
@@ -769,13 +664,8 @@ public class Play extends GameState {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(0, 0, 0, 0.03f));
+        shapeRenderer.setColor(new Color(0, 0, 0, 0.05f));
         shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
-        shapeRenderer.setColor(new Color(0, 0, 0, 0.2f));
-        for (List<GameButton> buttons : pauseMenu.buttons) {
-            GameButton button = buttons.get(1);
-            shapeRenderer.rect(button.x - button.width, button.y - 2, button.width, 4);
-        }
         shapeRenderer.end();
 
         //render pauseMenu
@@ -805,33 +695,28 @@ public class Play extends GameState {
         stage.draw();
 
         //render animations
-        if (animatedCells != null){
-            for (TiledMapTileLayer.Cell cell : animatedCells.keySet()) {
-                cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
-            }
-            tmr.invalidateCache();
-        }
+        if (animatedCells != null) for (TiledMapTileLayer.Cell cell : animatedCells.keySet())
+            cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
 
         //draw tilemap
-        tmr.setView(cam);
-        tmr.render();
+        renderer.setView(cam);
+        renderer.getBatch().begin();
+        if (background != null) renderer.renderTileLayer(background);
+        if (foreground != null) renderer.renderTileLayer(foreground);
+        if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
+        if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
+        renderer.getBatch().end();
         b2dcam.update();
         cam.update();
 
         //draw player
         sb.setProjectionMatrix(cam.combined);
-        if (player != null) {
-            player.render(sb);
-        }
+        if (player != null) player.render(sb);
 
-        if (bossArray != null) {
-            for (Boss boss : bossArray) boss.render(sb);
-        }
+        if (bossArray != null) for (Boss boss : bossArray) boss.render(sb);
 
         // draw checkpoint
-        if (checkpoint != null) {
-            checkpoint.render(sb);
-        }
+        if (checkpoint != null) checkpoint.render(sb);
     }
 
     public void dispose() {

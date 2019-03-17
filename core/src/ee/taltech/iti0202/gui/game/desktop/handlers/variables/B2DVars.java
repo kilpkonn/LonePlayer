@@ -1,5 +1,10 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.variables;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static javax.swing.UIManager.put;
+
 public class B2DVars {
 
     // pixel per meter
@@ -9,8 +14,8 @@ public class B2DVars {
     public static final float MAX_SPEED = 2.5f;
     public static final float FRICTION = 0.6f;
     public static final float PLAYER_SPEED = 8;
-    public static final float PLAYER_DASH_FORCE_UP = 250;
-    public static final float PLAYER_DASH_FORCE_SIDE = 200;
+    public static float PLAYER_DASH_FORCE_UP = 250;
+    public static float PLAYER_DASH_FORCE_SIDE = 150;
     public static final boolean DEBUG = false;
 
     public static String PATH = "";
@@ -37,15 +42,15 @@ public class B2DVars {
     public static final short TERRA_DIMENTSION_1 = 64;
     public static final short TERRA_DIMENTSION_2 = 128;
 
-
     // corner coords
     public static final int[] SQUARE_CORNERS = {-1, -1, -1, 1, 1, 1, 1, -1};
-    public static final int[] TRIANGLE_BOTTOM_LEFT = {-1, -1, -1, 1, 1, -1, 1, -1};
-    public static final int[] TRIANGLE_BOTTOM_RIGHT = {-1, -1, -1, -1, 1, 1, 1, -1};
-    public static final int[] TRIANGLE_TOP_RIGHT = {-1, 1, -1, 1, 1, 1, 1, -1};
-    public static final int[] TRIANGLE_TOP_LEFT = {-1, -1, -1, 1, 1, 1, 1, 1};
 
     // main screen sections
+    public static final Map<Integer, String> BACKGROUND_SCREENS = new HashMap<Integer, String>() {{
+        put(1, "rock");
+        put(2, "snow");
+    }};
+
     public static final String[] MAIN_SCREENS = {
             "images/game_background_0/layers/backgroundLayer",
             "images/game_background_1/layers/backgroundLayer",

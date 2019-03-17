@@ -24,7 +24,7 @@ public class MyContactListener implements ContactListener {
     public void beginContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
-
+        System.out.println(fa.getUserData() + ", " + fb.getUserData());
 
         if (fa.getUserData() != null && fb.getUserData() != null) {
 
@@ -49,12 +49,12 @@ public class MyContactListener implements ContactListener {
 
             // detection happens when player goes outside of initial game border
             if (fa.getUserData() != null && (fa.getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
-                if (fb.getUserData().equals("border")) {
+                if (fb.getUserData().equals("barrier")) {
                     setPlayerDead(true);
                 }
             }
             if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
-                if (fa.getUserData().equals("border")) {
+                if (fa.getUserData().equals("barrier")) {
                     setPlayerDead(true);
                 }
             }
