@@ -1,117 +1,124 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="130" height="64" tilewidth="32" tileheight="32" infinite="0" nextlayerid="37" nextobjectid="5">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="130" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="59" nextobjectid="29">
  <tileset firstgid="1" source="tilesets/DungeonCrawler.tsx"/>
  <tileset firstgid="3073" source="tilesets/Neon.tsx"/>
  <tileset firstgid="3113" source="tilesets/base_1.tsx"/>
- <layer id="14" name="background" width="130" height="64">
+ <layer id="53" name="border" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJzt3DENADAMBLFgC39Q1VHo2NrSI8jN2ZlZs+F3OiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA3Hfin8B53IzogOiA6IDogOiA1cACUITfz
   </data>
  </layer>
- <layer id="22" name="terra_squares" width="130" height="64">
+ <layer id="37" name="background" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt27ENwzAMAEGVLryEN/NoGcWjRb9BgFiAijuALRt+yzEAAADgf9c5nuMcw2w/z7zVvaqDY+Fu3jVv9Vm4+161m3fpgOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogKzs4Jq7N/jdMz/MvBUAAAAAAAAAAAAAAAAAwPa+1S8y/Q==
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
   </data>
  </layer>
- <layer id="18" name="terra_triangle_bottom_right" width="130" height="64">
+ <layer id="38" name="terra_squares" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt0TEKACAMA8AOLkJx8f9/FREXd3HwDgLpVkgEAAAAAAAAAAAAAAAAAAAA/KtlRM/VS779hfvm3vXI3r8dNwAAAAAAAAAAAAAAAAAAAPCXAa/SASU=
+   eJzt27ENhEAMAMELCWiCzijtS6E0bjt4CU4imJGcOvGmHgMAAACeO/ZxbfsY5vNzzVudqzrYFu7mXfNWv4W7z1W7eZcOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOyMoOjrn7A7975o+ZtwIAeOwGlcUy/Q==
   </data>
  </layer>
- <layer id="20" name="terra_triangle_top_left" width="130" height="64">
+ <layer id="39" name="terra_triangle_bottom_right" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt0TEKACAMA8Di4tLF/39WF6H6hHIHGULGRAAAAAAAAAAAAAAAAAAAAAAAv8yIebLy7TV3o69R/vc3AAAAAAAAAAAAAAAAAAD0tgFBawEN
+   eJzt0TEKwDAMA0ANXQrGS/7/1xJKl+wlhd6BQN4MSgAAAAAAAAAAAAAAAAAAAOC/upJRdz9q7y+8b+59Lnn27+UGAAAAvuUC4MoBJQ==
   </data>
  </layer>
- <layer id="21" name="terra_triangle_top_right" width="130" height="64">
+ <layer id="40" name="terra_triangle_top_left" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt0jEKACAMA8AuLlLo4v/f6iSoX+gdZCgZ0wgAAAAAAAAAAAAAAAAAAAAA6KMyYn5Z+Xbnpp+69h/+AAAAAAAAAAAAAAAAAAAAWtkd1gEx
+   eJzt0TEKACAMA8Di4tLF/39WF6H6AUHuIEPImAgAAAAAAAAAAAAAAAAAAAAA4JYZ0VdGnr1mb/yrlf/9DQAAb00ErgEN
   </data>
  </layer>
- <layer id="19" name="terra_triangle_bottom_left" width="130" height="64">
+ <layer id="41" name="terra_triangle_top_right" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt0jEKwEAIBEDhmhSmiP9/bIQQuLxACDOwLHaCRgAAAAAAAAAAAAAAAAAAAACvlU9n95WzuzDn7NsfncrvvKf8BwAAAAAAAAAAAAAAAAAAAPzKDfgGARc=
+   eJzt0jEKACAMA8AuLlLo4v/f6iSoLxC8gwwlYxoBAAAAAAAAAAAAAAAAAAAAAP+ojOhXRp7duvlPbfs3fwAAAE+ZBbABMQ==
   </data>
  </layer>
- <layer id="24" name="terra_squares_1" width="130" height="64">
+ <layer id="42" name="terra_triangle_bottom_left" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt0jEKwCAQRUELC4vYpPH+t/FY0TJgUgnRMAPbL/wXAgAAAAAAAAAAAAAAAAAAu6rx6w9YgQ7odECng/8rx/1GdLCX3HZML3c+7AwAAAAAAAAAAAAAAAAAAMB8F65EBUw=
+   eJzt0jEKwEAIBEDhmhSmiP9/bIQQuHwgNjOwLHaCRgAAAAAAAAAAAAAAAAAAAACvlU9n95WzuzDn7NsfncrvvKf8BwAAAPzqBtOrARc=
   </data>
  </layer>
- <layer id="26" name="terra_triangle_top_right_1" width="130" height="64">
+ <layer id="43" name="terra_squares_1" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJzt0iEOwCAQRUEEAlEMhvvfhmMVZBNaS2lnkvWb/BcCAAAAAAAAAAAAAAAAAAC7anH1B7yBDhh0wKCD76vH9WZ0sJfcd0wPV252BgAA+KMTZiYFTA==
   </data>
  </layer>
- <layer id="32" name="terra_triangle_bottom_right_1" width="130" height="64">
+ <layer id="44" name="terra_triangle_top_right_1" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
   </data>
  </layer>
- <layer id="30" name="terra_triangle_bottom_left_1" width="130" height="64">
+ <layer id="45" name="terra_triangle_bottom_right_1" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
   </data>
  </layer>
- <layer id="28" name="terra_triangle_top_left_1" width="130" height="64">
+ <layer id="46" name="terra_triangle_bottom_left_1" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
   </data>
  </layer>
- <layer id="25" name="terra_squares_2" width="130" height="64">
+ <layer id="47" name="terra_triangle_top_left_1" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt1s0JgDAMBtDcRCxeXMDRXMVNHMXRbBFEwZ+bKLwHuYQUCv0KiQAAAAAAAAAAAAAAAAAA4Gv6FHOVIvaVe8PV/Ni8eDlek999OukNV/Ny8A9t/s/1TXXpOC8HFHJAIQcUeSecqnVX3KpPz+cAAAAAAAAAAAAAAAAAAAB4tgDlJA4p
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
   </data>
  </layer>
- <layer id="33" name="terra_triangle_bottom_right_2" width="130" height="64">
+ <layer id="48" name="terra_squares_2" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJzt1ssJhTAQBdDZiRjc2ICl2YqdWMorzQRBFPzs5CnnwGyGCQRyAxMBAAAAAAAAAAAAAAAAAMC/6VP8qhSxrdwbzubH5sHL8Zj87tNBbzibl4N3aPN/ri+qS/t5OaCQAwo5oMg74VQtu+Jafbo/BwAA8AUzbfYOKQ==
   </data>
  </layer>
- <layer id="29" name="terra_triangle_top_left_2" width="130" height="64">
+ <layer id="49" name="terra_triangle_bottom_right_2" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
   </data>
  </layer>
- <layer id="31" name="terra_triangle_bottom_left_2" width="130" height="64">
+ <layer id="50" name="terra_triangle_top_left_2" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
   </data>
  </layer>
- <layer id="27" name="terra_triangle_top_right_2" width="130" height="64">
+ <layer id="51" name="terra_triangle_bottom_left_2" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztwQEBAAAAgiD/r25IQAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAfBuCAAAB
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
   </data>
  </layer>
- <objectgroup id="36" name="test">
-  <object id="3" x="565" y="1267">
-   <polygon points="0,0 53,-30 91,-8 75,31 24,41"/>
+ <layer id="52" name="terra_triangle_top_right_2" width="130" height="40">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAL4NUUAAAQ==
+  </data>
+ </layer>
+ <objectgroup id="36" name="hitboxes">
+  <object id="18" x="626" y="836" width="72.6667" height="202.667"/>
+  <object id="20" x="885.333" y="806">
+   <polygon points="0,0 17.3333,26.6667 42,30.6667 60.6667,36 86,32.6667 112,16 117.333,-3.33333"/>
   </object>
-  <object id="4" x="797" y="1058">
-   <polygon points="0,0 -5,-122 -60,-30"/>
+  <object id="24" x="735.333" y="428.667">
+   <polygon points="-66,102.667 -66,255.333 34,280 86.6667,210 49.3333,49.3333 8,0"/>
   </object>
  </objectgroup>
- <layer id="17" name="border" width="130" height="64">
-  <data encoding="base64" compression="zlib">
-   eJzt3EENACAQBLHThn9RZBwQntAmq4D5HmtmltnwOx0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB2Qmw78p/Ae70Z0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QHRAdEB0QE5ul+2PbVCpZVM=
-  </data>
- </layer>
- <layer id="15" name="bosses" width="130" height="64">
+ <objectgroup id="57" name="hitboxes_1">
+  <object id="27" x="1107" y="794" width="138" height="50"/>
+ </objectgroup>
+ <objectgroup id="58" name="hitboxes_2">
+  <object id="28" x="1301" y="791" width="160" height="56"/>
+ </objectgroup>
+ <layer id="54" name="bosses" width="130" height="40">
   <properties>
    <property name="2" value="1"/>
   </properties>
   <data encoding="base64" compression="zlib">
-   eJztzjEBAAAMAiC7r/hieAgJSAAAAAAAAAAA+q4dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAApj1GogCE
+   eJztzjEBAAAMAiC7r/hi6AEJSAAAAAAAAAAA+q4dAAAAAAAAAAAAAAAApj0iKwCE
   </data>
  </layer>
- <layer id="16" name="player" width="130" height="64">
+ <layer id="55" name="player" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztzgENAAAIA6DHs38iY9w5SEACAAAAAAAAAAAAAAAAAAAAAPDftAMAAAAAAAAAAAAAAAAAAMBpC4yfAEk=
+   eJztzjENAAAIA7DJw78iROwgIa2CJgAAAAAAAAAAAAAAAAAAAAAA/811AAAAqCylDQBJ
   </data>
  </layer>
- <layer id="23" name="checkpoints" width="130" height="64">
+ <layer id="56" name="checkpoints" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJztySEBAAAIA7BbctG/EyEuMJtdAgAAAAAAAAAAAAAAAAAAAABAY6d7AAAAAAAAAAAAAAAAAADg3wE7ygCZ
+   eJztySEBAAAIA7BbctG/ExEQt5tdAgAAAAAAAAAAAAAAAAAAAABAY6d7AADgdxdXAJk=
   </data>
  </layer>
 </map>

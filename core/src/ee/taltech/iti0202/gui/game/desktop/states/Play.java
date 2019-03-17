@@ -7,23 +7,31 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
@@ -168,12 +176,12 @@ public class Play extends GameState {
     private Player initPlayer() {
 
         circle = new CircleShape();
-        if (checkpoint == null ) {
+        if (checkpoint == null) {
             if (initPlayerLocation == null)
                 bdef.position.set(0, 0);
             else bdef.position.set(initPlayerLocation);
         } else if (dimentionJump) {
-          dimentionJump = false;
+            dimentionJump = false;
             bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
             bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
         } else {
@@ -185,15 +193,17 @@ public class Play extends GameState {
         // TODO: make user control 2 players same time
 
         short mask;
-        if (dimention) mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
-        else           mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
+        if (dimention)
+            mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
+        else
+            mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
         System.out.println(mask);
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
         fdef.isSensor = false;
         circle.setRadius(6 / PPM);
         fdef.shape = circle;
-        fdef.filter.categoryBits =  DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
         body.createFixture(fdef).setFriction(FRICTION);
         body.setFixedRotation(false);
@@ -202,7 +212,7 @@ public class Play extends GameState {
         shape = new PolygonShape();
         shape.setAsBox(4 / PPM, 8 / PPM, new Vector2(0, 8 / PPM), 0);
         fdef.shape = shape;
-        fdef.filter.categoryBits =  DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
         body.createFixture(fdef).setUserData("playerBody");
 
@@ -268,14 +278,50 @@ public class Play extends GameState {
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
     private void drawLayers() {
-        List<String> objectLayers = new ArrayList<>(Arrays.asList("test"));
+
         for (MapLayer layer : tiledMap.getLayers()) {
-                if (objectLayers.contains(layer.getName())) {}
-                else ReadPolygonVertices((TiledMapTileLayer)layer);
+            switch(layer.getName()){
+                case "hitboxes":
+                    fdef.filter.categoryBits = TERRA_SQUARES;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                    determineMapObject(layer);
+                    break;
+                case "hitboxes_1":
+                    fdef.filter.categoryBits = TERRA_DIMENTSION_1;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1;
+                    determineMapObject(layer);
+                    break;
+                case "hitboxes_2":
+                    fdef.filter.categoryBits = TERRA_DIMENTSION_2;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_2;
+                    determineMapObject(layer);
+                    break;
+                default:
+                    ReadVertices((TiledMapTileLayer) layer);
+            }
         }
     }
 
-    private void ReadPolygonVertices(TiledMapTileLayer layer) {
+    private void determineMapObject(MapLayer layer) {
+        Shape shape;
+        for (MapObject object : layer.getObjects()) {
+            if (object instanceof RectangleMapObject)
+                shape = getRectangle((RectangleMapObject) object);
+            else if (object instanceof PolygonMapObject)
+                shape = getPolygon((PolygonMapObject) object);
+            else if (object instanceof PolylineMapObject)
+                shape = getPolyline((PolylineMapObject) object);
+            else if (object instanceof EllipseMapObject)
+                shape = getCircle((EllipseMapObject) object);
+            else continue;
+            bdef.type = BodyDef.BodyType.StaticBody;
+            fdef.isSensor = false;
+            fdef.shape = shape;
+            world.createBody(bdef).createFixture(fdef).setUserData(layer.getName());
+        }
+    }
+
+    private void ReadVertices(TiledMapTileLayer layer) {
 
         short bits;
         int[] corner_coords;
@@ -487,6 +533,55 @@ public class Play extends GameState {
         }
     }
 
+    private static PolygonShape getRectangle(RectangleMapObject rectangleObject) {
+        Rectangle rectangle = rectangleObject.getRectangle();
+        PolygonShape polygon = new PolygonShape();
+        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / PPM,
+                (rectangle.y + rectangle.height * 0.5f) / PPM);
+        polygon.setAsBox(rectangle.width * 0.5f / PPM,
+                rectangle.height * 0.5f / PPM,
+                size,
+                0.0f);
+        return polygon;
+    }
+
+    private static CircleShape getCircle(EllipseMapObject circleObject) {
+        Ellipse circle = circleObject.getEllipse();
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(circle.width / PPM);
+        circleShape.setPosition(new Vector2(circle.x / PPM, circle.y / PPM));
+        return circleShape;
+    }
+
+    private static PolygonShape getPolygon(PolygonMapObject polygonObject) {
+        PolygonShape polygon = new PolygonShape();
+        float[] vertices = polygonObject.getPolygon().getTransformedVertices();
+
+        float[] worldVertices = new float[vertices.length];
+
+        for (int i = 0; i < vertices.length; ++i) {
+            worldVertices[i] = vertices[i] / PPM;
+        }
+
+        polygon.set(worldVertices);
+        return polygon;
+    }
+
+    private static ChainShape getPolyline(PolylineMapObject polylineObject) {
+        float[] vertices = polylineObject.getPolyline().getTransformedVertices();
+        Vector2[] worldVertices = new Vector2[vertices.length / 2];
+
+        for (int i = 0; i < vertices.length / 2; ++i) {
+            worldVertices[i] = new Vector2();
+            worldVertices[i].x = vertices[i * 2] / PPM;
+            worldVertices[i].y = vertices[i * 2 + 1] / PPM;
+        }
+
+        ChainShape chain = new ChainShape();
+        chain.createChain(worldVertices);
+        return chain;
+    }
+
 
     ////////////////////////////////////////////////////////////////////      Handle I/O devices    ////////////////////////////////////////////////////////////////////
 
@@ -507,7 +602,7 @@ public class Play extends GameState {
             dimentionJump = true;
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
-            dimention =! dimention;
+            dimention = !dimention;
             cl.setPlayerDead(true);
         }
 
@@ -679,10 +774,10 @@ public class Play extends GameState {
 
         //set camera to follow player
         if (!DEBUG)
-        cam.position.set(
-                player.getPosition().x * PPM,
-                player.getPosition().y * PPM,
-                0);
+            cam.position.set(
+                    player.getPosition().x * PPM,
+                    player.getPosition().y * PPM,
+                    0);
 
         if (DEBUG) b2dr.render(world, b2dcam.combined);
 
