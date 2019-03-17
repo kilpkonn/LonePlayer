@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="130" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="59" nextobjectid="29">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="130" height="40" tilewidth="32" tileheight="32" infinite="0" nextlayerid="62" nextobjectid="29">
  <tileset firstgid="1" source="tilesets/DungeonCrawler.tsx"/>
  <tileset firstgid="3073" source="tilesets/Neon.tsx"/>
  <tileset firstgid="3113" source="tilesets/base_1.tsx"/>
@@ -15,7 +15,7 @@
  </layer>
  <layer id="38" name="terra_squares" width="130" height="40">
   <data encoding="base64" compression="zlib">
-   eJzt27ENhEAMAMELCWiCzijtS6E0bjt4CU4imJGcOvGmHgMAAACeO/ZxbfsY5vNzzVudqzrYFu7mXfNWv4W7z1W7eZcOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOiA6IDogOyMoOjrn7A7975o+ZtwIAeOwGlcUy/Q==
+   eJzt27ENwzAMRUEilQsv4SpreTSP4tGiP0ECWAxU3AFsCQF8raoAAADguWOve9urzPJzj1udXR1sjbuZa9zqatx9du1mLh0QOiB0QOiA0AGhA0IHhA4IHRA6IHRA6IDQAaEDQgeEDggdEDogdEDogNABsXoH79eEh/DV6h3wHzogdEB0dnCM3Qv83TM/zLgVAMBjH3IsMyY=
   </data>
  </layer>
  <layer id="39" name="terra_triangle_bottom_right" width="130" height="40">

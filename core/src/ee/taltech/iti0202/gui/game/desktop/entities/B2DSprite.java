@@ -12,8 +12,6 @@ public class B2DSprite {
 
     private Body body;
     private Animation animation;
-    private float width;
-    private float height;
 
     B2DSprite(Body body) {
         System.out.println("New body: " + body.toString());
@@ -23,8 +21,8 @@ public class B2DSprite {
 
     void setAnimation(TextureRegion[] reg, float delay) {
         animation.setFrames(reg, delay);
-        width = reg[0].getRegionWidth();
-        height = reg[0].getRegionHeight();
+        float width = reg[0].getRegionWidth();
+        float height = reg[0].getRegionHeight();
     }
 
     public void update(float dt) {

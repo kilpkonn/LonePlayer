@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -16,6 +17,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthoCachedTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -32,9 +34,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.B2DSprite;
 import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
@@ -45,6 +50,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
@@ -89,24 +95,25 @@ public class Play extends GameState {
     private OrthographicCamera hudCam;
     private MyContactListener cl;
     private TiledMap tiledMap;
+    private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
     private OrthoCachedTiledMapRenderer tmr;
     private Player player;
-    private boolean dimention;
-    private boolean dimentionJump = false;
+    private boolean dimension;
+    private boolean dimensionJump;
     private Array<Boss> bossArray;
     private Checkpoint checkpoint;
     private Vector2 tempPlayerLocation;
     private Vector2 tempPlayerVelocity;
     private Vector2 initPlayerLocation;
     private BodyDef bdef;
-    private PolygonShape shape;
+    private PolygonShape polyShape;
     private CircleShape circle;
     private FixtureDef fdef;
     private PauseMenu pauseMenu;
     private ShapeRenderer shapeRenderer;
     private Stage stage;
     private ParallaxBackground parallaxBackground;
-    private Vector2 current_force = new Vector2(0, 0);
+    private Vector2 current_force;
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
@@ -114,31 +121,29 @@ public class Play extends GameState {
 
         super(gsm);
 
-        System.out.println("Tere");
         // sey up world
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
         world.setContactListener(cl);
         if (DEBUG) b2dr = new Box2DDebugRenderer();
 
-
         // create shapes
         bdef = new BodyDef();
-        shape = new PolygonShape();
+        polyShape = new PolygonShape();
         circle = new CircleShape();
         fdef = new FixtureDef();
 
         // create array for bosses
-        dimention = true;
+        dimensionJump = false;
+        dimension = true;
         tempPlayerLocation = new Vector2();
         tempPlayerVelocity = new Vector2();
-        initPlayer();
         bossArray = new Array<>();
+        initPlayer();
 
         //set up cameras
         b2dcam = new OrthographicCamera();
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
-
         hudCam = new OrthographicCamera();
         hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
@@ -147,6 +152,7 @@ public class Play extends GameState {
         shapeRenderer = new ShapeRenderer();
 
         // set up background
+        current_force = new Vector2(0, 0);
         Texture texture = Game.res.getTexture("starBackground");
         texture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
         Array<Texture> textures = new Array<>();
@@ -165,23 +171,27 @@ public class Play extends GameState {
         String path = PATH + "maps/level_" + act + "_" + map + ".tmx";
         tiledMap = new TmxMapLoader().load(path);
         tmr = new OrthoCachedTiledMapRenderer(tiledMap, 1, 8191);
-
+        List<TiledMapTileLayer.Cell> cellList = new ArrayList<>();
+        animatedCells = new HashMap<>();
         drawLayers();
-
     }
 
 
     ////////////////////////////////////////////////////////////////////   Create Animated bodies   ////////////////////////////////////////////////////////////////////
 
-    private Player initPlayer() {
-
+    private void initPlayer() {
+        if (player != null) world.destroyBody(player.getBody());
+        bdef = new BodyDef();
+        fdef = new FixtureDef();
         circle = new CircleShape();
+        polyShape = new PolygonShape();
+
         if (checkpoint == null) {
             if (initPlayerLocation == null)
                 bdef.position.set(0, 0);
             else bdef.position.set(initPlayerLocation);
-        } else if (dimentionJump) {
-            dimentionJump = false;
+        } else if (dimensionJump) {
+            dimensionJump = false;
             bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
             bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
         } else {
@@ -193,11 +203,10 @@ public class Play extends GameState {
         // TODO: make user control 2 players same time
 
         short mask;
-        if (dimention)
+        if (dimension)
             mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
         else
             mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
-        System.out.println(mask);
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
         fdef.isSensor = false;
@@ -209,23 +218,20 @@ public class Play extends GameState {
         body.setFixedRotation(false);
         body.setUserData("playerBody");
 
-        shape = new PolygonShape();
-        shape.setAsBox(4 / PPM, 8 / PPM, new Vector2(0, 8 / PPM), 0);
-        fdef.shape = shape;
+        polyShape.setAsBox(4 / PPM, 8 / PPM, new Vector2(0, 8 / PPM), 0);
+        fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
         body.createFixture(fdef).setUserData("playerBody");
 
-        shape.setAsBox(4 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
-        fdef.shape = shape;
+        polyShape.setAsBox(4 / PPM, 2 / PPM, new Vector2(0, -13 / PPM), 0);
+        fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
 
         player = new Player(body);
-
-        return player;
     }
 
     private void createBosses(Vector2 position, String type) {
@@ -264,9 +270,9 @@ public class Play extends GameState {
         bdef.position.set(pos);
         bdef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bdef);
-        shape = new PolygonShape();
-        shape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
-        fdef.shape = shape;
+        polyShape = new PolygonShape();
+        polyShape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
+        fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = B2DVars.BIT_ALL;
         fdef.isSensor = true;
@@ -451,6 +457,13 @@ public class Play extends GameState {
                 layer.setVisible(true);
                 break;
 
+            case "database":
+                corner_coords = SQUARE_CORNERS;
+                maskBits = NONE;
+                bits = NONE;
+                layer.setVisible(false);
+                break;
+
             default:
                 corner_coords = SQUARE_CORNERS;
                 maskBits = NONE;
@@ -472,6 +485,7 @@ public class Play extends GameState {
                 // get cell
                 TiledMapTileLayer.Cell cell = layer.getCell(col, row);
 
+
                 if (cell == null) {
                     lastWasThere = false;
                     if (v[0] != null) {
@@ -479,6 +493,12 @@ public class Play extends GameState {
                     }
                     v = new Vector2[4];
                     continue;
+                }
+
+                if (cell.getTile().getProperties().containsKey("animation")){
+                    Texture tex = Game.res.getTexture("Player");
+                    TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
+                    animatedCells.put(cell, new Animation(sprites, 1 / 12f));
                 }
 
                 float corner = tileSize / 2 / PPM;
@@ -504,7 +524,7 @@ public class Play extends GameState {
 
             for (Vector2[] polygon : polygonVertices) {
 
-                shape.set(polygon);
+                polyShape.set(polygon);
                 fdef.filter.categoryBits = bits;
                 fdef.filter.maskBits = maskBits;
                 fdef.isSensor = isSensor;
@@ -519,10 +539,7 @@ public class Play extends GameState {
 
                     case "player":
                         initPlayerLocation = new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y);
-                        world.destroyBody(player.getBody());
-                        bdef = new BodyDef();
-                        fdef = new FixtureDef();
-                        player = initPlayer();
+                        initPlayer();
                         break;
 
                     default:
@@ -596,13 +613,13 @@ public class Play extends GameState {
             else pauseMenu.setGameState(RUN);
         }
 
-        //change dimention
+        //change dimension
         if (MyInput.isPressed(MyInput.CHANGE_DIMENTION)) {
-            System.out.println("changed dimention");
-            dimentionJump = true;
+            System.out.println("changed dimension");
+            dimensionJump = true;
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
-            dimention = !dimention;
+            dimension = !dimension;
             cl.setPlayerDead(true);
         }
 
@@ -689,12 +706,17 @@ public class Play extends GameState {
         //call update animation
         if (!cl.IsPlayerDead()) player.update(dt);
         else {
-            world.destroyBody(player.getBody());
-            bdef = new BodyDef();
-            fdef = new FixtureDef();
-            player = initPlayer();
+            initPlayer();
             cl.setPlayerDead(false);
         }
+
+        //draw tilemap animations
+        if (animatedCells != null) {
+            for (Animation animation : animatedCells.values()) {
+                animation.update(dt);
+            }
+        }
+
         // create a new checkpoint if needed
         if (checkpoint != null) {
             if (cl.isNewCheckpoint()) {
@@ -713,7 +735,6 @@ public class Play extends GameState {
             world.destroyBody(temp);
             cl.resetOldCheckpoint();
         }
-
     }
 
     public void render() {
@@ -744,7 +765,7 @@ public class Play extends GameState {
     }
 
     private void drawPauseScreen() {
-        //clear screen
+        //clear screen gradually by shading it
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -769,8 +790,6 @@ public class Play extends GameState {
         //clear screen
         Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Gdx.gl20.glClear(GL20.GL_ALPHA_BITS);
-        // Gdx.gl.glEnable(GL20.GL_BLEND);
-        // Gdx.gl.glBlendFunc(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
         //set camera to follow player
         if (!DEBUG)
@@ -785,10 +804,17 @@ public class Play extends GameState {
         stage.act();
         stage.draw();
 
+        //render animations
+        if (animatedCells != null){
+            for (TiledMapTileLayer.Cell cell : animatedCells.keySet()) {
+                cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
+            }
+            tmr.invalidateCache();
+        }
+
         //draw tilemap
         tmr.setView(cam);
         tmr.render();
-
         b2dcam.update();
         cam.update();
 

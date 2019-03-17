@@ -24,9 +24,8 @@ public class MyContactListener implements ContactListener {
     public void beginContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
-        System.out.println(fa.getUserData());
-        System.out.println(fb.getUserData());
-        //System.out.println(fa.getUserData() + ", " + fb.getUserData());
+
+
         if (fa.getUserData() != null && fb.getUserData() != null) {
 
             // set up a new checkpoint
