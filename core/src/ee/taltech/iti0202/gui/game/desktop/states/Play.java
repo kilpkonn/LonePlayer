@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -22,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
@@ -79,7 +81,6 @@ public class Play extends GameState {
     private OrthographicCamera hudCam;
     private MyContactListener cl;
     private TiledMap tiledMap;
-    private float tileSize;
     private OrthoCachedTiledMapRenderer tmr;
     private Player player;
     private boolean dimention;
@@ -267,123 +268,151 @@ public class Play extends GameState {
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
     private void drawLayers() {
-        TiledMapTileLayer layer;
-
-        Short[] terra_masks = {TERRA_SQUARES, TERRA_DIMENTSION_1, TERRA_DIMENTSION_2};
-        String[] terra_dimentions = {"", "_1", "_2"};
-        String[] terra_layers = {"terra_squares", "terra_triangle_bottom_right", "terra_triangle_bottom_left", "terra_triangle_top_left", "terra_triangle_top_right"};
-
-        for (int i = 0; i < 3; i++) {
-            for (String terra_layer : terra_layers) {
-                layer = (TiledMapTileLayer) tiledMap.getLayers().get(terra_layer + terra_dimentions[i]);
-                draw_solid(layer, terra_masks[i], false);
-            }
-        }
-
-
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_dimension_1");
-        draw_solid(layer, TERRA_DIMENTSION_1, false);
-
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("terra_dimension_2");
-        draw_solid(layer, TERRA_DIMENTSION_2, false);
-
-
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("background");
-        draw_solid(layer, B2DVars.NONE, false);
-
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("border");
-        if (layer != null) {
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, BIT_ALL, false);
-            layer.setVisible(false);
-        }
-
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("bosses");
-        if (layer != null) {
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, NONE, false);
-            layer.setVisible(false);
-        }
-
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("checkpoints");
-        draw_solid(layer, B2DVars.BACKGROUND, true);
-
-
-        layer = (TiledMapTileLayer) tiledMap.getLayers().get("player");
-        if (layer != null) {
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, NONE, false);
-            layer.setVisible(false);
+        List<String> objectLayers = new ArrayList<>(Arrays.asList("test"));
+        for (MapLayer layer : tiledMap.getLayers()) {
+                if (objectLayers.contains(layer.getName())) {}
+                else ReadPolygonVertices((TiledMapTileLayer)layer);
         }
     }
 
-    private void draw_solid(TiledMapTileLayer layer, short terraSquares, boolean b) {
-        if (layer != null) {
-            layer.setVisible(true);
-            tileSize = layer.getTileWidth();
-            ReadPolygonVertices(layer, terraSquares, b);
-        }
-    }
+    private void ReadPolygonVertices(TiledMapTileLayer layer) {
 
-    private void ReadPolygonVertices(TiledMapTileLayer layer, short bits, boolean isSensor) {
-
+        short bits;
         int[] corner_coords;
         short maskBits;
         String type = layer.getName();
-
-        System.out.println(layer.getName());
+        boolean isSensor = false;
+        float tileSize = layer.getTileWidth();
 
         switch (type) {
             case "terra_squares":
                 corner_coords = SQUARE_CORNERS;
                 maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                bits = TERRA_SQUARES;
+                layer.setVisible(true);
                 break;
+
             case "terra_dimension_1":
                 corner_coords = SQUARE_CORNERS;
                 maskBits = DIMENTSION_1;
+                bits = TERRA_DIMENTSION_1;
+                layer.setVisible(true);
                 break;
+
             case "terra_dimension_2":
                 corner_coords = SQUARE_CORNERS;
                 maskBits = DIMENTSION_2;
+                bits = TERRA_DIMENTSION_2;
+                layer.setVisible(true);
                 break;
+
             case "background":
                 corner_coords = SQUARE_CORNERS;
                 maskBits = NONE;
+                bits = NONE;
+                isSensor = true;
+                layer.setVisible(true);
                 break;
-            case "checkpoints":
-                corner_coords = SQUARE_CORNERS;
-                maskBits = DIMENTSION_1 | DIMENTSION_2;
-                break;
+
             case "border":
                 corner_coords = SQUARE_CORNERS;
                 maskBits = BIT_ALL;
+                bits = BIT_ALL;
+                layer.setVisible(false);
                 break;
 
             case "terra_triangle_bottom_left":
                 corner_coords = TRIANGLE_BOTTOM_LEFT;
                 maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                bits = TERRA_SQUARES;
+                layer.setVisible(true);
                 break;
 
             case "terra_triangle_bottom_right":
                 corner_coords = TRIANGLE_BOTTOM_RIGHT;
                 maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                bits = TERRA_SQUARES;
+                layer.setVisible(true);
                 break;
 
             case "terra_triangle_top_left":
                 corner_coords = TRIANGLE_TOP_LEFT;
                 maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                bits = TERRA_SQUARES;
+                layer.setVisible(true);
                 break;
 
             case "terra_triangle_top_right":
                 corner_coords = TRIANGLE_TOP_RIGHT;
                 maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                bits = TERRA_SQUARES;
+                layer.setVisible(true);
+                break;
+
+            case "terra_triangle_bottom_left_1":
+                corner_coords = TRIANGLE_BOTTOM_LEFT;
+                maskBits = BIT_BOSSES | DIMENTSION_1;
+                bits = TERRA_DIMENTSION_1;
+                layer.setVisible(true);
+                break;
+
+            case "terra_triangle_bottom_right_1":
+                corner_coords = TRIANGLE_BOTTOM_RIGHT;
+                maskBits = BIT_BOSSES | DIMENTSION_1;
+                bits = TERRA_DIMENTSION_1;
+                layer.setVisible(true);
+                break;
+
+            case "terra_triangle_top_left_1":
+                corner_coords = TRIANGLE_TOP_LEFT;
+                maskBits = BIT_BOSSES | DIMENTSION_1;
+                bits = TERRA_DIMENTSION_1;
+                layer.setVisible(true);
+                break;
+
+            case "terra_triangle_top_right_1":
+                corner_coords = TRIANGLE_TOP_RIGHT;
+                maskBits = BIT_BOSSES | DIMENTSION_1;
+                bits = TERRA_DIMENTSION_1;
+                layer.setVisible(true);
+                break;
+
+            case "terra_triangle_bottom_left_2":
+                corner_coords = TRIANGLE_BOTTOM_LEFT;
+                maskBits = BIT_BOSSES | DIMENTSION_2;
+                bits = TERRA_DIMENTSION_2;
+                layer.setVisible(true);
+                break;
+
+            case "terra_triangle_bottom_right_2":
+                corner_coords = TRIANGLE_BOTTOM_RIGHT;
+                maskBits = BIT_BOSSES | DIMENTSION_2;
+                bits = TERRA_DIMENTSION_2;
+                layer.setVisible(true);
+                break;
+
+            case "terra_triangle_top_left_2":
+                corner_coords = TRIANGLE_TOP_LEFT;
+                maskBits = BIT_BOSSES | DIMENTSION_2;
+                bits = TERRA_DIMENTSION_2;
+                layer.setVisible(true);
+                break;
+
+            case "terra_triangle_top_right_2":
+                corner_coords = TRIANGLE_TOP_RIGHT;
+                maskBits = BIT_BOSSES | DIMENTSION_2;
+                bits = TERRA_DIMENTSION_2;
+                layer.setVisible(true);
                 break;
 
             default:
                 corner_coords = SQUARE_CORNERS;
-                maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                maskBits = NONE;
+                bits = NONE;
+                layer.setVisible(false);
                 break;
         }
+
         bdef.type = BodyDef.BodyType.StaticBody;
 
         for (int row = 0; row <= layer.getHeight(); row++) {

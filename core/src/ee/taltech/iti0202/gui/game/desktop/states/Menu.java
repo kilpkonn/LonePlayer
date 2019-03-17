@@ -117,7 +117,7 @@ public class Menu extends GameState {
     @Override
     public void handleInput() {   // TODO: MAKE A ACT SELECTOR
         if (MyInput.isPressed(MyInput.SHOOT) && cur_block == block.NEW_GAME) {
-            gsm.pushState(GameStateManager.State.PLAY, 0, 0);
+            gsm.pushState(GameStateManager.State.PLAY, 0, 1);
         }
 
         if (MyInput.isPressed(MyInput.SHOOT) && cur_block == block.EXIT) {
