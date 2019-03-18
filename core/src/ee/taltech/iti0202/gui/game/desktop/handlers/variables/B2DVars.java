@@ -3,8 +3,6 @@ package ee.taltech.iti0202.gui.game.desktop.handlers.variables;
 import java.util.HashMap;
 import java.util.Map;
 
-import static javax.swing.UIManager.put;
-
 public class B2DVars {
 
     // pixel per meter
@@ -59,8 +57,7 @@ public class B2DVars {
     };
 
     // pause states
-    public enum pauseState
-    {
+    public enum pauseState {
         PAUSE,
         RUN,
         RESUME,

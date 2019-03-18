@@ -47,7 +47,6 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
@@ -191,13 +190,11 @@ public class Play extends GameState {
         if (dimensionJump) {
             dimensionJump = false;
             bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
-            bdef.linearVelocity.set(new Vector2(tempPlayerVelocity)); }
-        else if (checkpoint == null) if (initPlayerLocation == null) bdef.position.set(0, 0);
+            bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
+        } else if (checkpoint == null) if (initPlayerLocation == null) bdef.position.set(0, 0);
         else bdef.position.set(initPlayerLocation);
         else if (cl.isInitSpawn()) bdef.position.set(initPlayerLocation);
         else bdef.position.set(new Vector2(checkpoint.getPosition()));
-
-        // TODO: make user control 2 players same time
 
         short mask;
         if (dimension)
@@ -263,6 +260,7 @@ public class Play extends GameState {
     }
 
     private void createCheckpoints(Vector2 pos) {
+        System.out.println("new checkpoint");
         bdef = new BodyDef();
         bdef.position.set(pos);
         bdef.type = BodyDef.BodyType.StaticBody;
@@ -380,7 +378,6 @@ public class Play extends GameState {
                 // get cell
                 TiledMapTileLayer.Cell cell = layer.getCell(col, row);
 
-
                 if (cell == null) {
                     lastWasThere = false;
                     if (v[0] != null) {
@@ -389,7 +386,7 @@ public class Play extends GameState {
                     v = new Vector2[4];
                     continue;
                 }
-
+                fixBleeding(cell.getTile().getTextureRegion());
                 if (cell.getTile().getProperties().containsKey("animation")) {
                     Texture tex = Game.res.getTexture("Player");
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
@@ -492,6 +489,27 @@ public class Play extends GameState {
         ChainShape chain = new ChainShape();
         chain.createChain(worldVertices);
         return chain;
+    }
+
+    private static void fixBleeding(TextureRegion[][] region) {
+        for (TextureRegion[] array : region) {
+            for (TextureRegion texture : array) {
+                fixBleeding(texture);
+            }
+        }
+    }
+
+    private static void fixBleeding(TextureRegion region) {
+        float fix = 0.01f;
+
+        float x = region.getRegionX();
+        float y = region.getRegionY();
+        float width = region.getRegionWidth();
+        float height = region.getRegionHeight();
+        float invTexWidth = 1f / region.getTexture().getWidth();
+        float invTexHeight = 1f / region.getTexture().getHeight();
+        region.setRegion((x + fix) * invTexWidth, (y + fix) * invTexHeight, (x + width - fix) * invTexWidth, (y + height - fix) * invTexHeight); // Trims
+        // region
     }
 
 

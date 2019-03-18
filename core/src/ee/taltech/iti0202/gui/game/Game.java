@@ -6,11 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.Content;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInputProcessor;
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.STEP;
@@ -33,7 +33,7 @@ public class Game extends ApplicationAdapter {
 
     public void create() {
 
-        switch(Gdx.app.getType()) {
+        switch (Gdx.app.getType()) {
             case Android:
                 // android specific code
                 B2DVars.SCALE = 2;
@@ -99,7 +99,7 @@ public class Game extends ApplicationAdapter {
     @Override
     public void render() {
         accum += Gdx.graphics.getDeltaTime();
-        while(accum >= STEP) {
+        while (accum >= STEP) {
             accum -= STEP;
             gsm.update(STEP);
             gsm.render();
@@ -112,11 +112,7 @@ public class Game extends ApplicationAdapter {
     }
 
     public void resize(int w, int h) {
-        System.out.println(w);
-        System.out.println(h);
-        System.out.println();
-        V_HEIGHT = h;
-        V_WIDTH = w;
+       
     }
 
     public void pause() {

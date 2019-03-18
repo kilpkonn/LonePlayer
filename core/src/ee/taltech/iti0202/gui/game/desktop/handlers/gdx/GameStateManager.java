@@ -62,7 +62,7 @@ public class GameStateManager {
         System.out.println(state);
     }
 
-    public void pushState(State state, int act, int level){
+    public void pushState(State state, int act, int level) {
         gameStates.push(getState(state, act, level));
     }
 

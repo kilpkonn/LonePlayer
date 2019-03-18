@@ -9,7 +9,7 @@ public class Content {
     private HashMap<String, Texture> textures;
 
     public Content() {
-        textures = new HashMap<String, Texture>();
+        textures = new HashMap<>();
     }
 
     public void loadTexture(String path, String key) {
