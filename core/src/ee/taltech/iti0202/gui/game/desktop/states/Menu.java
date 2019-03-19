@@ -50,7 +50,7 @@ public class Menu extends GameState {
     private Texture player;
     private Texture logo;
     private Texture backgroundTexture;
-    private List<List<GameButton>> buttons;
+    private List<GameButton> buttons;
     private HashMap<GameButton, block> buttonType;
     private Vector2 mouseInWorld2D;
     private block cur_block = block.DEFAULT;
@@ -75,17 +75,12 @@ public class Menu extends GameState {
         mouseInWorld2D = new Vector2();
 
         // play button
-        newGameButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 32, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        GameButton newGameButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 0, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        loadGameButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 96, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        GameButton loadGameButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 64, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        settingsButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 160, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        GameButton settinsButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 128, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        exitButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 224, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
-        GameButton exitButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 192, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
+        newGameButtonActive = new GameButton("New Game", V_WIDTH / 2f, V_HEIGHT / 1.5f);
+        loadGameButtonActive = new GameButton("Resume", V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
+        settingsButtonActive = new GameButton("Settings", V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
+        exitButtonActive = new GameButton("Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
 
-        buttons = new ArrayList<>(Arrays.asList(Arrays.asList(newGameButtonActive, newGameButtonInactive), Arrays.asList(loadGameButtonActive, loadGameButtonInactive),
-                Arrays.asList(settingsButtonActive, settinsButtonInactive), Arrays.asList(exitButtonActive, exitButtonInactive)));
+        buttons = new ArrayList<>(Arrays.asList(newGameButtonActive, loadGameButtonActive, settingsButtonActive, exitButtonActive));
 
         buttonType = new HashMap<GameButton, block>() {{
             put(newGameButtonActive, block.NEW_GAME);
@@ -135,7 +130,7 @@ public class Menu extends GameState {
 
         animation.update(dt);
 
-        for (List<GameButton> button : buttons) button.get(1).update(mouseInWorld2D);
+        for (GameButton button : buttons) button.update(mouseInWorld2D);
     }
 
     @Override
@@ -154,12 +149,12 @@ public class Menu extends GameState {
         // draw button
 
 
-        for (List<GameButton> button : buttons) {
-            if (button.get(1).hoverOver()) {
-                cur_block = buttonType.get(button.get(0));
-                button.get(0).render(sb);
+        for (GameButton button : buttons) {
+            if (button.hoverOver()) {
+                cur_block = buttonType.get(button);
+                button.render(sb);
             } else {
-                button.get(1).render(sb);
+                button.render(sb);
             }
         }
 

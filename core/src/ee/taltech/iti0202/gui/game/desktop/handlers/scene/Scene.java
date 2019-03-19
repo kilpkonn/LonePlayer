@@ -22,7 +22,7 @@ public abstract class Scene {
     protected OrthographicCamera hudCam;
 
     protected Vector2 mouseInWorld2D;
-    protected HashSet<List<GameButton>> buttons;
+    protected HashSet<GameButton> buttons;
     protected HashMap<GameButton, block> buttonType;
 
     public Scene(int act, int map, OrthographicCamera cam){
@@ -54,8 +54,8 @@ public abstract class Scene {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();
 
-        for (List<GameButton> button : buttons)
-            button.get(1).update(mouseInWorld2D);
+        for (GameButton button : buttons)
+            button.update(mouseInWorld2D);
     }
 
     public void render(SpriteBatch sb) {
@@ -69,13 +69,11 @@ public abstract class Scene {
         stage.act();
         stage.draw();
 
-        for (List<GameButton> button : buttons) {
-            if (button.get(1).hoverOver()) {
-                cur_block = buttonType.get(button.get(0));
-                button.get(0).render(sb);
-            } else {
-                button.get(1).render(sb);
+        for (GameButton button : buttons) {
+            if (button.hoverOver()) {
+                cur_block = buttonType.get(button);
             }
+            button.render(sb);
         }
     }
 

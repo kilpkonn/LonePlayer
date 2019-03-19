@@ -3,8 +3,6 @@ package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -47,8 +45,12 @@ public class GameButton {
 
     public void render(SpriteBatch sb) {
         sb.begin();
-
-        //sb.draw(reg, x - width / 2, y - height / 2);
+        /*ShapeRenderer shapeRenderer = new ShapeRenderer();
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeRenderer.setColor(80 / 255.0f, 80 / 255.0f, 50 / 255.0f, 1);
+        shapeRenderer.rect(x - width, y - height, width, height);
+        shapeRenderer.end();*/
+        //TODO: Draw line on hover
 
         if (text != null) {
             drawString(sb, text, x, y);

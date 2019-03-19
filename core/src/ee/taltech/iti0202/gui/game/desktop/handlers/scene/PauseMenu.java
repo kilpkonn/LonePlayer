@@ -31,19 +31,13 @@ public class PauseMenu extends Scene{
 
         //Texture backLayer = Game.res.getTexture("backLayer");
 
-        resumeButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 416, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f + 40);
-        GameButton resumeButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 384, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f + 40);
-        saveButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 288, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        GameButton saveButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 256, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        saveAndExitButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 352, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        GameButton saveAndExitButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 320, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        settingsButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 160, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        GameButton settinsButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 128, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        exitButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 224, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
-        GameButton exitButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 192, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
+        resumeButtonActive = new GameButton("Resume", V_WIDTH / 2f, V_HEIGHT / 1.5f + 40);
+        saveButtonActive = new GameButton("Save", V_WIDTH / 2f, V_HEIGHT / 1.5f);
+        saveAndExitButtonActive = new GameButton("Save n' Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
+        settingsButtonActive = new GameButton("Settings", V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
+        exitButtonActive = new GameButton("Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
 
-        buttons = new HashSet<>(Arrays.asList(Arrays.asList(resumeButtonActive, resumeButtonInactive), Arrays.asList(saveButtonActive, saveButtonInactive),
-                Arrays.asList(saveAndExitButtonActive, saveAndExitButtonInactive), Arrays.asList(settingsButtonActive, settinsButtonInactive), Arrays.asList(exitButtonActive, exitButtonInactive)));
+        buttons = new HashSet<>(Arrays.asList(resumeButtonActive, saveButtonActive, saveAndExitButtonActive, settingsButtonActive, exitButtonActive));
 
         buttonType = new HashMap<GameButton, block>() {{
             put(resumeButtonActive, block.RESUME);

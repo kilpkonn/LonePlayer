@@ -30,14 +30,11 @@ public class EndMenu extends Scene{
 
         Texture backLayer = Game.res.getTexture("backLayer");
 
-        nextButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 352, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        GameButton nextButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 320, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        settingsButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 160, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        GameButton settinsButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 128, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        exitButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 224, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
-        GameButton exitButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 192, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
+        nextButtonActive = new GameButton("Next level", V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
+        settingsButtonActive = new GameButton("Settings", V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
+        exitButtonActive = new GameButton("Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
 
-        buttons = new HashSet<>(Arrays.asList(Arrays.asList(nextButtonActive, nextButtonInactive), Arrays.asList(settingsButtonActive, settinsButtonInactive), Arrays.asList(exitButtonActive, exitButtonInactive)));
+        buttons = new HashSet<>(Arrays.asList(nextButtonActive, settingsButtonActive, exitButtonActive));
 
         buttonType = new HashMap<GameButton, block>() {{
             put(nextButtonActive, block.NEXT);

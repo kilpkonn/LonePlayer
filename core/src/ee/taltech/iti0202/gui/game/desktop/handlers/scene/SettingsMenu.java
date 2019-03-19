@@ -30,14 +30,11 @@ public class SettingsMenu extends Scene {
 
         Texture backLayer = Game.res.getTexture("backLayer");
 
-        restoreButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 352, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        GameButton nextButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 320, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        saveButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 160, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        GameButton settinsButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 128, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        exitButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 224, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
-        GameButton exitButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 192, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
+        restoreButtonActive = new GameButton("Restore", V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
+        saveButtonActive = new GameButton("Save", V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
+        exitButtonActive = new GameButton("Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
 
-        buttons = new HashSet<>(Arrays.asList(Arrays.asList(restoreButtonActive, nextButtonInactive), Arrays.asList(saveButtonActive, settinsButtonInactive), Arrays.asList(exitButtonActive, exitButtonInactive)));
+        buttons = new HashSet<>(Arrays.asList(restoreButtonActive, saveButtonActive, exitButtonActive));
 
         buttonType = new HashMap<GameButton, block>() {{
             put(restoreButtonActive, block.NEXT);
