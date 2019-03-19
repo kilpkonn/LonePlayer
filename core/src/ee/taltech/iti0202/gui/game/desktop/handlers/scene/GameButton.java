@@ -41,7 +41,6 @@ public class GameButton {
     }
 
     public void update(Vector2 mousePos) {
-        System.out.println(mousePos.x);
         hoverOver = (mousePos.x / SCALE >= x
                 && mousePos.x / SCALE <= x + width)
                 && (V_HEIGHT - mousePos.y / SCALE >= y - height
