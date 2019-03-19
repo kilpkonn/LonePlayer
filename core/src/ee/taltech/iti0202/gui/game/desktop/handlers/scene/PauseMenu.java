@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
@@ -49,7 +50,7 @@ public class PauseMenu extends Scene{
         exitButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 224, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
         GameButton exitButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 192, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
 
-        buttons = new ArrayList<>(Arrays.asList(Arrays.asList(resumeButtonActive, resumeButtonInactive), Arrays.asList(saveButtonActive, saveButtonInactive),
+        buttons = new HashSet<>(Arrays.asList(Arrays.asList(resumeButtonActive, resumeButtonInactive), Arrays.asList(saveButtonActive, saveButtonInactive),
                 Arrays.asList(saveAndExitButtonActive, saveAndExitButtonInactive), Arrays.asList(settingsButtonActive, settinsButtonInactive), Arrays.asList(exitButtonActive, exitButtonInactive)));
 
         buttonType = new HashMap<GameButton, block>() {{
@@ -60,41 +61,5 @@ public class PauseMenu extends Scene{
             put(exitButtonActive, block.EXIT);
         }};
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
-    }
-
-    public void setGameState(B2DVars.pauseState s) {
-        this.pauseState = s;
-    }
-
-    public B2DVars.pauseState getPauseState() {
-        return pauseState;
-    }
-
-    public void update(float dt) {
-        mouseInWorld2D.x = Gdx.input.getX();
-        mouseInWorld2D.y = Gdx.input.getY();
-
-        for (List<GameButton> button : buttons) button.get(1).update(mouseInWorld2D);
-    }
-
-    public void render(SpriteBatch sb) {
-
-        hudCam.update();
-        sb.setProjectionMatrix(hudCam.combined);
-        //sb.begin();
-        //Draw pause screen
-        //sb.draw(backLayer, hudCam.position.x - (tw / 2f), hudCam.position.y - (th / 3f));
-        //sb.end();
-        stage.act();
-        stage.draw();
-
-        for (List<GameButton> button : buttons) {
-            if (button.get(1).hoverOver()) {
-                cur_block = buttonType.get(button.get(0));
-                button.get(0).render(sb);
-            } else {
-                button.get(1).render(sb);
-            }
-        }
     }
 }
