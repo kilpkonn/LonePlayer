@@ -21,19 +21,10 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_H
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 
-public class PauseMenu {
+public class PauseMenu extends Scene{
 
     public block getCur_block() {
         return cur_block;
-    }
-
-    public enum block {
-        RESUME,
-        SETTINGS,
-        SAVE,
-        SAVEANDEXIT,
-        EXIT,
-        DEFAULT
     }
 
     private OrthographicCamera hudCam;
@@ -48,12 +39,13 @@ public class PauseMenu {
     private GameButton saveAndExitButtonActive;
 
     private Vector2 mouseInWorld2D;
-    public List<List<GameButton>> buttons;
+    private List<List<GameButton>> buttons;
     private HashMap<GameButton, block> buttonType;
     private block cur_block = block.DEFAULT;
 
     public PauseMenu(int act, int map, OrthographicCamera cam) {
 
+        super(act, map, cam);
         this.pauseState = B2DVars.pauseState.RUN;
         this.hudCam = cam;
         stage = new Stage(new ScreenViewport());
@@ -106,11 +98,10 @@ public class PauseMenu {
 
         hudCam.update();
         sb.setProjectionMatrix(hudCam.combined);
-        sb.begin();
+        //sb.begin();
         //Draw pause screen
         //sb.draw(backLayer, hudCam.position.x - (tw / 2f), hudCam.position.y - (th / 3f));
-        sb.end();
-
+        //sb.end();
         stage.act();
         stage.draw();
 

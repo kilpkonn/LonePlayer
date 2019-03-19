@@ -112,6 +112,9 @@ public class Game extends ApplicationAdapter {
     }
 
     public void resize(int w, int h) {
+        B2DVars.V_HEIGHT = h;
+        B2DVars.V_WIDTH = w;
+        System.out.println("resized");
        
     }
 

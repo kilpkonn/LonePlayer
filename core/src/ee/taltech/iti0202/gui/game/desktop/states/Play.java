@@ -610,6 +610,9 @@ public class Play extends GameState {
             case RESUME:
                 break;
 
+            case STOPPED:
+                break;
+
             default:
                 break;
         }
