@@ -31,11 +31,11 @@ public class PauseMenu extends Scene{
 
         //Texture backLayer = Game.res.getTexture("backLayer");
 
-        resumeButtonActive = new GameButton("Resume", V_WIDTH / 2f, V_HEIGHT / 1.5f + 40);
-        saveButtonActive = new GameButton("Save", V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        saveAndExitButtonActive = new GameButton("Save n' Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        settingsButtonActive = new GameButton("Settings", V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        exitButtonActive = new GameButton("Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
+        resumeButtonActive = new GameButton("Resume", V_WIDTH / 5f, V_HEIGHT / 1.5f + 40);
+        saveButtonActive = new GameButton("Save", V_WIDTH / 5f, V_HEIGHT / 1.5f);
+        saveAndExitButtonActive = new GameButton("Save n' Exit", V_WIDTH / 5f, V_HEIGHT / 1.5f - 40);
+        settingsButtonActive = new GameButton("Settings", V_WIDTH / 5f, V_HEIGHT / 1.5f - 80);
+        exitButtonActive = new GameButton("Exit", V_WIDTH / 5f, V_HEIGHT / 1.5f - 120);
 
         buttons = new HashSet<>(Arrays.asList(resumeButtonActive, saveButtonActive, saveAndExitButtonActive, settingsButtonActive, exitButtonActive));
 

@@ -24,6 +24,9 @@ public abstract class Scene {
     protected Vector2 mouseInWorld2D;
     protected HashSet<GameButton> buttons;
     protected HashMap<GameButton, block> buttonType;
+    public Scene(OrthographicCamera cam) {
+        this(1, 1, cam);
+    }
 
     public Scene(int act, int map, OrthographicCamera cam){
         this.hudCam = cam;
@@ -32,6 +35,7 @@ public abstract class Scene {
     }
 
     public enum block {
+        NEWGAME,
         RESUME,
         SETTINGS,
         SAVE,

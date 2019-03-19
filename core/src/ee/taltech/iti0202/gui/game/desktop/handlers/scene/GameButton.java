@@ -22,7 +22,7 @@ public class GameButton {
 
     private boolean hoverOver;
 
-    private BitmapFont font = new BitmapFont(Gdx.files.internal(PATH + "fonts/comics.fnt"), false);
+    private BitmapFont font = new BitmapFont(Gdx.files.internal(PATH + "fonts/bullfrog.fnt"), false);
 
     private String text;
 
@@ -41,8 +41,9 @@ public class GameButton {
     }
 
     public void update(Vector2 mousePos) {
-        hoverOver = (V_WIDTH - mousePos.x / SCALE >= x - width
-                && V_WIDTH - mousePos.x / SCALE <= x)
+        System.out.println(mousePos.x);
+        hoverOver = (mousePos.x / SCALE >= x
+                && mousePos.x / SCALE <= x + width)
                 && (V_HEIGHT - mousePos.y / SCALE >= y - height
                 && V_HEIGHT - mousePos.y / SCALE <= y);
     }

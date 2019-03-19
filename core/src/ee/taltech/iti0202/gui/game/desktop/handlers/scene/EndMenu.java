@@ -30,9 +30,9 @@ public class EndMenu extends Scene{
 
         Texture backLayer = Game.res.getTexture("backLayer");
 
-        nextButtonActive = new GameButton("Next level", V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        settingsButtonActive = new GameButton("Settings", V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        exitButtonActive = new GameButton("Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
+        nextButtonActive = new GameButton("Next level", V_WIDTH / 6f, V_HEIGHT / 1.5f - 40);
+        settingsButtonActive = new GameButton("Settings", V_WIDTH / 6f, V_HEIGHT / 1.5f - 80);
+        exitButtonActive = new GameButton("Exit", V_WIDTH / 6f, V_HEIGHT / 1.5f - 120);
 
         buttons = new HashSet<>(Arrays.asList(nextButtonActive, settingsButtonActive, exitButtonActive));
 
