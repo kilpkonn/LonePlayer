@@ -1,8 +1,10 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -20,6 +22,8 @@ public class GameButton {
 
     private boolean hoverOver;
 
+    private BitmapFont font = new BitmapFont(Gdx.files.internal(PATH + "fonts/comics.fnt"), false);
+
     private String text;
 
     public GameButton(String text, float x, float y) {
@@ -28,7 +32,7 @@ public class GameButton {
         this.x = x;
         this.y = y;
 
-        width = text.length() * 35;
+        width = text.length() * 20;
         height = 40;
     }
 
@@ -44,26 +48,17 @@ public class GameButton {
     }
 
     public void render(SpriteBatch sb) {
-        sb.begin();
-        /*ShapeRenderer shapeRenderer = new ShapeRenderer();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(80 / 255.0f, 80 / 255.0f, 50 / 255.0f, 1);
-        shapeRenderer.rect(x - width, y - height, width, height);
-        shapeRenderer.end();*/
-        //TODO: Draw line on hover
-
-        if (text != null) {
-            drawString(sb, text, x, y);
+        if (hoverOver) {
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.rectLine(x - 100, y - height / 2 - 10, x - 5, y - height / 2 - 10, 2, Color.MAGENTA, Color.CYAN);
+            shapeRenderer.rectLine(x + 400, y - height / 2 - 10, x + width + 5, y - height / 2 - 10, 2, Color.MAGENTA, Color.CYAN);
+            shapeRenderer.end();
         }
-
+        sb.begin();
+        font.draw(sb, text, x, y);
         sb.end();
 
     }
-
-    private void drawString(SpriteBatch sb, String s, float x, float y) {
-        BitmapFont bfont = new BitmapFont(Gdx.files.internal(PATH + "fonts/comics.fnt"), false);
-        bfont.draw(sb, s, x, y);
-    }
-
 }
 
