@@ -184,7 +184,7 @@ public class Menu extends GameState {
     }
 
     private void updateLevelsMenu(float dt) {
-
+        levelSelectionMenu.update(dt);
     }
 
     private void updateSettingsMenu(float dt) {
@@ -196,7 +196,7 @@ public class Menu extends GameState {
     }
 
     private void drawLevelsMenu() {
-
+        levelSelectionMenu.render(sb);
     }
 
     private void drawSettingsMenu() {
@@ -205,7 +205,8 @@ public class Menu extends GameState {
 
     private void handleMainMenuInput() {
         if (MyInput.isPressed(MyInput.SHOOT) && mainMenuScene.getCur_block() == Scene.block.NEWGAME) {
-            gsm.pushState(GameStateManager.State.PLAY, 1, 1);
+            menuState = sceneState.LEVELS;
+            //gsm.pushState(GameStateManager.State.PLAY, 1, 1);
         }
         if (MyInput.isPressed(MyInput.SHOOT) && mainMenuScene.getCur_block() == Scene.block.EXIT) {
             Gdx.app.exit();

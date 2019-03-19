@@ -10,7 +10,6 @@ import com.badlogic.gdx.math.Vector2;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 public class GameButton {
 

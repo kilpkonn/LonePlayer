@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -17,16 +18,19 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 public class LevelSelectionMenu extends Scene {
 
     private GameButton backButton;
-    private List<GameButton> actButtons;
+    private GameButton playButton;
 
     public LevelSelectionMenu(OrthographicCamera cam) {
         super(cam);
-        actButtons = new ArrayList<>();
 
-        backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.5f);
+        backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.5f - 40);
+        playButton = new GameButton("Play", V_WIDTH / 6f, V_HEIGHT / 1.5f);
+
+        buttons = new HashSet<>(Arrays.asList(backButton, playButton));
+
         List<String> acts = loadActs();
         for (int i = 0; i < acts.size(); i++) {
-            actButtons.add(new GameButton(acts.get(i), V_WIDTH / 3f, V_HEIGHT / 3f));
+            buttons.add(new GameButton(acts.get(i), V_WIDTH / 3f, V_HEIGHT / 3f + i * 40));
         }
 
     }
