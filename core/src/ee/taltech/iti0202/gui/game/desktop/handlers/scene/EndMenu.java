@@ -19,30 +19,24 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
+/*
 
+public class EndMenu extends Scene{
 
-public class PauseMenu extends Scene{
     // Active
     private GameButton exitButtonActive;
     private GameButton settingsButtonActive;
-    private GameButton resumeButtonActive;
-    private GameButton saveButtonActive;
-    private GameButton saveAndExitButtonActive;
+    private GameButton nextButtonActive;
 
-    public PauseMenu(int act, int map, OrthographicCamera cam) {
-
+    public EndMenu(int act, int map, OrthographicCamera cam) {
         super(act, map, cam);
-        this.pauseState = B2DVars.pauseState.RUN;
+        pauseState = B2DVars.pauseState.RUN; //TODO: change?
 
         hudCam.update();
 
-        //Texture backLayer = Game.res.getTexture("backLayer");
+        Texture backLayer = Game.res.getTexture("backLayer");
 
-        resumeButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 416, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f + 40);
-        GameButton resumeButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 384, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f + 40);
-        saveButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 288, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        GameButton saveButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 256, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        saveAndExitButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 352, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
+        nextButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 352, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
         GameButton saveAndExitButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 320, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
         settingsButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 160, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
         GameButton settinsButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 128, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
@@ -98,3 +92,4 @@ public class PauseMenu extends Scene{
         }
     }
 }
+*/
