@@ -47,15 +47,6 @@ public abstract class Scene {
         DEFAULT
     }
 
-
-    public void setGameState(B2DVars.pauseState s) {
-        this.pauseState = s;
-    }
-
-    public B2DVars.pauseState getPauseState() {
-        return pauseState;
-    }
-
     public void update(float dt) {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();

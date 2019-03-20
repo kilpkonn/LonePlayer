@@ -113,6 +113,7 @@ public class Play extends GameState {
     private TiledMapTileLayer foreground;
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
+    private B2DVars.pauseState pauseState;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
@@ -150,6 +151,7 @@ public class Play extends GameState {
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
         shapeRenderer = new ShapeRenderer();
+        pauseState = B2DVars.pauseState.RUN;
 
         // set up background
         current_force = new Vector2(0, 0);
@@ -521,9 +523,10 @@ public class Play extends GameState {
 
         //pause screen
         if (MyInput.isPressed(MyInput.ESC)) {
-            if (pauseMenu.getPauseState() == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
-                pauseMenu.setGameState(PAUSE);
-            else pauseMenu.setGameState(RUN);
+            if (pauseState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
+                pauseState = PAUSE;
+            else
+                pauseState = RUN;
         }
 
         //change dimension
@@ -600,7 +603,7 @@ public class Play extends GameState {
         handleInput();
         world.step(dt, 10, 2); // recommended values
 
-        switch (pauseMenu.getPauseState()) {
+        switch (pauseState) {
             case RUN:
                 UpdateProps(dt);
 
@@ -655,7 +658,7 @@ public class Play extends GameState {
 
     public void render() {
 
-        switch (pauseMenu.getPauseState()) {
+        switch (pauseState) {
             case RUN:
                 drawAndSetCamera();
                 break;
@@ -675,7 +678,7 @@ public class Play extends GameState {
 
     private void handlePauseInput() {
         if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
-            pauseMenu.setGameState(B2DVars.pauseState.RUN);
+            pauseState = RUN;
         if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
             gsm.pushState(GameStateManager.State.MENU);
     }
