@@ -21,18 +21,18 @@ public class SettingsMenu extends Scene {
     private GameButton restoreButtonActive;
 
 
-    public SettingsMenu(int act, int map, OrthographicCamera cam) {
-        super(act, map, cam);
+    public SettingsMenu(OrthographicCamera cam) {
+        super(0, 0, cam);
 
         pauseState = B2DVars.pauseState.STOPPED;
 
         hudCam.update();
 
-        Texture backLayer = Game.res.getTexture("backLayer");
+        //Texture backLayer = Game.res.getTexture("backLayer");
 
-        restoreButtonActive = new GameButton("Restore", V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        saveButtonActive = new GameButton("Save", V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        exitButtonActive = new GameButton("Exit", V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
+        restoreButtonActive = new GameButton("Restore", V_WIDTH / 6f, V_HEIGHT / 2f - 40);
+        saveButtonActive = new GameButton("Save", V_WIDTH / 6f, V_HEIGHT / 2f - 80);
+        exitButtonActive = new GameButton("Exit", V_WIDTH / 6f, V_HEIGHT / 2f - 120);
 
         buttons = new HashSet<>(Arrays.asList(restoreButtonActive, saveButtonActive, exitButtonActive));
 

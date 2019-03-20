@@ -4,6 +4,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
@@ -21,6 +22,8 @@ public class DesktopLauncher {
         config.height = V_HEIGHT * SCALE;
         config.foregroundFPS = 60; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized
+
+        new Settings().Save();
 
 	}
 }

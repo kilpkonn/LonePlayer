@@ -54,7 +54,7 @@ project(":desktop") {
         implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
-        
+        implementation 'com.google.code.gson:gson:2.8.5'
     }
 }
 
@@ -94,6 +94,7 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-x86"
         natives "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-x86_64"
         implementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        implementation 'com.google.code.gson:gson:2.8.5'
         
     }
 }
@@ -112,6 +113,7 @@ project(":ios") {
         implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
         implementation "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
+        implementation 'com.google.code.gson:gson:2.8.5'
         
     }
 }
@@ -129,6 +131,7 @@ project(":core") {
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         implementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        implementation 'com.google.code.gson:gson:2.8.5'
         
     }
 }
@@ -145,6 +148,7 @@ project(":ios-moe") {
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
         natives "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
+        implementation 'com.google.code.gson:gson:2.8.5'
         
     }
 }
