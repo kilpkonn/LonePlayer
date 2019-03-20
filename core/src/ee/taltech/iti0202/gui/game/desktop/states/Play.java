@@ -168,7 +168,7 @@ public class Play extends GameState {
 
 
         // load tiled map
-        String path = PATH + "maps/level_" + act + "_" + map + ".tmx";
+        String path = PATH + "maps/levels/Act_" + act + "/Map_" + map + ".tmx";
         tiledMap = new TmxMapLoader().load(path);
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         animatedCells = new HashMap<>();

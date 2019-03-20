@@ -42,6 +42,8 @@ public abstract class Scene {
         SAVEANDEXIT,
         EXIT,
         NEXT,
+        ACT,
+        MAP,
         DEFAULT
     }
 

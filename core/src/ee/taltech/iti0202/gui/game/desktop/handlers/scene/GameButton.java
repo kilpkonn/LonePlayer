@@ -57,7 +57,10 @@ public class GameButton {
         sb.begin();
         font.draw(sb, text, x, y);
         sb.end();
+    }
 
+    public String getText() {
+        return text;
     }
 }
 

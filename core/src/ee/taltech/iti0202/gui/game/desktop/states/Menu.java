@@ -43,7 +43,7 @@ public class Menu extends GameState {
     private Background bg;
     private Animation animation;
     private Stage stage;
-    private Scene levelSelectionMenu;
+    private LevelSelectionMenu levelSelectionMenu;
     private Scene mainMenuScene;
 
     private World world;
@@ -214,7 +214,16 @@ public class Menu extends GameState {
     }
 
     private void handleLevelsMenuInput() {
+        /*if (MyInput.isPressed(MyInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.ACT) {
+            //gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
+        }*/
+        if (MyInput.isPressed(MyInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.MAP) {
+            gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
+        }
 
+        if (MyInput.isPressed(MyInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.EXIT) {
+            menuState = sceneState.MAIN;
+        }
     }
 
     private void handleSettingsMenuInput() {
