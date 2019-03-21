@@ -6,57 +6,20 @@ import com.badlogic.gdx.InputAdapter;
 public class MyInputProcessor extends InputAdapter {
 
     public boolean keyDown(int k) {
-        if (k == Input.Keys.A) {
-            MyInput.setKey(MyInput.MOVE_LEFT, true);
-        }
-        if (k == Input.Keys.D) {
-            MyInput.setKey(MyInput.MOVE_RIGHT, true);
-        }
-        if (k == Input.Keys.SPACE) {
-            MyInput.setKey(MyInput.JUMP, true);
-        }
-        if (k == Input.Keys.S) {
-            MyInput.setKey(MyInput.CHANGE_DIMENTION, true);
-        }
-        if (k == Input.Keys.SHIFT_LEFT) {
-            MyInput.setKey(MyInput.MENU, true);
-        }
-
-        if (k == Input.Keys.ESCAPE) {
-            MyInput.setKey(MyInput.ESC, true);
-        }
-
+        MyInput.setKeyDown(Input.Keys.toString(k), true);
         return true;
     }
 
     public boolean keyUp(int k) {
-        if (k == Input.Keys.A) {
-            MyInput.setKey(MyInput.MOVE_LEFT, false);
-        }
-        if (k == Input.Keys.D) {
-            MyInput.setKey(MyInput.MOVE_RIGHT, false);
-        }
-        if (k == Input.Keys.SPACE) {
-            MyInput.setKey(MyInput.JUMP, false);
-        }
-        if (k == Input.Keys.S) {
-            MyInput.setKey(MyInput.CHANGE_DIMENTION, false);
-        }
-        if (k == Input.Keys.SHIFT_LEFT) {
-            MyInput.setKey(MyInput.MENU, false);
-        }
-
-        if (k == Input.Keys.ESCAPE) {
-            MyInput.setKey(MyInput.ESC, false);
-        }
-
+        MyInput.setKeyDown(Input.Keys.toString(k), false);
+        MyInput.setKeyPressed(Input.Keys.toString(k));
         return true;
     }
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
         if (button == Input.Buttons.LEFT) {
-            MyInput.setKey(MyInput.SHOOT, true);
+            MyInput.setKeyDown("MOUSE1", true);
         }
 
         return true;
@@ -65,9 +28,9 @@ public class MyInputProcessor extends InputAdapter {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if (button == Input.Buttons.LEFT) {
-            MyInput.setKey(MyInput.SHOOT, false);
+            MyInput.setKeyDown("MOUSE1", false);
+            MyInput.setKeyPressed("MOUSE1");
         }
-
         return true;
     }
 

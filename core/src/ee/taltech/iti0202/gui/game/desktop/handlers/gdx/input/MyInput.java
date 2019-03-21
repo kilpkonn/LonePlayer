@@ -1,40 +1,33 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input;
 
+import java.util.HashSet;
+
 public class MyInput {
 
-    private static boolean[] keys;
-    private static boolean[] pkeys;
-
-    public static final int NUM_KEYS = 7;
-    public static final int MOVE_LEFT = 0;
-    public static final int MOVE_RIGHT = 1;
-    public static final int JUMP = 2;
-    public static final int CHANGE_DIMENTION = 3;
-    public static final int MENU = 4;
-    public static final int SHOOT = 5;
-    public static final int ESC = 6;
-
-    static {
-        keys = new boolean[NUM_KEYS];
-        pkeys = new boolean[NUM_KEYS];
-    }
+    private static HashSet<String> keysDown = new HashSet<>();
+    private static HashSet<String> keysPressed = new HashSet<>();
 
     public static void update() {
-        for (int i = 0; i < NUM_KEYS; i++) {
-            pkeys[i] = keys[i];
-        }
+        //keysDown.clear();
+        keysPressed.clear();
     }
 
-    public static void setKey(int i, boolean b) {
-        keys[i] = b;
+    public static void setKeyDown(String key, boolean isdown) {
+        if (isdown)
+            keysDown.add(key);
+        else
+            keysDown.remove(key);
     }
 
-    public static boolean isDown(int i) {
-        return keys[i];
+    public static void setKeyPressed(String key) {
+        keysPressed.add(key);
     }
 
-    public static boolean isPressed(int i) {
+    public static boolean isDown(String key) {
+        return keysDown.contains(key);
+    }
 
-        return keys[i] && !pkeys[i];
+    public static boolean isPressed(String key) {
+        return keysPressed.contains(key);
     }
 }
