@@ -67,7 +67,7 @@ public class Game extends ApplicationAdapter {
 
         res.loadTexture(PATH + "images/Player/Player.png", "Player");
         res.loadTexture(PATH + "images/Player/Llama.png", "Llama");
-        res.loadTexture(PATH + "maps/Flag.png", "Checkpoint");
+        res.loadTexture(PATH + "maps/tilesets/images/Flag.png", "Checkpoint");
         res.loadTexture(PATH + "maps/background/rock.png", "rock");
         res.loadTexture(PATH + "maps/background/snow.png", "snow");
         res.loadTexture(PATH + "maps/background/grass.png", "grass");

@@ -19,6 +19,9 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LevelSelectionMenu;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.MainMenu;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.Scene;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Background;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
@@ -30,34 +33,32 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 public class Menu extends GameState {
 
-    enum block {
-        NEW_GAME,
-        lOAD_GAME,
+    enum sceneState {
+        MAIN,
+        LEVELS,
         SETTINGS,
-        EXIT,
         DEFAULT
     }
 
     private Background bg;
     private Animation animation;
     private Stage stage;
-    private GameButton newGameButtonActive;
-    private GameButton loadGameButtonActive;
-    private GameButton settingsButtonActive;
-    private GameButton exitButtonActive;
+    private LevelSelectionMenu levelSelectionMenu;
+    private Scene mainMenuScene;
 
     private World world;
     private Texture player;
     private Texture logo;
     private Texture backgroundTexture;
-    private List<List<GameButton>> buttons;
-    private HashMap<GameButton, block> buttonType;
+    private List<GameButton> buttons;
     private Vector2 mouseInWorld2D;
-    private block cur_block = block.DEFAULT;
+    private sceneState menuState;
 
     public Menu(GameStateManager gsm) {
 
         super(gsm);
+
+        menuState = sceneState.MAIN;
 
         // get textures
         player = Game.res.getTexture("Llama");
@@ -74,25 +75,10 @@ public class Menu extends GameState {
         animation = new Animation(reg, 1 / 12f);
         mouseInWorld2D = new Vector2();
 
+        levelSelectionMenu = new LevelSelectionMenu(cam);
+        mainMenuScene = new MainMenu(cam);
+
         // play button
-        newGameButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 32, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        GameButton newGameButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 0, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f);
-        loadGameButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 96, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        GameButton loadGameButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 64, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 40);
-        settingsButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 160, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        GameButton settinsButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 128, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 80);
-        exitButtonActive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 224, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
-        GameButton exitButtonInactive = new GameButton(new TextureRegion(Game.res.getTexture("buttons"), 0, 192, V_WIDTH, 32), V_WIDTH / 2f, V_HEIGHT / 1.5f - 120);
-
-        buttons = new ArrayList<>(Arrays.asList(Arrays.asList(newGameButtonActive, newGameButtonInactive), Arrays.asList(loadGameButtonActive, loadGameButtonInactive),
-                Arrays.asList(settingsButtonActive, settinsButtonInactive), Arrays.asList(exitButtonActive, exitButtonInactive)));
-
-        buttonType = new HashMap<GameButton, block>() {{
-            put(newGameButtonActive, block.NEW_GAME);
-            put(loadGameButtonActive, block.lOAD_GAME);
-            put(settingsButtonActive, block.SETTINGS);
-            put(exitButtonActive, block.EXIT);
-        }};
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
@@ -116,12 +102,19 @@ public class Menu extends GameState {
 
     @Override
     public void handleInput() {   // TODO: MAKE A ACT SELECTOR
-        if (MyInput.isPressed(MyInput.SHOOT) && cur_block == block.NEW_GAME) {
-            gsm.pushState(GameStateManager.State.PLAY, 1, 1);
-        }
+        switch (menuState) {
+            case MAIN:
+                handleMainMenuInput();
+                break;
+            case LEVELS:
+                handleLevelsMenuInput();
+                break;
+            case SETTINGS:
+                handleSettingsMenuInput();
+                break;
+                default:
+                    System.out.println("Error with menuState!!!");
 
-        if (MyInput.isPressed(MyInput.SHOOT) && cur_block == block.EXIT) {
-            Gdx.app.exit();
         }
     }
 
@@ -135,7 +128,19 @@ public class Menu extends GameState {
 
         animation.update(dt);
 
-        for (List<GameButton> button : buttons) button.get(1).update(mouseInWorld2D);
+        switch (menuState) {
+            case MAIN:
+                updateMainMenu(dt);
+                break;
+            case LEVELS:
+                updateLevelsMenu(dt);
+                break;
+            case SETTINGS:
+                updateSettingsMenu(dt);
+                break;
+                default:
+                    System.out.println("Error with menuState!");
+        }
     }
 
     @Override
@@ -153,20 +158,75 @@ public class Menu extends GameState {
 
         // draw button
 
-
-        for (List<GameButton> button : buttons) {
-            if (button.get(1).hoverOver()) {
-                cur_block = buttonType.get(button.get(0));
-                button.get(0).render(sb);
-            } else {
-                button.get(1).render(sb);
-            }
+        switch (menuState) {
+            case MAIN:
+                drawMainMenu();
+                break;
+            case LEVELS:
+                drawLevelsMenu();
+                break;
+            case SETTINGS:
+                drawSettingsMenu();
+                break;
+                default:
+                    System.out.println("Error with menuState!");
         }
 
         // draw player
         sb.begin();
         sb.draw(animation.getFrame(), 146, 151);
         sb.end();
+
+    }
+
+    private void updateMainMenu(float dt) {
+        mainMenuScene.update(dt);
+    }
+
+    private void updateLevelsMenu(float dt) {
+        levelSelectionMenu.update(dt);
+    }
+
+    private void updateSettingsMenu(float dt) {
+
+    }
+
+    private void drawMainMenu() {
+        mainMenuScene.render(sb);
+    }
+
+    private void drawLevelsMenu() {
+        levelSelectionMenu.render(sb);
+    }
+
+    private void drawSettingsMenu() {
+
+    }
+
+    private void handleMainMenuInput() {
+        if (MyInput.isPressed(MyInput.SHOOT) && mainMenuScene.getCur_block() == Scene.block.NEWGAME) {
+            menuState = sceneState.LEVELS;
+            //gsm.pushState(GameStateManager.State.PLAY, 1, 1);
+        }
+        if (MyInput.isPressed(MyInput.SHOOT) && mainMenuScene.getCur_block() == Scene.block.EXIT) {
+            Gdx.app.exit();
+        }
+    }
+
+    private void handleLevelsMenuInput() {
+        /*if (MyInput.isPressed(MyInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.ACT) {
+            //gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
+        }*/
+        if (MyInput.isPressed(MyInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.MAP) {
+            gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
+        }
+
+        if (MyInput.isPressed(MyInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.EXIT) {
+            menuState = sceneState.MAIN;
+        }
+    }
+
+    private void handleSettingsMenuInput() {
 
     }
 
