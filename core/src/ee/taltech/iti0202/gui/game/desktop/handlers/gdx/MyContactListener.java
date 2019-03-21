@@ -11,9 +11,10 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public class MyContactListener implements ContactListener {
 
-    private boolean playerOnGround;
-    private boolean doubleJump;
-    private boolean dash;
+    private boolean playerOnGround = false;
+    private boolean doubleJump = false;
+    private int wallJump = 0;
+    private boolean dash = false;
     private boolean newCheckpoint = false;
     private Body curCheckpoint;
     private Body toBeDeleted;
@@ -27,7 +28,7 @@ public class MyContactListener implements ContactListener {
 
         if (fa.getUserData() != null && fb.getUserData() != null) {
 
-            // set up a new checkpoint
+            // set up a new checkpoint and double jump
             if (fa.getUserData() != null && fa.getUserData().equals("foot")) {
                 playerOnGround = true;
                 if (fb.getUserData().equals("checkpoint")) {
@@ -45,30 +46,47 @@ public class MyContactListener implements ContactListener {
                 }
             }
 
-
-            // detection happens when player goes outside of initial game border
-            if (fa.getUserData() != null && (fa.getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
-                if (fb.getUserData().equals("barrier")) {
-                    setPlayerDead(true);
-                }
+            //set wall jump
+            if (fa.getUserData() != null && fa.getUserData().equals("side_r")) {
+                wallJump = -1;
             }
-            if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
-                if (fa.getUserData().equals("barrier")) {
-                    setPlayerDead(true);
-                }
+            if (fb.getUserData() != null && fb.getUserData().equals("side_r")) {
+                wallJump = -1;
             }
 
+            if (fa.getUserData() != null && fa.getUserData().equals("side_l")) {
+                wallJump = 1;
+            }
+            if (fb.getUserData() != null && fb.getUserData().equals("side_l")) {
+                wallJump = 1;
+            }
         }
+
+
+        // detection happens when player goes outside of initial game border
+        if (fa.getUserData() != null && (fa.getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
+            if (fb.getUserData().equals("barrier")) {
+                setPlayerDead(true);
+            }
+        }
+        if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
+            if (fa.getUserData().equals("barrier")) {
+                setPlayerDead(true);
+            }
+        }
+
     }
+
 
     // called when two fixtures no longer collide
     public void endContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
 
-        if (fa.getUserData() != null && fa.getUserData().equals("foot") || fb.getUserData() != null && fb.getUserData().equals("foot")) {
+        if (fa.getUserData() != null && (fa.getUserData().equals("foot") || fa.getUserData().equals("side")) || fb.getUserData() != null && (fb.getUserData().equals("foot") || fb.getUserData().equals("side"))) {
             playerOnGround = false;
             doubleJump = true;
+            wallJump = 0;
             dash = true;
         }
 
@@ -142,4 +160,11 @@ public class MyContactListener implements ContactListener {
         return curCheckpoint.getPosition();
     }
 
+    public int isWallJump() {
+        return wallJump;
+    }
+
+    public void setWallJump(int wallJump) {
+        this.wallJump = wallJump;
+    }
 }

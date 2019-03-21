@@ -208,13 +208,27 @@ public class Play extends GameState {
             mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
+
+        polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(-20 / PPM, 20 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("side_l");
+
+        polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(20 / PPM, 20 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        body.createFixture(fdef).setUserData("side_r");
+
+
         fdef.isSensor = false;
         circle.setRadius(9 / PPM);
         fdef.shape = circle;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
         body.createFixture(fdef).setFriction(FRICTION);
-        body.setFixedRotation(false);
         body.setUserData("playerBody");
 
         polyShape.setAsBox(8 / PPM, 16 / PPM, new Vector2(0, 12 / PPM), 0);
@@ -223,7 +237,7 @@ public class Play extends GameState {
         fdef.filter.maskBits = mask;
         body.createFixture(fdef).setUserData("playerBody");
 
-        polyShape.setAsBox(8 / PPM, 4 / PPM, new Vector2(0, -13 / PPM), 0);
+        polyShape.setAsBox(1 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
         fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
@@ -496,13 +510,13 @@ public class Play extends GameState {
         return chain;
     }
 
-    private static void fixBleeding(TextureRegion[][] region) {
-        for (TextureRegion[] array : region) {
-            for (TextureRegion texture : array) {
-                fixBleeding(texture);
-            }
-        }
-    }
+    // private static void fixBleeding(TextureRegion[][] region) {
+    //     for (TextureRegion[] array : region) {
+    //         for (TextureRegion texture : array) {
+    //             fixBleeding(texture);
+    //         }
+    //     }
+    // }
 
     private static void fixBleeding(TextureRegion region) {
         float fix = 0.01f;
@@ -542,10 +556,13 @@ public class Play extends GameState {
             cl.setPlayerDead(true);
         }
 
-        //player jump / double jump
+        //player jump / double jump / dash
         if (MyInput.isPressed(settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+            } else if (cl.isWallJump() != 0) {
+                player.getBody().applyForceToCenter(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP, true);
+                cl.setWallJump(0);
             } else if (cl.hasDoubleJump()) {
                 player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
                 cl.setDoubleJump(false);
@@ -709,13 +726,10 @@ public class Play extends GameState {
         Gdx.gl20.glClear(GL20.GL_ALPHA_BITS);
 
         //set camera to follow player
-        if (!DEBUG)
-            cam.position.set(
-                    player.getPosition().x * PPM,
-                    player.getPosition().y * PPM,
-                    0);
-
-        if (DEBUG) b2dr.render(world, b2dcam.combined);
+        cam.position.set(
+                player.getPosition().x * PPM,
+                player.getPosition().y * PPM,
+                0);
 
         parallaxBackground.setSpeed(current_force.x);
         stage.act();
@@ -735,6 +749,14 @@ public class Play extends GameState {
         renderer.getBatch().end();
         b2dcam.update();
         cam.update();
+
+        if (DEBUG) {
+            b2dcam.position.set(
+                    player.getPosition().x,
+                    player.getPosition().y,
+                    0);
+            b2dr.render(world, b2dcam.combined);
+        }
 
         //draw player
         sb.setProjectionMatrix(cam.combined);

@@ -8,19 +8,20 @@ public class MyInput {
     private static HashSet<String> keysPressed = new HashSet<>();
 
     public static void update() {
-        //keysDown.clear();
-        keysPressed.clear();
+        for (String key : keysPressed) setKeyDown(key, true);
     }
 
     public static void setKeyDown(String key, boolean isdown) {
-        if (isdown)
-            keysDown.add(key);
-        else
+        if (isdown) {
+            if (!keysPressed.contains(key)) {
+                keysPressed.add(key);
+            } else {
+                keysDown.add(key);
+            }
+        } else {
             keysDown.remove(key);
-    }
-
-    public static void setKeyPressed(String key) {
-        keysPressed.add(key);
+            keysPressed.remove(key);
+        }
     }
 
     public static boolean isDown(String key) {
@@ -28,6 +29,6 @@ public class MyInput {
     }
 
     public static boolean isPressed(String key) {
-        return keysPressed.contains(key);
+        return keysPressed.contains(key) && !keysDown.contains(key);
     }
 }

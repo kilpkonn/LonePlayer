@@ -12,7 +12,6 @@ public class MyInputProcessor extends InputAdapter {
 
     public boolean keyUp(int k) {
         MyInput.setKeyDown(Input.Keys.toString(k), false);
-        MyInput.setKeyPressed(Input.Keys.toString(k));
         return true;
     }
 
@@ -29,7 +28,6 @@ public class MyInputProcessor extends InputAdapter {
 
         if (button == Input.Buttons.LEFT) {
             MyInput.setKeyDown("MOUSE1", false);
-            MyInput.setKeyPressed("MOUSE1");
         }
         return true;
     }
