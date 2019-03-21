@@ -237,6 +237,14 @@ public class Menu extends GameState {
         if (MyInput.isPressed(MyInput.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
             menuState = sceneState.MAIN;
         }
+        if (MyInput.isPressed(MyInput.SHOOT) && settingsMenu.getCur_block() == Scene.block.SAVE) {
+            game.settings.save();
+            // update other classes
+        }
+        if (MyInput.isPressed(MyInput.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
+            game.settings = game.settings.loadDefault();
+        }
+
     }
 
     @Override

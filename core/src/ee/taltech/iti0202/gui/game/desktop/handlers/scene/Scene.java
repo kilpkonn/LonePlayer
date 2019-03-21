@@ -44,6 +44,7 @@ public abstract class Scene {
         NEXT,
         ACT,
         MAP,
+        LOAD,
         DEFAULT
     }
 

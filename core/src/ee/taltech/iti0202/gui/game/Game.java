@@ -11,6 +11,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInputProcessor;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.STEP;
@@ -26,7 +27,7 @@ public class Game extends ApplicationAdapter {
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;
-
+    public Settings settings;
 
     private GameStateManager gsm;
     public static Content res;
@@ -82,6 +83,8 @@ public class Game extends ApplicationAdapter {
         hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         gsm = new GameStateManager(this);
+
+        settings = new Settings().load();
     }
 
     public SpriteBatch getSpriteBatch() {

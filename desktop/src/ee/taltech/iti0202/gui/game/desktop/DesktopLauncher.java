@@ -22,8 +22,5 @@ public class DesktopLauncher {
         config.height = V_HEIGHT * SCALE;
         config.foregroundFPS = 60; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized
-
-        new Settings().Save();
-
 	}
 }
