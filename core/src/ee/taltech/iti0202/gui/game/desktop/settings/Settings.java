@@ -25,8 +25,8 @@ public class Settings {
         try {
             File f = new File(path);
             if (!f.exists()) {
-                f.createNewFile();
-                System.out.println("Created new settings file!");
+                boolean newFile = f.createNewFile();
+                System.out.println(newFile ? "Created new settings file!" : "failed");
             }
             FileWriter writer = new FileWriter(f, false);
             System.out.println(jsonString);
