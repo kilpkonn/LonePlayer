@@ -46,7 +46,7 @@ public class GameStateManager {
 
     private GameState getState(State state, int act, int level) {
         if (state == State.PLAY) {
-            return new Play(this, act, level);
+            return new Play(this, act, level, game.settings);
         }
         System.out.println("desired state was no found!");
         return null;

@@ -32,6 +32,10 @@ public class Game extends ApplicationAdapter {
     private GameStateManager gsm;
     public static Content res;
 
+    public Game(Settings settings) {
+        this.settings = settings;
+    }
+
     public void create() {
 
         switch (Gdx.app.getType()) {
@@ -83,8 +87,6 @@ public class Game extends ApplicationAdapter {
         hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         gsm = new GameStateManager(this);
-
-        settings = new Settings().load();
     }
 
     public SpriteBatch getSpriteBatch() {

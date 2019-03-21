@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -13,7 +14,10 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		new LwjglApplication(new Game(), config);
+
+		Settings settings = new Settings().load("android/assets/settings/settings.json");
+
+		new LwjglApplication(new Game(settings), config);
 
 		config.title = Game.TITLE;
         config.width = V_WIDTH * SCALE;

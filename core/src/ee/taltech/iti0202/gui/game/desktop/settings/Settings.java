@@ -10,24 +10,20 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
-
 public class Settings {
-    public int NUM_KEYS = 7;
-    public int MOVE_LEFT = 0;
-    public int MOVE_RIGHT = 1;
-    public int JUMP = 2;
-    public int CHANGE_DIMENTION = 3;
-    public int MENU = 4;
-    public int SHOOT = 5;
-    public int ESC = 6;
+    public String MOVE_LEFT = "A";
+    public String MOVE_RIGHT = "D";
+    public String JUMP = "Space";
+    public String CHANGE_DIMENTION = "S";
+    public String MENU = "MENU";
+    public String SHOOT = "MOUSE1";
+    public String ESC = "Escape";
 
-    public void save() {
+    public void save(String path) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Settings.class, new SettingsSerializer()).create();
         String jsonString = gson.toJson(this);
         try {
-            File f = new File(B2DVars.PATH + "settings/settings.json");
+            File f = new File(path);
             if (!f.exists()) {
                 f.createNewFile();
                 System.out.println("Created new settings file!");
@@ -47,9 +43,9 @@ public class Settings {
         return new Settings();
     }
 
-    public Settings load() {
+    public Settings load(String path) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(new File(B2DVars.PATH + "settings/settings.json")));
+            BufferedReader br = new BufferedReader(new FileReader(new File(path)));
             Gson gson = new GsonBuilder().registerTypeAdapter(Settings.class, new SettingsSerializer()).create();
             Settings s = gson.fromJson(br, Settings.class);
             System.out.println("Done loading settings!");

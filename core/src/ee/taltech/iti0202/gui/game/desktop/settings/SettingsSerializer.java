@@ -17,7 +17,6 @@ public class SettingsSerializer implements JsonSerializer<Settings> {
         result.add("JUMP", new JsonPrimitive(settings.JUMP));
         result.add("SHOOT", new JsonPrimitive(settings.SHOOT));
         result.add("MENU", new JsonPrimitive(settings.MENU));
-        result.add("NUM_KEYS", new JsonPrimitive(settings.NUM_KEYS));
         result.add("ESC", new JsonPrimitive(settings.ESC));
         return result;
     }

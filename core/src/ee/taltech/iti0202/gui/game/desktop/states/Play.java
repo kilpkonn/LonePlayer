@@ -51,6 +51,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
@@ -114,13 +115,15 @@ public class Play extends GameState {
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
     private B2DVars.pauseState pauseState;
+    private Settings settings;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    public Play(GameStateManager gsm, int act, int map) {
+    public Play(GameStateManager gsm, int act, int map, Settings settings) {
 
         super(gsm);
+        this.settings = settings;
 
         // sey up world
         world = new World(new Vector2(0, GRAVITY), true);
@@ -522,7 +525,7 @@ public class Play extends GameState {
         current_force = player.getBody().getLinearVelocity();
 
         //pause screen
-        if (MyInput.isPressed(MyInput.ESC)) {
+        if (MyInput.isPressed(settings.ESC)) {
             if (pauseState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
                 pauseState = PAUSE;
             else
@@ -530,7 +533,7 @@ public class Play extends GameState {
         }
 
         //change dimension
-        if (MyInput.isPressed(MyInput.CHANGE_DIMENTION)) {
+        if (MyInput.isPressed(settings.CHANGE_DIMENTION)) {
             System.out.println("changed dimension");
             dimensionJump = true;
             tempPlayerLocation = player.getPosition();
@@ -540,7 +543,7 @@ public class Play extends GameState {
         }
 
         //player jump / double jump
-        if (MyInput.isPressed(MyInput.JUMP)) {
+        if (MyInput.isPressed(settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.hasDoubleJump()) {
@@ -550,7 +553,7 @@ public class Play extends GameState {
         }
 
         //player move left
-        if (MyInput.isDown(MyInput.MOVE_LEFT)) {
+        if (MyInput.isDown(settings.MOVE_LEFT)) {
             if (current_force.x > -MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
@@ -562,7 +565,7 @@ public class Play extends GameState {
         }
 
         //player dash left
-        if (MyInput.isPressed(MyInput.MOVE_LEFT)) {
+        if (MyInput.isPressed(settings.MOVE_LEFT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
@@ -575,7 +578,7 @@ public class Play extends GameState {
         }
 
         //player move right
-        if (MyInput.isDown(MyInput.MOVE_RIGHT)) {
+        if (MyInput.isDown(settings.MOVE_RIGHT)) {
             if (current_force.x < MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
@@ -586,7 +589,7 @@ public class Play extends GameState {
         }
 
         //player dash right
-        if (MyInput.isPressed(MyInput.MOVE_RIGHT)) {
+        if (MyInput.isPressed(settings.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
                     player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
@@ -677,9 +680,9 @@ public class Play extends GameState {
     }
 
     private void handlePauseInput() {
-        if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
+        if (MyInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
             pauseState = RUN;
-        if (MyInput.isPressed(MyInput.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
+        if (MyInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
             gsm.pushState(GameStateManager.State.MENU);
     }
 
