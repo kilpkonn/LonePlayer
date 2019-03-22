@@ -108,7 +108,8 @@ public class Game extends ApplicationAdapter {
             accum -= STEP;
             gsm.update(STEP);
             gsm.render();
-            MyInput.update();
+            MyInput.update(); // this is to define the end state of current iteration
+            System.gc();
         }
     }
 

@@ -114,7 +114,7 @@ public class Play extends GameState {
     private TiledMapTileLayer foreground;
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
-    private B2DVars.pauseState pauseState;
+    private B2DVars.pauseState playState;
     private Settings settings;
 
 
@@ -154,7 +154,7 @@ public class Play extends GameState {
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
         shapeRenderer = new ShapeRenderer();
-        pauseState = B2DVars.pauseState.RUN;
+        playState = B2DVars.pauseState.RUN;
 
         // set up background
         current_force = new Vector2(0, 0);
@@ -540,10 +540,10 @@ public class Play extends GameState {
 
         //pause screen
         if (MyInput.isPressed(settings.ESC)) {
-            if (pauseState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
-                pauseState = PAUSE;
+            if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
+                playState = PAUSE;
             else
-                pauseState = RUN;
+                playState = RUN;
         }
 
         //change dimension
@@ -621,9 +621,10 @@ public class Play extends GameState {
     public void update(float dt) {
 
         handleInput();
+
         world.step(dt, 10, 2); // recommended values
 
-        switch (pauseState) {
+        switch (playState) {
             case RUN:
                 UpdateProps(dt);
 
@@ -642,6 +643,9 @@ public class Play extends GameState {
     }
 
     private void UpdateProps(float dt) {
+        b2dcam.update();
+        cam.update();
+
         //call update animation
         if (!cl.IsPlayerDead()) player.update(dt);
         else {
@@ -678,7 +682,7 @@ public class Play extends GameState {
 
     public void render() {
 
-        switch (pauseState) {
+        switch (playState) {
             case RUN:
                 drawAndSetCamera();
                 break;
@@ -694,11 +698,11 @@ public class Play extends GameState {
             default:
                 break;
         }
-    }
+    } //TODO: render update rectangle around player and smoorther paste
 
     private void handlePauseInput() {
         if (MyInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
-            pauseState = RUN;
+            playState = RUN;
         if (MyInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
             gsm.pushState(GameStateManager.State.MENU);
     }
@@ -747,8 +751,6 @@ public class Play extends GameState {
         if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
         if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
         renderer.getBatch().end();
-        b2dcam.update();
-        cam.update();
 
         if (DEBUG) {
             b2dcam.position.set(

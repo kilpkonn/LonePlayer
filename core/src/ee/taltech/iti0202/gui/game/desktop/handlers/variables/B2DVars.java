@@ -14,7 +14,7 @@ public class B2DVars {
     public static final float PLAYER_SPEED = 8;
     public static float PLAYER_DASH_FORCE_UP = 250;
     public static float PLAYER_DASH_FORCE_SIDE = 150;
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static String PATH = "";
     public static int V_WIDTH = 1920;
