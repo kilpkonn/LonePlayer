@@ -544,7 +544,7 @@ public class Play extends GameState {
         current_force = player.getBody().getLinearVelocity();
 
         //pause screen
-        if (Gdx.input.isKeyJustPressed(settings.ESC)) {
+        if (MyInput.isPressed(settings.ESC)) {
             if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
                 playState = PAUSE;
             else
@@ -552,7 +552,7 @@ public class Play extends GameState {
         }
 
         //change dimension
-        if (Gdx.input.isKeyJustPressed(settings.CHANGE_DIMENTION)) {
+        if (MyInput.isPressed(settings.CHANGE_DIMENTION)) {
             System.out.println("changed dimension");
             dimensionJump = true;
             tempPlayerLocation = player.getPosition();
@@ -562,7 +562,7 @@ public class Play extends GameState {
         }
 
         //player jump / double jump / dash
-        if (Gdx.input.isKeyJustPressed(settings.JUMP)) {
+        if (MyInput.isPressed(settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
@@ -575,7 +575,7 @@ public class Play extends GameState {
         }
 
         //player move left
-        if (Gdx.input.isKeyPressed(settings.MOVE_LEFT)) {
+        if (MyInput.isDown(settings.MOVE_LEFT)) {
             if (current_force.x > -MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
@@ -587,7 +587,7 @@ public class Play extends GameState {
         }
 
         //player dash left
-        if (Gdx.input.isKeyJustPressed(settings.MOVE_LEFT)) {
+        if (MyInput.isPressed(settings.MOVE_LEFT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
@@ -600,7 +600,7 @@ public class Play extends GameState {
         }
 
         //player move right
-        if (Gdx.input.isKeyPressed(settings.MOVE_RIGHT)) {
+        if (MyInput.isDown(settings.MOVE_RIGHT)) {
             if (current_force.x < MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
@@ -611,7 +611,7 @@ public class Play extends GameState {
         }
 
         //player dash right
-        if (Gdx.input.isKeyJustPressed(settings.MOVE_RIGHT)) {
+        if (MyInput.isPressed(settings.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
                     player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
@@ -727,7 +727,7 @@ public class Play extends GameState {
     }
 
     private void handleSettingsInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
+        if (MyInput.isPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
 
         if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
             playState = PAUSE;

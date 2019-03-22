@@ -233,7 +233,7 @@ public class Menu extends GameState {
     }
 
     private void handleSettingsMenuInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
+        if (MyInput.isPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
 
         if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
             menuState = sceneState.MAIN;

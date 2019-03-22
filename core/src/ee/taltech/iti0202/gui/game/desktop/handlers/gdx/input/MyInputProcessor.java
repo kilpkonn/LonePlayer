@@ -5,15 +5,16 @@ import com.badlogic.gdx.InputAdapter;
 
 public class MyInputProcessor extends InputAdapter {
 
-    public boolean keyDown(int key) {
-        MyInput.setKeyDown(key);
+    public boolean keyDown(int k) {
+        MyInput.setKeyDown(k, true);
         return true;
     }
 
-    public boolean keyUp(int key) {
-        if (key == MyInput.getKeyDown()) MyInput.setKeyDown(-1);
+    public boolean keyUp(int k) {
+        MyInput.setKeyDown(k, false);
         return true;
     }
+
 
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
