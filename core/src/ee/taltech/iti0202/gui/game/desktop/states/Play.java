@@ -717,35 +717,44 @@ public class Play extends GameState {
     } //TODO: render update rectangle around player and smoorther paste
 
     private void handlePauseInput() {
-        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
-            playState = RUN;
-        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
-            gsm.pushState(GameStateManager.State.MENU);
-        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.SETTINGS)
-            playState = B2DVars.pauseState.SETTINGS;
-
+        if (MyInput.isMouseClicked(settings.SHOOT)) {
+            switch (pauseMenu.getCur_block()) {
+                case RESUME:
+                    playState = RUN;
+                    break;
+                case EXIT:
+                    gsm.pushState(GameStateManager.State.MENU);
+                    break;
+                case SETTINGS:
+                    playState = B2DVars.pauseState.SETTINGS;
+                    break;
+            }
+        }
     }
 
     private void handleSettingsInput() {
         if (MyInput.isPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
 
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
-            playState = PAUSE;
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SAVE) {
-            Game.settings.save(B2DVars.PATH + "settings/settings.json");
-            // update other classes
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.NEXT) {
-            Game.settings = Game.settings.loadDefault();
-            settingsMenu.updateAllBindsDisplayed();
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
-            Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
-            settingsMenu.updateAllBindsDisplayed();
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SETTINGS) {
-            settingsMenu.handleSettingsButtonClick();
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (settingsMenu.getCur_block()) {
+                case EXIT:
+                    playState = PAUSE;
+                    break;
+                case SAVE:
+                    Game.settings.save(B2DVars.PATH + "settings/settings.json");
+                    break;
+                case NEXT:
+                    Game.settings = Game.settings.loadDefault();
+                    settingsMenu.updateAllBindsDisplayed();
+                    break;
+                case LOAD:
+                    Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
+                    settingsMenu.updateAllBindsDisplayed();
+                    break;
+                case SETTINGS:
+                    settingsMenu.handleSettingsButtonClick();
+                    break;
+            }
         }
     }
 

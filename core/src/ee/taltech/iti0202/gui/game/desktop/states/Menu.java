@@ -178,7 +178,6 @@ public class Menu extends GameState {
         sb.begin();
         sb.draw(animation.getFrame(), 146, 151);
         sb.end();
-
     }
 
     private void updateMainMenu(float dt) {
@@ -203,57 +202,63 @@ public class Menu extends GameState {
 
     private void drawSettingsMenu() {
         settingsMenu.render(sb);
-
     }
 
     private void handleMainMenuInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.NEWGAME) {
-            menuState = sceneState.LEVELS;
-            //gsm.pushState(GameStateManager.State.PLAY, 1, 1);
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.SETTINGS) {
-            menuState = sceneState.SETTINGS;
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.EXIT) {
-            Gdx.app.exit();
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (mainMenuScene.getCur_block()) {
+                case NEWGAME:
+                    menuState = sceneState.LEVELS;
+                    break;
+                case RESUME:
+                    break;
+                case SETTINGS:
+                    menuState = sceneState.SETTINGS;
+                    break;
+                case EXIT:
+                    Gdx.app.exit();
+                    break;
+            }
         }
     }
 
     private void handleLevelsMenuInput() {
-        /*if (MyInput.isMouseClicked(MyInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.ACT) {
-            //gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
-        }*/
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.MAP) {
-            gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
-        }
-
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.EXIT) {
-            menuState = sceneState.MAIN;
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (levelSelectionMenu.getCur_block()) {
+                case MAP:
+                    gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
+                    break;
+                case EXIT:
+                    menuState = sceneState.MAIN;
+                    break;
+            }
         }
     }
 
     private void handleSettingsMenuInput() {
         if (MyInput.isPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
 
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
-            menuState = sceneState.MAIN;
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (settingsMenu.getCur_block()) {
+                case EXIT:
+                    menuState = sceneState.MAIN;
+                    break;
+                case SAVE:
+                    Game.settings.save(B2DVars.PATH + "settings/settings.json");
+                    break;
+                case NEXT:
+                    Game.settings = Game.settings.loadDefault();
+                    settingsMenu.updateAllBindsDisplayed();
+                    break;
+                case LOAD:
+                    Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
+                    settingsMenu.updateAllBindsDisplayed();
+                    break;
+                case SETTINGS:
+                    settingsMenu.handleSettingsButtonClick();
+                    break;
+            }
         }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SAVE) {
-            Game.settings.save(B2DVars.PATH + "settings/settings.json");
-            // update other classes
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.NEXT) {
-            Game.settings = Game.settings.loadDefault();
-            settingsMenu.updateAllBindsDisplayed();
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
-            Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
-            settingsMenu.updateAllBindsDisplayed();
-        }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SETTINGS) {
-            settingsMenu.handleSettingsButtonClick();
-        }
-
     }
 
     @Override
