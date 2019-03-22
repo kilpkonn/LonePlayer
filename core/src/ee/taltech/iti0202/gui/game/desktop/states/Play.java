@@ -46,7 +46,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MouseInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
@@ -539,7 +539,7 @@ public class Play extends GameState {
         current_force = player.getBody().getLinearVelocity();
 
         //pause screen
-        if (MyInput.isPressed(settings.ESC)) {
+        if (Gdx.input.isKeyJustPressed(settings.ESC)) {
             if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
                 playState = PAUSE;
             else
@@ -547,7 +547,7 @@ public class Play extends GameState {
         }
 
         //change dimension
-        if (MyInput.isPressed(settings.CHANGE_DIMENTION)) {
+        if (Gdx.input.isKeyJustPressed(settings.CHANGE_DIMENTION)) {
             System.out.println("changed dimension");
             dimensionJump = true;
             tempPlayerLocation = player.getPosition();
@@ -557,7 +557,7 @@ public class Play extends GameState {
         }
 
         //player jump / double jump / dash
-        if (MyInput.isPressed(settings.JUMP)) {
+        if (Gdx.input.isKeyJustPressed(settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
@@ -570,7 +570,7 @@ public class Play extends GameState {
         }
 
         //player move left
-        if (MyInput.isDown(settings.MOVE_LEFT)) {
+        if (Gdx.input.isKeyPressed(settings.MOVE_LEFT)) {
             if (current_force.x > -MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
@@ -582,7 +582,7 @@ public class Play extends GameState {
         }
 
         //player dash left
-        if (MyInput.isPressed(settings.MOVE_LEFT)) {
+        if (Gdx.input.isKeyJustPressed(settings.MOVE_LEFT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
@@ -595,7 +595,7 @@ public class Play extends GameState {
         }
 
         //player move right
-        if (MyInput.isDown(settings.MOVE_RIGHT)) {
+        if (Gdx.input.isKeyPressed(settings.MOVE_RIGHT)) {
             if (current_force.x < MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
@@ -606,7 +606,7 @@ public class Play extends GameState {
         }
 
         //player dash right
-        if (MyInput.isPressed(settings.MOVE_RIGHT)) {
+        if (Gdx.input.isKeyJustPressed(settings.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
                     player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
@@ -701,9 +701,9 @@ public class Play extends GameState {
     } //TODO: render update rectangle around player and smoorther paste
 
     private void handlePauseInput() {
-        if (MyInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
+        if (MouseInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
             playState = RUN;
-        if (MyInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
+        if (MouseInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
             gsm.pushState(GameStateManager.State.MENU);
     }
 

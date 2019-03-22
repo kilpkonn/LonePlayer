@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.Content;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MouseInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInputProcessor;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
@@ -108,7 +108,7 @@ public class Game extends ApplicationAdapter {
             accum -= STEP;
             gsm.update(STEP);
             gsm.render();
-            MyInput.update(); // this is to define the end state of current iteration
+            MouseInput.update(); // this is to define the end state of current iteration
             System.gc();
         }
     }

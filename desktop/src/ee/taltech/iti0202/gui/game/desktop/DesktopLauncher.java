@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 

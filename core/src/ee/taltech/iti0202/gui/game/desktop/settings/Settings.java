@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.settings;
 
+import com.badlogic.gdx.Input;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -11,13 +12,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class Settings {
-    public String MOVE_LEFT = "A";
-    public String MOVE_RIGHT = "D";
-    public String JUMP = "Space";
-    public String CHANGE_DIMENTION = "S";
-    public String MENU = "MENU";
-    public String SHOOT = "MOUSE1";
-    public String ESC = "Escape";
+    public int MOVE_LEFT = Input.Keys.A;
+    public int MOVE_RIGHT = Input.Keys.D;
+    public int JUMP = Input.Keys.SPACE;
+    public int CHANGE_DIMENTION = Input.Keys.S;
+    public int MENU = Input.Keys.MENU;
+    public int SHOOT = Input.Buttons.LEFT;
+    public int ESC = Input.Keys.ESCAPE;
 
     public void save(String path) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Settings.class, new SettingsSerializer()).create();
