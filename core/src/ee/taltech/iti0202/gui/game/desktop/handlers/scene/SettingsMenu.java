@@ -40,7 +40,7 @@ public class SettingsMenu extends Scene {
 
         buttonType = new HashMap<GameButton, block>() {{
             put(restoreButtonActive, block.NEXT);
-            put(saveButtonActive, block.SETTINGS);
+            put(saveButtonActive, block.SAVE);
             put(exitButtonActive, block.EXIT);
             put(loadButton, block.LOAD);
         }};
