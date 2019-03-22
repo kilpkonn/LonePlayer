@@ -62,6 +62,7 @@ public class B2DVars {
         PAUSE,
         RUN,
         RESUME,
+        SETTINGS,
         STOPPED
     }
 }

@@ -20,19 +20,18 @@ public class GameButton {
     public float height;
 
     private boolean hoverOver;
+    private boolean acceptHover = true;
 
     private BitmapFont font = new BitmapFont(Gdx.files.internal(PATH + "fonts/bullfrog.fnt"), false);
 
     private String text;
 
     public GameButton(String text, float x, float y) {
-
-        this.text = text;
         this.x = x;
         this.y = y;
 
-        width = text.length() * 20;
-        height = 40;
+        setText(text);
+        height = 36;
     }
 
     public boolean hoverOver() {
@@ -40,7 +39,7 @@ public class GameButton {
     }
 
     public void update(Vector2 mousePos) {
-        hoverOver = (mousePos.x / SCALE >= x
+        hoverOver = acceptHover && (mousePos.x / SCALE >= x
                 && mousePos.x / SCALE <= x + width)
                 && (V_HEIGHT - mousePos.y / SCALE >= y - height
                 && V_HEIGHT - mousePos.y / SCALE <= y);
@@ -57,6 +56,15 @@ public class GameButton {
         sb.begin();
         font.draw(sb, text, x, y);
         sb.end();
+    }
+
+    public void setAcceptHover(boolean acceptHover) {
+        this.acceptHover = acceptHover;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+        width = text.length() * 20;
     }
 
     public String getText() {

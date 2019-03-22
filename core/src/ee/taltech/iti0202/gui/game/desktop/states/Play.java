@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -48,6 +49,8 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.Scene;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
@@ -106,6 +109,7 @@ public class Play extends GameState {
     private CircleShape circle;
     private FixtureDef fdef;
     private PauseMenu pauseMenu;
+    private SettingsMenu settingsMenu;
     private ShapeRenderer shapeRenderer;
     private Stage stage;
     private ParallaxBackground parallaxBackground;
@@ -153,6 +157,7 @@ public class Play extends GameState {
 
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
+        settingsMenu = new SettingsMenu(hudCam);
         shapeRenderer = new ShapeRenderer();
         playState = B2DVars.pauseState.RUN;
 
@@ -539,7 +544,7 @@ public class Play extends GameState {
         current_force = player.getBody().getLinearVelocity();
 
         //pause screen
-        if (MyInput.isPressed(settings.ESC)) {
+        if (Gdx.input.isKeyJustPressed(settings.ESC)) {
             if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
                 playState = PAUSE;
             else
@@ -547,7 +552,7 @@ public class Play extends GameState {
         }
 
         //change dimension
-        if (MyInput.isPressed(settings.CHANGE_DIMENTION)) {
+        if (Gdx.input.isKeyJustPressed(settings.CHANGE_DIMENTION)) {
             System.out.println("changed dimension");
             dimensionJump = true;
             tempPlayerLocation = player.getPosition();
@@ -557,7 +562,7 @@ public class Play extends GameState {
         }
 
         //player jump / double jump / dash
-        if (MyInput.isPressed(settings.JUMP)) {
+        if (Gdx.input.isKeyJustPressed(settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
@@ -570,7 +575,7 @@ public class Play extends GameState {
         }
 
         //player move left
-        if (MyInput.isDown(settings.MOVE_LEFT)) {
+        if (Gdx.input.isKeyPressed(settings.MOVE_LEFT)) {
             if (current_force.x > -MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
@@ -582,7 +587,7 @@ public class Play extends GameState {
         }
 
         //player dash left
-        if (MyInput.isPressed(settings.MOVE_LEFT)) {
+        if (Gdx.input.isKeyJustPressed(settings.MOVE_LEFT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
@@ -595,7 +600,7 @@ public class Play extends GameState {
         }
 
         //player move right
-        if (MyInput.isDown(settings.MOVE_RIGHT)) {
+        if (Gdx.input.isKeyPressed(settings.MOVE_RIGHT)) {
             if (current_force.x < MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
@@ -606,7 +611,7 @@ public class Play extends GameState {
         }
 
         //player dash right
-        if (MyInput.isPressed(settings.MOVE_RIGHT)) {
+        if (Gdx.input.isKeyJustPressed(settings.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
                     player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
@@ -627,11 +632,17 @@ public class Play extends GameState {
         switch (playState) {
             case RUN:
                 UpdateProps(dt);
+                break;
 
             case PAUSE:
                 pauseMenu.update(dt);
+                break;
 
             case RESUME:
+                break;
+
+            case SETTINGS:
+                settingsMenu.update(dt);
                 break;
 
             case STOPPED:
@@ -695,16 +706,47 @@ public class Play extends GameState {
             case RESUME:
                 break;
 
+            case SETTINGS:
+                handleSettingsInput();
+                drawPauseScreen();
+                break;
+
             default:
                 break;
         }
     } //TODO: render update rectangle around player and smoorther paste
 
     private void handlePauseInput() {
-        if (MyInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
+        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
             playState = RUN;
-        if (MyInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
+        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
             gsm.pushState(GameStateManager.State.MENU);
+        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.SETTINGS)
+            playState = B2DVars.pauseState.SETTINGS;
+
+    }
+
+    private void handleSettingsInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
+
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
+            playState = PAUSE;
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SAVE) {
+            Game.settings.save(B2DVars.PATH + "settings/settings.json");
+            // update other classes
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.NEXT) {
+            Game.settings = Game.settings.loadDefault();
+            settingsMenu.updateAllBindsDisplayed();
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
+            Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
+            settingsMenu.updateAllBindsDisplayed();
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SETTINGS) {
+            settingsMenu.handleSettingsButtonClick();
+        }
     }
 
     private void drawPauseScreen() {
@@ -720,8 +762,10 @@ public class Play extends GameState {
 
         hudCam.update();
 
-        pauseMenu.render(sb);
+        if (playState == B2DVars.pauseState.SETTINGS) settingsMenu.render(sb);
+        else pauseMenu.render(sb);
     }
+
 
     private void drawAndSetCamera() {
 

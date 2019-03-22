@@ -27,13 +27,13 @@ public class Game extends ApplicationAdapter {
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;
-    public Settings settings;
+    public static Settings settings;
 
     private GameStateManager gsm;
     public static Content res;
 
-    public Game(Settings settings) {
-        this.settings = settings;
+    public Game(Settings s) {
+        settings = s;
     }
 
     public void create() {
