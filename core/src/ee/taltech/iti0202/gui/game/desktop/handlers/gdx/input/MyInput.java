@@ -1,25 +1,47 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input;
 
 
+import java.util.HashSet;
+
 public class MyInput {
+
+    private static HashSet<Integer> keysDown = new HashSet<>();
+    private static HashSet<Integer> keysPressed = new HashSet<>();
+
 
     private static boolean mouseDown;
     private static boolean mouseDownPrev = true;
-    private static int keyDown;
 
     public static void update() {
-        if (mouseDownPrev && !mouseDown) {
-            mouseDownPrev = false;
+        for (Integer key : keysPressed) setKeyDown(key, true);
+        if (!mouseDown) mouseDownPrev = false;
+    }
+
+    public static void setKeyDown(int key, boolean isdown) {
+        if (isdown) {
+            if (!keysPressed.contains(key)) {
+                keysPressed.add(key);
+            } else {
+                keysDown.add(key);
+            }
+        } else {
+            keysDown.remove(key);
+            keysPressed.remove(key);
         }
     }
 
-    public static void setKeyDown(int keyDown) {
-        MyInput.keyDown = keyDown;
+    public static int getKeyDown() {
+        return !keysDown.isEmpty() ? keysDown.iterator().next() : -1;
     }
 
-    public static int getKeyDown() {
-        return keyDown;
+    public static boolean isDown(Integer key) {
+        return keysDown.contains(key);
     }
+
+    public static boolean isPressed(Integer key) {
+        return keysPressed.contains(key) && !keysDown.contains(key);
+    }
+
 
     public static void setMouseDown(boolean isdown) {
         mouseDownPrev = mouseDown;

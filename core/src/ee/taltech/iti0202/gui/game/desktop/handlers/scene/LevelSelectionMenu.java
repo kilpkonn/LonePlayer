@@ -19,9 +19,9 @@ public class LevelSelectionMenu extends Scene {
 
     private GameButton backButton;
     private HashMap<GameButton, Integer> actButtons = new HashMap<>();
-    private HashMap<GameButton, Integer> mapButtons = new HashMap<>();
+    private HashMap<GameButton, String> mapButtons = new HashMap<>();
     private int selectedAct;
-    private int selectedMap;
+    private String selectedMap;
 
     public LevelSelectionMenu(OrthographicCamera cam) {
         super(cam);
@@ -36,7 +36,7 @@ public class LevelSelectionMenu extends Scene {
 
         List<String> acts = loadActs();
         for (int i = 0; i < acts.size(); i++) {
-            GameButton btn = new GameButton(acts.get(i), V_WIDTH / 3f, V_HEIGHT / 2f - i * 40);
+            GameButton btn = new GameButton(acts.get(i).replace("_", " "), V_WIDTH / 3f, V_HEIGHT / 2f - i * 40);
             actButtons.put(btn, i + 1);
             buttonType.put(btn, block.ACT);
         }
@@ -64,8 +64,10 @@ public class LevelSelectionMenu extends Scene {
         List<String> maps = loadMapNames(selectedAct);
 
         for (int i = 0; i < maps.size(); i++) {
-            GameButton btn = new GameButton(maps.get(i).replace(".tmx", ""), V_WIDTH * 2 / 3f, V_HEIGHT / 2f - i * 40);
-            mapButtons.put(btn, i + 1);
+            GameButton btn = new GameButton(maps.get(i)
+                    .replace(".tmx", "")
+                    .replace("_", " "), V_WIDTH * 2 / 3f, V_HEIGHT / 2f - i * 40);
+            mapButtons.put(btn, maps.get(i));
             buttonType.put(btn, block.MAP);
         }
         buttons.addAll(mapButtons.keySet());
@@ -97,7 +99,7 @@ public class LevelSelectionMenu extends Scene {
         return new ArrayList<>();
     }
 
-    public int getSelectedMap() {
+    public String getSelectedMap() {
         return selectedMap;
     }
 

@@ -44,9 +44,9 @@ public class GameStateManager {
         return null;
     }
 
-    private GameState getState(State state, int act, int level) {
+    private GameState getState(State state, int act, String level) {
         if (state == State.PLAY) {
-            return new Play(this, act, level, game.settings);
+            return new Play(this, act, level);
         }
         System.out.println("desired state was no found!");
         return null;
@@ -62,7 +62,7 @@ public class GameStateManager {
         System.out.println(state);
     }
 
-    public void pushState(State state, int act, int level) {
+    public void pushState(State state, int act, String level) {
         gameStates.push(getState(state, act, level));
     }
 
