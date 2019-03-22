@@ -25,10 +25,10 @@ public abstract class Scene {
     protected HashSet<GameButton> buttons;
     protected HashMap<GameButton, block> buttonType;
     public Scene(OrthographicCamera cam) {
-        this(1, 1, cam);
+        this(0, "", cam);
     }
 
-    public Scene(int act, int map, OrthographicCamera cam){
+    public Scene(int act, String map, OrthographicCamera cam){
         this.hudCam = cam;
         stage = new Stage(new ScreenViewport());
         mouseInWorld2D = new Vector2();

@@ -119,16 +119,13 @@ public class Play extends GameState {
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
     private B2DVars.pauseState playState;
-    private Settings settings;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    public Play(GameStateManager gsm, int act, int map, Settings settings) {
+    public Play(GameStateManager gsm, int act, String map) {
 
         super(gsm);
-        this.settings = settings;
-
         // sey up world
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
@@ -178,7 +175,7 @@ public class Play extends GameState {
 
 
         // load tiled map
-        String path = PATH + "maps/levels/Act_" + act + "/Map_" + map + ".tmx";
+        String path = PATH + "maps/levels/Act_" + act + "/" + map;
         tiledMap = new TmxMapLoader().load(path);
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         animatedCells = new HashMap<>();
@@ -544,7 +541,7 @@ public class Play extends GameState {
         current_force = player.getBody().getLinearVelocity();
 
         //pause screen
-        if (MyInput.isPressed(settings.ESC)) {
+        if (MyInput.isPressed(Game.settings.ESC)) {
             if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
                 playState = PAUSE;
             else
@@ -552,7 +549,7 @@ public class Play extends GameState {
         }
 
         //change dimension
-        if (MyInput.isPressed(settings.CHANGE_DIMENTION)) {
+        if (MyInput.isPressed(Game.settings.CHANGE_DIMENTION)) {
             System.out.println("changed dimension");
             dimensionJump = true;
             tempPlayerLocation = player.getPosition();
@@ -562,7 +559,7 @@ public class Play extends GameState {
         }
 
         //player jump / double jump / dash
-        if (MyInput.isPressed(settings.JUMP)) {
+        if (MyInput.isPressed(Game.settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
@@ -575,7 +572,7 @@ public class Play extends GameState {
         }
 
         //player move left
-        if (MyInput.isDown(settings.MOVE_LEFT)) {
+        if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
             if (current_force.x > -MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
@@ -587,7 +584,7 @@ public class Play extends GameState {
         }
 
         //player dash left
-        if (MyInput.isPressed(settings.MOVE_LEFT)) {
+        if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
@@ -600,7 +597,7 @@ public class Play extends GameState {
         }
 
         //player move right
-        if (MyInput.isDown(settings.MOVE_RIGHT)) {
+        if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
             if (current_force.x < MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
@@ -611,7 +608,7 @@ public class Play extends GameState {
         }
 
         //player dash right
-        if (MyInput.isPressed(settings.MOVE_RIGHT)) {
+        if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
                     player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
@@ -717,7 +714,7 @@ public class Play extends GameState {
     } //TODO: render update rectangle around player and smoorther paste
 
     private void handlePauseInput() {
-        if (MyInput.isMouseClicked(settings.SHOOT)) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (pauseMenu.getCur_block()) {
                 case RESUME:
                     playState = RUN;
@@ -760,12 +757,17 @@ public class Play extends GameState {
 
     private void drawPauseScreen() {
         //clear screen gradually by shading it
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(new Color(0, 0, 0, 0.05f));
-        shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
-        shapeRenderer.end();
+        if (playState == B2DVars.pauseState.PAUSE) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(new Color(0, 0, 0, 0.05f));
+            shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
+            shapeRenderer.end();
+        } else {
+            // TODO: No fade in settings.
+            // Help pls!
+        }
 
         //render pauseMenu
 
