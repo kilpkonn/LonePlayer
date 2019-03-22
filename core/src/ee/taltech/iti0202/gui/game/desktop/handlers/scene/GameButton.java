@@ -31,7 +31,7 @@ public class GameButton {
         this.y = y;
 
         setText(text);
-        height = 40;
+        height = 36;
     }
 
     public boolean hoverOver() {

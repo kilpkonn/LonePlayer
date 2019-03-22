@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -48,6 +49,8 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.Scene;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
@@ -106,6 +109,7 @@ public class Play extends GameState {
     private CircleShape circle;
     private FixtureDef fdef;
     private PauseMenu pauseMenu;
+    private SettingsMenu settingsMenu;
     private ShapeRenderer shapeRenderer;
     private Stage stage;
     private ParallaxBackground parallaxBackground;
@@ -153,6 +157,7 @@ public class Play extends GameState {
 
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
+        settingsMenu = new SettingsMenu(hudCam);
         shapeRenderer = new ShapeRenderer();
         playState = B2DVars.pauseState.RUN;
 
@@ -627,11 +632,17 @@ public class Play extends GameState {
         switch (playState) {
             case RUN:
                 UpdateProps(dt);
+                break;
 
             case PAUSE:
                 pauseMenu.update(dt);
+                break;
 
             case RESUME:
+                break;
+
+            case SETTINGS:
+                settingsMenu.update(dt);
                 break;
 
             case STOPPED:
@@ -695,6 +706,11 @@ public class Play extends GameState {
             case RESUME:
                 break;
 
+            case SETTINGS:
+                handleSettingsInput();
+                drawPauseScreen();
+                break;
+
             default:
                 break;
         }
@@ -705,6 +721,32 @@ public class Play extends GameState {
             playState = RUN;
         if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
             gsm.pushState(GameStateManager.State.MENU);
+        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.SETTINGS)
+            playState = B2DVars.pauseState.SETTINGS;
+
+    }
+
+    private void handleSettingsInput() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
+
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
+            playState = PAUSE;
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SAVE) {
+            Game.settings.save(B2DVars.PATH + "settings/settings.json");
+            // update other classes
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.NEXT) {
+            Game.settings = Game.settings.loadDefault();
+            settingsMenu.updateAllBindsDisplayed();
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
+            Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
+            settingsMenu.updateAllBindsDisplayed();
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SETTINGS) {
+            settingsMenu.handleSettingsButtonClick();
+        }
     }
 
     private void drawPauseScreen() {
@@ -720,8 +762,10 @@ public class Play extends GameState {
 
         hudCam.update();
 
-        pauseMenu.render(sb);
+        if (playState == B2DVars.pauseState.SETTINGS) settingsMenu.render(sb);
+        else pauseMenu.render(sb);
     }
+
 
     private void drawAndSetCamera() {
 

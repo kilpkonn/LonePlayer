@@ -242,8 +242,13 @@ public class Menu extends GameState {
             Game.settings.save(B2DVars.PATH + "settings/settings.json");
             // update other classes
         }
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.NEXT) {
             Game.settings = Game.settings.loadDefault();
+            settingsMenu.updateAllBindsDisplayed();
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
+            Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
+            settingsMenu.updateAllBindsDisplayed();
         }
         if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SETTINGS) {
             settingsMenu.handleSettingsButtonClick();
