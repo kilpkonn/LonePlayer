@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -14,7 +15,7 @@ import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MouseInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LevelSelectionMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.MainMenu;
@@ -24,7 +25,6 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Background;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
-import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -46,7 +46,6 @@ public class Menu extends GameState {
     private LevelSelectionMenu levelSelectionMenu;
     private SettingsMenu settingsMenu;
     private Scene mainMenuScene;
-    private Settings settings = game.settings;
 
     private World world;
     private Texture player;
@@ -208,41 +207,46 @@ public class Menu extends GameState {
     }
 
     private void handleMainMenuInput() {
-        if (MouseInput.isPressed(settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.NEWGAME) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.NEWGAME) {
             menuState = sceneState.LEVELS;
             //gsm.pushState(GameStateManager.State.PLAY, 1, 1);
         }
-        if (MouseInput.isPressed(settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.SETTINGS) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.SETTINGS) {
             menuState = sceneState.SETTINGS;
         }
-        if (MouseInput.isPressed(settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.EXIT) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && mainMenuScene.getCur_block() == Scene.block.EXIT) {
             Gdx.app.exit();
         }
     }
 
     private void handleLevelsMenuInput() {
-        /*if (MouseInput.isPressed(MouseInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.ACT) {
+        /*if (MyInput.isMouseClicked(MyInput.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.ACT) {
             //gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
         }*/
-        if (MouseInput.isPressed(settings.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.MAP) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.MAP) {
             gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
         }
 
-        if (MouseInput.isPressed(settings.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.EXIT) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && levelSelectionMenu.getCur_block() == Scene.block.EXIT) {
             menuState = sceneState.MAIN;
         }
     }
 
     private void handleSettingsMenuInput() {
-        if (MouseInput.isPressed(settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
+
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.EXIT) {
             menuState = sceneState.MAIN;
         }
-        if (MouseInput.isPressed(settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SAVE) {
-            game.settings.save(B2DVars.PATH + "settings/settings.json");
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SAVE) {
+            Game.settings.save(B2DVars.PATH + "settings/settings.json");
             // update other classes
         }
-        if (MouseInput.isPressed(settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
-            game.settings = game.settings.loadDefault();
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.LOAD) {
+            Game.settings = Game.settings.loadDefault();
+        }
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && settingsMenu.getCur_block() == Scene.block.SETTINGS) {
+            settingsMenu.handleSettingsButtonClick();
         }
 
     }

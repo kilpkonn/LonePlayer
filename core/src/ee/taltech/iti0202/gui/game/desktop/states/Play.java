@@ -46,7 +46,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MouseInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
@@ -701,9 +701,9 @@ public class Play extends GameState {
     } //TODO: render update rectangle around player and smoorther paste
 
     private void handlePauseInput() {
-        if (MouseInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
+        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.RESUME)
             playState = RUN;
-        if (MouseInput.isPressed(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
+        if (MyInput.isMouseClicked(settings.SHOOT) && pauseMenu.getCur_block() == PauseMenu.block.EXIT)
             gsm.pushState(GameStateManager.State.MENU);
     }
 
