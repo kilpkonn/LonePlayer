@@ -730,7 +730,7 @@ public class Play extends GameState {
     }
 
     private void handleSettingsInput() {
-        if (MyInput.isPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
+        settingsMenu.handleKey(MyInput.getKeyDown());
 
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (settingsMenu.getCur_block()) {
