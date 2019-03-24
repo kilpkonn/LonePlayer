@@ -3,6 +3,7 @@ package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -31,7 +32,6 @@ public class GameButton {
         this.y = y;
 
         setText(text);
-        height = 36;
     }
 
     public boolean hoverOver() {
@@ -49,8 +49,8 @@ public class GameButton {
         if (hoverOver) {
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rectLine(x - 100, y - height / 2 - 10, x - 5, y - height / 2 - 10, 2, Color.MAGENTA, Color.CYAN);
-            shapeRenderer.rectLine(x + 400, y - height / 2 - 10, x + width + 5, y - height / 2 - 10, 2, Color.MAGENTA, Color.CYAN);
+            shapeRenderer.rectLine(x - 100, y - height, x - 5, y - height, 2, Color.MAGENTA, Color.CYAN);
+            shapeRenderer.rectLine(x + 400, y - height, x + width + 5, y - height, 2, Color.MAGENTA, Color.CYAN);
             shapeRenderer.end();
         }
         sb.begin();
@@ -63,8 +63,11 @@ public class GameButton {
     }
 
     public void setText(String text) {
+        GlyphLayout layout = new GlyphLayout(); //dont do this every frame! Store it as member
+        layout.setText(font, text);
+        width = layout.width;// contains the width of the current set text
+        height = layout.height; // contains the height of the current set text
         this.text = text;
-        width = text.length() * 20;
     }
 
     public String getText() {
