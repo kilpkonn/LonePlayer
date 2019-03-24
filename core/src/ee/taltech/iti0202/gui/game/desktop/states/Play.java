@@ -34,7 +34,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,6 +55,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
@@ -742,6 +745,13 @@ public class Play extends GameState {
                 case RESUME:
                     playState = RUN;
                     break;
+                case SAVE:
+                    saveGame();
+                    break;
+                case SAVEANDEXIT:
+                    saveGame();
+                    gsm.pushState(GameStateManager.State.MENU);
+                    break;
                 case EXIT:
                     gsm.pushState(GameStateManager.State.MENU);
                     break;
@@ -835,6 +845,14 @@ public class Play extends GameState {
 
         // draw checkpoint
         if (checkpoint != null) checkpoint.render(sb);
+    }
+
+    private void saveGame() {
+        GameProgress progress = new GameProgress();
+        progress.playerLocationX = player.getPosition().x;
+        progress.playerLocationY = player.getPosition().y;
+
+        progress.save(B2DVars.PATH + "gameprogress/" + new SimpleDateFormat("dd-mm-YYYY_HH,mm,ss").format(new Date()) + ".json");
     }
 
     public void dispose() {
