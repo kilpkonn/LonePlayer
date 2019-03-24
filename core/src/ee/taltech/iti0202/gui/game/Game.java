@@ -109,9 +109,6 @@ public class Game extends ApplicationAdapter {
             gsm.update(STEP);
             gsm.render();
             MyInput.update(); // this is to define the end state of current iteration
-            System.gc();
-
-            System.out.println(Gdx.graphics.getFramesPerSecond());
         }
     }
 

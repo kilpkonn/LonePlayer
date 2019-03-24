@@ -49,12 +49,10 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.Scene;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
-import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
@@ -247,6 +245,11 @@ public class Play extends GameState {
         body.createFixture(fdef).setUserData("foot");
 
         player = new Player(body);
+
+        cam.position.set(
+                player.getPosition().x * PPM,
+                player.getPosition().y * PPM,
+                0);
     }
 
     private void createBosses(Vector2 position, String type) {
@@ -651,7 +654,27 @@ public class Play extends GameState {
     }
 
     private void UpdateProps(float dt) {
-        b2dcam.update();
+        //update camera
+        if (DEBUG) {
+
+            b2dcam.position.set(
+                    player.getPosition().x,
+                    player.getPosition().y,
+                    0);
+            b2dr.render(world, b2dcam.combined);
+
+            cam.position.set(
+                    player.getPosition().x * PPM,
+                    player.getPosition().y * PPM,
+                    0);
+            b2dcam.update();
+
+        } else {
+
+            cam.position.x += (player.getPosition().x - cam.position.x / PPM) * 2 * PPM * dt;
+            cam.position.y += (player.getPosition().y - cam.position.y / PPM) * 2 * PPM * dt;
+        }
+
         cam.update();
 
         //call update animation
@@ -785,12 +808,9 @@ public class Play extends GameState {
         Gdx.gl20.glClear(GL20.GL_ALPHA_BITS);
 
         //set camera to follow player
-        cam.position.set(
-                player.getPosition().x * PPM,
-                player.getPosition().y * PPM,
-                0);
-
-        parallaxBackground.setSpeed(current_force.x);
+        if (current_force.x < -1) parallaxBackground.setSpeed(-1f);
+        else if (current_force.x > 1) parallaxBackground.setSpeed(1f);
+        else parallaxBackground.setSpeed(0);
         stage.act();
         stage.draw();
 
@@ -807,14 +827,6 @@ public class Play extends GameState {
         if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
         renderer.getBatch().end();
 
-        if (DEBUG) {
-            b2dcam.position.set(
-                    player.getPosition().x,
-                    player.getPosition().y,
-                    0);
-            b2dr.render(world, b2dcam.combined);
-        }
-
         //draw player
         sb.setProjectionMatrix(cam.combined);
         if (player != null) player.render(sb);
@@ -826,5 +838,8 @@ public class Play extends GameState {
     }
 
     public void dispose() {
+        Gdx.input.setInputProcessor(null);
+        stage.dispose();
+        System.gc();
     }
 }
