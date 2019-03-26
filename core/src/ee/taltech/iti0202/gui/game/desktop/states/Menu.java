@@ -13,13 +13,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.List;
 
-import javax.xml.soap.Text;
-
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LevelSelectionMenu;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LoadGameMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.MainMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.Scene;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
@@ -39,6 +38,7 @@ public class Menu extends GameState {
         MAIN,
         LEVELS,
         SETTINGS,
+        RESUME,
         DEFAULT
     }
 
@@ -47,6 +47,7 @@ public class Menu extends GameState {
     private Stage stage;
     private LevelSelectionMenu levelSelectionMenu;
     private SettingsMenu settingsMenu;
+    private LoadGameMenu loadGameMenu;
     private Scene mainMenuScene;
 
     private World world;
@@ -80,6 +81,7 @@ public class Menu extends GameState {
 
         levelSelectionMenu = new LevelSelectionMenu(cam);
         settingsMenu = new SettingsMenu(cam);
+        loadGameMenu = new LoadGameMenu(cam);
         mainMenuScene = new MainMenu(cam);
 
         // play button
@@ -110,6 +112,9 @@ public class Menu extends GameState {
             case MAIN:
                 handleMainMenuInput();
                 break;
+            case RESUME:
+                handleLoadGameMenuInput();
+                break;
             case LEVELS:
                 handleLevelsMenuInput();
                 break;
@@ -135,6 +140,9 @@ public class Menu extends GameState {
         switch (menuState) {
             case MAIN:
                 updateMainMenu(dt);
+                break;
+            case RESUME:
+                updateLoadGameMenu(dt);
                 break;
             case LEVELS:
                 updateLevelsMenu(dt);
@@ -166,6 +174,9 @@ public class Menu extends GameState {
             case MAIN:
                 drawMainMenu();
                 break;
+            case RESUME:
+                drawLoadGameMenu();
+                break;
             case LEVELS:
                 drawLevelsMenu();
                 break;
@@ -186,6 +197,10 @@ public class Menu extends GameState {
         mainMenuScene.update(dt);
     }
 
+    private void updateLoadGameMenu(float dt) {
+        loadGameMenu.update(dt);
+    }
+
     private void updateLevelsMenu(float dt) {
         levelSelectionMenu.update(dt);
     }
@@ -196,6 +211,10 @@ public class Menu extends GameState {
 
     private void drawMainMenu() {
         mainMenuScene.render(sb);
+    }
+
+    private void drawLoadGameMenu() {
+        loadGameMenu.render(sb);
     }
 
     private void drawLevelsMenu() {
@@ -213,6 +232,7 @@ public class Menu extends GameState {
                     menuState = sceneState.LEVELS;
                     break;
                 case RESUME:
+                    menuState = sceneState.RESUME;
                     break;
                 case SETTINGS:
                     menuState = sceneState.SETTINGS;
@@ -220,6 +240,17 @@ public class Menu extends GameState {
                 case EXIT:
                     Gdx.app.exit();
                     break;
+            }
+        }
+    }
+
+    private void handleLoadGameMenuInput() {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (loadGameMenu.getCur_block()) {
+                case LOAD:
+                    gsm.pushState(GameStateManager.State.PLAY, loadGameMenu.getGameProgress());
+                case EXIT:
+                    menuState = sceneState.MAIN;
             }
         }
     }

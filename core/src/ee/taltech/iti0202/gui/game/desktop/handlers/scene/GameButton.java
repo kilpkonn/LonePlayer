@@ -63,7 +63,7 @@ public class GameButton {
     }
 
     public void setText(String text) {
-        GlyphLayout layout = new GlyphLayout(); //dont do this every frame! Store it as member
+        GlyphLayout layout = new GlyphLayout(); //dont do this every frame!
         layout.setText(font, text);
         width = layout.width;// contains the width of the current set text
         height = layout.height; // contains the height of the current set text

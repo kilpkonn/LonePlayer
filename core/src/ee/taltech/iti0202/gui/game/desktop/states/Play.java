@@ -1,7 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -39,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
@@ -120,13 +120,16 @@ public class Play extends GameState {
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
     private B2DVars.pauseState playState;
+    private int act;
+    private String map;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    public Play(GameStateManager gsm, int act, String map) {
-
+    public Play(GameStateManager gsm, int act, String map, GameProgress progress) {
         super(gsm);
+        this.act = act;
+        this.map = map;
         // sey up world
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
@@ -170,6 +173,7 @@ public class Play extends GameState {
 
         // draw background
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         stage.addActor(parallaxBackground);
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////
@@ -182,6 +186,14 @@ public class Play extends GameState {
         animatedCells = new HashMap<>();
 
         drawLayers();
+    }
+
+    public Play(GameStateManager gsm, int act, String map) {
+        this(gsm, act, map, null);
+    }
+
+    public Play(GameStateManager gsm, GameProgress progress) {
+        this(gsm, progress.act, progress.map, progress);
     }
 
 
@@ -798,8 +810,11 @@ public class Play extends GameState {
             shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
             shapeRenderer.end();
         } else {
-            // TODO: No fade in settings.
-            // Help pls!
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            sb.setProjectionMatrix(cam.combined);
+
+            // draw background
         }
 
         //render pauseMenu
@@ -851,8 +866,10 @@ public class Play extends GameState {
         GameProgress progress = new GameProgress();
         progress.playerLocationX = player.getPosition().x;
         progress.playerLocationY = player.getPosition().y;
+        progress.act = act;
+        progress.map = map;
 
-        progress.save(B2DVars.PATH + "gameprogress/" + new SimpleDateFormat("dd-mm-YYYY_HH,mm,ss").format(new Date()) + ".json");
+        progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-mm-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }
 
     public void dispose() {

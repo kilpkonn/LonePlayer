@@ -14,6 +14,8 @@ import java.io.IOException;
 public class GameProgress {
     public float playerLocationX;
     public float playerLocationY;
+    public int act;
+    public String map;
 
     public void save(String path) {
         Gson gson = new GsonBuilder().registerTypeAdapter(GameProgress.class, new GameProgressSerializer()).create();
