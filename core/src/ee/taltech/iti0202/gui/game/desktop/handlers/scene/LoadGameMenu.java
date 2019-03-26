@@ -62,7 +62,7 @@ public class LoadGameMenu extends Scene {
         for (int i = 0; i < maps.size(); i++) {
             GameButton btn = new GameButton(maps.get(i)
                     .replace(".json", "")
-                    .replace("_", " "), V_WIDTH * 2 / 3f, V_HEIGHT / 2f - i * 40);
+                    .replace("_", " "), V_WIDTH * 3 / 5f, V_HEIGHT / 2f - i * 40);
             savesButtons.put(btn, maps.get(i));
             buttonType.put(btn, block.LOAD);
         }

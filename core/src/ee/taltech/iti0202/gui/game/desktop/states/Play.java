@@ -50,6 +50,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.EndMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
@@ -111,6 +112,7 @@ public class Play extends GameState {
     private FixtureDef fdef;
     private PauseMenu pauseMenu;
     private SettingsMenu settingsMenu;
+    private EndMenu endMenu;
     private ShapeRenderer shapeRenderer;
     private Stage stage;
     private ParallaxBackground parallaxBackground;
@@ -159,6 +161,7 @@ public class Play extends GameState {
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
         settingsMenu = new SettingsMenu(hudCam);
+        endMenu = new EndMenu(act, map, cam);
         shapeRenderer = new ShapeRenderer();
         playState = B2DVars.pauseState.RUN;
 
@@ -377,6 +380,7 @@ public class Play extends GameState {
                 dimension_1 = layer;
                 isSensor = true;
                 layer.setVisible(true);
+                layer.setOpacity(1f);
                 background = layer;
                 break;
 
@@ -384,6 +388,7 @@ public class Play extends GameState {
                 dimension_2 = layer;
                 isSensor = true;
                 layer.setVisible(true);
+                layer.setOpacity(0.5f);
                 background = layer;
                 break;
 
@@ -573,6 +578,15 @@ public class Play extends GameState {
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
             dimension = !dimension;
+            if (dimension_1 != null && dimension_2 != null) {
+                if (dimension) {
+                    dimension_1.setOpacity(1f);
+                    dimension_2.setOpacity(0.5f);
+                } else {
+                    dimension_1.setOpacity(0.5f);
+                    dimension_2.setOpacity(1f);
+                }
+            }
             cl.setPlayerDead(true);
         }
 
@@ -661,6 +675,7 @@ public class Play extends GameState {
                 break;
 
             case STOPPED:
+                endMenu.update(dt);
                 break;
 
             default:
@@ -745,11 +760,14 @@ public class Play extends GameState {
                 handleSettingsInput();
                 drawPauseScreen();
                 break;
-
+            case STOPPED:
+                handleEndInput();
+                drawPauseScreen();
+                break;
             default:
                 break;
         }
-    } //TODO: render update rectangle around player and smoorther paste
+    } //TODO: render update rectangle around player and smoother paste
 
     private void handlePauseInput() {
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
@@ -796,6 +814,20 @@ public class Play extends GameState {
                 case SETTINGS:
                     settingsMenu.handleSettingsButtonClick();
                     break;
+            }
+        }
+    }
+
+    private void handleEndInput() {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (endMenu.getCur_block()) {
+                case NEXT:
+                    //TODO: Select next map
+                    break;
+                case SETTINGS:
+                    playState = B2DVars.pauseState.SETTINGS;
+                case EXIT:
+                    gsm.pushState(GameStateManager.State.MENU);
             }
         }
     }

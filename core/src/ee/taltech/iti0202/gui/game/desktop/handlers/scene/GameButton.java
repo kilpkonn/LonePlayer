@@ -49,8 +49,8 @@ public class GameButton {
         if (hoverOver) {
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.rectLine(x - 100, y - height, x - 5, y - height, 2, Color.MAGENTA, Color.CYAN);
-            shapeRenderer.rectLine(x + 400, y - height, x + width + 5, y - height, 2, Color.MAGENTA, Color.CYAN);
+            shapeRenderer.rectLine(x - 100, y - height / 2, x - 5, y - height / 2, 2, Color.MAGENTA, Color.CYAN);
+            shapeRenderer.rectLine(x + 420, y - height / 2, x + width + 10, y - height / 2, 2, Color.MAGENTA, Color.CYAN);
             shapeRenderer.end();
         }
         sb.begin();

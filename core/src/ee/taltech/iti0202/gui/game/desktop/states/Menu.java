@@ -89,7 +89,6 @@ public class Menu extends GameState {
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         world = new World(new Vector2(0, -9.8f * 5), true);
-
     }
 
     private void addParallax(String path) {
@@ -168,7 +167,7 @@ public class Menu extends GameState {
         stage.act();
         stage.draw();
 
-        // draw button
+        // draw buttons
 
         switch (menuState) {
             case MAIN:
@@ -188,9 +187,9 @@ public class Menu extends GameState {
         }
 
         // draw player
-        sb.begin();
+        /*sb.begin();
         sb.draw(animation.getFrame(), 146, 151);
-        sb.end();
+        sb.end();*/
     }
 
     private void updateMainMenu(float dt) {
