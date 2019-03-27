@@ -15,8 +15,10 @@ public class B2DVars {
     public static float PLAYER_DASH_FORCE_UP = 250;
     public static float PLAYER_DASH_FORCE_SIDE = 150;
 
-    public static final float FADE_TIME = 1;
-    public static final float FADE_AMOUNT = 0.7f;
+    public static final float MENU_FADE_TIME = 1;
+    public static final float MENU_FADE_AMOUNT = 0.7f;
+    public static final float DIMENSION_FADE_TIME = 0.4f;
+    public static final float DIMENSION_FADE_AMOUNT = 0.6f;
 
     public static final boolean DEBUG = false;
 

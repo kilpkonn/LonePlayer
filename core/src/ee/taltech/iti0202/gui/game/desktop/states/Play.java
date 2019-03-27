@@ -1,7 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -78,7 +77,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLA
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.SCALE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.SQUARE_CORNERS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_2;
@@ -122,9 +120,11 @@ public class Play extends GameState {
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
     private B2DVars.pauseState playState;
-    private boolean fadeOut = false;
-    private boolean fadeDone = true;
-    private float currentFade = 0;
+    private boolean gameFadeOut = false;
+    private boolean gameFadeDone = true;
+    private boolean dimensionFadeDone = false;
+    private float currentDimensionFade = 0;
+    private float currentMenuFade = 0;
     private int act;
     private String map;
 
@@ -585,12 +585,12 @@ public class Play extends GameState {
         if (MyInput.isPressed(Game.settings.ESC)) {
             if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f) {
                 playState = PAUSE;
-                fadeOut = true;
-                fadeDone = false;
+                gameFadeOut = true;
+                gameFadeDone = false;
             } else {
                 playState = RUN;
-                fadeOut = false;
-                fadeDone = false;
+                gameFadeOut = false;
+                gameFadeDone = false;
             }
         }
 
@@ -598,18 +598,10 @@ public class Play extends GameState {
         if (MyInput.isPressed(Game.settings.CHANGE_DIMENTION)) {
             System.out.println("changed dimension");
             dimensionJump = true;
+            dimensionFadeDone = false;
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
             dimension = !dimension;
-            if (dimension_1 != null && dimension_2 != null) {
-                if (dimension) {
-                    dimension_1.setOpacity(1f);
-                    dimension_2.setOpacity(0.5f);
-                } else {
-                    dimension_1.setOpacity(0.5f);
-                    dimension_2.setOpacity(1f);
-                }
-            }
             cl.setPlayerDead(true);
         }
 
@@ -680,7 +672,8 @@ public class Play extends GameState {
         handleInput();
 
         world.step(dt, 10, 2); // recommended values
-        updateFade(dt);
+        updateGameFade(dt);
+        updateDimensionFade(dt);
 
         switch (playState) {
             case RUN:
@@ -798,8 +791,8 @@ public class Play extends GameState {
             switch (pauseMenu.getCur_block()) {
                 case RESUME:
                     playState = RUN;
-                    fadeOut = false;
-                    fadeDone = false;
+                    gameFadeOut = false;
+                    gameFadeDone = false;
                     break;
                 case SAVE:
                     saveGame();
@@ -867,30 +860,51 @@ public class Play extends GameState {
         else pauseMenu.render(sb);
     }
 
-    private void updateFade(float dt) {
-        if (!fadeDone) {
-            if (fadeOut) {
-                if (currentFade < B2DVars.FADE_AMOUNT) {
-                    currentFade += (B2DVars.FADE_AMOUNT / B2DVars.FADE_TIME) * dt;
+    private void updateGameFade(float dt) {
+        if (!gameFadeDone) {
+            if (gameFadeOut) {
+                if (currentMenuFade < B2DVars.MENU_FADE_AMOUNT) {
+                    currentMenuFade += (B2DVars.MENU_FADE_AMOUNT / B2DVars.MENU_FADE_TIME) * dt;
                 } else {
-                    currentFade = B2DVars.FADE_AMOUNT;
-                    fadeDone = true;
+                    currentMenuFade = B2DVars.MENU_FADE_AMOUNT;
+                    gameFadeDone = true;
                 }
             } else {
-                if (currentFade > 0) {
-                    currentFade -= (B2DVars.FADE_AMOUNT / B2DVars.FADE_TIME) * dt;
+                if (currentMenuFade > 0) {
+                    currentMenuFade -= (B2DVars.MENU_FADE_AMOUNT / B2DVars.MENU_FADE_TIME) * dt;
                 } else {
-                    currentFade = 0;
-                    fadeDone = true;
+                    currentMenuFade = 0;
+                    gameFadeDone = true;
                 }
             }
 
-            parallaxBackground.setColor(1, 1, 1, 1 - currentFade);
-            player.setOpacity(1 - currentFade);
-            checkpoint.setOpacity(1 - currentFade);
+            parallaxBackground.setColor(1, 1, 1, 1 - currentMenuFade);
+            player.setOpacity(1 - currentMenuFade);
+            if (checkpoint != null) checkpoint.setOpacity(1 - currentMenuFade);
         }
     }
 
+    private void updateDimensionFade(float dt) {
+        if (!dimensionFadeDone) {
+            if (dimension) {
+                if (currentDimensionFade > 0) {
+                    currentDimensionFade -= (B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
+                } else {
+                    currentDimensionFade = 0;
+                    dimensionFadeDone = true;
+                }
+            } else {
+                if (currentDimensionFade < B2DVars.DIMENSION_FADE_AMOUNT) {
+                    currentDimensionFade += (B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
+                } else {
+                    currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
+                    dimensionFadeDone = true;
+                }
+            }
+            if (dimension_1 != null) dimension_1.setOpacity(1 - currentDimensionFade);
+            if (dimension_2 != null) dimension_2.setOpacity((1 - B2DVars.DIMENSION_FADE_AMOUNT) + currentDimensionFade);
+        }
+    }
 
     private void drawAndSetCamera() {
 
@@ -912,13 +926,13 @@ public class Play extends GameState {
         //draw tilemap
         renderer.setView(cam);
         renderer.getBatch().begin();
-        if (currentFade > 0) {
+        if (currentMenuFade > 0) {
             renderer.getBatch().setColor(0, 0, 0, 1);
             if (background != null) renderer.renderTileLayer(background);
             if (foreground != null) renderer.renderTileLayer(foreground);
             if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
             if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
-            renderer.getBatch().setColor(1, 1, 1, 1 - currentFade);
+            renderer.getBatch().setColor(1, 1, 1, 1 - currentMenuFade);
         }
         if (background != null) renderer.renderTileLayer(background);
         if (foreground != null) renderer.renderTileLayer(foreground);
