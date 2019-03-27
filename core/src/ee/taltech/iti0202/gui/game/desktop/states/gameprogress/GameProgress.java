@@ -14,6 +14,9 @@ import java.io.IOException;
 public class GameProgress {
     public float playerLocationX;
     public float playerLocationY;
+    public float playerVelocityX;
+    public float playerVelocityY;
+    public boolean dimension;
     public int act;
     public String map;
 

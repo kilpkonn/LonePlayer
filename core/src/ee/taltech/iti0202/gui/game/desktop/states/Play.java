@@ -192,6 +192,7 @@ public class Play extends GameState {
 
         if (progress != null) {
             initPlayerLocation = new Vector2(progress.playerLocationX, progress.playerLocationY);
+            dimension = progress.dimension;
             drawLayers();
             initPlayer();
         } else {
@@ -954,8 +955,11 @@ public class Play extends GameState {
         GameProgress progress = new GameProgress();
         progress.playerLocationX = player.getPosition().x;
         progress.playerLocationY = player.getPosition().y;
+        progress.playerVelocityX = player.getBody().getLinearVelocity().x;
+        progress.playerVelocityY = player.getBody().getLinearVelocity().y;
         progress.act = act;
         progress.map = map;
+        progress.dimension = dimension;
 
         progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }
