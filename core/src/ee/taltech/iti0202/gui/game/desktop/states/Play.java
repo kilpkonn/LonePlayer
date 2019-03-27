@@ -123,7 +123,7 @@ public class Play extends GameState {
     private boolean gameFadeOut = false;
     private boolean gameFadeDone = true;
     private boolean dimensionFadeDone = false;
-    private float currentDimensionFade = 0;
+    private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
     private float currentMenuFade = 0;
     private int act;
     private String map;
@@ -957,7 +957,7 @@ public class Play extends GameState {
         progress.act = act;
         progress.map = map;
 
-        progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-mm-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
+        progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }
 
     public void dispose() {
