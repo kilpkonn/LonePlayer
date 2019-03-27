@@ -12,6 +12,7 @@ public class B2DSprite {
 
     private Body body;
     private Animation animation;
+    private float opacity = 1;
 
     B2DSprite(Body body) {
         System.out.println("New body: " + body.toString());
@@ -30,6 +31,7 @@ public class B2DSprite {
     }
 
     public void render(SpriteBatch sb) {
+        sb.setColor(1, 1, 1, opacity);
         sb.begin();
         sb.draw(
                 animation.getFrame(),
@@ -37,6 +39,11 @@ public class B2DSprite {
                 body.getPosition().y * B2DVars.PPM);
 
         sb.end();
+        sb.setColor(1, 1, 1, 1);
+    }
+
+    public void setOpacity(float opacity) {
+        this.opacity = opacity;
     }
 
     public Body getBody() {

@@ -122,6 +122,9 @@ public class Play extends GameState {
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
     private B2DVars.pauseState playState;
+    private boolean fadeOut = false;
+    private boolean fadeDone = true;
+    private float currentFade = 0;
     private int act;
     private String map;
 
@@ -580,10 +583,15 @@ public class Play extends GameState {
 
         //pause screen
         if (MyInput.isPressed(Game.settings.ESC)) {
-            if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f)
+            if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f) {
                 playState = PAUSE;
-            else
+                fadeOut = true;
+                fadeDone = false;
+            } else {
                 playState = RUN;
+                fadeOut = false;
+                fadeDone = false;
+            }
         }
 
         //change dimension
@@ -672,6 +680,7 @@ public class Play extends GameState {
         handleInput();
 
         world.step(dt, 10, 2); // recommended values
+        updateFade(dt);
 
         switch (playState) {
             case RUN:
@@ -789,6 +798,8 @@ public class Play extends GameState {
             switch (pauseMenu.getCur_block()) {
                 case RESUME:
                     playState = RUN;
+                    fadeOut = false;
+                    fadeDone = false;
                     break;
                 case SAVE:
                     saveGame();
@@ -848,28 +859,38 @@ public class Play extends GameState {
     }
 
     private void drawPauseScreen() {
-        //clear screen gradually by shading it
-        if (playState == B2DVars.pauseState.PAUSE) {
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(new Color(0, 0, 0, 0.05f));
-            shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
-            shapeRenderer.end();
-        } else {
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            sb.setProjectionMatrix(cam.combined);
-
-            // draw background
-        }
-
         //render pauseMenu
 
-        hudCam.update();
+        drawAndSetCamera();
 
         if (playState == B2DVars.pauseState.SETTINGS) settingsMenu.render(sb);
         else pauseMenu.render(sb);
+    }
+
+    private void updateFade(float dt) {
+        if (!fadeDone) {
+            if (fadeOut) {
+                if (currentFade < B2DVars.FADE_AMOUNT) {
+                    currentFade += (B2DVars.FADE_AMOUNT / B2DVars.FADE_TIME) * dt;
+                } else {
+                    fadeDone = true;
+                }
+            } else {
+                if (currentFade > 0) {
+                    currentFade -= (B2DVars.FADE_AMOUNT / B2DVars.FADE_TIME) * dt;
+                } else {
+                    fadeDone = true;
+                }
+            }
+
+            if (background != null) background.setOpacity(1 - currentFade);
+            if (foreground != null) foreground.setOpacity(1 - currentFade);
+            if (dimension_1 != null) dimension_1.setOpacity(1 - currentFade);
+            if (dimension_2 != null) dimension_2.setOpacity(1 - currentFade);
+            parallaxBackground.setColor(1, 1, 1, 1 - currentFade);
+            player.setOpacity(1 - currentFade);
+            checkpoint.setOpacity(1 - currentFade);
+        }
     }
 
 
