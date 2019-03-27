@@ -112,14 +112,19 @@ public class SettingsMenu extends Scene {
         switch (settingsButtons.get(btnWaitingInput)) {
             case MOVE_LEFT:
                 Game.settings.MOVE_LEFT = key;
+                break;
             case MOVE_RIGHT:
                 Game.settings.MOVE_RIGHT = key;
+                break;
             case JUMP:
                 Game.settings.JUMP = key;
+                break;
             case TOGGLE_DIMENSION:
                 Game.settings.CHANGE_DIMENTION = key;
+                break;
             case ESC:
                 Game.settings.ESC = key;
+                break;
         }
         updateKeyBindsDisplayed(btnWaitingInput, key);
         btnWaitingInput = null;
