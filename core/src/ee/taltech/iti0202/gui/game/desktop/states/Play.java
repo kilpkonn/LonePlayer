@@ -151,12 +151,6 @@ public class Play extends GameState {
         tempPlayerVelocity = new Vector2();
         bossArray = new Array<>();
 
-        if (progress != null) {
-            initPlayerLocation = new Vector2(progress.playerLocationX, progress.playerLocationY);
-        }
-
-        initPlayer();
-
         //set up cameras
         b2dcam = new OrthographicCamera();
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
@@ -193,7 +187,14 @@ public class Play extends GameState {
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         animatedCells = new HashMap<>();
 
-        drawLayers();
+        if (progress != null) {
+            initPlayerLocation = new Vector2(progress.playerLocationX, progress.playerLocationY);
+            drawLayers();
+            initPlayer();
+        } else {
+            initPlayer();
+            drawLayers();
+        }
     }
 
     public Play(GameStateManager gsm, int act, String map) {
