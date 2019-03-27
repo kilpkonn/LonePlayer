@@ -873,20 +873,18 @@ public class Play extends GameState {
                 if (currentFade < B2DVars.FADE_AMOUNT) {
                     currentFade += (B2DVars.FADE_AMOUNT / B2DVars.FADE_TIME) * dt;
                 } else {
+                    currentFade = B2DVars.FADE_AMOUNT;
                     fadeDone = true;
                 }
             } else {
                 if (currentFade > 0) {
                     currentFade -= (B2DVars.FADE_AMOUNT / B2DVars.FADE_TIME) * dt;
                 } else {
+                    currentFade = 0;
                     fadeDone = true;
                 }
             }
 
-            if (background != null) background.setOpacity(1 - currentFade);
-            if (foreground != null) foreground.setOpacity(1 - currentFade);
-            if (dimension_1 != null) dimension_1.setOpacity(1 - currentFade);
-            if (dimension_2 != null) dimension_2.setOpacity(1 - currentFade);
             parallaxBackground.setColor(1, 1, 1, 1 - currentFade);
             player.setOpacity(1 - currentFade);
             checkpoint.setOpacity(1 - currentFade);
@@ -914,6 +912,14 @@ public class Play extends GameState {
         //draw tilemap
         renderer.setView(cam);
         renderer.getBatch().begin();
+        if (currentFade > 0) {
+            renderer.getBatch().setColor(0, 0, 0, 1);
+            if (background != null) renderer.renderTileLayer(background);
+            if (foreground != null) renderer.renderTileLayer(foreground);
+            if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
+            if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
+            renderer.getBatch().setColor(1, 1, 1, 1 - currentFade);
+        }
         if (background != null) renderer.renderTileLayer(background);
         if (foreground != null) renderer.renderTileLayer(foreground);
         if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
