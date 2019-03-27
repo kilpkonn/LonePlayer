@@ -6,6 +6,7 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.states.GameState;
 import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 public class GameStateManager {
 
@@ -19,7 +20,7 @@ public class GameStateManager {
 
     public GameStateManager(Game game) {
         this.game = game;
-        gameStates = new Stack<GameState>();
+        gameStates = new Stack<>();
         pushState(State.MENU);
     }
 
@@ -52,6 +53,14 @@ public class GameStateManager {
         return null;
     }
 
+    private GameState getState(State state, GameProgress progress) {
+        if (state == State.PLAY) {
+            return new Play(this, progress);
+        }
+        System.out.println("desired state was no found!");
+        return null;
+    }
+
     public void setState(State state) {
         popState();
         pushState(state);
@@ -64,6 +73,10 @@ public class GameStateManager {
 
     public void pushState(State state, int act, String level) {
         gameStates.push(getState(state, act, level));
+    }
+
+    public void pushState(State state, GameProgress progress) {
+        gameStates.push(getState(state, progress));
     }
 
     public void popState() {

@@ -24,11 +24,8 @@ public class EndMenu extends Scene{
 
     public EndMenu(int act, String map, OrthographicCamera cam) {
         super(act, map, cam);
-        pauseState = B2DVars.pauseState.STOPPED;
 
         hudCam.update();
-
-        Texture backLayer = Game.res.getTexture("backLayer");
 
         nextButtonActive = new GameButton("Next level", V_WIDTH / 6f, V_HEIGHT / 1.5f - 40);
         settingsButtonActive = new GameButton("Settings", V_WIDTH / 6f, V_HEIGHT / 1.5f - 80);

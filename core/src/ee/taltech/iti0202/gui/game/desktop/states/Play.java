@@ -1,7 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -34,9 +33,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
@@ -48,11 +50,13 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.EndMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
@@ -108,6 +112,7 @@ public class Play extends GameState {
     private FixtureDef fdef;
     private PauseMenu pauseMenu;
     private SettingsMenu settingsMenu;
+    private EndMenu endMenu;
     private ShapeRenderer shapeRenderer;
     private Stage stage;
     private ParallaxBackground parallaxBackground;
@@ -117,13 +122,16 @@ public class Play extends GameState {
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
     private B2DVars.pauseState playState;
+    private int act;
+    private String map;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    public Play(GameStateManager gsm, int act, String map) {
-
+    private Play(GameStateManager gsm, int act, String map, GameProgress progress) {
         super(gsm);
+        this.act = act;
+        this.map = map;
         // sey up world
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
@@ -142,7 +150,6 @@ public class Play extends GameState {
         tempPlayerLocation = new Vector2();
         tempPlayerVelocity = new Vector2();
         bossArray = new Array<>();
-        initPlayer();
 
         //set up cameras
         b2dcam = new OrthographicCamera();
@@ -153,6 +160,7 @@ public class Play extends GameState {
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
         settingsMenu = new SettingsMenu(hudCam);
+        endMenu = new EndMenu(act, map, cam);
         shapeRenderer = new ShapeRenderer();
         playState = B2DVars.pauseState.RUN;
 
@@ -167,6 +175,7 @@ public class Play extends GameState {
 
         // draw background
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         stage.addActor(parallaxBackground);
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////
@@ -178,7 +187,22 @@ public class Play extends GameState {
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         animatedCells = new HashMap<>();
 
-        drawLayers();
+        if (progress != null) {
+            initPlayerLocation = new Vector2(progress.playerLocationX, progress.playerLocationY);
+            drawLayers();
+            initPlayer();
+        } else {
+            initPlayer();
+            drawLayers();
+        }
+    }
+
+    public Play(GameStateManager gsm, int act, String map) {
+        this(gsm, act, map, null);
+    }
+
+    public Play(GameStateManager gsm, GameProgress progress) {
+        this(gsm, progress.act, progress.map, progress);
     }
 
 
@@ -196,10 +220,17 @@ public class Play extends GameState {
             dimensionJump = false;
             bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
             bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
-        } else if (checkpoint == null) if (initPlayerLocation == null) bdef.position.set(0, 0);
-        else bdef.position.set(initPlayerLocation);
-        else if (cl.isInitSpawn()) bdef.position.set(initPlayerLocation);
-        else bdef.position.set(new Vector2(checkpoint.getPosition()));
+        } else if (checkpoint == null) {
+            if (initPlayerLocation == null) {
+                bdef.position.set(0, 0); // hopefully never get here
+            } else {
+                bdef.position.set(initPlayerLocation);
+            }
+        } else if (cl.isInitSpawn()) {
+            bdef.position.set(initPlayerLocation);
+        } else {
+            bdef.position.set(new Vector2(checkpoint.getPosition()));
+        }
 
         short mask;
         if (dimension)
@@ -362,6 +393,7 @@ public class Play extends GameState {
                 dimension_1 = layer;
                 isSensor = true;
                 layer.setVisible(true);
+                layer.setOpacity(1f);
                 background = layer;
                 break;
 
@@ -369,6 +401,7 @@ public class Play extends GameState {
                 dimension_2 = layer;
                 isSensor = true;
                 layer.setVisible(true);
+                layer.setOpacity(0.5f);
                 background = layer;
                 break;
 
@@ -454,8 +487,10 @@ public class Play extends GameState {
                         break;
 
                     case "player":
-                        initPlayerLocation = new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y);
-                        initPlayer();
+                        if (initPlayerLocation == null) {
+                            initPlayerLocation = new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y);
+                            initPlayer();
+                        }
                         break;
 
                     default:
@@ -558,6 +593,15 @@ public class Play extends GameState {
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
             dimension = !dimension;
+            if (dimension_1 != null && dimension_2 != null) {
+                if (dimension) {
+                    dimension_1.setOpacity(1f);
+                    dimension_2.setOpacity(0.5f);
+                } else {
+                    dimension_1.setOpacity(0.5f);
+                    dimension_2.setOpacity(1f);
+                }
+            }
             cl.setPlayerDead(true);
         }
 
@@ -646,6 +690,7 @@ public class Play extends GameState {
                 break;
 
             case STOPPED:
+                endMenu.update(dt);
                 break;
 
             default:
@@ -730,17 +775,27 @@ public class Play extends GameState {
                 handleSettingsInput();
                 drawPauseScreen();
                 break;
-
+            case STOPPED:
+                handleEndInput();
+                drawPauseScreen();
+                break;
             default:
                 break;
         }
-    } //TODO: render update rectangle around player and smoorther paste
+    } //TODO: render update rectangle around player and smoother paste
 
     private void handlePauseInput() {
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (pauseMenu.getCur_block()) {
                 case RESUME:
                     playState = RUN;
+                    break;
+                case SAVE:
+                    saveGame();
+                    break;
+                case SAVEANDEXIT:
+                    saveGame();
+                    gsm.pushState(GameStateManager.State.MENU);
                     break;
                 case EXIT:
                     gsm.pushState(GameStateManager.State.MENU);
@@ -753,7 +808,7 @@ public class Play extends GameState {
     }
 
     private void handleSettingsInput() {
-        if (MyInput.isPressed(Input.Keys.ANY_KEY)) settingsMenu.handleKey(MyInput.getKeyDown());
+        settingsMenu.handleKey(MyInput.getKeyDown());
 
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (settingsMenu.getCur_block()) {
@@ -778,6 +833,20 @@ public class Play extends GameState {
         }
     }
 
+    private void handleEndInput() {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (endMenu.getCur_block()) {
+                case NEXT:
+                    //TODO: Select next map
+                    break;
+                case SETTINGS:
+                    playState = B2DVars.pauseState.SETTINGS;
+                case EXIT:
+                    gsm.pushState(GameStateManager.State.MENU);
+            }
+        }
+    }
+
     private void drawPauseScreen() {
         //clear screen gradually by shading it
         if (playState == B2DVars.pauseState.PAUSE) {
@@ -788,8 +857,11 @@ public class Play extends GameState {
             shapeRenderer.rect(0, 0, V_WIDTH * SCALE, V_HEIGHT * SCALE);
             shapeRenderer.end();
         } else {
-            // TODO: No fade in settings.
-            // Help pls!
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            sb.setProjectionMatrix(cam.combined);
+
+            // draw background
         }
 
         //render pauseMenu
@@ -835,6 +907,16 @@ public class Play extends GameState {
 
         // draw checkpoint
         if (checkpoint != null) checkpoint.render(sb);
+    }
+
+    private void saveGame() {
+        GameProgress progress = new GameProgress();
+        progress.playerLocationX = player.getPosition().x;
+        progress.playerLocationY = player.getPosition().y;
+        progress.act = act;
+        progress.map = map;
+
+        progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-mm-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }
 
     public void dispose() {
