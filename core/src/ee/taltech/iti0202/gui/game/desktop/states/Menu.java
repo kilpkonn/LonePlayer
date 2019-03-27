@@ -295,7 +295,6 @@ public class Menu extends GameState {
 
     @Override
     public void dispose() {
-        Gdx.input.setInputProcessor(null);
         stage.dispose();
         System.gc();
     }

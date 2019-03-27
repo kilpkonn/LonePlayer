@@ -114,6 +114,8 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void dispose() {
+        Gdx.input.setInputProcessor(null);
+        System.gc();
     }
 
     @Override
