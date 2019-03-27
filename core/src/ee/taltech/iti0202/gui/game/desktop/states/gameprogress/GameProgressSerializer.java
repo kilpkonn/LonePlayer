@@ -12,8 +12,8 @@ import java.lang.reflect.Type;
 public class GameProgressSerializer implements JsonSerializer<GameProgress> {
     public JsonElement serialize(final GameProgress progress, final Type type, final JsonSerializationContext context) {
         JsonObject result = new JsonObject();
-        result.add("player_x", new JsonPrimitive(progress.playerLocationX));
-        result.add("player_y", new JsonPrimitive(progress.playerLocationY));
+        result.add("playerLocationX", new JsonPrimitive(progress.playerLocationX));
+        result.add("playerLocationY", new JsonPrimitive(progress.playerLocationY));
         result.add("act", new JsonPrimitive(progress.act));
         result.add("map", new JsonPrimitive(progress.map));
         return result;

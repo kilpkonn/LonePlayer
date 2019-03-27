@@ -128,7 +128,7 @@ public class Play extends GameState {
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    public Play(GameStateManager gsm, int act, String map, GameProgress progress) {
+    private Play(GameStateManager gsm, int act, String map, GameProgress progress) {
         super(gsm);
         this.act = act;
         this.map = map;
@@ -150,6 +150,11 @@ public class Play extends GameState {
         tempPlayerLocation = new Vector2();
         tempPlayerVelocity = new Vector2();
         bossArray = new Array<>();
+
+        if (progress != null) {
+            initPlayerLocation = new Vector2(progress.playerLocationX, progress.playerLocationY);
+        }
+
         initPlayer();
 
         //set up cameras
@@ -214,10 +219,17 @@ public class Play extends GameState {
             dimensionJump = false;
             bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
             bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
-        } else if (checkpoint == null) if (initPlayerLocation == null) bdef.position.set(0, 0);
-        else bdef.position.set(initPlayerLocation);
-        else if (cl.isInitSpawn()) bdef.position.set(initPlayerLocation);
-        else bdef.position.set(new Vector2(checkpoint.getPosition()));
+        } else if (checkpoint == null) {
+            if (initPlayerLocation == null) {
+                bdef.position.set(0, 0); // hopefully never get here
+            } else {
+                bdef.position.set(initPlayerLocation);
+            }
+        } else if (cl.isInitSpawn()) {
+            bdef.position.set(initPlayerLocation);
+        } else {
+            bdef.position.set(new Vector2(checkpoint.getPosition()));
+        }
 
         short mask;
         if (dimension)
@@ -474,8 +486,10 @@ public class Play extends GameState {
                         break;
 
                     case "player":
-                        initPlayerLocation = new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y);
-                        initPlayer();
+                        if (initPlayerLocation == null) {
+                            initPlayerLocation = new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y);
+                            initPlayer();
+                        }
                         break;
 
                     default:

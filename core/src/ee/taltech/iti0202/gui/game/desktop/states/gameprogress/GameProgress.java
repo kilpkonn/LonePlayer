@@ -37,9 +37,9 @@ public class GameProgress {
     }
 
     public static GameProgress load(String path) {
+        Gson gson = new GsonBuilder().registerTypeAdapter(GameProgress.class, new GameProgressSerializer()).create();
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-            Gson gson = new GsonBuilder().registerTypeAdapter(GameProgress.class, new GameProgressSerializer()).create();
             GameProgress p = gson.fromJson(br, GameProgress.class);
             System.out.println("Done loading game!");
             return p;
