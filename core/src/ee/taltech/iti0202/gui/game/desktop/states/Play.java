@@ -844,10 +844,15 @@ public class Play extends GameState {
                 case NEXT:
                     //TODO: Select next map
                     break;
+                case NEWGAME:
+                    gsm.pushState(GameStateManager.State.PLAY, act, map);
+                    break;
                 case SETTINGS:
                     playState = B2DVars.pauseState.SETTINGS;
+                    break;
                 case EXIT:
                     gsm.pushState(GameStateManager.State.MENU);
+                    break;
             }
         }
     }
