@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -57,13 +58,14 @@ public class LoadGameMenu extends Scene {
 
     private void showMaps() {
         savesButtons.clear();
-        List<String> maps = loadSaves();
+        List<String> saves = loadSaves();
+        Collections.sort(saves);
 
-        for (int i = 0; i < maps.size(); i++) {
-            GameButton btn = new GameButton(maps.get(i)
+        for (int i = 0; i < saves.size(); i++) {
+            GameButton btn = new GameButton(saves.get(i)
                     .replace(".json", "")
                     .replace("_", " "), V_WIDTH * 3 / 5f, V_HEIGHT / 2f - i * 40);
-            savesButtons.put(btn, maps.get(i));
+            savesButtons.put(btn, saves.get(i));
             buttonType.put(btn, block.LOAD);
         }
         buttons.addAll(savesButtons.keySet());

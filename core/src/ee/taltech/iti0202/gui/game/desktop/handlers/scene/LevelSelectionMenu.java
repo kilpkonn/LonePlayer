@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -35,6 +36,7 @@ public class LevelSelectionMenu extends Scene {
         }};
 
         List<String> acts = loadActs();
+        Collections.sort(acts);
         for (int i = 0; i < acts.size(); i++) {
             GameButton btn = new GameButton(acts.get(i).replace("_", " "), V_WIDTH / 3f, V_HEIGHT / 2f - i * 40);
             actButtons.put(btn, i + 1);
@@ -62,6 +64,7 @@ public class LevelSelectionMenu extends Scene {
 
     public void showMaps() {
         List<String> maps = loadMapNames(selectedAct);
+        Collections.sort(maps);
 
         for (int i = 0; i < maps.size(); i++) {
             GameButton btn = new GameButton(maps.get(i)
