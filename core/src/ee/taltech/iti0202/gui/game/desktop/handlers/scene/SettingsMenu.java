@@ -53,7 +53,7 @@ public class SettingsMenu extends Scene {
         restoreButtonActive = new GameButton("Restore", V_WIDTH / 6f, V_HEIGHT / 2f - 40);
         saveButtonActive = new GameButton("Save", V_WIDTH / 6f, V_HEIGHT / 2f - 80);
         loadButton = new GameButton("Load", V_WIDTH / 6f, V_HEIGHT / 2f - 120);
-        exitButtonActive = new GameButton("Exit", V_WIDTH / 6f, V_HEIGHT / 2f - 160);
+        exitButtonActive = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 2f - 160);
 
         buttons = new HashSet<>(Arrays.asList(restoreButtonActive, saveButtonActive, exitButtonActive, loadButton));
 
