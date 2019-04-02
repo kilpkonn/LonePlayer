@@ -6,7 +6,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 
 public class B2DSprite {
 
@@ -30,13 +31,38 @@ public class B2DSprite {
         animation.update(dt);
     }
 
+    public void render(SpriteBatch sb, boolean rotate) {
+        sb.setColor(1, 1, 1, opacity);
+        sb.begin();
+
+        float posX = body.getPosition().x * PPM;
+        float posY = body.getPosition().y * PPM;
+        double rotation = Math.toDegrees(body.getAngle());
+        sb.draw(
+                animation.getFrame(),
+                posX,
+                posY,
+                1,1,
+                animation.getFrame().getRegionWidth(),
+                animation.getFrame().getRegionHeight(),
+                1,
+                1,
+                (float)rotation
+
+        );
+        sb.setColor(1, 1, 1, 1);
+        sb.end();
+    }
+
     public void render(SpriteBatch sb) {
         sb.setColor(1, 1, 1, opacity);
         sb.begin();
+
         sb.draw(
                 animation.getFrame(),
-                body.getPosition().x * B2DVars.PPM,
-                body.getPosition().y * B2DVars.PPM);
+                body.getPosition().x * PPM,
+                body.getPosition().y * PPM
+        );
 
         sb.end();
         sb.setColor(1, 1, 1, 1);

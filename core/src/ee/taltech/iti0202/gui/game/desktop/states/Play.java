@@ -20,6 +20,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -81,6 +82,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.SQU
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_SQUARES;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.PAUSE;
@@ -96,6 +98,11 @@ public class Play extends GameState {
     private TiledMap tiledMap;
     private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
     private OrthogonalTiledMapRenderer renderer;
+
+    public Player getPlayer() {
+        return player;
+    }
+
     private Player player;
     private boolean dimension;
     private boolean dimensionJump;
@@ -104,6 +111,7 @@ public class Play extends GameState {
     private Vector2 tempPlayerLocation;
     private Vector2 tempPlayerVelocity;
     private Vector2 initPlayerLocation;
+    private Vector3 tempCamLocation;
     private BodyDef bdef;
     private PolygonShape polyShape;
     private CircleShape circle;
@@ -111,7 +119,6 @@ public class Play extends GameState {
     private PauseMenu pauseMenu;
     private SettingsMenu settingsMenu;
     private EndMenu endMenu;
-    private ShapeRenderer shapeRenderer;
     private Stage stage;
     private ParallaxBackground parallaxBackground;
     private Vector2 current_force;
@@ -123,6 +130,7 @@ public class Play extends GameState {
     private boolean gameFadeOut = false;
     private boolean gameFadeDone = true;
     private boolean dimensionFadeDone = false;
+    private boolean newPlayer;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
     private float currentMenuFade = 0;
     private int act;
@@ -164,7 +172,7 @@ public class Play extends GameState {
         pauseMenu = new PauseMenu(act, map, hudCam);
         settingsMenu = new SettingsMenu(hudCam);
         endMenu = new EndMenu(act, map, cam);
-        shapeRenderer = new ShapeRenderer();
+        ShapeRenderer shapeRenderer = new ShapeRenderer();
         playState = B2DVars.pauseState.RUN;
 
         // set up background
@@ -199,6 +207,12 @@ public class Play extends GameState {
             initPlayer();
             drawLayers();
         }
+
+        cam.position.set(
+                player.getPosition().x * PPM,
+                player.getPosition().y * PPM,
+                0);
+        newPlayer = true;
     }
 
     public Play(GameStateManager gsm, int act, String map) {
@@ -219,11 +233,11 @@ public class Play extends GameState {
         circle = new CircleShape();
         polyShape = new PolygonShape();
 
-
         if (dimensionJump) {
             dimensionJump = false;
             bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
             bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
+            cam.position.set(tempCamLocation);
         } else if (checkpoint == null) {
             if (initPlayerLocation == null) {
                 bdef.position.set(0, 0); // hopefully never get here
@@ -281,10 +295,6 @@ public class Play extends GameState {
 
         player = new Player(body);
 
-        cam.position.set(
-                player.getPosition().x * PPM,
-                player.getPosition().y * PPM,
-                0);
     }
 
     private void createBosses(Vector2 position, String type) {
@@ -300,12 +310,13 @@ public class Play extends GameState {
 
         switch (type) {
             case MAGMAWORM:
+                aurelienribon.bodyeditor.BodyEditorLoader loader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses.json"));
                 MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, position);
-
                 Body body = world.createBody(alias.getBdef());
-                body.setUserData("boss");
                 body.createFixture(alias.getFdef());
-                Boss boss = new MagmaWorm(body, type);
+                loader.attachFixture(body, "magmawormbody", alias.getFdef(), 0.5f);
+                Boss boss = new MagmaWorm(body, type, this);
+                boss.getBody().setUserData(MAGMAWORM);
                 bossArray.add(boss);
                 break;
 
@@ -435,7 +446,6 @@ public class Play extends GameState {
             boolean lastWasThere = false;
 
             for (int col = 0; col <= layer.getWidth(); col++) {
-
                 // get cell
                 TiledMapTileLayer.Cell cell = layer.getCell(col, row);
 
@@ -584,11 +594,13 @@ public class Play extends GameState {
 
         //pause screen
         if (MyInput.isPressed(Game.settings.ESC)) {
-            if (playState == RUN && Math.abs(current_force.x) < 1 && Math.abs(current_force.y) < .5f) {
+            if (playState == RUN) {
+                UPDATE = false;
                 playState = PAUSE;
                 gameFadeOut = true;
                 gameFadeDone = false;
             } else {
+                UPDATE = true;
                 playState = RUN;
                 gameFadeOut = false;
                 gameFadeDone = false;
@@ -602,6 +614,7 @@ public class Play extends GameState {
             dimensionFadeDone = false;
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
+            tempCamLocation = cam.position;
             dimension = !dimension;
             cl.setPlayerDead(true);
         }
@@ -669,10 +682,13 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
+        if (newPlayer) {
 
-        handleInput();
+            if (Math.abs(player.getPosition().x - cam.position.x / PPM) < 1 && Math.abs(player.getPosition().y - cam.position.y / PPM) < 1)
+                newPlayer = false;
+        } else handleInput();
 
-        world.step(dt, 10, 2); // recommended values
+        if (UPDATE) world.step(dt, 10, 2); // recommended values
         updateGameFade(dt);
         updateDimensionFade(dt);
 
@@ -709,7 +725,6 @@ public class Play extends GameState {
                     player.getPosition().x,
                     player.getPosition().y,
                     0);
-            b2dr.render(world, b2dcam.combined);
 
             cam.position.set(
                     player.getPosition().x * PPM,
@@ -731,6 +746,8 @@ public class Play extends GameState {
             initPlayer();
             cl.setPlayerDead(false);
         }
+
+        if (bossArray.size != 0) for (Boss boss : bossArray) boss.update(dt);
 
         //draw tilemap animations
         if (animatedCells != null) {
@@ -903,7 +920,8 @@ public class Play extends GameState {
                 }
             }
             if (dimension_1 != null) dimension_1.setOpacity(1 - currentDimensionFade);
-            if (dimension_2 != null) dimension_2.setOpacity((1 - B2DVars.DIMENSION_FADE_AMOUNT) + currentDimensionFade);
+            if (dimension_2 != null)
+                dimension_2.setOpacity((1 - B2DVars.DIMENSION_FADE_AMOUNT) + currentDimensionFade);
         }
     }
 
@@ -941,11 +959,15 @@ public class Play extends GameState {
         if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
         renderer.getBatch().end();
 
+        if (DEBUG) b2dr.render(world, b2dcam.combined);
+
         //draw player
         sb.setProjectionMatrix(cam.combined);
         if (player != null) player.render(sb);
 
-        if (bossArray != null) for (Boss boss : bossArray) boss.render(sb);
+        if (bossArray != null) for (Boss boss : bossArray) {
+            boss.render(sb, true);
+        }
 
         // draw checkpoint
         if (checkpoint != null) checkpoint.render(sb);

@@ -21,6 +21,7 @@ public class B2DVars {
     public static final float DIMENSION_FADE_AMOUNT = 0.6f;
 
     public static final boolean DEBUG = false;
+    public static boolean UPDATE = true;
 
     public static String PATH = "";
     public static int V_WIDTH = 1920;
