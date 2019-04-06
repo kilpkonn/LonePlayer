@@ -35,7 +35,7 @@ public class LoadGameMenu extends Scene {
             put(backButton, block.EXIT);
         }};
 
-        showMaps();
+        showSaves();
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
@@ -56,15 +56,16 @@ public class LoadGameMenu extends Scene {
         return GameProgress.load(PATH + "saves/" + selectedMap);
     }
 
-    private void showMaps() {
+    private void showSaves() {
         savesButtons.clear();
         List<String> saves = loadSaves();
         Collections.sort(saves);
+        float y = V_HEIGHT / 2f + 40 * (int)Math.floor(saves.size() / 2f);
 
         for (int i = 0; i < saves.size(); i++) {
             GameButton btn = new GameButton(saves.get(i)
                     .replace(".json", "")
-                    .replace("_", " "), V_WIDTH * 3 / 5f, V_HEIGHT / 2f - i * 40);
+                    .replace("_", " "), V_WIDTH * 3 / 5f, y - i * 40);
             savesButtons.put(btn, saves.get(i));
             buttonType.put(btn, block.LOAD);
         }
