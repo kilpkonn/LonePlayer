@@ -70,6 +70,8 @@ public class Game extends ApplicationAdapter {
         res.loadTexture(PATH + "images/backLayer.png", "backLayer");
         res.loadTexture(PATH + "images/BackgroundStars/Stars-Big_1_2_PC.png", "starBackground");
 
+        res.loadTexture(PATH + "images/bosses/magmawormbody.png", "magmawormbody");
+        res.loadTexture(PATH + "images/bosses/magmawormhead.png", "magmawormhead");
         res.loadTexture(PATH + "images/Player/Player.png", "Player");
         res.loadTexture(PATH + "images/Player/Llama.png", "Llama");
         res.loadTexture(PATH + "maps/tilesets/images/Flag.png", "Checkpoint");

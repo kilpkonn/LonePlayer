@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAGMAWORM;
+
 
 public class MyContactListener implements ContactListener {
 
@@ -25,7 +27,6 @@ public class MyContactListener implements ContactListener {
     public void beginContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
-
         if (fa.getUserData() != null && fb.getUserData() != null) {
 
             // set up a new checkpoint and double jump
@@ -65,16 +66,21 @@ public class MyContactListener implements ContactListener {
 
         // detection happens when player goes outside of initial game border
         if (fa.getUserData() != null && (fa.getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
-            if (fb.getUserData().equals("barrier")) {
+            if (fb.getUserData() != null && fb.getUserData().equals("barrier")) {
+                setPlayerDead(true);
+            }
+            if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(MAGMAWORM)) {
                 setPlayerDead(true);
             }
         }
         if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
-            if (fa.getUserData().equals("barrier")) {
+            if (fa.getUserData() != null && fa.getUserData().equals("barrier")) {
+                setPlayerDead(true);
+            }
+            if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(MAGMAWORM)) {
                 setPlayerDead(true);
             }
         }
-
     }
 
 
