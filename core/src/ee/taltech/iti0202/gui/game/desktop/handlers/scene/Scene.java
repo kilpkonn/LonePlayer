@@ -60,10 +60,6 @@ public abstract class Scene {
 
         hudCam.update();
         sb.setProjectionMatrix(hudCam.combined);
-        //sb.begin();
-        //Draw pause screen
-        //sb.draw(backLayer, hudCam.position.x - (tw / 2f), hudCam.position.y - (th / 3f));
-        //sb.end();
         stage.act();
         stage.draw();
 

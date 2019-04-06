@@ -10,6 +10,7 @@ public class Player extends B2DSprite {
 
     private int numCrystals;
     private int totalCrystals;
+    private int health;
 
     public Player(Body body) {
 
@@ -20,6 +21,7 @@ public class Player extends B2DSprite {
 
         setAnimation(sprites, 1 / 6f);
 
+        health = 100;
     }
 
     public void collectCrystal() {
@@ -36,6 +38,10 @@ public class Player extends B2DSprite {
 
     public int getTotalCrystals() {
         return totalCrystals;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
 }

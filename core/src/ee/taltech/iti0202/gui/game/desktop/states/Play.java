@@ -50,6 +50,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.EndMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
@@ -119,6 +120,7 @@ public class Play extends GameState {
     private PauseMenu pauseMenu;
     private SettingsMenu settingsMenu;
     private EndMenu endMenu;
+    private Hud hud;
     private Stage stage;
     private ParallaxBackground parallaxBackground;
     private Vector2 current_force;
@@ -171,7 +173,9 @@ public class Play extends GameState {
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
         settingsMenu = new SettingsMenu(hudCam);
-        endMenu = new EndMenu(act, map, cam);
+        endMenu = new EndMenu(act, map, hudCam);
+        hud = new Hud(hudCam, this);
+
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         playState = B2DVars.pauseState.RUN;
 
@@ -695,6 +699,7 @@ public class Play extends GameState {
         switch (playState) {
             case RUN:
                 UpdateProps(dt);
+                hud.update(dt);
                 break;
 
             case PAUSE:
@@ -781,6 +786,7 @@ public class Play extends GameState {
         switch (playState) {
             case RUN:
                 drawAndSetCamera();
+                hud.render(sb);
                 break;
 
             case PAUSE:

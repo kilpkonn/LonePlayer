@@ -30,7 +30,7 @@ public class GameButton {
     public GameButton(String text, float x, float y) {
         this.x = x;
         this.y = y;
-
+        font.setColor(new Color(0.37f, 1f, 1f, 1));
         setText(text);
     }
 
@@ -43,6 +43,10 @@ public class GameButton {
                 && mousePos.x / SCALE <= x + width)
                 && (V_HEIGHT - mousePos.y / SCALE >= y - height
                 && V_HEIGHT - mousePos.y / SCALE <= y);
+    }
+
+    public void setColor(Color color) {
+        font.setColor(color);
     }
 
     public void render(SpriteBatch sb) {
