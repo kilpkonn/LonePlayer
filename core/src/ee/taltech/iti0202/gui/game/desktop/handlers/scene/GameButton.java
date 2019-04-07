@@ -30,7 +30,7 @@ public class GameButton {
     public GameButton(String text, float x, float y) {
         this.x = x;
         this.y = y;
-        font.setColor(new Color(0.37f, 1f, 1f, 1));
+        font.setColor(new Color(0.47f, 1f, 1f, 1));
         setText(text);
     }
 
