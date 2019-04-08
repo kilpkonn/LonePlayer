@@ -24,11 +24,12 @@ public abstract class Scene {
     protected Vector2 mouseInWorld2D;
     protected HashSet<GameButton> buttons;
     protected HashMap<GameButton, block> buttonType;
+
     public Scene(OrthographicCamera cam) {
-        this(0, "", cam);
+        this("", "", cam);
     }
 
-    public Scene(int act, String map, OrthographicCamera cam){
+    public Scene(String act, String map, OrthographicCamera cam){
         this.hudCam = cam;
         stage = new Stage(new ScreenViewport());
         mouseInWorld2D = new Vector2();

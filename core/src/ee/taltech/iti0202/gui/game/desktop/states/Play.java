@@ -135,13 +135,13 @@ public class Play extends GameState {
     private boolean newPlayer;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
     private float currentMenuFade = 0;
-    private int act;
+    private String act;
     private String map;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    private Play(GameStateManager gsm, int act, String map, GameProgress progress) {
+    private Play(GameStateManager gsm, String act, String map, GameProgress progress) {
         super(gsm);
         this.act = act;
         this.map = map;
@@ -197,7 +197,7 @@ public class Play extends GameState {
 
 
         // load tiled map
-        String path = PATH + "maps/levels/Act_" + act + "/" + map;
+        String path = PATH + "maps/levels/" + act + "/" + map;
         tiledMap = new TmxMapLoader().load(path);
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         animatedCells = new HashMap<>();
@@ -219,7 +219,7 @@ public class Play extends GameState {
         newPlayer = true;
     }
 
-    public Play(GameStateManager gsm, int act, String map) {
+    public Play(GameStateManager gsm, String act, String map) {
         this(gsm, act, map, null);
     }
 

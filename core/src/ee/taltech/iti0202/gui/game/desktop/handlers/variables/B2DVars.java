@@ -51,10 +51,10 @@ public class B2DVars {
     public static final int[] SQUARE_CORNERS = {-1, -1, -1, 1, 1, 1, 1, -1};
 
     // main screen sections
-    public static final Map<Integer, String> BACKGROUND_SCREENS = new HashMap<Integer, String>() {{
-        put(1, "rock");
-        put(2, "snow");
-        put(3, "snow"); //TODO: Something else here
+    public static final Map<String, String> BACKGROUND_SCREENS = new HashMap<String, String>() {{
+        put("Desert", "rock");
+        put("Plains", "snow");
+        put("Snow", "snow"); //TODO: Something else here
     }};
 
     public static final String[] MAIN_SCREENS = {

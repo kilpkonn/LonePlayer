@@ -18,7 +18,7 @@ public class EndMenu extends Scene{
     private GameButton nextButton;
     private GameButton playAgainButton;
 
-    public EndMenu(int act, String map, OrthographicCamera cam) {
+    public EndMenu(String act, String map, OrthographicCamera cam) {
         super(act, map, cam);
 
         hudCam.update();

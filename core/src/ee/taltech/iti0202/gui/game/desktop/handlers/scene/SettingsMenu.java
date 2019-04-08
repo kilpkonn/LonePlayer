@@ -38,7 +38,7 @@ public class SettingsMenu extends Scene {
 
 
     public SettingsMenu(OrthographicCamera cam) {
-        super(0, "", cam);
+        super("", "", cam);
 
         pauseState = B2DVars.pauseState.STOPPED;
 

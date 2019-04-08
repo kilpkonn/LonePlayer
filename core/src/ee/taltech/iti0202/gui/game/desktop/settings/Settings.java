@@ -20,6 +20,8 @@ public class Settings {
     public int SHOOT = Input.Buttons.LEFT;
     public int ESC = Input.Keys.ESCAPE;
 
+    public boolean ENABLE_DEV_MAPS = false;
+
     public void save(String path) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Settings.class, new SettingsSerializer()).create();
         String jsonString = gson.toJson(this);

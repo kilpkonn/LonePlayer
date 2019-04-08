@@ -20,7 +20,7 @@ public class PauseMenu extends Scene{
     private GameButton saveButton;
     private GameButton saveAndExitButton;
 
-    public PauseMenu(int act, String map, OrthographicCamera cam) {
+    public PauseMenu(String act, String map, OrthographicCamera cam) {
 
         super(act, map, cam);
         this.pauseState = B2DVars.pauseState.RUN;
