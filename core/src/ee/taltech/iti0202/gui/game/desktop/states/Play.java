@@ -687,7 +687,6 @@ public class Play extends GameState {
 
     public void update(float dt) {
         if (newPlayer) {
-
             if (Math.abs(player.getPosition().x - cam.position.x / PPM) < 1 && Math.abs(player.getPosition().y - cam.position.y / PPM) < 1)
                 newPlayer = false;
         } else handleInput();
