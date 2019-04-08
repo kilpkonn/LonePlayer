@@ -12,8 +12,8 @@ public class B2DVars {
     public static final float MAX_SPEED = 2.5f;
     public static final float FRICTION = 0.6f;
     public static final float PLAYER_SPEED = 8;
-    public static float PLAYER_DASH_FORCE_UP = 250;
-    public static float PLAYER_DASH_FORCE_SIDE = 150;
+    public static float PLAYER_DASH_FORCE_UP = 250 * STEP;
+    public static float PLAYER_DASH_FORCE_SIDE = 150 * STEP;
 
     public static final float MENU_FADE_TIME = 1;
     public static final float MENU_FADE_AMOUNT = 0.7f;

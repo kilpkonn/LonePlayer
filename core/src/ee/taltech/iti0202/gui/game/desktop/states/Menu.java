@@ -101,7 +101,7 @@ public class Menu extends GameState {
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures);
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        parallaxBackground.setSpeed(1f);
+        parallaxBackground.setSpeed(60f);
         stage.addActor(parallaxBackground);
     }
 
@@ -134,7 +134,7 @@ public class Menu extends GameState {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();
 
-        animation.update(dt);
+        //animation.update(dt);
 
         switch (menuState) {
             case MAIN:

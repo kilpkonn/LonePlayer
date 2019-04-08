@@ -626,12 +626,12 @@ public class Play extends GameState {
         //player jump / double jump / dash
         if (MyInput.isPressed(Game.settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
-                player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
-                player.getBody().applyForceToCenter(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP, true);
+                player.getBody().applyLinearImpulse(new Vector2(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                 cl.setWallJump(0);
             } else if (cl.hasDoubleJump()) {
-                player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                 cl.setDoubleJump(false);
             }
         }
@@ -653,9 +653,9 @@ public class Play extends GameState {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
-                    player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x * PPM / 3, 0), tempPlayerLocation, true);
                 } else {
-                    player.getBody().applyForceToCenter(-PLAYER_DASH_FORCE_SIDE, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
                 }
                 cl.setDash(false);
             }
@@ -676,9 +676,9 @@ public class Play extends GameState {
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
-                    player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x * PPM / 3, 0), tempPlayerLocation, true);
                 } else {
-                    player.getBody().applyForceToCenter(PLAYER_DASH_FORCE_SIDE, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
                 }
                 cl.setDash(false);
             }
