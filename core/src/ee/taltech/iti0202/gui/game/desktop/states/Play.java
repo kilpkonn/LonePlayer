@@ -227,6 +227,7 @@ public class Play extends GameState {
                 player.getPosition().y * PPM,
                 0);
         newPlayer = true;
+        UPDATE = true;
     }
 
     public Play(GameStateManager gsm, String act, String map) {
@@ -824,6 +825,7 @@ public class Play extends GameState {
             switch (pauseMenu.getCur_block()) {
                 case RESUME:
                     playState = RUN;
+                    UPDATE = true;
                     gameFadeOut = false;
                     gameFadeDone = false;
                     break;
