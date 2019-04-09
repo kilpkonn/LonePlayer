@@ -664,7 +664,7 @@ public class Play extends GameState {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
-                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x * PPM / 3, 0), tempPlayerLocation, true);
+                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x * PPM / 30, 0), tempPlayerLocation, true);
                 } else {
                     player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
                 }
@@ -687,7 +687,7 @@ public class Play extends GameState {
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
-                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x * PPM / 3, 0), tempPlayerLocation, true);
+                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x * PPM / 30, 0), tempPlayerLocation, true);
                 } else {
                     player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
                 }
