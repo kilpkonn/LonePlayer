@@ -2,17 +2,14 @@ package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import java.awt.Button;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
-import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
@@ -24,10 +21,10 @@ public class SettingsMenu extends Scene {
     }
 
     // Active
-    private GameButton exitButtonActive;
-    private GameButton saveButtonActive;
+    private GameButton exitButton;
+    private GameButton saveButton;
     private GameButton loadButton;
-    private GameButton restoreButtonActive;
+    private GameButton restoreButton;
 
     private GameButton moveLeftDisplay;
     private GameButton moveRightDisplay;
@@ -42,7 +39,7 @@ public class SettingsMenu extends Scene {
 
 
     public SettingsMenu(OrthographicCamera cam) {
-        super(0, "", cam);
+        super("", "", cam);
 
         pauseState = B2DVars.pauseState.STOPPED;
 
@@ -50,17 +47,17 @@ public class SettingsMenu extends Scene {
 
         //Texture backLayer = Game.res.getTexture("backLayer");
 
-        restoreButtonActive = new GameButton("Restore", V_WIDTH / 6f, V_HEIGHT / 2f - 40);
-        saveButtonActive = new GameButton("Save", V_WIDTH / 6f, V_HEIGHT / 2f - 80);
+        restoreButton = new GameButton("Restore", V_WIDTH / 6f, V_HEIGHT / 2f - 40);
+        saveButton = new GameButton("Save", V_WIDTH / 6f, V_HEIGHT / 2f - 80);
         loadButton = new GameButton("Load", V_WIDTH / 6f, V_HEIGHT / 2f - 120);
-        exitButtonActive = new GameButton("Exit", V_WIDTH / 6f, V_HEIGHT / 2f - 160);
+        exitButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 2f - 160);
 
-        buttons = new HashSet<>(Arrays.asList(restoreButtonActive, saveButtonActive, exitButtonActive, loadButton));
+        buttons = new HashSet<>(Arrays.asList(restoreButton, saveButton, exitButton, loadButton));
 
         buttonType = new HashMap<GameButton, block>() {{
-            put(restoreButtonActive, block.NEXT);
-            put(saveButtonActive, block.SAVE);
-            put(exitButtonActive, block.EXIT);
+            put(restoreButton, block.NEXT);
+            put(saveButton, block.SAVE);
+            put(exitButton, block.EXIT);
             put(loadButton, block.LOAD);
         }};
 

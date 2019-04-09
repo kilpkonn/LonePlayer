@@ -7,10 +7,12 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -34,7 +36,7 @@ public class LoadGameMenu extends Scene {
             put(backButton, block.EXIT);
         }};
 
-        showMaps();
+        showSaves();
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
@@ -55,15 +57,17 @@ public class LoadGameMenu extends Scene {
         return GameProgress.load(PATH + "saves/" + selectedMap);
     }
 
-    private void showMaps() {
+    private void showSaves() {
         savesButtons.clear();
-        List<String> maps = loadSaves();
+        List<String> saves = loadSaves();
+        Collections.sort(saves);
+        float y = V_HEIGHT / 2f + 40 * (int)Math.floor(saves.size() / 2f);
 
-        for (int i = 0; i < maps.size(); i++) {
-            GameButton btn = new GameButton(maps.get(i)
+        for (int i = 0; i < saves.size(); i++) {
+            GameButton btn = new GameButton(saves.get(i)
                     .replace(".json", "")
-                    .replace("_", " "), V_WIDTH * 3 / 5f, V_HEIGHT / 2f - i * 40);
-            savesButtons.put(btn, maps.get(i));
+                    .replace("_", " "), V_WIDTH * 3 / 5f, y - i * 40);
+            savesButtons.put(btn, saves.get(i));
             buttonType.put(btn, block.LOAD);
         }
         buttons.addAll(savesButtons.keySet());

@@ -17,7 +17,7 @@ public class GameProgress {
     public float playerVelocityX;
     public float playerVelocityY;
     public boolean dimension;
-    public int act;
+    public String act;
     public String map;
 
     public void save(String path) {

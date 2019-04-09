@@ -32,6 +32,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,6 +51,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.EndMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
@@ -60,6 +62,7 @@ import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_ALL;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
@@ -71,6 +74,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIM
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAGMAWORM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -119,9 +123,11 @@ public class Play extends GameState {
     private PauseMenu pauseMenu;
     private SettingsMenu settingsMenu;
     private EndMenu endMenu;
+    private Hud hud;
     private Stage stage;
+    private Texture backgroundTexture;
     private ParallaxBackground parallaxBackground;
-    private Vector2 current_force;
+    private Vector2 current_force = new Vector2(0, 0);
     private TiledMapTileLayer background;
     private TiledMapTileLayer foreground;
     private TiledMapTileLayer dimension_2;
@@ -133,13 +139,14 @@ public class Play extends GameState {
     private boolean newPlayer;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
     private float currentMenuFade = 0;
-    private int act;
+    private float backgroundSpeed;
+    private String act;
     private String map;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    private Play(GameStateManager gsm, int act, String map, GameProgress progress) {
+    private Play(GameStateManager gsm, String act, String map, GameProgress progress) {
         super(gsm);
         this.act = act;
         this.map = map;
@@ -171,29 +178,36 @@ public class Play extends GameState {
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
         settingsMenu = new SettingsMenu(hudCam);
-        endMenu = new EndMenu(act, map, cam);
+        endMenu = new EndMenu(act, map, hudCam);
+        hud = new Hud(hudCam, this);
+
         ShapeRenderer shapeRenderer = new ShapeRenderer();
         playState = B2DVars.pauseState.RUN;
 
         // set up background
-        current_force = new Vector2(0, 0);
-        Texture texture = Game.res.getTexture(BACKGROUND_SCREENS.get(act));
-        texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.ClampToEdge);
+        stage = new Stage(new ScreenViewport());
+
+        String backgroundPath = MAIN_SCREENS[BACKGROUND_SCREENS.get(act)];
+        backgroundTexture = new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer.png"));
+
+        backgroundSpeed = BACKGROUND_SPEEDS.get(act);
         Array<Texture> textures = new Array<>();
-        textures.add(texture);
-        parallaxBackground = new ParallaxBackground(textures);
+        int layersCount = Gdx.files.internal(PATH + backgroundPath).list().length;
+        for (int i = 1; i < layersCount; i++) {
+            textures.add(new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer" + i + ".png")));
+            textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        }
         stage = new Stage();
 
-        // draw background
+        parallaxBackground = new ParallaxBackground(textures);
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        parallaxBackground.setSpeed(0f);
         stage.addActor(parallaxBackground);
-
         ////////////////////////////////    Tiled stuff here    ///////////////////////
 
 
         // load tiled map
-        String path = PATH + "maps/levels/Act_" + act + "/" + map;
+        String path = PATH + "maps/levels/" + act + "/" + map;
         tiledMap = new TmxMapLoader().load(path);
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         animatedCells = new HashMap<>();
@@ -213,9 +227,10 @@ public class Play extends GameState {
                 player.getPosition().y * PPM,
                 0);
         newPlayer = true;
+        UPDATE = true;
     }
 
-    public Play(GameStateManager gsm, int act, String map) {
+    public Play(GameStateManager gsm, String act, String map) {
         this(gsm, act, map, null);
     }
 
@@ -622,12 +637,12 @@ public class Play extends GameState {
         //player jump / double jump / dash
         if (MyInput.isPressed(Game.settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
-                player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
-                player.getBody().applyForceToCenter(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP, true);
+                player.getBody().applyLinearImpulse(new Vector2(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                 cl.setWallJump(0);
             } else if (cl.hasDoubleJump()) {
-                player.getBody().applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                 cl.setDoubleJump(false);
             }
         }
@@ -649,9 +664,9 @@ public class Play extends GameState {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
-                    player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x * PPM / 30, 0), tempPlayerLocation, true);
                 } else {
-                    player.getBody().applyForceToCenter(-PLAYER_DASH_FORCE_SIDE, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
                 }
                 cl.setDash(false);
             }
@@ -672,9 +687,9 @@ public class Play extends GameState {
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
-                    player.getBody().applyForceToCenter(-current_force.x * PPM / 3, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x * PPM / 30, 0), tempPlayerLocation, true);
                 } else {
-                    player.getBody().applyForceToCenter(PLAYER_DASH_FORCE_SIDE, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
                 }
                 cl.setDash(false);
             }
@@ -683,18 +698,19 @@ public class Play extends GameState {
 
     public void update(float dt) {
         if (newPlayer) {
-
             if (Math.abs(player.getPosition().x - cam.position.x / PPM) < 1 && Math.abs(player.getPosition().y - cam.position.y / PPM) < 1)
                 newPlayer = false;
         } else handleInput();
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
+
         updateGameFade(dt);
         updateDimensionFade(dt);
 
         switch (playState) {
             case RUN:
                 UpdateProps(dt);
+                hud.update(dt);
                 break;
 
             case PAUSE:
@@ -741,8 +757,9 @@ public class Play extends GameState {
         cam.update();
 
         //call update animation
-        if (!cl.IsPlayerDead()) player.update(dt);
-        else {
+        if (!cl.IsPlayerDead()) {
+            player.update(dt);
+        } else {
             initPlayer();
             cl.setPlayerDead(false);
         }
@@ -809,6 +826,7 @@ public class Play extends GameState {
             switch (pauseMenu.getCur_block()) {
                 case RESUME:
                     playState = RUN;
+                    UPDATE = true;
                     gameFadeOut = false;
                     gameFadeDone = false;
                     break;
@@ -861,10 +879,15 @@ public class Play extends GameState {
                 case NEXT:
                     //TODO: Select next map
                     break;
+                case NEWGAME:
+                    gsm.pushState(GameStateManager.State.PLAY, act, map);
+                    break;
                 case SETTINGS:
                     playState = B2DVars.pauseState.SETTINGS;
+                    break;
                 case EXIT:
                     gsm.pushState(GameStateManager.State.MENU);
+                    break;
             }
         }
     }
@@ -896,9 +919,9 @@ public class Play extends GameState {
                 }
             }
 
-            parallaxBackground.setColor(1, 1, 1, 1 - currentMenuFade);
+            /*parallaxBackground.setColor(1, 1, 1, 1 - currentMenuFade);
             player.setOpacity(1 - currentMenuFade);
-            if (checkpoint != null) checkpoint.setOpacity(1 - currentMenuFade);
+            if (checkpoint != null) checkpoint.setOpacity(1 - currentMenuFade);*/
         }
     }
 
@@ -932,9 +955,14 @@ public class Play extends GameState {
         Gdx.gl20.glClear(GL20.GL_ALPHA_BITS);
 
         //set camera to follow player
-        if (current_force.x < -1) parallaxBackground.setSpeed(-1f);
-        else if (current_force.x > 1) parallaxBackground.setSpeed(1f);
+        /*if (current_force.x < -1) parallaxBackground.setSpeed(-60f);
+        else if (current_force.x > 1) parallaxBackground.setSpeed(60f);
         else parallaxBackground.setSpeed(0);
+        System.out.println(current_force.x);*/
+        sb.begin();
+        sb.draw(backgroundTexture, 0, 0);
+        sb.end();
+        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 8)); //TODO: more advance stuff here
         stage.act();
         stage.draw();
 
@@ -945,14 +973,6 @@ public class Play extends GameState {
         //draw tilemap
         renderer.setView(cam);
         renderer.getBatch().begin();
-        if (currentMenuFade > 0) {
-            renderer.getBatch().setColor(0, 0, 0, 1);
-            if (background != null) renderer.renderTileLayer(background);
-            if (foreground != null) renderer.renderTileLayer(foreground);
-            if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
-            if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
-            renderer.getBatch().setColor(1, 1, 1, 1 - currentMenuFade);
-        }
         if (background != null) renderer.renderTileLayer(background);
         if (foreground != null) renderer.renderTileLayer(foreground);
         if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
@@ -971,6 +991,25 @@ public class Play extends GameState {
 
         // draw checkpoint
         if (checkpoint != null) checkpoint.render(sb);
+
+        hud.render(sb);
+
+        if (currentMenuFade > 0) {
+            /*renderer.getBatch().setColor(0, 0, 0, 1);
+            if (background != null) renderer.renderTileLayer(background);
+            if (foreground != null) renderer.renderTileLayer(foreground);
+            if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
+            if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
+            renderer.getBatch().setColor(1, 1, 1, 1 - currentMenuFade);*/
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0 ,0, 0, currentMenuFade);
+            shapeRenderer.rect(0, 0, B2DVars.V_WIDTH, B2DVars.V_HEIGHT);
+            shapeRenderer.end();
+        }
     }
 
     private void saveGame() {

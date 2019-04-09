@@ -14,7 +14,7 @@ public class ParallaxBackground extends Actor {
     private int rotation;
     private int srcY;
     private boolean flipX, flipY;
-    private int scroll;
+    private float scroll;
     private Array<Texture> layers;
     private float speed;
 
@@ -29,7 +29,8 @@ public class ParallaxBackground extends Actor {
         x = y = originX = originY = rotation = srcY = 0;
         width = Gdx.graphics.getWidth();
         heigth = Gdx.graphics.getHeight();
-        scaleX = scaleY = 1;
+        scaleY = heigth / textures.get(0).getHeight();
+        scaleX = 1;
         flipX = flipY = false;
     }
 
@@ -38,10 +39,13 @@ public class ParallaxBackground extends Actor {
     }
 
     @Override
+    public void act(float dt) {
+        scroll += speed * dt;
+    }
+
+    @Override
     public void draw(Batch batch, float parentAlpha) {
         batch.setColor(getColor().r, getColor().g, getColor().b, getColor().a * parentAlpha);
-
-        scroll += speed;
         for (int i = 0; i < layers.size; i++) {
             float LAYER_SPEED_DIFFERENCE = 1f;
             int srcX = (int) (scroll + i * LAYER_SPEED_DIFFERENCE * scroll);

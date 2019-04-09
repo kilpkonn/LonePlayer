@@ -1,7 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -16,7 +15,7 @@ import java.util.List;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LevelSelectionMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LoadGameMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.MainMenu;
@@ -92,16 +91,17 @@ public class Menu extends GameState {
     }
 
     private void addParallax(String path) {
-        backgroundTexture = new Texture(Gdx.files.internal(PATH + path + ".png"));
+        backgroundTexture = new Texture(Gdx.files.internal(PATH + path + "backgroundLayer.png"));
         stage = new Stage(new ScreenViewport());
         Array<Texture> textures = new Array<>();
-        for (int i = 1; i <= 6; i++) {
-            textures.add(new Texture(Gdx.files.internal(PATH + path + i + ".png")));
+        int layersCount = Gdx.files.internal(PATH + path).list().length;
+        for (int i = 1; i < layersCount; i++) {
+            textures.add(new Texture(Gdx.files.internal(PATH + path + "backgroundLayer" + i + ".png")));
             textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures);
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        parallaxBackground.setSpeed(1f);
+        parallaxBackground.setSpeed(60f);
         stage.addActor(parallaxBackground);
     }
 
@@ -134,7 +134,7 @@ public class Menu extends GameState {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();
 
-        animation.update(dt);
+        //animation.update(dt);
 
         switch (menuState) {
             case MAIN:

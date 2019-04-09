@@ -12,8 +12,8 @@ public class B2DVars {
     public static final float MAX_SPEED = 2.5f;
     public static final float FRICTION = 0.6f;
     public static final float PLAYER_SPEED = 8;
-    public static float PLAYER_DASH_FORCE_UP = 250;
-    public static float PLAYER_DASH_FORCE_SIDE = 150;
+    public static float PLAYER_DASH_FORCE_UP = 250 * STEP;
+    public static float PLAYER_DASH_FORCE_SIDE = 150 * STEP;
 
     public static final float MENU_FADE_TIME = 1;
     public static final float MENU_FADE_AMOUNT = 0.7f;
@@ -51,18 +51,25 @@ public class B2DVars {
     public static final int[] SQUARE_CORNERS = {-1, -1, -1, 1, 1, 1, 1, -1};
 
     // main screen sections
-    public static final Map<Integer, String> BACKGROUND_SCREENS = new HashMap<Integer, String>() {{
-        put(1, "rock");
-        put(2, "snow");
-        put(3, "snow"); //TODO: Something else here
+    public static final Map<String, Integer> BACKGROUND_SCREENS = new HashMap<String, Integer>() {{
+        put("Desert", 2);
+        put("Plains", 4);
+        put("Snow", 2); //TODO: Something else here
     }};
 
     public static final String[] MAIN_SCREENS = {
-            "images/game_background_0/layers/backgroundLayer",
-            "images/game_background_1/layers/backgroundLayer",
-            "images/game_background_2/layers/backgroundLayer",
-            "images/game_background_3/layers/backgroundLayer",
+            "images/game_background_0/layers/",
+            "images/game_background_1/layers/",
+            "images/game_background_2/layers/",
+            "images/game_background_3/layers/",
+            "images/game_background_4/layers/"
     };
+
+    public static final Map<String, Float> BACKGROUND_SPEEDS = new HashMap<String, Float>() {{
+        put("Desert", 1.5f);
+        put("Plains", 0.5f);
+        put("Snow", 1f);
+    }};
 
     // pause states
     public enum pauseState {

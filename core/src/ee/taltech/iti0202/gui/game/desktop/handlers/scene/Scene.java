@@ -7,11 +7,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 public abstract class Scene {
@@ -24,11 +23,12 @@ public abstract class Scene {
     protected Vector2 mouseInWorld2D;
     protected HashSet<GameButton> buttons;
     protected HashMap<GameButton, block> buttonType;
+
     public Scene(OrthographicCamera cam) {
-        this(0, "", cam);
+        this("", "", cam);
     }
 
-    public Scene(int act, String map, OrthographicCamera cam){
+    public Scene(String act, String map, OrthographicCamera cam){
         this.hudCam = cam;
         stage = new Stage(new ScreenViewport());
         mouseInWorld2D = new Vector2();
@@ -60,10 +60,6 @@ public abstract class Scene {
 
         hudCam.update();
         sb.setProjectionMatrix(hudCam.combined);
-        //sb.begin();
-        //Draw pause screen
-        //sb.draw(backLayer, hudCam.position.x - (tw / 2f), hudCam.position.y - (th / 3f));
-        //sb.end();
         stage.act();
         stage.draw();
 

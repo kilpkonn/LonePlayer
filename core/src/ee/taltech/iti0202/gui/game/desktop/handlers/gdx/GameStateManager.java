@@ -48,7 +48,7 @@ public class GameStateManager {
         return null;
     }
 
-    private GameState getState(State state, int act, String level) {
+    private GameState getState(State state, String act, String level) {
         if (state == State.PLAY) {
             return new Play(this, act, level);
         }
@@ -74,7 +74,7 @@ public class GameStateManager {
         System.out.println(state);
     }
 
-    public void pushState(State state, int act, String level) {
+    public void pushState(State state, String act, String level) {
         gameStates.push(getState(state, act, level));
     }
 
