@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
+package ee.taltech.iti0202.gui.game.desktop.handlers.scene.components;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;

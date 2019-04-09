@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -692,6 +693,7 @@ public class Play extends GameState {
         } else handleInput();
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
+
         updateGameFade(dt);
         updateDimensionFade(dt);
 
@@ -785,7 +787,6 @@ public class Play extends GameState {
         switch (playState) {
             case RUN:
                 drawAndSetCamera();
-                hud.render(sb);
                 break;
 
             case PAUSE:
@@ -906,9 +907,9 @@ public class Play extends GameState {
                 }
             }
 
-            parallaxBackground.setColor(1, 1, 1, 1 - currentMenuFade);
+            /*parallaxBackground.setColor(1, 1, 1, 1 - currentMenuFade);
             player.setOpacity(1 - currentMenuFade);
-            if (checkpoint != null) checkpoint.setOpacity(1 - currentMenuFade);
+            if (checkpoint != null) checkpoint.setOpacity(1 - currentMenuFade);*/
         }
     }
 
@@ -955,14 +956,6 @@ public class Play extends GameState {
         //draw tilemap
         renderer.setView(cam);
         renderer.getBatch().begin();
-        if (currentMenuFade > 0) {
-            renderer.getBatch().setColor(0, 0, 0, 1);
-            if (background != null) renderer.renderTileLayer(background);
-            if (foreground != null) renderer.renderTileLayer(foreground);
-            if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
-            if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
-            renderer.getBatch().setColor(1, 1, 1, 1 - currentMenuFade);
-        }
         if (background != null) renderer.renderTileLayer(background);
         if (foreground != null) renderer.renderTileLayer(foreground);
         if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
@@ -981,6 +974,25 @@ public class Play extends GameState {
 
         // draw checkpoint
         if (checkpoint != null) checkpoint.render(sb);
+
+        hud.render(sb);
+
+        if (currentMenuFade > 0) {
+            /*renderer.getBatch().setColor(0, 0, 0, 1);
+            if (background != null) renderer.renderTileLayer(background);
+            if (foreground != null) renderer.renderTileLayer(foreground);
+            if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
+            if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
+            renderer.getBatch().setColor(1, 1, 1, 1 - currentMenuFade);*/
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            ShapeRenderer shapeRenderer = new ShapeRenderer();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0 ,0, 0, currentMenuFade);
+            shapeRenderer.rect(0, 0, B2DVars.V_WIDTH, B2DVars.V_HEIGHT);
+            shapeRenderer.end();
+        }
     }
 
     private void saveGame() {
