@@ -1,7 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -33,6 +32,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -62,6 +62,7 @@ import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_ALL;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
@@ -73,6 +74,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIM
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAGMAWORM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -123,8 +125,9 @@ public class Play extends GameState {
     private EndMenu endMenu;
     private Hud hud;
     private Stage stage;
+    private Texture backgroundTexture;
     private ParallaxBackground parallaxBackground;
-    private Vector2 current_force;
+    private Vector2 current_force = new Vector2(0, 0);
     private TiledMapTileLayer background;
     private TiledMapTileLayer foreground;
     private TiledMapTileLayer dimension_2;
@@ -136,6 +139,7 @@ public class Play extends GameState {
     private boolean newPlayer;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
     private float currentMenuFade = 0;
+    private float backgroundSpeed;
     private String act;
     private String map;
 
@@ -181,19 +185,24 @@ public class Play extends GameState {
         playState = B2DVars.pauseState.RUN;
 
         // set up background
-        current_force = new Vector2(0, 0);
-        Texture texture = Game.res.getTexture(BACKGROUND_SCREENS.get(act));
-        texture.setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.ClampToEdge);
+        stage = new Stage(new ScreenViewport());
+
+        String backgroundPath = MAIN_SCREENS[BACKGROUND_SCREENS.get(act)];
+        backgroundTexture = new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer.png"));
+
+        backgroundSpeed = BACKGROUND_SPEEDS.get(act);
         Array<Texture> textures = new Array<>();
-        textures.add(texture);
-        parallaxBackground = new ParallaxBackground(textures);
+        int layersCount = Gdx.files.internal(PATH + backgroundPath).list().length;
+        for (int i = 1; i < layersCount; i++) {
+            textures.add(new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer" + i + ".png")));
+            textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        }
         stage = new Stage();
 
-        // draw background
+        parallaxBackground = new ParallaxBackground(textures);
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        parallaxBackground.setSpeed(0f);
         stage.addActor(parallaxBackground);
-
         ////////////////////////////////    Tiled stuff here    ///////////////////////
 
 
@@ -943,9 +952,14 @@ public class Play extends GameState {
         Gdx.gl20.glClear(GL20.GL_ALPHA_BITS);
 
         //set camera to follow player
-        if (current_force.x < -1) parallaxBackground.setSpeed(-1f);
-        else if (current_force.x > 1) parallaxBackground.setSpeed(1f);
+        /*if (current_force.x < -1) parallaxBackground.setSpeed(-60f);
+        else if (current_force.x > 1) parallaxBackground.setSpeed(60f);
         else parallaxBackground.setSpeed(0);
+        System.out.println(current_force.x);*/
+        sb.begin();
+        sb.draw(backgroundTexture, 0, 0);
+        sb.end();
+        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 8)); //TODO: more advance stuff here
         stage.act();
         stage.draw();
 

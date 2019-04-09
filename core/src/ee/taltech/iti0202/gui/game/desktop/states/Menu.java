@@ -91,11 +91,12 @@ public class Menu extends GameState {
     }
 
     private void addParallax(String path) {
-        backgroundTexture = new Texture(Gdx.files.internal(PATH + path + ".png"));
+        backgroundTexture = new Texture(Gdx.files.internal(PATH + path + "backgroundLayer.png"));
         stage = new Stage(new ScreenViewport());
         Array<Texture> textures = new Array<>();
-        for (int i = 1; i <= 6; i++) {
-            textures.add(new Texture(Gdx.files.internal(PATH + path + i + ".png")));
+        int layersCount = Gdx.files.internal(PATH + path).list().length;
+        for (int i = 1; i < layersCount; i++) {
+            textures.add(new Texture(Gdx.files.internal(PATH + path + "backgroundLayer" + i + ".png")));
             textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures);

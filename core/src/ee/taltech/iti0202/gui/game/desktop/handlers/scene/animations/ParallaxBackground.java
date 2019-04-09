@@ -29,7 +29,8 @@ public class ParallaxBackground extends Actor {
         x = y = originX = originY = rotation = srcY = 0;
         width = Gdx.graphics.getWidth();
         heigth = Gdx.graphics.getHeight();
-        scaleX = scaleY = 1;
+        scaleY = heigth / textures.get(0).getHeight();
+        scaleX = 1;
         flipX = flipY = false;
     }
 

@@ -18,6 +18,8 @@ public class SettingsSerializer implements JsonSerializer<Settings> {
         result.add("SHOOT", new JsonPrimitive(settings.SHOOT));
         result.add("MENU", new JsonPrimitive(settings.MENU));
         result.add("ESC", new JsonPrimitive(settings.ESC));
+        result.add("ENABLE_DEV_MAPS", new JsonPrimitive(settings.ENABLE_DEV_MAPS));
+        result.add("SHOW_FPS", new JsonPrimitive(settings.SHOW_FPS));
         return result;
     }
 }

@@ -51,18 +51,25 @@ public class B2DVars {
     public static final int[] SQUARE_CORNERS = {-1, -1, -1, 1, 1, 1, 1, -1};
 
     // main screen sections
-    public static final Map<String, String> BACKGROUND_SCREENS = new HashMap<String, String>() {{
-        put("Desert", "rock");
-        put("Plains", "snow");
-        put("Snow", "snow"); //TODO: Something else here
+    public static final Map<String, Integer> BACKGROUND_SCREENS = new HashMap<String, Integer>() {{
+        put("Desert", 2);
+        put("Plains", 4);
+        put("Snow", 2); //TODO: Something else here
     }};
 
     public static final String[] MAIN_SCREENS = {
-            "images/game_background_0/layers/backgroundLayer",
-            "images/game_background_1/layers/backgroundLayer",
-            "images/game_background_2/layers/backgroundLayer",
-            "images/game_background_3/layers/backgroundLayer",
+            "images/game_background_0/layers/",
+            "images/game_background_1/layers/",
+            "images/game_background_2/layers/",
+            "images/game_background_3/layers/",
+            "images/game_background_4/layers/"
     };
+
+    public static final Map<String, Float> BACKGROUND_SPEEDS = new HashMap<String, Float>() {{
+        put("Desert", 1.5f);
+        put("Plains", 0.5f);
+        put("Snow", 1f);
+    }};
 
     // pause states
     public enum pauseState {
