@@ -67,7 +67,7 @@ public class MyContactListener implements ContactListener {
         // detection happens when player goes outside of initial game border
         if (fa.getUserData() != null && (fa.getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
             if (fb.getUserData() != null && fb.getUserData().equals("barrier")) {
-                setPlayerDead(true);
+                setPlayerDead(true); //TODO: Fix random deaths (wrong coords?)
             }
             if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(MAGMAWORM)) {
                 setPlayerDead(true);

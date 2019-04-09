@@ -757,8 +757,9 @@ public class Play extends GameState {
         cam.update();
 
         //call update animation
-        if (!cl.IsPlayerDead()) player.update(dt);
-        else {
+        if (!cl.IsPlayerDead()) {
+            player.update(dt);
+        } else {
             initPlayer();
             cl.setPlayerDead(false);
         }
