@@ -20,6 +20,8 @@ public class SettingsSerializer implements JsonSerializer<Settings> {
         result.add("ESC", new JsonPrimitive(settings.ESC));
         result.add("ENABLE_DEV_MAPS", new JsonPrimitive(settings.ENABLE_DEV_MAPS));
         result.add("SHOW_FPS", new JsonPrimitive(settings.SHOW_FPS));
+        result.add("MAX_FPS", new JsonPrimitive(settings.MAX_FPS));
+        result.add("ENABLE_VSYNC", new JsonPrimitive(settings.ENABLE_VSYNC));
         return result;
     }
 }

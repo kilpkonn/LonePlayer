@@ -22,6 +22,8 @@ public class Settings {
 
     public boolean ENABLE_DEV_MAPS = false;
     public boolean SHOW_FPS = true;
+    public int MAX_FPS = 300;
+    public boolean ENABLE_VSYNC = true;
 
     public void save(String path) {
         Gson gson = new GsonBuilder().registerTypeAdapter(Settings.class, new SettingsSerializer()).create();

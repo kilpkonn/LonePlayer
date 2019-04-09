@@ -12,18 +12,22 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
 		Settings settings = new Settings().load("android/assets/settings/settings.json");
 
-		new LwjglApplication(new Game(settings), config);
+		new LwjglApplication(new Game(settings) {
+		    @Override
+            public void setForegroundFPS(int value) {
+                config.foregroundFPS = value;
+            }}, config);
 
 		config.title = Game.TITLE;
         config.width = V_WIDTH * SCALE;
         config.forceExit = true;
         config.fullscreen = false;
         config.height = V_HEIGHT * SCALE;
-        config.foregroundFPS = 120; // <- limit when focused
+        //config.foregroundFPS = 300; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized
 	}
 }

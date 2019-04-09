@@ -89,6 +89,9 @@ public class Game extends ApplicationAdapter {
         hudCam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         gsm = new GameStateManager(this);
+
+        Gdx.graphics.setVSync(settings.ENABLE_VSYNC);
+        setForegroundFPS(settings.MAX_FPS);
     }
 
     public SpriteBatch getSpriteBatch() {
@@ -137,4 +140,6 @@ public class Game extends ApplicationAdapter {
 
     public void resume() {
     }
+
+    public void setForegroundFPS(int value) {}
 }
