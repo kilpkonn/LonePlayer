@@ -8,7 +8,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class ParallaxBackground extends Actor {
 
-    private float x, y, width, heigth, scaleX, scaleY;
+    private float x, y, width, height, scaleX, scaleY;
     private int originX;
     private int originY;
     private int rotation;
@@ -28,9 +28,9 @@ public class ParallaxBackground extends Actor {
 
         x = y = originX = originY = rotation = srcY = 0;
         width = Gdx.graphics.getWidth();
-        heigth = Gdx.graphics.getHeight();
-        scaleY = heigth / textures.get(0).getHeight();
-        scaleX = 1;
+        height = Gdx.graphics.getHeight();
+        scaleY = height / textures.get(0).getHeight();
+        scaleX = 1f;
         flipX = flipY = false;
     }
 
@@ -49,7 +49,7 @@ public class ParallaxBackground extends Actor {
         for (int i = 0; i < layers.size; i++) {
             float LAYER_SPEED_DIFFERENCE = 1f;
             int srcX = (int) (scroll + i * LAYER_SPEED_DIFFERENCE * scroll);
-            batch.draw(layers.get(i), x, y, originX, originY, width, heigth, scaleX, scaleY, rotation, srcX, srcY, layers.get(i).getWidth(), layers.get(i).getHeight(), flipX, flipY);
+            batch.draw(layers.get(i), x, y, originX, originY, width, height, scaleX, scaleY, rotation, srcX, srcY, layers.get(i).getWidth(), layers.get(i).getHeight(), flipX, flipY);
         }
     }
 }

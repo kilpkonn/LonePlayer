@@ -69,7 +69,7 @@ public class B2DVars {
 
     public static final Map<String, Float> BACKGROUND_SPEEDS = new HashMap<String, Float>() {{
         put("Desert", 1f);
-        put("Plains", 0.6f);
+        put("Plains", 1f);
         put("Snow", 1f);
     }};
 
