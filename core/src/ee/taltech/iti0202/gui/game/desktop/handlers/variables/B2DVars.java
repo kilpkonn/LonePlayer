@@ -53,7 +53,7 @@ public class B2DVars {
     // main screen sections
     public static final Map<String, Integer> BACKGROUND_SCREENS = new HashMap<String, Integer>() {{
         put("Desert", 5);
-        put("Plains", 4);
+        put("Plains", 6);
         put("Snow", 2); //TODO: Something else here
     }};
 
@@ -63,7 +63,8 @@ public class B2DVars {
             "images/game_background_2/layers/",
             "images/game_background_3/layers/",
             "images/game_background_4/layers/",
-            "images/game_background_5/layers/"
+            "images/game_background_5/layers/",
+            "images/game_background_6/layers/"
     };
 
     public static final Map<String, Float> BACKGROUND_SPEEDS = new HashMap<String, Float>() {{
