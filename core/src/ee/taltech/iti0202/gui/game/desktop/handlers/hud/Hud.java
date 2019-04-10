@@ -35,7 +35,8 @@ public class Hud {
 
         int currentFPS = Gdx.graphics.getFramesPerSecond();
         fps.setText(Integer.toString(currentFPS));
-        fps.setColor(new Color((60 - currentFPS) / 50f, currentFPS / 50f, 0, 1));
+        int prefFPS = (int)(Game.settings.MAX_FPS * 0.8);
+        fps.setColor(new Color((float)(prefFPS - currentFPS) / prefFPS, (float)currentFPS / prefFPS, 0, 1));
     }
 
     public void render(SpriteBatch sb){
