@@ -21,7 +21,7 @@ public class Settings {
     public int ESC = Input.Keys.ESCAPE;
 
     public boolean ENABLE_DEV_MAPS = false;
-    public boolean SHOW_FPS = true;
+    public boolean SHOW_FPS = false;
     public int MAX_FPS = 300;
     public boolean ENABLE_VSYNC = true;
 
