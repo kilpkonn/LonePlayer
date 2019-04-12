@@ -9,16 +9,15 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 
 public abstract class GameState {
 
-    protected GameStateManager gsm;
+    //protected GameStateManager gsm;
     protected Game game;
 
     protected SpriteBatch sb;
     protected OrthographicCamera cam; // follows the player
     protected OrthographicCamera hudCam; // stationary hud
 
-    protected  GameState(GameStateManager gsm){
-        this.gsm = gsm;
-        game = gsm.game();
+    protected  GameState(){
+        game = GameStateManager.game();
         sb = game.getSpriteBatch();
         cam = game.getCamera();
         hudCam = game.getHUDCamera();

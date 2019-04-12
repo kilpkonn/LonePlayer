@@ -10,29 +10,29 @@ import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 public class GameStateManager {
 
-    private Game game;
-    private boolean booting = true;
-    private Stack<GameState> gameStates;
+    private static Game game;
+    private static boolean booting = true;
+    private static Stack<GameState> gameStates;
 
     public enum State {
         PLAY, MENU
     }
 
-    public GameStateManager(Game game) {
-        this.game = game;
+    public GameStateManager(Game newGame) {
+        game = newGame;
         gameStates = new Stack<>();
         pushState(State.MENU);
     }
 
-    public Game game() {
+    public static Game game() {
         return game;
     }
 
-    public void update(float dt) {
+    public static void update(float dt) {
         gameStates.peek().update(dt);
     }
 
-    public void render() {
+    public static void render() {
         gameStates.peek().render();
         if (booting) {
             setState(State.MENU);
@@ -40,49 +40,49 @@ public class GameStateManager {
         }
     }
 
-    private GameState getState(State state) {
+    private static GameState getState(State state) {
         if (state == State.MENU) {
-            return new Menu(this);
+            return new Menu();
         }
         System.out.println("desired state was no found!");
         return null;
     }
 
-    private GameState getState(State state, String act, String level) {
+    private static GameState getState(State state, String act, String level) {
         if (state == State.PLAY) {
-            return new Play(this, act, level);
+            return new Play( act, level);
         }
         System.out.println("desired state was no found!");
         return null;
     }
 
-    private GameState getState(State state, GameProgress progress) {
+    private static GameState getState(State state, GameProgress progress) {
         if (state == State.PLAY) {
-            return new Play(this, progress);
+            return new Play(progress);
         }
         System.out.println("desired state was no found!");
         return null;
     }
 
-    public void setState(State state) {
+    public static void setState(State state) {
         popState();
         pushState(state);
     }
 
-    public void pushState(State state) {
+    public static void pushState(State state) {
         gameStates.push(getState(state));
         System.out.println(state);
     }
 
-    public void pushState(State state, String act, String level) {
+    public static void pushState(State state, String act, String level) {
         gameStates.push(getState(state, act, level));
     }
 
-    public void pushState(State state, GameProgress progress) {
+    public static void pushState(State state, GameProgress progress) {
         gameStates.push(getState(state, progress));
     }
 
-    public void popState() {
+    public static void popState() {
         GameState g = gameStates.pop();
         g.dispose();
     }

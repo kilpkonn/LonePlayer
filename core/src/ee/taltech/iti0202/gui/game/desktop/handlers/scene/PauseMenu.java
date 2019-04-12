@@ -6,25 +6,41 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 
 public class PauseMenu extends Scene{
-    // Active
+
+    private enum block {
+        SAVE, RESUME, EXIT, SETTINGS, SAVEANDEXIT
+    }
+
+    private PauseMenu.block currBlock;
+
+    private HashMap<GameButton, PauseMenu.block> buttonType;
+
+    private Runnable resumeFunc;
+    private Runnable saveFunc;
+    private Runnable openSettingsFunc;
+
     private GameButton exitButton;
     private GameButton settingsButton;
     private GameButton resumeButton;
     private GameButton saveButton;
     private GameButton saveAndExitButton;
 
-    public PauseMenu(String act, String map, OrthographicCamera cam) {
-
+    public PauseMenu(String act, String map, OrthographicCamera cam, Runnable resumeFunc, Runnable saveFunc, Runnable openSettingsFunc) {
         super(act, map, cam);
-        this.pauseState = B2DVars.pauseState.RUN;
+        //this.pauseState = B2DVars.pauseState.RUN;
+        this.resumeFunc = resumeFunc;
+        this.saveFunc = saveFunc;
+        this.openSettingsFunc = openSettingsFunc;
 
         hudCam.update();
 
@@ -46,5 +62,34 @@ public class PauseMenu extends Scene{
             put(exitButton, block.EXIT);
         }};
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+    }
+
+    @Override
+    public void handleInput() {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (currBlock) {
+                case RESUME:
+                    resumeFunc.run();
+                    break;
+                case SAVE:
+                    saveFunc.run();
+                    break;
+                case SAVEANDEXIT:
+                    saveFunc.run();
+                    GameStateManager.pushState(GameStateManager.State.MENU);
+                    break;
+                case EXIT:
+                    GameStateManager.pushState(GameStateManager.State.MENU);
+                    break;
+                case SETTINGS:
+                    openSettingsFunc.run();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void updateCurrentBlock(GameButton button) {
+        currBlock = buttonType.get(button);
     }
 }

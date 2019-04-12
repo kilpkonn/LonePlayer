@@ -74,11 +74,5 @@ public class B2DVars {
     }};
 
     // pause states
-    public enum pauseState {
-        PAUSE,
-        RUN,
-        RESUME,
-        SETTINGS,
-        STOPPED
-    }
+
 }

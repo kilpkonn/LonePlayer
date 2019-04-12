@@ -14,15 +14,12 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 public abstract class Scene {
-
-    protected block cur_block = block.DEFAULT;
     protected Stage stage;
-    protected B2DVars.pauseState pauseState;
     protected OrthographicCamera hudCam;
 
     protected Vector2 mouseInWorld2D;
     protected HashSet<GameButton> buttons;
-    protected HashMap<GameButton, block> buttonType;
+    protected String act, map;
 
     public Scene(OrthographicCamera cam) {
         this("", "", cam);
@@ -30,23 +27,13 @@ public abstract class Scene {
 
     public Scene(String act, String map, OrthographicCamera cam){
         this.hudCam = cam;
+        this.act = act;
+        this.map = map;
         stage = new Stage(new ScreenViewport());
         mouseInWorld2D = new Vector2();
     }
 
-    public enum block {
-        NEWGAME,
-        RESUME,
-        SETTINGS,
-        SAVE,
-        SAVEANDEXIT,
-        EXIT,
-        NEXT,
-        ACT,
-        MAP,
-        LOAD,
-        DEFAULT
-    }
+    public abstract void handleInput();
 
     public void update(float dt) {
         mouseInWorld2D.x = Gdx.input.getX();
@@ -65,13 +52,11 @@ public abstract class Scene {
 
         for (GameButton button : buttons) {
             if (button.hoverOver()) {
-                cur_block = buttonType.get(button);
+                updateCurrentBlock(button);
             }
             button.render(sb);
         }
     }
 
-    public block getCur_block() {
-        return cur_block;
-    }
+    protected abstract void updateCurrentBlock(GameButton btn);
 }
