@@ -15,13 +15,11 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 public abstract class Scene {
     protected Stage stage;
-    protected B2DVars.pauseState pauseState;
     protected OrthographicCamera hudCam;
 
     protected Vector2 mouseInWorld2D;
     protected HashSet<GameButton> buttons;
     protected String act, map;
-    //protected HashMap<GameButton, block> buttonType;
 
     public Scene(OrthographicCamera cam) {
         this("", "", cam);
@@ -34,20 +32,6 @@ public abstract class Scene {
         stage = new Stage(new ScreenViewport());
         mouseInWorld2D = new Vector2();
     }
-
-    /*public enum block {
-        NEWGAME,
-        RESUME,
-        SETTINGS,
-        SAVE,
-        SAVEANDEXIT,
-        EXIT,
-        NEXT,
-        ACT,
-        MAP,
-        LOAD,
-        DEFAULT
-    }*/
 
     public abstract void handleInput();
 
@@ -75,8 +59,4 @@ public abstract class Scene {
     }
 
     protected abstract void updateCurrentBlock(GameButton btn);
-
-    /*public block getCur_block() {
-        return cur_block;
-    }*/
 }

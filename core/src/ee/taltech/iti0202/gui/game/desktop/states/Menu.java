@@ -31,12 +31,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 public class Menu extends GameState {
 
-    private enum menuState {
-        MAIN,
-        LEVELS,
-        SETTINGS,
-        RESUME,
-        DEFAULT
+    private enum state {
+        MAIN, SETTINGS, LEVELS, RESUME
     }
 
     private Background bg;
@@ -53,10 +49,10 @@ public class Menu extends GameState {
     private Texture backgroundTexture;
     private List<GameButton> buttons;
     private Vector2 mouseInWorld2D;
-    private menuState menuState;
+    private state menuState;
 
     public Menu() {
-        menuState = menuState.MAIN;
+        this.menuState = state.MAIN;
 
         // get textures
         player = Game.res.getTexture("Llama");
@@ -76,35 +72,35 @@ public class Menu extends GameState {
         levelSelectionMenu = new LevelSelectionMenu(cam, new Runnable() {
             @Override
             public void run() {
-                menuState = menuState.MAIN;
+                menuState = state.MAIN;
             }
         });
         settingsMenu = new SettingsMenu(cam, game, new Runnable() {
             @Override
             public void run() {
-                menuState = menuState.MAIN;
+                menuState = state.MAIN;
             }
         });
         loadGameMenu = new LoadGameMenu(cam, new Runnable() {
             @Override
             public void run() {
-                menuState = menuState.MAIN;
+                menuState = state.MAIN;
             }
         });
         mainMenuScene = new MainMenu(cam, new Runnable() {
             @Override
             public void run() {
-                menuState = menuState.LEVELS;
+                menuState = state.LEVELS;
             }
         }, new Runnable() {
             @Override
             public void run() {
-                menuState = menuState.RESUME;
+                menuState = state.RESUME;
             }
         }, new Runnable() {
             @Override
             public void run() {
-                menuState = menuState.SETTINGS;
+                menuState = state.SETTINGS;
             }
         });
 

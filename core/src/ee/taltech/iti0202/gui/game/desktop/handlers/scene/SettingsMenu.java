@@ -74,8 +74,6 @@ public class SettingsMenu extends Scene {
         this.game = game;
         this.backFunc = backFunc;
 
-        pauseState = B2DVars.pauseState.STOPPED;
-
         hudCam.update();
 
         //Texture backLayer = Game.res.getTexture("backLayer");

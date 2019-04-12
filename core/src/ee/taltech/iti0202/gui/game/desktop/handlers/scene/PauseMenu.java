@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import java.util.Arrays;
@@ -11,13 +10,9 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
-import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.RUN;
 
 
 public class PauseMenu extends Scene{

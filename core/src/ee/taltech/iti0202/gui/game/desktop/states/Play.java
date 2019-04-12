@@ -88,11 +88,16 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TER
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.PAUSE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.RUN;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.SETTINGS;
 
 public class Play extends GameState {
+
+    public enum pauseState {
+        PAUSE,
+        RUN,
+        RESUME,
+        SETTINGS,
+        STOPPED
+    }
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -132,7 +137,7 @@ public class Play extends GameState {
     private TiledMapTileLayer foreground;
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
-    private B2DVars.pauseState playState;
+    private pauseState playState;
     private boolean gameFadeOut = false;
     private boolean gameFadeDone = true;
     private boolean dimensionFadeDone = false;
@@ -178,7 +183,7 @@ public class Play extends GameState {
         pauseMenu = new PauseMenu(act, map, hudCam, new Runnable() {
             @Override
             public void run() {
-                playState = RUN;
+                playState = pauseState.RUN;
                 UPDATE = true;
                 gameFadeOut = false;
                 gameFadeDone = false;
@@ -191,27 +196,27 @@ public class Play extends GameState {
         }, new Runnable() {
             @Override
             public void run() {
-                playState = SETTINGS;
+                playState = pauseState.SETTINGS;
             }
         });
 
         settingsMenu = new SettingsMenu(hudCam, game, new Runnable() {
             @Override
             public void run() {
-                playState = PAUSE;
+                playState = pauseState.PAUSE;
             }
         });
 
         endMenu = new EndMenu(act, map, hudCam, new Runnable() {
             @Override
             public void run() {
-                playState = SETTINGS;
+                playState = pauseState.SETTINGS;
             }
         });
         hud = new Hud(hudCam, this);
 
         ShapeRenderer shapeRenderer = new ShapeRenderer();
-        playState = B2DVars.pauseState.RUN;
+        playState = pauseState.RUN;
 
         // set up background
         stage = new Stage(new ScreenViewport());
@@ -639,14 +644,14 @@ public class Play extends GameState {
 
         //pause screen
         if (MyInput.isPressed(Game.settings.ESC)) {
-            if (playState == RUN) {
+            if (playState == pauseState.RUN) {
                 UPDATE = false;
-                playState = PAUSE;
+                playState = pauseState.PAUSE;
                 gameFadeOut = true;
                 gameFadeDone = false;
             } else {
                 UPDATE = true;
-                playState = RUN;
+                playState = pauseState.RUN;
                 gameFadeOut = false;
                 gameFadeDone = false;
             }
@@ -857,7 +862,7 @@ public class Play extends GameState {
 
         drawAndSetCamera();
 
-        if (playState == B2DVars.pauseState.SETTINGS) settingsMenu.render(sb);
+        if (playState == pauseState.SETTINGS) settingsMenu.render(sb);
         else pauseMenu.render(sb);
     }
 
