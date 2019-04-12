@@ -242,6 +242,7 @@ public class Play extends GameState {
     ////////////////////////////////////////////////////////////////////   Create Animated bodies   ////////////////////////////////////////////////////////////////////
 
     private void initPlayer() {
+        //TODO: Better logic for loading saved game
         if (player != null) world.destroyBody(player.getBody());
         bdef = new BodyDef();
         fdef = new FixtureDef();
@@ -962,7 +963,7 @@ public class Play extends GameState {
         sb.begin();
         sb.draw(backgroundTexture, 0, 0);
         sb.end();
-        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 8)); //TODO: more advance stuff here
+        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 8)); //TODO: more advance stuff here, move with camera...
         stage.act();
         stage.draw();
 
