@@ -79,7 +79,7 @@ public class Menu extends GameState {
         mouseInWorld2D = new Vector2();
 
         levelSelectionMenu = new LevelSelectionMenu(cam);
-        settingsMenu = new SettingsMenu(cam);
+        settingsMenu = new SettingsMenu(cam, game);
         loadGameMenu = new LoadGameMenu(cam);
         mainMenuScene = new MainMenu(cam);
 
