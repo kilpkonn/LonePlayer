@@ -20,6 +20,7 @@ buildscript {
 allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
+    apply plugin: 'maven'
 
     version = '1.0'
     ext {
@@ -35,6 +36,7 @@ allprojects {
         mavenLocal()
         mavenCentral()
         google()
+        maven { url 'https://jitpack.io' }
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
     }
@@ -46,6 +48,9 @@ project(":desktop") {
 
     dependencies {
         implementation project(":core")
+
+        implementation 'com.github.envomp:spriter:1.0.1'
+
         implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
@@ -65,6 +70,9 @@ project(":android") {
 
     dependencies {
         implementation project(":core")
+
+        implementation 'com.github.envomp:spriter:1.0.1'
+
         implementation "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
@@ -106,6 +114,9 @@ project(":ios") {
 
     dependencies {
         implementation project(":core")
+
+        implementation 'com.github.envomp:spriter:1.0.1'
+
         implementation "com.mobidevelop.robovm:robovm-rt:$roboVMVersion"
         implementation "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
         implementation "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
@@ -123,6 +134,9 @@ project(":core") {
 
 
     dependencies {
+
+        implementation 'com.github.envomp:spriter:1.0.1'
+
         implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
@@ -143,6 +157,9 @@ project(":ios-moe") {
 
     dependencies {
         implementation project(":core")
+
+        implementation 'com.github.envomp:spriter:1.0.1'
+
         implementation "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
