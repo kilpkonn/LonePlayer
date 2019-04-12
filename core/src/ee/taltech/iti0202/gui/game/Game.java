@@ -106,6 +106,7 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void render() {
+
         /*accum += Gdx.graphics.getDeltaTime();
         while (accum >= STEP) {
             accum -= STEP;
