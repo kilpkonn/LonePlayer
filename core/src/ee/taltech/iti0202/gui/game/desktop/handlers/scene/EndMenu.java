@@ -6,22 +6,35 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.SETTINGS;
 
 
 public class EndMenu extends Scene{
 
-    // Active
+    private enum block {
+        NEWGAME, NEXT, EXIT, SETTINGS
+    }
+
+    private block currBlock;
+    private HashMap<GameButton, block> buttonType;
+    private Runnable openSettingsFunc;
+
     private GameButton exitButton;
     private GameButton settingsButton;
     private GameButton nextButton;
     private GameButton playAgainButton;
 
-    public EndMenu(String act, String map, OrthographicCamera cam) {
+    public EndMenu(String act, String map, OrthographicCamera cam, Runnable openSettingsFunc) {
         super(act, map, cam);
+        this.openSettingsFunc = openSettingsFunc;
 
         hudCam.update();
 
@@ -39,5 +52,30 @@ public class EndMenu extends Scene{
             put(exitButton, block.EXIT);
         }};
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+    }
+
+    @Override
+    public void handleInput() {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (currBlock) {
+                case NEXT:
+                    //TODO: Select next map
+                    break;
+                case NEWGAME:
+                    GameStateManager.pushState(GameStateManager.State.PLAY, act, map);
+                    break;
+                case SETTINGS:
+                    openSettingsFunc.run();
+                    break;
+                case EXIT:
+                    GameStateManager.pushState(GameStateManager.State.MENU);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void updateCurrentBlock(GameButton button) {
+        currBlock = buttonType.get(button);
     }
 }

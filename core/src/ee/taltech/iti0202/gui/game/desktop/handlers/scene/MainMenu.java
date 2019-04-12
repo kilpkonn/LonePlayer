@@ -1,24 +1,44 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.states.Menu;
+import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 public class MainMenu extends Scene {
+
+    private enum block {
+        NEWGAME, RESUME, EXIT, SETTINGS, DEFAULT
+    }
+
+    private block currBlock = block.DEFAULT;
+    private Runnable newGameFunc;
+    private Runnable resumeGameFunc;
+    private Runnable settingsFunc;
+
     private GameButton newGameButton;
     private GameButton loadGameButton;
     private GameButton settingsButton;
     private GameButton exitButton;
 
-    public MainMenu(OrthographicCamera cam) {
+    private HashMap<GameButton, MainMenu.block> buttonType;
+
+    public MainMenu(OrthographicCamera cam, Runnable newGameFunc, Runnable resumeGameFunc, Runnable settingsFunc) {
         super(cam);
+        this.newGameFunc = newGameFunc;
+        this.resumeGameFunc = resumeGameFunc;
+        this.settingsFunc = settingsFunc;
 
         newGameButton = new GameButton("New Game", V_WIDTH / 5f, V_HEIGHT / 1.5f);
         loadGameButton = new GameButton("Resume", V_WIDTH / 5f, V_HEIGHT / 1.5f - 40);
@@ -35,5 +55,30 @@ public class MainMenu extends Scene {
         }};
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+    }
+
+    @Override
+    public void handleInput() {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (currBlock) {
+                case NEWGAME:
+                    newGameFunc.run();
+                    break;
+                case RESUME:
+                    resumeGameFunc.run();
+                    break;
+                case SETTINGS:
+                    settingsFunc.run();
+                    break;
+                case EXIT:
+                    Gdx.app.exit();
+                    break;
+            }
+        }
+    }
+
+    @Override
+    protected void updateCurrentBlock(GameButton button) {
+        currBlock = buttonType.get(button);
     }
 }

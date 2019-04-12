@@ -12,7 +12,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -21,12 +25,21 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 public class LoadGameMenu extends Scene {
 
+    private enum block {
+        NEWGAME, LOAD, EXIT
+    }
+
+    private LoadGameMenu.block currBlock;
+    private Runnable backFunc;
+
     private GameButton backButton;
     private HashMap<GameButton, String> savesButtons = new HashMap<>();
+    private HashMap<GameButton, LoadGameMenu.block> buttonType;
     private String selectedMap;
 
-    public LoadGameMenu(OrthographicCamera cam) {
+    public LoadGameMenu(OrthographicCamera cam, Runnable backFunc) {
         super(cam);
+        this.backFunc = backFunc;
 
         backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.2f - 40);
 
@@ -50,6 +63,18 @@ public class LoadGameMenu extends Scene {
         for (GameButton button : buttons){
             button.update(mouseInWorld2D);
             if (button.hoverOver() && buttonType.get(button) == block.LOAD) selectedMap = savesButtons.get(button);
+        }
+    }
+
+    @Override
+    public void handleInput() {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (currBlock) {
+                case LOAD:
+                    GameStateManager.pushState(GameStateManager.State.PLAY, getGameProgress());
+                case EXIT:
+                    backFunc.run();
+            }
         }
     }
 
@@ -84,5 +109,10 @@ public class LoadGameMenu extends Scene {
             return Arrays.asList(maps);
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    protected void updateCurrentBlock(GameButton button) {
+        currBlock = buttonType.get(button);
     }
 }

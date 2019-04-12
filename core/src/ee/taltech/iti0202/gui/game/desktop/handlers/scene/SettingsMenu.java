@@ -8,10 +8,15 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.function.Consumer;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.states.Menu;
+import jdk.nashorn.internal.objects.annotations.Function;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
@@ -30,10 +35,17 @@ public class SettingsMenu extends Scene {
         DEFAULT
     }
 
+    private enum block {
+        NEXT, SAVE, EXIT, LOAD, SETTINGS
+    }
+
+    private block currBlock;
+
     private float settingsXLocation = V_WIDTH / 2f;
     private float displayXLocation = V_WIDTH / 1.3f;
 
     private Game game;
+    private Runnable backFunc;
 
     private GameButton exitButton;
     private GameButton saveButton;
@@ -52,13 +64,16 @@ public class SettingsMenu extends Scene {
 
     private HashMap<GameButton, SettingBlock> settingsButtons = new HashMap<>();
     private HashMap<GameButton, GameButton> keyBindButtons = new HashMap<>();
+    private HashMap<GameButton, block> buttonType;
 
     private GameButton btnWaitingInput;
 
 
-    public SettingsMenu(OrthographicCamera cam, Game game) {
+    public SettingsMenu(OrthographicCamera cam, Game game, Runnable backFunc) {
         super("", "", cam);
         this.game = game;
+        this.backFunc = backFunc;
+
         pauseState = B2DVars.pauseState.STOPPED;
 
         hudCam.update();
@@ -133,6 +148,38 @@ public class SettingsMenu extends Scene {
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
     }
 
+    @Override
+    public void handleInput() {
+        handleKey(MyInput.getKeyDown());
+
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (currBlock) {
+                case EXIT:
+                    try {
+                        backFunc.run();
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        //TODO: gsm.push -> main
+                    }
+                    break;
+                case SAVE:
+                    Game.settings.save(B2DVars.PATH + "settings/settings.json");
+                    break;
+                case NEXT:
+                    Game.settings = Game.settings.loadDefault();
+                    updateAllBindsDisplayed();
+                    break;
+                case LOAD:
+                    Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
+                    updateAllBindsDisplayed();
+                    break;
+                case SETTINGS:
+                    handleSettingsButtonClick();
+                    break;
+            }
+        }
+    }
+
     public void handleSettingsButtonClick() {
         for (Map.Entry<GameButton, GameButton> entry: keyBindButtons.entrySet()) {
             if ((entry.getKey().hoverOver() || entry.getValue().hoverOver()) && checkNonKeyBindButtons(entry.getKey())) {
@@ -196,5 +243,10 @@ public class SettingsMenu extends Scene {
 
     private void updateKeyBindsDisplayed(GameButton btn, int key) {
         keyBindButtons.get(btn).setText(Input.Keys.toString(key));
+    }
+
+    @Override
+    protected void updateCurrentBlock(GameButton button) {
+        currBlock = buttonType.get(button);
     }
 }

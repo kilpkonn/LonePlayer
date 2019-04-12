@@ -48,7 +48,6 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.Player;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
@@ -91,6 +90,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_H
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.PAUSE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.RUN;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.pauseState.SETTINGS;
 
 public class Play extends GameState {
 
@@ -146,8 +146,7 @@ public class Play extends GameState {
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    private Play(GameStateManager gsm, String act, String map, GameProgress progress) {
-        super(gsm);
+    private Play(String act, String map, GameProgress progress) {
         this.act = act;
         this.map = map;
         // sey up world
@@ -176,9 +175,39 @@ public class Play extends GameState {
         hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
         // create pause state
-        pauseMenu = new PauseMenu(act, map, hudCam);
-        settingsMenu = new SettingsMenu(hudCam, game);
-        endMenu = new EndMenu(act, map, hudCam);
+        pauseMenu = new PauseMenu(act, map, hudCam, new Runnable() {
+            @Override
+            public void run() {
+                playState = RUN;
+                UPDATE = true;
+                gameFadeOut = false;
+                gameFadeDone = false;
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                saveGame();
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                playState = SETTINGS;
+            }
+        });
+
+        settingsMenu = new SettingsMenu(hudCam, game, new Runnable() {
+            @Override
+            public void run() {
+                playState = PAUSE;
+            }
+        });
+
+        endMenu = new EndMenu(act, map, hudCam, new Runnable() {
+            @Override
+            public void run() {
+                playState = SETTINGS;
+            }
+        });
         hud = new Hud(hudCam, this);
 
         ShapeRenderer shapeRenderer = new ShapeRenderer();
@@ -230,12 +259,12 @@ public class Play extends GameState {
         UPDATE = true;
     }
 
-    public Play(GameStateManager gsm, String act, String map) {
-        this(gsm, act, map, null);
+    public Play(String act, String map) {
+        this(act, map, null);
     }
 
-    public Play(GameStateManager gsm, GameProgress progress) {
-        this(gsm, progress.act, progress.map, progress);
+    public Play(GameProgress progress) {
+        this(progress.act, progress.map, progress);
     }
 
 
@@ -802,7 +831,7 @@ public class Play extends GameState {
                 break;
 
             case PAUSE:
-                handlePauseInput();
+                pauseMenu.handleInput();
                 drawPauseScreen();
                 break;
 
@@ -810,11 +839,11 @@ public class Play extends GameState {
                 break;
 
             case SETTINGS:
-                handleSettingsInput();
+                settingsMenu.handleInput();
                 drawPauseScreen();
                 break;
             case STOPPED:
-                handleEndInput();
+                endMenu.handleInput();
                 drawPauseScreen();
                 break;
             default:
@@ -822,76 +851,6 @@ public class Play extends GameState {
         }
     } //TODO: render update rectangle around player and smoother paste
 
-    private void handlePauseInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            switch (pauseMenu.getCur_block()) {
-                case RESUME:
-                    playState = RUN;
-                    UPDATE = true;
-                    gameFadeOut = false;
-                    gameFadeDone = false;
-                    break;
-                case SAVE:
-                    saveGame();
-                    break;
-                case SAVEANDEXIT:
-                    saveGame();
-                    gsm.pushState(GameStateManager.State.MENU);
-                    break;
-                case EXIT:
-                    gsm.pushState(GameStateManager.State.MENU);
-                    break;
-                case SETTINGS:
-                    playState = B2DVars.pauseState.SETTINGS;
-                    break;
-            }
-        }
-    }
-
-    private void handleSettingsInput() {
-        settingsMenu.handleKey(MyInput.getKeyDown());
-
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            switch (settingsMenu.getCur_block()) {
-                case EXIT:
-                    playState = PAUSE;
-                    break;
-                case SAVE:
-                    Game.settings.save(B2DVars.PATH + "settings/settings.json");
-                    break;
-                case NEXT:
-                    Game.settings = Game.settings.loadDefault();
-                    settingsMenu.updateAllBindsDisplayed();
-                    break;
-                case LOAD:
-                    Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
-                    settingsMenu.updateAllBindsDisplayed();
-                    break;
-                case SETTINGS:
-                    settingsMenu.handleSettingsButtonClick();
-                    break;
-            }
-        }
-    }
-
-    private void handleEndInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            switch (endMenu.getCur_block()) {
-                case NEXT:
-                    //TODO: Select next map
-                    break;
-                case NEWGAME:
-                    gsm.pushState(GameStateManager.State.PLAY, act, map);
-                    break;
-                case SETTINGS:
-                    playState = B2DVars.pauseState.SETTINGS;
-                    break;
-                case EXIT:
-                    gsm.pushState(GameStateManager.State.MENU);
-                    break;
-            }
-        }
-    }
 
     private void drawPauseScreen() {
         //render pauseMenu

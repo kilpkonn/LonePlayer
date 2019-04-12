@@ -13,7 +13,10 @@ import java.util.HashSet;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
@@ -21,14 +24,24 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 public class LevelSelectionMenu extends Scene {
 
+    private enum block {
+        MAP, ACT, EXIT
+    }
+    private Runnable backFunc;
+
+    private LevelSelectionMenu.block currBlock;
+
     private GameButton backButton;
     private HashMap<GameButton, String> actButtons = new HashMap<>();
     private HashMap<GameButton, String> mapButtons = new HashMap<>();
+    private HashMap<GameButton, LevelSelectionMenu.block> buttonType;
+
     private String selectedAct = "";
     private String selectedMap;
 
-    public LevelSelectionMenu(OrthographicCamera cam) {
+    public LevelSelectionMenu(OrthographicCamera cam, Runnable backFunc) {
         super(cam);
+        this.backFunc = backFunc;
 
         backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.2f - 40);
 
@@ -63,6 +76,20 @@ public class LevelSelectionMenu extends Scene {
             if (button.hoverOver() && buttonType.get(button) == block.MAP) selectedMap = mapButtons.get(button);
         }
         if (!actChanged.equals("")) setSelectedAct(actChanged);
+    }
+
+    @Override
+    public void handleInput() {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            switch (currBlock) {
+                case MAP:
+                    GameStateManager.pushState(GameStateManager.State.PLAY, selectedAct, selectedMap);
+                    break;
+                case EXIT:
+                    backFunc.run();
+                    break;
+            }
+        }
     }
 
     public void showMaps() {
@@ -105,18 +132,15 @@ public class LevelSelectionMenu extends Scene {
         return new ArrayList<>();
     }
 
-    public String getSelectedMap() {
-        return selectedMap;
-    }
-
-    public String getSelectedAct() {
-        return selectedAct;
-    }
-
     public void setSelectedAct(String selectedAct) {
         this.selectedAct = selectedAct;
         buttons.removeAll(mapButtons.keySet());
         mapButtons.clear();
         showMaps();
+    }
+
+    @Override
+    protected void updateCurrentBlock(GameButton button) {
+        currBlock = buttonType.get(button);
     }
 }

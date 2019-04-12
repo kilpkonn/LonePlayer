@@ -11,10 +11,9 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.List;
+import java.util.concurrent.Callable;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LevelSelectionMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LoadGameMenu;
@@ -24,7 +23,6 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Background;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -33,7 +31,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 public class Menu extends GameState {
 
-    enum sceneState {
+    private enum menuState {
         MAIN,
         LEVELS,
         SETTINGS,
@@ -55,13 +53,10 @@ public class Menu extends GameState {
     private Texture backgroundTexture;
     private List<GameButton> buttons;
     private Vector2 mouseInWorld2D;
-    private sceneState menuState;
+    private menuState menuState;
 
-    public Menu(GameStateManager gsm) {
-
-        super(gsm);
-
-        menuState = sceneState.MAIN;
+    public Menu() {
+        menuState = menuState.MAIN;
 
         // get textures
         player = Game.res.getTexture("Llama");
@@ -78,10 +73,40 @@ public class Menu extends GameState {
         animation = new Animation(reg, 1 / 12f);
         mouseInWorld2D = new Vector2();
 
-        levelSelectionMenu = new LevelSelectionMenu(cam);
-        settingsMenu = new SettingsMenu(cam, game);
-        loadGameMenu = new LoadGameMenu(cam);
-        mainMenuScene = new MainMenu(cam);
+        levelSelectionMenu = new LevelSelectionMenu(cam, new Runnable() {
+            @Override
+            public void run() {
+                menuState = menuState.MAIN;
+            }
+        });
+        settingsMenu = new SettingsMenu(cam, game, new Runnable() {
+            @Override
+            public void run() {
+                menuState = menuState.MAIN;
+            }
+        });
+        loadGameMenu = new LoadGameMenu(cam, new Runnable() {
+            @Override
+            public void run() {
+                menuState = menuState.MAIN;
+            }
+        });
+        mainMenuScene = new MainMenu(cam, new Runnable() {
+            @Override
+            public void run() {
+                menuState = menuState.LEVELS;
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                menuState = menuState.RESUME;
+            }
+        }, new Runnable() {
+            @Override
+            public void run() {
+                menuState = menuState.SETTINGS;
+            }
+        });
 
         // play button
 
@@ -109,16 +134,16 @@ public class Menu extends GameState {
     public void handleInput() {
         switch (menuState) {
             case MAIN:
-                handleMainMenuInput();
+                mainMenuScene.handleInput();
                 break;
             case RESUME:
-                handleLoadGameMenuInput();
+                loadGameMenu.handleInput();
                 break;
             case LEVELS:
-                handleLevelsMenuInput();
+                levelSelectionMenu.handleInput();
                 break;
             case SETTINGS:
-                handleSettingsMenuInput();
+                settingsMenu.handleInput();
                 break;
                 default:
                     System.out.println("Error with menuState!!!");
@@ -138,16 +163,16 @@ public class Menu extends GameState {
 
         switch (menuState) {
             case MAIN:
-                updateMainMenu(dt);
+                mainMenuScene.update(dt);
                 break;
             case RESUME:
-                updateLoadGameMenu(dt);
+                loadGameMenu.update(dt);
                 break;
             case LEVELS:
-                updateLevelsMenu(dt);
+                levelSelectionMenu.update(dt);
                 break;
             case SETTINGS:
-                updateSettingsMenu(dt);
+                settingsMenu.update(dt);
                 break;
                 default:
                     System.out.println("Error with menuState!");
@@ -171,16 +196,16 @@ public class Menu extends GameState {
 
         switch (menuState) {
             case MAIN:
-                drawMainMenu();
+                mainMenuScene.render(sb);
                 break;
             case RESUME:
-                drawLoadGameMenu();
+                loadGameMenu.render(sb);
                 break;
             case LEVELS:
-                drawLevelsMenu();
+                levelSelectionMenu.render(sb);
                 break;
             case SETTINGS:
-                drawSettingsMenu();
+                settingsMenu.render(sb);
                 break;
                 default:
                     System.out.println("Error with menuState!");
@@ -190,107 +215,6 @@ public class Menu extends GameState {
         /*sb.begin();
         sb.draw(animation.getFrame(), 146, 151);
         sb.end();*/
-    }
-
-    private void updateMainMenu(float dt) {
-        mainMenuScene.update(dt);
-    }
-
-    private void updateLoadGameMenu(float dt) {
-        loadGameMenu.update(dt);
-    }
-
-    private void updateLevelsMenu(float dt) {
-        levelSelectionMenu.update(dt);
-    }
-
-    private void updateSettingsMenu(float dt) {
-        settingsMenu.update(dt);
-    }
-
-    private void drawMainMenu() {
-        mainMenuScene.render(sb);
-    }
-
-    private void drawLoadGameMenu() {
-        loadGameMenu.render(sb);
-    }
-
-    private void drawLevelsMenu() {
-        levelSelectionMenu.render(sb);
-    }
-
-    private void drawSettingsMenu() {
-        settingsMenu.render(sb);
-    }
-
-    private void handleMainMenuInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            switch (mainMenuScene.getCur_block()) {
-                case NEWGAME:
-                    menuState = sceneState.LEVELS;
-                    break;
-                case RESUME:
-                    menuState = sceneState.RESUME;
-                    break;
-                case SETTINGS:
-                    menuState = sceneState.SETTINGS;
-                    break;
-                case EXIT:
-                    Gdx.app.exit();
-                    break;
-            }
-        }
-    }
-
-    private void handleLoadGameMenuInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            switch (loadGameMenu.getCur_block()) {
-                case LOAD:
-                    gsm.pushState(GameStateManager.State.PLAY, loadGameMenu.getGameProgress());
-                case EXIT:
-                    menuState = sceneState.MAIN;
-            }
-        }
-    }
-
-    private void handleLevelsMenuInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            switch (levelSelectionMenu.getCur_block()) {
-                case MAP:
-                    gsm.pushState(GameStateManager.State.PLAY, levelSelectionMenu.getSelectedAct(), levelSelectionMenu.getSelectedMap());
-                    break;
-                case EXIT:
-                    menuState = sceneState.MAIN;
-                    break;
-            }
-        }
-    }
-
-    private void handleSettingsMenuInput() {
-        settingsMenu.handleKey(MyInput.getKeyDown());
-
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            switch (settingsMenu.getCur_block()) {
-                case EXIT:
-                    menuState = sceneState.MAIN;
-                    break;
-                case SAVE:
-                    Game.settings.save(B2DVars.PATH + "settings/settings.json");
-                    break;
-                case NEXT:
-                    Game.settings = Game.settings.loadDefault();
-                    settingsMenu.updateAllBindsDisplayed();
-                    break;
-                case LOAD:
-                    Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
-                    settingsMenu.updateAllBindsDisplayed();
-                    break;
-                case SETTINGS:
-                    settingsMenu.handleSettingsButtonClick();
-                    break;
-            }
-        }
     }
 
     @Override
