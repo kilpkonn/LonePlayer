@@ -26,7 +26,7 @@ public class DesktopLauncher {
         config.title = Game.TITLE;
         config.width = V_WIDTH * SCALE;
         config.forceExit = true;
-        config.fullscreen = true;
+        config.fullscreen = false;
         config.height = V_HEIGHT * SCALE;
         //config.foregroundFPS = 300; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized

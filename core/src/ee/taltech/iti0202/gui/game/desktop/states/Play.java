@@ -177,7 +177,7 @@ public class Play extends GameState {
 
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam);
-        settingsMenu = new SettingsMenu(hudCam);
+        settingsMenu = new SettingsMenu(hudCam, game);
         endMenu = new EndMenu(act, map, hudCam);
         hud = new Hud(hudCam, this);
 

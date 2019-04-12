@@ -39,7 +39,7 @@ public class GameButton {
     }
 
     public void update(Vector2 mousePos) {
-        hoverOver = acceptHover && (mousePos.x / SCALE >= x
+        hoverOver = (mousePos.x / SCALE >= x
                 && mousePos.x / SCALE <= x + width)
                 && (V_HEIGHT - mousePos.y / SCALE >= y - height
                 && V_HEIGHT - mousePos.y / SCALE <= y);
@@ -50,7 +50,7 @@ public class GameButton {
     }
 
     public void render(SpriteBatch sb) {
-        if (hoverOver) {
+        if (acceptHover && hoverOver) {
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.rectLine(x - 100, y - height / 2, x - 5, y - height / 2, 2, Color.MAGENTA, Color.CYAN);
