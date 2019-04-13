@@ -63,7 +63,6 @@ import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_ALL;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
@@ -372,7 +371,7 @@ public class Play extends GameState {
                 initSnakePart("magmawormhead", tempArray);
                 tempPosition.y -= 30 / PPM;
 
-                for (int i = 0; i < 18; i++) {
+                for (int i = 0; i < 500; i++) {
                     initSnakePart("magmawormbody", tempArray);
 
                     // create joint between links
@@ -380,9 +379,9 @@ public class Play extends GameState {
                     distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
                     distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
                     distanceJointDef.length = bossArray.size == 2 ? 20 / PPM : 10 / PPM;
-                    distanceJointDef.collideConnected = true;
+                    distanceJointDef.collideConnected = false;
                     distanceJointDef.localAnchorA.set(0.25f, 0.4f);
-                    distanceJointDef.localAnchorB.set(0.25f, 0.15f);
+                    distanceJointDef.localAnchorB.set(0.25f, 0.2f);
                     world.createJoint(distanceJointDef);
                 }
 
@@ -408,7 +407,7 @@ public class Play extends GameState {
         Boss boss = new MagmaWorm(body, MAGMAWORM, this, bodyPart);
         boss.getBody().setUserData(MAGMAWORM);
         tempArray.add(boss);
-        tempPosition.y -= 30 / PPM;
+        tempPosition.y -= 25 / PPM;
     }
 
     private void createCheckpoints(Vector2 pos) {
@@ -434,8 +433,8 @@ public class Play extends GameState {
         for (MapLayer layer : tiledMap.getLayers()) {
             switch (layer.getName()) {
                 case "barrier":
-                    fdef.filter.categoryBits = BIT_ALL;
-                    fdef.filter.maskBits = BIT_ALL;
+                    fdef.filter.categoryBits = BACKGROUND;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
                     determineMapObject(layer);
                     break;
                 case "hitboxes_1":
@@ -833,7 +832,14 @@ public class Play extends GameState {
 
         //update boss
         if (bossArray.size != 0) {
-            for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.update(dt);
+            for (Array<Boss> bossList : bossArray)
+                for (int i = 0; i < bossList.size; i++) {
+                    if (i == bossList.size - 1) {
+                        bossList.get(i).updateHead(dt);
+                    } else {
+                        bossList.get(i).update(dt);
+                    }
+                }
         }
 
         //draw tilemap animations
@@ -888,7 +894,6 @@ public class Play extends GameState {
                 break;
         }
     }
-
 
     private void drawPauseScreen() {
         //render pauseMenu

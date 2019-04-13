@@ -28,4 +28,8 @@ public abstract class Boss extends B2DSprite {
     public void update(float dt) {
         super.update(dt);
     }
+
+    public void updateHead(float dt) {
+        super.update(dt);
+    }
 }

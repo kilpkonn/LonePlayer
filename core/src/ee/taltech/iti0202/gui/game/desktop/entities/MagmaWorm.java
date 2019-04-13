@@ -2,15 +2,17 @@ package ee.taltech.iti0202.gui.game.desktop.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 public class MagmaWorm extends Boss {
-    private float max_speed = 5;
+    private float max_speed = 10;
     private Body body;
     private Play play;
+    private float time = 0;
 
     public MagmaWorm(Body body, String type, Play play, String part) {
         super(body, type, play);
@@ -24,15 +26,38 @@ public class MagmaWorm extends Boss {
     @Override
     public void update(float dt) {
         super.update(dt);
+    }
 
+    @Override
+    public void updateHead(float dt) {
+        super.update(dt);
+        time += dt;
+
+        float sinOffset = (float) Math.sin(time) * 10;
+
+        float velocity = (float) Math.sqrt(Math.pow(body.linVelLoc.x, 2) + Math.pow(body.linVelLoc.y, 2)); // Your desired velocity of the car.
+        float angle = body.getAngle(); // Body angle in radians.
+
+        float velX = MathUtils.cos(angle) * velocity; // X-component.
+        float velY = MathUtils.sin(angle) * velocity; // Y-component.
+
+        body.setLinearVelocity(velX, velY + sinOffset);
+
+
+        // Vector2 v = new Vector2(play.getPlayer().getPosition().x - body.getPosition().x, play.getPlayer().getPosition().x - body.getPosition().y);
+        // double len = sqrt(v.x * v.x + v.y * v.y);
+        // Vector2 dir = new Vector2((float) (v.x / len), (float) (v.y / len)); //v.x / len, v.y / len
+        // Vector2 movement = new Vector2(dir.x * max_speed, dir.y * max_speed);
+        // body.setLinearVelocity(body.getLinearVelocity().x + movement.x, body.linVelLoc.y + movement.y);
 
         // Player player = play.getPlayer();
+
         // Vector2 cur_vel = body.getLinearVelocity();
         // body.setLinearVelocity(
         //         minmax(cur_vel.x),
         //         minmax(cur_vel.y)
         // );
-//
+
         // body.setTransform(
         //         body.getPosition(),
         //         MathUtils.radiansToDegrees * MathUtils.atan2(
