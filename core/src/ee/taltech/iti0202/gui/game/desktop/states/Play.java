@@ -149,6 +149,7 @@ public class Play extends GameState {
     private float backgroundSpeed;
     private String act;
     private String map;
+    private float scale = 1f;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
@@ -349,7 +350,7 @@ public class Play extends GameState {
 
     }
 
-    private void createBosses(Vector2 position, String type) {
+    private void createBosses(Vector2 position, String type, boolean decider, int size) {
 
         /////////////////////////////////////////////////////////////////////////
         //                                                                     //
@@ -359,6 +360,7 @@ public class Play extends GameState {
         //                                                                     //
         /////////////////////////////////////////////////////////////////////////
 
+        scale = decider ? 1f : 0.5f;
 
         switch (type) {
             case MAGMAWORM:
@@ -368,20 +370,20 @@ public class Play extends GameState {
                 this.tempPosition = position;
                 this.bossLoader = loader;
                 Array<Boss> tempArray = new Array<>();
-                initSnakePart("magmawormhead", tempArray);
-                tempPosition.y -= 30 / PPM;
+                initSnakePart("magmawormhead" + scale, tempArray);
+                tempPosition.y -= 60 * scale / PPM;
 
-                for (int i = 0; i < 500; i++) {
-                    initSnakePart("magmawormbody", tempArray);
+                for (int i = 0; i < size; i++) {
+                    initSnakePart("magmawormbody" + scale, tempArray);
 
-                    // create joint between links
+                    // create joint between bodies
                     DistanceJointDef distanceJointDef = new DistanceJointDef();
                     distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
                     distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
-                    distanceJointDef.length = bossArray.size == 2 ? 20 / PPM : 10 / PPM;
+                    distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
                     distanceJointDef.collideConnected = false;
-                    distanceJointDef.localAnchorA.set(0.25f, 0.4f);
-                    distanceJointDef.localAnchorB.set(0.25f, 0.2f);
+                    distanceJointDef.localAnchorA.set(0.5f * scale, 0.8f * scale);
+                    distanceJointDef.localAnchorB.set(0.5f * scale, 0.4f * scale);
                     world.createJoint(distanceJointDef);
                 }
 
@@ -403,11 +405,11 @@ public class Play extends GameState {
         MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, tempPosition);
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, bodyPart, alias.getFdef(), 0.5f);
+        bossLoader.attachFixture(body, bodyPart, alias.getFdef(), scale);
         Boss boss = new MagmaWorm(body, MAGMAWORM, this, bodyPart);
         boss.getBody().setUserData(MAGMAWORM);
         tempArray.add(boss);
-        tempPosition.y -= 25 / PPM;
+        tempPosition.y -= 50 * scale / PPM;
     }
 
     private void createCheckpoints(Vector2 pos) {
@@ -577,8 +579,12 @@ public class Play extends GameState {
                         createCheckpoints(new Vector2(polygon[1].x, polygon[0].y));
                         break;
 
-                    case "bosses":
-                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get(BOSS).toString());
+                    case "bosses_small":
+                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get(BOSS).toString(), false, (Integer) layer.getProperties().get("size"));
+                        break;
+
+                    case "bosses_big":
+                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get(BOSS).toString(), true, (Integer) layer.getProperties().get("size"));
                         break;
 
                     case "player":
@@ -834,10 +840,18 @@ public class Play extends GameState {
         if (bossArray.size != 0) {
             for (Array<Boss> bossList : bossArray)
                 for (int i = 0; i < bossList.size; i++) {
-                    if (i == bossList.size - 1) {
-                        bossList.get(i).updateHead(dt);
+                    if (bossList.size > 300) {
+                        if (i == bossList.size - 1) {
+                            bossList.get(i).updateHeadBig(dt);
+                        } else {
+                            bossList.get(i).update(dt);
+                        }
                     } else {
-                        bossList.get(i).update(dt);
+                        if (i == bossList.size - 1) {
+                            bossList.get(i).updateHeadSmall(dt);
+                        } else {
+                            bossList.get(i).update(dt);
+                        }
                     }
                 }
         }
