@@ -30,6 +30,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -115,12 +116,14 @@ public class Play extends GameState {
     private Player player;
     private boolean dimension;
     private boolean dimensionJump;
-    private Array<Boss> bossArray;
+    private Array<Array<Boss>> bossArray;
+    private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
     private Checkpoint checkpoint;
     private Vector2 tempPlayerLocation;
     private Vector2 tempPlayerVelocity;
     private Vector2 initPlayerLocation;
     private Vector3 tempCamLocation;
+    private Vector2 tempPosition;
     private BodyDef bdef;
     private PolygonShape polyShape;
     private CircleShape circle;
@@ -360,14 +363,32 @@ public class Play extends GameState {
 
         switch (type) {
             case MAGMAWORM:
+
+                System.out.println("BOSS");
                 aurelienribon.bodyeditor.BodyEditorLoader loader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses.json"));
-                MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, position);
-                Body body = world.createBody(alias.getBdef());
-                body.createFixture(alias.getFdef());
-                loader.attachFixture(body, "magmawormbody", alias.getFdef(), 0.5f);
-                Boss boss = new MagmaWorm(body, type, this);
-                boss.getBody().setUserData(MAGMAWORM);
-                bossArray.add(boss);
+                this.tempPosition = position;
+                this.bossLoader = loader;
+                Array<Boss> tempArray = new Array<>();
+                initSnakePart("magmawormhead", tempArray);
+                tempPosition.y -= 30 / PPM;
+
+                for (int i = 0; i < 18; i++) {
+                    initSnakePart("magmawormbody", tempArray);
+
+                    // create joint between links
+                    DistanceJointDef distanceJointDef = new DistanceJointDef();
+                    distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
+                    distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
+                    distanceJointDef.length = bossArray.size == 2 ? 20 / PPM : 10 / PPM;
+                    distanceJointDef.collideConnected = true;
+                    distanceJointDef.localAnchorA.set(0.25f, 0.4f);
+                    distanceJointDef.localAnchorB.set(0.25f, 0.15f);
+                    world.createJoint(distanceJointDef);
+                }
+
+                tempArray.reverse();
+                bossArray.add(tempArray);
+
                 break;
 
             case COLOSSEOS:
@@ -377,6 +398,17 @@ public class Play extends GameState {
                 break;
 
         }
+    }
+
+    private void initSnakePart(String bodyPart, Array<Boss> tempArray) {
+        MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, tempPosition);
+        Body body = world.createBody(alias.getBdef());
+        body.createFixture(alias.getFdef());
+        bossLoader.attachFixture(body, bodyPart, alias.getFdef(), 0.5f);
+        Boss boss = new MagmaWorm(body, MAGMAWORM, this, bodyPart);
+        boss.getBody().setUserData(MAGMAWORM);
+        tempArray.add(boss);
+        tempPosition.y -= 30 / PPM;
     }
 
     private void createCheckpoints(Vector2 pos) {
@@ -799,7 +831,10 @@ public class Play extends GameState {
             cl.setPlayerDead(false);
         }
 
-        if (bossArray.size != 0) for (Boss boss : bossArray) boss.update(dt);
+        //update boss
+        if (bossArray.size != 0) {
+            for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.update(dt);
+        }
 
         //draw tilemap animations
         if (animatedCells != null) {
@@ -816,8 +851,6 @@ public class Play extends GameState {
             }
             checkpoint.update(dt);
         }
-
-        if (bossArray != null) for (Boss boss : bossArray) boss.update(dt);
 
 
         // dispose of old bodies
@@ -854,7 +887,7 @@ public class Play extends GameState {
             default:
                 break;
         }
-    } //TODO: render update rectangle around player and smoother paste
+    }
 
 
     private void drawPauseScreen() {
@@ -950,9 +983,8 @@ public class Play extends GameState {
         sb.setProjectionMatrix(cam.combined);
         if (player != null) player.render(sb);
 
-        if (bossArray != null) for (Boss boss : bossArray) {
-            boss.render(sb, true);
-        }
+        if (bossArray != null)
+            for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.render(sb, true);
 
         // draw checkpoint
         if (checkpoint != null) checkpoint.render(sb);
@@ -971,7 +1003,7 @@ public class Play extends GameState {
 
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0 ,0, 0, currentMenuFade);
+            shapeRenderer.setColor(0, 0, 0, currentMenuFade);
             shapeRenderer.rect(0, 0, B2DVars.V_WIDTH, B2DVars.V_HEIGHT);
             shapeRenderer.end();
         }

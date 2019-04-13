@@ -12,6 +12,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInputProcessor;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
+import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
@@ -19,8 +20,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 public class Game extends ApplicationAdapter {
     public static final String TITLE = "Alone at Night";
-
-    private float accum;
 
     private SpriteBatch sb;
     private OrthographicCamera cam;
@@ -106,7 +105,6 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void render() {
-
         /*accum += Gdx.graphics.getDeltaTime();
         while (accum >= STEP) {
             accum -= STEP;
@@ -115,8 +113,8 @@ public class Game extends ApplicationAdapter {
             MyInput.update(); // this is to define the end state of current iteration
         }*/
         float dt = Gdx.graphics.getDeltaTime();
-        gsm.update(dt);
-        gsm.render();
+        GameStateManager.update(dt);
+        GameStateManager.render();
         MyInput.update();
     }
 
@@ -128,10 +126,12 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void resize(int w, int h) {
-        B2DVars.V_HEIGHT = h;
-        B2DVars.V_WIDTH = w;
-        System.out.println("resized");
-       
+        if ((Gdx.app.getType().equals(Desktop))) {
+            B2DVars.V_HEIGHT = h;
+            B2DVars.V_WIDTH = w;
+            System.out.println("resized");
+        }
+
     }
 
     public void pause() {
@@ -140,5 +140,6 @@ public class Game extends ApplicationAdapter {
     public void resume() {
     }
 
-    public void setForegroundFPS(int value) {}
+    public void setForegroundFPS(int value) {
+    }
 }
