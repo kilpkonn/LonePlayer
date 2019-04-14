@@ -754,7 +754,7 @@ public class Play extends GameState {
 
         //player jump / double jump / dash
         if (MyInput.isPressed(Game.settings.JUMP)) {
-            player.setAnimation(Player.PlayerAnimation.JUMP ,tempPlayerVelocity.x >= 0);
+            player.setAnimation(Player.PlayerAnimation.JUMP);
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
@@ -771,12 +771,13 @@ public class Play extends GameState {
             if (current_force.x > -MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
-                    player.setAnimation(Player.PlayerAnimation.RUN, false);
+                    player.setAnimation(Player.PlayerAnimation.RUN);
                 } else {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
                 }
 
             }
+            player.setFlipX(false);
         }
 
         //player dash left
@@ -790,18 +791,20 @@ public class Play extends GameState {
                 }
                 cl.setDash(false);
             }
+            player.setFlipX(false);
         }
 
         //player move right
         if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
             if (current_force.x < MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
-                    player.setAnimation(Player.PlayerAnimation.RUN, true);
+                    player.setAnimation(Player.PlayerAnimation.RUN);
                     player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
                 } else {
                     player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
                 }
             }
+            player.setFlipX(true);
         }
 
         //player dash right
@@ -814,10 +817,11 @@ public class Play extends GameState {
                 }
                 cl.setDash(false);
             }
+            player.setFlipX(true);
         }
 
         if (!MyInput.isDown(-1)) {
-            player.setAnimation(Player.PlayerAnimation.IDLE, tempPlayerVelocity.x >= 0);
+            player.setAnimation(Player.PlayerAnimation.IDLE);
         }
     }
 

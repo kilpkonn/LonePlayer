@@ -35,8 +35,8 @@ public class Player extends SpriteAnimation {
         health = 100;
     }
 
-    public void setAnimation(PlayerAnimation animation, boolean flipX) {
-        setAnimation(animation.name, flipX);
+    public void setAnimation(PlayerAnimation animation) {
+        setAnimation(animation.name);
     }
 
     public void collectCrystal() {

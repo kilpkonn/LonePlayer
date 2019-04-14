@@ -58,10 +58,13 @@ public class SpriteAnimation {
         sb.end();
     }
 
-    protected void setAnimation(String animation, boolean flipX) {
+    protected void setAnimation(String animation) {
         playerTweener.setAnimation(animation);
+    }
+
+    public void setFlipX(boolean flipX) {
         if ((playerTweener.flippedX() == -1) != flipX)
-        playerTweener.flipX();
+            playerTweener.flipX();
     }
 
     public void setScale(float scale) {
