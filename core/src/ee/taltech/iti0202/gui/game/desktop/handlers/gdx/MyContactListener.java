@@ -70,7 +70,7 @@ public class MyContactListener implements ContactListener {
                 setPlayerDead(true); //TODO: Fix random deaths (wrong coords?)
             }
             if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(MAGMAWORM)) {
-                setPlayerDead(true);
+                setPlayerDead(true); //TODO: Fix random deaths (wrong coords?)
             }
         }
         if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
