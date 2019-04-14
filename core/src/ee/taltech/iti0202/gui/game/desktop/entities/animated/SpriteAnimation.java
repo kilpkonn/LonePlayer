@@ -38,12 +38,13 @@ public class SpriteAnimation {
 
         drawer = new LibGdxDrawer(loader, sb, null); // no shape rendering
         playerTweener = new MyPlayerTweener(data.getEntity(0));
+        playerTweener.setPivot(0, 0);
     }
 
     public void update(float dt) {
         //animation.update(dt);
         playerTweener.update(dt);
-        playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM);
+        playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM + 24);
         playerTweener.setAngle((float) Math.toDegrees(body.getAngle()));
     }
 
