@@ -381,15 +381,11 @@ public class Play extends GameState {
                 for (int i = 0; i < size; i++) {
                     initSnakePart("magmawormbody" + scale, tempArray);
 
-                    // create joint between bodies
-                    DistanceJointDef distanceJointDef = new DistanceJointDef();
-                    distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
-                    distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
-                    distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
-                    distanceJointDef.collideConnected = false;
-                    distanceJointDef.localAnchorA.set(0.5f * scale, 0.8f * scale);
-                    distanceJointDef.localAnchorB.set(0.5f * scale, 0.4f * scale);
-                    world.createJoint(distanceJointDef);
+                    float cur_Lock = 0.45f;
+                    for (int j = 0; j < 3; j++) {
+                        craeteJointBetweenLinks(tempArray, cur_Lock);
+                        cur_Lock += 0.05f;
+                    }
                 }
 
                 // some random ass box
@@ -413,6 +409,18 @@ public class Play extends GameState {
                 break;
 
         }
+    }
+
+    private void craeteJointBetweenLinks(Array<Boss> tempArray, float lock) {
+        // create joint between bodies
+        DistanceJointDef distanceJointDef = new DistanceJointDef();
+        distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
+        distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
+        distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
+        distanceJointDef.collideConnected = false;
+        distanceJointDef.localAnchorA.set(lock * scale, 0.8f * scale);
+        distanceJointDef.localAnchorB.set(lock * scale, 0.4f * scale);
+        world.createJoint(distanceJointDef);
     }
 
     private void initSnakePart(String bodyPart, Array<Boss> tempArray) {

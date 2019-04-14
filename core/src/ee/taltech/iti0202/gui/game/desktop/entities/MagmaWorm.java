@@ -27,12 +27,12 @@ public class MagmaWorm extends Boss {
     @Override
     public void update(float dt) {
         super.update(dt);
-        max_speed = 3;
-        Vector2 cur_vel = body.getLinearVelocity();
-        body.setLinearVelocity(
-                minmax(cur_vel.x),
-                minmax(cur_vel.y)
-        );
+        // max_speed = 3;
+        // Vector2 cur_vel = body.getLinearVelocity();
+        // body.setLinearVelocity(
+        //         minmax(cur_vel.x),
+        //         minmax(cur_vel.y)
+        // );
     }
 
     @Override
@@ -81,9 +81,9 @@ public class MagmaWorm extends Boss {
         super.update(dt);
         // updateHeadBig(dt);
         time += dt;
-        max_speed = 2;
+        max_speed = 3f;
 //
-        float sinOffset = (float) Math.sin(time) * 10;
+        float sinOffset = (float) Math.sin(time) * 15;
 //
         float velocity = (float) Math.sqrt(Math.pow(body.linVelLoc.x, 2) + Math.pow(body.linVelLoc.y, 2)); // Your desired velocity of the car.
         float angle = body.getAngle(); // Body angle in radians.
@@ -94,7 +94,7 @@ public class MagmaWorm extends Boss {
         Player player = play.getPlayer();
 //
         body.setLinearVelocity(
-                velX + (player.getPosition().x + 0.5f - body.getPosition().x),
+                velX + (player.getPosition().x - body.getPosition().x),
                 velY + (player.getPosition().y - body.getPosition().y) + sinOffset);
 //
 //
