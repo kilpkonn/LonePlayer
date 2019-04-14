@@ -387,7 +387,10 @@ public class Play extends GameState {
                     world.createJoint(distanceJointDef);
                 }
 
+                // some random ass box
+                tempArray.get(0).getBody().getFixtureList().removeIndex(0);
                 tempArray.reverse();
+
                 bossArray.add(tempArray);
 
                 break;
