@@ -7,18 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.MyPlayer;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 public class MagmaWorm extends Boss {
     private float max_speed = 3;
-    private Body body;
-    private Play play;
     private float time = 0;
 
     public MagmaWorm(Body body, String type, Play play, String part) {
         super(body, type, play);
-        this.body = body;
-        this.play = play;
         Texture tex = Game.res.getTexture(part);
         TextureRegion[] sprites = TextureRegion.split(tex, tex.getHeight(), tex.getHeight())[0];
         setAnimation(sprites, 1 / 12f);
@@ -27,6 +24,12 @@ public class MagmaWorm extends Boss {
     @Override
     public void update(float dt) {
         super.update(dt);
+        // max_speed = 3;
+        // Vector2 cur_vel = body.getLinearVelocity();
+        // body.setLinearVelocity(
+        //         minmax(cur_vel.x),
+        //         minmax(cur_vel.y)
+        // );
     }
 
     @Override
@@ -35,7 +38,7 @@ public class MagmaWorm extends Boss {
         time += dt;
         max_speed = 3;
 
-        float sinOffset = (float) Math.sin(time) * 15;
+        float sinOffset = (float) Math.sin(time) * 10;
 
         float velocity = (float) Math.sqrt(Math.pow(body.linVelLoc.x, 2) + Math.pow(body.linVelLoc.y, 2)); // Your desired velocity of the car.
         float angle = body.getAngle(); // Body angle in radians.
@@ -43,7 +46,7 @@ public class MagmaWorm extends Boss {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        Player player = play.getPlayer();
+        MyPlayer player = play.getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),
@@ -73,24 +76,25 @@ public class MagmaWorm extends Boss {
     @Override
     public void updateHeadSmall(float dt) {
         super.update(dt);
+        // updateHeadBig(dt);
         time += dt;
-        max_speed = 2;
-
-        float sinOffset = (float) Math.sin(time) * 20;
-
+        max_speed = 3f;
+//
+        float sinOffset = (float) Math.sin(time) * 15;
+//
         float velocity = (float) Math.sqrt(Math.pow(body.linVelLoc.x, 2) + Math.pow(body.linVelLoc.y, 2)); // Your desired velocity of the car.
         float angle = body.getAngle(); // Body angle in radians.
-
+//
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
-
-        Player player = play.getPlayer();
-
+//
+        MyPlayer player = play.getPlayer();
+//
         body.setLinearVelocity(
-                velX + (player.getPosition().x + 0.5f - body.getPosition().x),
+                velX + (player.getPosition().x - body.getPosition().x),
                 velY + (player.getPosition().y - body.getPosition().y) + sinOffset);
-
-
+//
+//
         Vector2 cur_vel = body.getLinearVelocity();
         body.setLinearVelocity(
                 minmax(cur_vel.x),
@@ -103,4 +107,3 @@ public class MagmaWorm extends Boss {
         return Math.min(Math.max(f, -max_speed), max_speed);
     }
 }
-

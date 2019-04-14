@@ -11,7 +11,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM
 
 public class B2DSprite {
 
-    private Body body;
+    protected Body body;
     private Animation animation;
     private float opacity = 1;
 
