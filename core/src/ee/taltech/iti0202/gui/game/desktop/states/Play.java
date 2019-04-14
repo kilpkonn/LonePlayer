@@ -26,6 +26,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -118,6 +119,7 @@ public class Play extends GameState {
     private Array<Array<Boss>> bossArray;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
     private Checkpoint checkpoint;
+    private int tempPlayerHp;
     private Vector2 tempPlayerLocation;
     private Vector2 tempPlayerVelocity;
     private Vector2 initPlayerLocation;
@@ -280,79 +282,82 @@ public class Play extends GameState {
 
     private void initPlayer() {
         //TODO: Better logic for loading saved game
-        if (cl.IsPlayerDead() || cl.isInitSpawn()) {
 
-            if (player != null) world.destroyBody(player.getBody());
-            bdef = new BodyDef();
-            fdef = new FixtureDef();
-            circle = new CircleShape();
-            polyShape = new PolygonShape();
 
-            if (dimensionJump) {
-                dimensionJump = false;
-                bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
-                bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
-                cam.position.set(tempCamLocation);
-            } else if (checkpoint == null) {
-                if (initPlayerLocation == null) {
-                    bdef.position.set(0, 0); // hopefully never get here
-                } else {
-                    bdef.position.set(initPlayerLocation);
-                }
-            } else if (cl.isInitSpawn()) {
+        if (player != null) world.destroyBody(player.getBody());
+        bdef = new BodyDef();
+        fdef = new FixtureDef();
+        circle = new CircleShape();
+        polyShape = new PolygonShape();
+
+        if (dimensionJump) {
+            bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
+            bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
+            cam.position.set(tempCamLocation);
+        } else if (checkpoint == null) {
+            if (initPlayerLocation == null) {
+                bdef.position.set(0, 0); // hopefully never get here
+            } else {
                 bdef.position.set(initPlayerLocation);
-            } else {
-                bdef.position.set(new Vector2(checkpoint.getPosition()));
             }
-
-            short mask;
-            if (dimension) {
-                mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
-            } else {
-                mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
-            }
-            bdef.type = BodyDef.BodyType.DynamicBody;
-            Body body = world.createBody(bdef);
-
-            polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(-20 / PPM, 20 / PPM), 0);
-            fdef.shape = polyShape;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            fdef.isSensor = true;
-            body.createFixture(fdef).setUserData("side_l");
-
-            polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(20 / PPM, 20 / PPM), 0);
-            fdef.shape = polyShape;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            body.createFixture(fdef).setUserData("side_r");
-
-
-            fdef.isSensor = false;
-            circle.setRadius(9 / PPM);
-            fdef.shape = circle;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            body.createFixture(fdef).setFriction(FRICTION);
-            body.setUserData("playerBody");
-
-            polyShape.setAsBox(8 / PPM, 16 / PPM, new Vector2(0, 12 / PPM), 0);
-            fdef.shape = polyShape;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            body.createFixture(fdef).setUserData("playerBody");
-
-            polyShape.setAsBox(1 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
-            fdef.shape = polyShape;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            fdef.isSensor = true;
-            body.createFixture(fdef).setUserData("foot");
-
-            player = new MyPlayer(body, sb);
-
+        } else if (cl.isInitSpawn()) {
+            bdef.position.set(initPlayerLocation);
+        } else {
+            bdef.position.set(new Vector2(checkpoint.getPosition()));
         }
+
+        short mask;
+        if (dimension) {
+            mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
+        } else {
+            mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
+        }
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        Body body = world.createBody(bdef);
+
+        polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(-20 / PPM, 20 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("side_l");
+
+        polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(20 / PPM, 20 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        body.createFixture(fdef).setUserData("side_r");
+
+
+        fdef.isSensor = false;
+        circle.setRadius(9 / PPM);
+        fdef.shape = circle;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        body.createFixture(fdef).setFriction(FRICTION);
+        body.setUserData("playerBody");
+
+        polyShape.setAsBox(8 / PPM, 16 / PPM, new Vector2(0, 12 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        body.createFixture(fdef).setUserData("playerBody");
+
+        polyShape.setAsBox(1 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("foot");
+
+        player = new Player(body);
+        if (dimensionJump) {
+            dimensionJump = false;
+            player.setHealth(tempPlayerHp);
+        }
+
     }
+
 
     private void createBosses(Vector2 position, String type, boolean decider, int size) {
 
@@ -380,19 +385,21 @@ public class Play extends GameState {
                 for (int i = 0; i < size; i++) {
                     initSnakePart("magmawormbody" + scale, tempArray);
 
-                    // create joint between bodies
-                    DistanceJointDef distanceJointDef = new DistanceJointDef();
-                    distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
-                    distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
-                    distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
-                    distanceJointDef.collideConnected = false;
-                    distanceJointDef.localAnchorA.set(0.5f * scale, 0.8f * scale);
-                    distanceJointDef.localAnchorB.set(0.5f * scale, 0.4f * scale);
-                    world.createJoint(distanceJointDef);
+                    float cur_Lock = 0.45f;
+                    for (int j = 0; j < 3; j++) {
+                        craeteJointBetweenLinks(tempArray, cur_Lock);
+                        cur_Lock += 0.05f;
+                    }
                 }
 
                 // some random ass box
-                tempArray.get(0).getBody().getFixtureList().removeIndex(0);
+                //world.destroyBody(tempArray.get(0).getBody());
+                Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
+                brokenFixture.setSensor(true);
+                brokenFixture.setUserData("I am broken");
+                brokenFixture.getBody().setUserData("I am broken");
+                brokenFixture.getFilterData().maskBits = NONE;
+                brokenFixture.refilter();
                 tempArray.reverse();
 
                 bossArray.add(tempArray);
@@ -406,6 +413,18 @@ public class Play extends GameState {
                 break;
 
         }
+    }
+
+    private void craeteJointBetweenLinks(Array<Boss> tempArray, float lock) {
+        // create joint between bodies
+        DistanceJointDef distanceJointDef = new DistanceJointDef();
+        distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
+        distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
+        distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
+        distanceJointDef.collideConnected = false;
+        distanceJointDef.localAnchorA.set(lock * scale, 0.8f * scale);
+        distanceJointDef.localAnchorB.set(lock * scale, 0.4f * scale);
+        world.createJoint(distanceJointDef);
     }
 
     private void initSnakePart(String bodyPart, Array<Boss> tempArray) {
@@ -706,11 +725,13 @@ public class Play extends GameState {
             System.out.println("changed dimension");
             dimensionJump = true;
             dimensionFadeDone = false;
+            tempPlayerHp = player.getHealth();
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
             tempCamLocation = cam.position;
             dimension = !dimension;
             cl.setPlayerDead(true);
+            cl.setPlayerSuperDead(true);
         }
 
         //player jump / double jump / dash
@@ -847,8 +868,17 @@ public class Play extends GameState {
         if (!cl.IsPlayerDead()) {
             player.update(dt);
         } else {
-            initPlayer();
+            if (cl.isPlayerSuperDead()) {
+                player.setHealth(0);
+            } else {
+                player.setHealth(player.getHealth() - 1);
+            }
+            if (player.getHealth() <= 0) {
+                initPlayer();
+            }
             cl.setPlayerDead(false);
+            cl.setPlayerSuperDead(false);
+            player.update(dt);
         }
 
         //update boss

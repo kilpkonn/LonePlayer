@@ -59,4 +59,8 @@ public class MyPlayer extends SpriteAnimation {
         return health;
     }
 
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
 }
