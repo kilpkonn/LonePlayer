@@ -460,7 +460,7 @@ public class Play extends GameState {
         bdef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bdef);
         polyShape = new PolygonShape();
-        polyShape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
+        polyShape.setAsBox(64 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
         fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = B2DVars.BIT_ALL;
@@ -617,7 +617,7 @@ public class Play extends GameState {
                 switch (layer.getName()) {
                     case "checkpoints":
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
-                            createEndPoint(new Vector2(polygon[1].x, polygon[0].y));
+                            createEndPoint(new Vector2(polygon[1].x + tileSize / PPM, polygon[0].y));
                         } else {
                             createCheckpoints(new Vector2(polygon[1].x, polygon[0].y));
                         }
