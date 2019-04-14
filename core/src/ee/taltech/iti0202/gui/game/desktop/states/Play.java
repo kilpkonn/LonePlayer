@@ -291,8 +291,6 @@ public class Play extends GameState {
         polyShape = new PolygonShape();
 
         if (dimensionJump) {
-            dimensionJump = false;
-            player.setHealth(tempPlayerHp);
             bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
             bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
             cam.position.set(tempCamLocation);
@@ -353,6 +351,10 @@ public class Play extends GameState {
         body.createFixture(fdef).setUserData("foot");
 
         player = new Player(body);
+        if (dimensionJump) {
+            dimensionJump = false;
+            player.setHealth(tempPlayerHp);
+        }
 
     }
 
