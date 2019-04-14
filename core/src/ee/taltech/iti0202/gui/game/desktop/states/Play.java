@@ -26,6 +26,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -392,7 +393,13 @@ public class Play extends GameState {
                 }
 
                 // some random ass box
-                tempArray.get(0).getBody().getFixtureList().removeIndex(0);
+                //world.destroyBody(tempArray.get(0).getBody());
+                Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
+                brokenFixture.setSensor(true);
+                brokenFixture.setUserData("I am broken");
+                brokenFixture.getBody().setUserData("I am broken");
+                brokenFixture.getFilterData().maskBits = NONE;
+                brokenFixture.refilter();
                 tempArray.reverse();
 
                 bossArray.add(tempArray);
