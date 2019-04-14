@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -12,7 +13,6 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInputProcessor;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
-import static com.badlogic.gdx.Application.ApplicationType.Desktop;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
@@ -20,6 +20,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 public class Game extends ApplicationAdapter {
     public static final String TITLE = "Alone at Night";
+
+    private float accum;
 
     private SpriteBatch sb;
     private OrthographicCamera cam;
@@ -67,12 +69,9 @@ public class Game extends ApplicationAdapter {
         res.loadTexture(PATH + "images/backLayer.png", "backLayer");
         res.loadTexture(PATH + "images/BackgroundStars/Stars-Big_1_2_PC.png", "starBackground");
 
-        res.loadTexture(PATH + "images/bosses/magmawormbody0.5.png", "magmawormbody0.5");
-        res.loadTexture(PATH + "images/bosses/magmawormhead0.5.png", "magmawormhead0.5");
-        res.loadTexture(PATH + "images/bosses/magmawormbody1.0.png", "magmawormbody1.0");
-        res.loadTexture(PATH + "images/bosses/magmawormhead1.0.png", "magmawormhead1.0");
-
-        res.loadTexture(PATH + "images/Player/Player.png", "Player");
+        res.loadTexture(PATH + "images/bosses/magmawormbody1.0.png", "magmawormbody");
+        res.loadTexture(PATH + "images/bosses/magmawormhead1.0.png", "magmawormhead");
+        //res.loadTexture(PATH + "images/Player/Player.png", "Player");
         res.loadTexture(PATH + "images/Player/Llama.png", "Llama");
         res.loadTexture(PATH + "maps/tilesets/images/Flag.png", "Checkpoint");
         res.loadTexture(PATH + "maps/background/rock.png", "rock");
@@ -108,6 +107,7 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void render() {
+
         /*accum += Gdx.graphics.getDeltaTime();
         while (accum >= STEP) {
             accum -= STEP;
@@ -129,7 +129,7 @@ public class Game extends ApplicationAdapter {
 
     @Override
     public void resize(int w, int h) {
-        if ((Gdx.app.getType().equals(Desktop))) {
+        if ((Gdx.app.getType().equals(Application.ApplicationType.Desktop))) {
             B2DVars.V_HEIGHT = h;
             B2DVars.V_WIDTH = w;
             System.out.println("resized");
@@ -143,6 +143,5 @@ public class Game extends ApplicationAdapter {
     public void resume() {
     }
 
-    public void setForegroundFPS(int value) {
-    }
+    public void setForegroundFPS(int value) {}
 }
