@@ -22,6 +22,7 @@ public class MagmaWorm extends Boss {
         Texture tex = Game.res.getTexture(part);
         TextureRegion[] sprites = TextureRegion.split(tex, tex.getHeight(), tex.getHeight())[0];
         setAnimation(sprites, 1 / 12f);
+
     }
 
     @Override

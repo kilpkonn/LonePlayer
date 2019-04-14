@@ -119,6 +119,7 @@ public class Play extends GameState {
     private Array<Array<Boss>> bossArray;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
     private Checkpoint checkpoint;
+    private int tempPlayerHp;
     private Vector2 tempPlayerLocation;
     private Vector2 tempPlayerVelocity;
     private Vector2 initPlayerLocation;
@@ -281,79 +282,80 @@ public class Play extends GameState {
 
     private void initPlayer() {
         //TODO: Better logic for loading saved game
-        if (cl.IsPlayerDead() || cl.isInitSpawn()) {
 
-            if (player != null) world.destroyBody(player.getBody());
-            bdef = new BodyDef();
-            fdef = new FixtureDef();
-            circle = new CircleShape();
-            polyShape = new PolygonShape();
 
-            if (dimensionJump) {
-                dimensionJump = false;
-                bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
-                bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
-                cam.position.set(tempCamLocation);
-            } else if (checkpoint == null) {
-                if (initPlayerLocation == null) {
-                    bdef.position.set(0, 0); // hopefully never get here
-                } else {
-                    bdef.position.set(initPlayerLocation);
-                }
-            } else if (cl.isInitSpawn()) {
+        if (player != null) world.destroyBody(player.getBody());
+        bdef = new BodyDef();
+        fdef = new FixtureDef();
+        circle = new CircleShape();
+        polyShape = new PolygonShape();
+
+        if (dimensionJump) {
+            dimensionJump = false;
+            player.setHealth(tempPlayerHp);
+            bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
+            bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
+            cam.position.set(tempCamLocation);
+        } else if (checkpoint == null) {
+            if (initPlayerLocation == null) {
+                bdef.position.set(0, 0); // hopefully never get here
+            } else {
                 bdef.position.set(initPlayerLocation);
-            } else {
-                bdef.position.set(new Vector2(checkpoint.getPosition()));
             }
-
-            short mask;
-            if (dimension) {
-                mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
-            } else {
-                mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
-            }
-            bdef.type = BodyDef.BodyType.DynamicBody;
-            Body body = world.createBody(bdef);
-
-            polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(-20 / PPM, 20 / PPM), 0);
-            fdef.shape = polyShape;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            fdef.isSensor = true;
-            body.createFixture(fdef).setUserData("side_l");
-
-            polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(20 / PPM, 20 / PPM), 0);
-            fdef.shape = polyShape;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            body.createFixture(fdef).setUserData("side_r");
-
-
-            fdef.isSensor = false;
-            circle.setRadius(9 / PPM);
-            fdef.shape = circle;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            body.createFixture(fdef).setFriction(FRICTION);
-            body.setUserData("playerBody");
-
-            polyShape.setAsBox(8 / PPM, 16 / PPM, new Vector2(0, 12 / PPM), 0);
-            fdef.shape = polyShape;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            body.createFixture(fdef).setUserData("playerBody");
-
-            polyShape.setAsBox(1 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
-            fdef.shape = polyShape;
-            fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-            fdef.filter.maskBits = mask;
-            fdef.isSensor = true;
-            body.createFixture(fdef).setUserData("foot");
-
-            player = new Player(body);
-
+        } else if (cl.isInitSpawn()) {
+            bdef.position.set(initPlayerLocation);
+        } else {
+            bdef.position.set(new Vector2(checkpoint.getPosition()));
         }
+
+        short mask;
+        if (dimension) {
+            mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
+        } else {
+            mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
+        }
+        bdef.type = BodyDef.BodyType.DynamicBody;
+        Body body = world.createBody(bdef);
+
+        polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(-20 / PPM, 20 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("side_l");
+
+        polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(20 / PPM, 20 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        body.createFixture(fdef).setUserData("side_r");
+
+
+        fdef.isSensor = false;
+        circle.setRadius(9 / PPM);
+        fdef.shape = circle;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        body.createFixture(fdef).setFriction(FRICTION);
+        body.setUserData("playerBody");
+
+        polyShape.setAsBox(8 / PPM, 16 / PPM, new Vector2(0, 12 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        body.createFixture(fdef).setUserData("playerBody");
+
+        polyShape.setAsBox(1 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = mask;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("foot");
+
+        player = new Player(body);
+
     }
+
 
     private void createBosses(Vector2 position, String type, boolean decider, int size) {
 
@@ -721,11 +723,13 @@ public class Play extends GameState {
             System.out.println("changed dimension");
             dimensionJump = true;
             dimensionFadeDone = false;
+            tempPlayerHp = player.getHealth();
             tempPlayerLocation = player.getPosition();
             tempPlayerVelocity = player.getBody().getLinearVelocity();
             tempCamLocation = cam.position;
             dimension = !dimension;
             cl.setPlayerDead(true);
+            cl.setPlayerSuperDead(true);
         }
 
         //player jump / double jump / dash
@@ -865,6 +869,7 @@ public class Play extends GameState {
             }
             cl.setPlayerDead(false);
             cl.setPlayerSuperDead(false);
+            player.update(dt);
         }
 
         //update boss
