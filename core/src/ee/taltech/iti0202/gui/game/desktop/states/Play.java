@@ -358,7 +358,6 @@ public class Play extends GameState {
 
     }
 
-
     private void createBosses(Vector2 position, String type, boolean decider, int size) {
 
         /////////////////////////////////////////////////////////////////////////
@@ -454,6 +453,21 @@ public class Play extends GameState {
         checkpoint = new Checkpoint(body);
     }
 
+    private void createEndPoint(Vector2 pos) {
+        System.out.println("new endpoint");
+        bdef = new BodyDef();
+        bdef.position.set(pos);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bdef);
+        polyShape = new PolygonShape();
+        polyShape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = B2DVars.BIT_ALL;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("end");
+        checkpoint = new Checkpoint(body);
+    }
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
@@ -602,7 +616,11 @@ public class Play extends GameState {
                 fdef.isSensor = isSensor;
                 switch (layer.getName()) {
                     case "checkpoints":
-                        createCheckpoints(new Vector2(polygon[1].x, polygon[0].y));
+                        if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
+                            createEndPoint(new Vector2(polygon[1].x, polygon[0].y));
+                        } else {
+                            createCheckpoints(new Vector2(polygon[1].x, polygon[0].y));
+                        }
                         break;
 
                     case "bosses_small":

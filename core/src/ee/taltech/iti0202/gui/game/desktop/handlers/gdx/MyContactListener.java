@@ -23,6 +23,7 @@ public class MyContactListener implements ContactListener {
     private boolean isPlayerDead = false;
     private boolean isPlayerSuperDead = false;
     private boolean initSpawn = true;
+    private boolean end = false;
 
     // called when 2 fixtures start to collide
     public void beginContact(Contact c) {
@@ -38,12 +39,23 @@ public class MyContactListener implements ContactListener {
                         setCurCheckpoint(fb.getBody());
                     }
                 }
+                if (fb.getUserData().equals("end")) {
+                    if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
+                        end = true;
+                    }
+                }
             }
             if (fb.getUserData() != null && fb.getUserData().equals("foot")) {
                 playerOnGround = true;
                 if (fa.getUserData().equals("checkpoint")) {
                     if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
                         setCurCheckpoint(fa.getBody());
+                    }
+                }
+
+                if (fa.getUserData().equals("end")) {
+                    if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
+                        end = true;
                     }
                 }
             }
@@ -108,6 +120,14 @@ public class MyContactListener implements ContactListener {
 
     }
 
+    //presolve
+    public void preSolve(Contact c, Manifold m) {
+    }
+
+    // handling
+    public void postSolve(Contact c, ContactImpulse ci) {
+    }
+
     public boolean isNewCheckpoint() {
         return newCheckpoint;
     }
@@ -156,15 +176,6 @@ public class MyContactListener implements ContactListener {
         return initSpawn;
     }
 
-    // detection
-    //presolve
-    public void preSolve(Contact c, Manifold m) {
-    }
-
-    // handling
-    public void postSolve(Contact c, ContactImpulse ci) {
-    }
-
     private void setCurCheckpoint(Body new_vec) {
         initSpawn = false;
         newCheckpoint = true;
@@ -190,5 +201,9 @@ public class MyContactListener implements ContactListener {
 
     public void setPlayerSuperDead(boolean playerSuperDead) {
         isPlayerSuperDead = playerSuperDead;
+    }
+
+    public boolean isEnd() {
+        return end;
     }
 }

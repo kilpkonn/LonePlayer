@@ -6,9 +6,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.Game;
 
-public class Checkpoint extends B2DSprite {
+public class EndPoint extends B2DSprite {
 
-    public Checkpoint(Body body) {
+    public EndPoint(Body body) {
 
         super(body);
 
@@ -19,4 +19,3 @@ public class Checkpoint extends B2DSprite {
 
     }
 }
-
