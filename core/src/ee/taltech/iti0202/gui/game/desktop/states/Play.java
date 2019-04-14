@@ -216,10 +216,9 @@ public class Play extends GameState {
             public void run() {
                 playState = pauseState.SETTINGS;
             }
-        });
+        }, cam);
         hud = new Hud(hudCam, this);
 
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
         playState = pauseState.RUN;
 
         // set up background
@@ -737,99 +736,106 @@ public class Play extends GameState {
             }
         }
 
-        //change dimension
-        if (MyInput.isPressed(Game.settings.CHANGE_DIMENTION)) {
-            System.out.println("changed dimension");
-            dimensionJump = true;
-            dimensionFadeDone = false;
-            tempPlayerHp = player.getHealth();
-            tempPlayerLocation = player.getPosition();
-            tempPlayerVelocity = player.getBody().getLinearVelocity();
-            tempCamLocation = cam.position;
-            dimension = !dimension;
-            cl.setPlayerDead(true);
-            cl.setPlayerSuperDead(true);
-        }
-
-        //player jump / double jump / dash
-        if (MyInput.isPressed(Game.settings.JUMP)) {
-            player.setAnimation(Player.PlayerAnimation.JUMP);
-            if (cl.isPlayerOnGround()) {
-                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
-            } else if (cl.isWallJump() != 0) {
-                player.getBody().applyLinearImpulse(new Vector2(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
-                cl.setWallJump(0);
-            } else if (cl.hasDoubleJump()) {
-                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
-                cl.setDoubleJump(false);
+        if (playState == pauseState.RUN) {
+            //change dimension
+            if (MyInput.isPressed(Game.settings.CHANGE_DIMENTION)) {
+                System.out.println("changed dimension");
+                dimensionJump = true;
+                dimensionFadeDone = false;
+                tempPlayerHp = player.getHealth();
+                tempPlayerLocation = player.getPosition();
+                tempPlayerVelocity = player.getBody().getLinearVelocity();
+                tempCamLocation = cam.position;
+                dimension = !dimension;
+                cl.setPlayerDead(true);
+                cl.setPlayerSuperDead(true);
             }
-        }
 
-        //player move left
-        if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
-            if (current_force.x > -MAX_SPEED) {
+            //player jump / double jump / dash
+            if (MyInput.isPressed(Game.settings.JUMP)) {
+                player.setAnimation(Player.PlayerAnimation.JUMP);
                 if (cl.isPlayerOnGround()) {
-                    player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
-                    player.setAnimation(Player.PlayerAnimation.RUN);
-                } else {
-                    player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
-                }
-
-            }
-            player.setFlipX(false);
-        }
-
-        //player dash left
-        if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
-            if (!cl.isPlayerOnGround() && cl.hasDash()) {
-                current_force = player.getBody().getLinearVelocity();
-                if (current_force.x > 0) {
-                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
-                } else {
-                    player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
-                }
-                cl.setDash(false);
-            }
-            player.setFlipX(false);
-        }
-
-        //player move right
-        if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
-            if (current_force.x < MAX_SPEED) {
-                if (cl.isPlayerOnGround()) {
-                    player.setAnimation(Player.PlayerAnimation.RUN);
-                    player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
-                } else {
-                    player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+                } else if (cl.isWallJump() != 0) {
+                    player.getBody().applyLinearImpulse(new Vector2(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
+                    cl.setWallJump(0);
+                } else if (cl.hasDoubleJump()) {
+                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
+                    cl.setDoubleJump(false);
                 }
             }
-            player.setFlipX(true);
-        }
 
-        //player dash right
-        if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
-            if (!cl.isPlayerOnGround() && cl.hasDash()) {
-                if (current_force.x < 0) {
-                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
-                } else {
-                    player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+            //player move left
+            if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
+                if (current_force.x > -MAX_SPEED) {
+                    if (cl.isPlayerOnGround()) {
+                        player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
+                        player.setAnimation(Player.PlayerAnimation.RUN);
+                    } else {
+                        player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
+                    }
+
                 }
-                cl.setDash(false);
+                player.setFlipX(false);
             }
-            player.setFlipX(true);
-        }
 
-        if (!MyInput.isDown(-1)) {
-            player.setAnimation(Player.PlayerAnimation.IDLE);
+            //player dash left
+            if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
+                if (!cl.isPlayerOnGround() && cl.hasDash()) {
+                    current_force = player.getBody().getLinearVelocity();
+                    if (current_force.x > 0) {
+                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
+                    } else {
+                        player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+                    }
+                    cl.setDash(false);
+                }
+                player.setFlipX(false);
+            }
+
+            //player move right
+            if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
+                if (current_force.x < MAX_SPEED) {
+                    if (cl.isPlayerOnGround()) {
+                        player.setAnimation(Player.PlayerAnimation.RUN);
+                        player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
+                    } else {
+                        player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
+                    }
+                }
+                player.setFlipX(true);
+            }
+
+            //player dash right
+            if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
+                if (!cl.isPlayerOnGround() && cl.hasDash()) {
+                    if (current_force.x < 0) {
+                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
+                    } else {
+                        player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+                    }
+                    cl.setDash(false);
+                }
+                player.setFlipX(true);
+            }
+
+            if (!MyInput.isDown(-1)) {
+                player.setAnimation(Player.PlayerAnimation.IDLE);
+            }
         }
     }
 
     public void update(float dt) {
 
+        if (cl.isEnd()) {
+            UPDATE = false;
+            cl.setEnd(false);
+            playState = pauseState.STOPPED;
+        }
         if (newPlayer) {
             if (Math.abs(player.getPosition().x - cam.position.x / PPM) < 1 && Math.abs(player.getPosition().y - cam.position.y / PPM) < 1)
                 newPlayer = false;
-        } else handleInput();
+        }
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
 
@@ -840,10 +846,12 @@ public class Play extends GameState {
             case RUN:
                 UpdateProps(dt);
                 hud.update(dt);
+                handleInput();
                 break;
 
             case PAUSE:
                 pauseMenu.update(dt);
+                handleInput();
                 break;
 
             case RESUME:
@@ -851,9 +859,16 @@ public class Play extends GameState {
 
             case SETTINGS:
                 settingsMenu.update(dt);
+                handleInput();
                 break;
 
             case STOPPED:
+                if (cam.zoom < 4)
+                    cam.zoom += 0.01;
+                gameFadeOut = true;
+                gameFadeDone = false;
+                drawAndSetCamera();
+                cam.update();
                 endMenu.update(dt);
                 break;
 
@@ -864,8 +879,8 @@ public class Play extends GameState {
 
     private void UpdateProps(float dt) {
         //update camera
-        if (DEBUG) {
 
+        if (DEBUG) {
             b2dcam.position.set(
                     player.getPosition().x,
                     player.getPosition().y,
@@ -878,7 +893,6 @@ public class Play extends GameState {
             b2dcam.update();
 
         } else {
-
             cam.position.x += (player.getPosition().x - cam.position.x / PPM) * 2 * PPM * dt;
             cam.position.y += (player.getPosition().y - cam.position.y / PPM) * 2 * PPM * dt;
         }
@@ -968,8 +982,9 @@ public class Play extends GameState {
                 break;
             case STOPPED:
                 endMenu.handleInput();
-                drawPauseScreen();
+                endMenu.render(sb);
                 break;
+
             default:
                 break;
         }
@@ -1045,7 +1060,7 @@ public class Play extends GameState {
         sb.begin();
         sb.draw(backgroundTexture, 0, 0);
         sb.end();
-        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 8)); //TODO: more advance stuff here, move with camera...
+        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 4)); //TODO: more advance stuff here, move with camera...
         stage.act();
         stage.draw();
 

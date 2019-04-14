@@ -21,32 +21,32 @@ public class EndMenu extends Scene{
         NEWGAME, NEXT, EXIT, SETTINGS
     }
 
+    private OrthographicCamera cam;
+
     private block currBlock;
     private HashMap<GameButton, block> buttonType;
     private Runnable openSettingsFunc;
 
     private GameButton exitButton;
-    private GameButton settingsButton;
     private GameButton nextButton;
     private GameButton playAgainButton;
 
-    public EndMenu(String act, String map, OrthographicCamera cam, Runnable openSettingsFunc) {
+    public EndMenu(String act, String map, OrthographicCamera cam, Runnable openSettingsFunc, OrthographicCamera Ccam) {
         super(act, map, cam);
+        this.cam = Ccam;
         this.openSettingsFunc = openSettingsFunc;
 
         hudCam.update();
 
         nextButton = new GameButton("Next level", V_WIDTH / 6f, V_HEIGHT / 1.5f - 40);
-        playAgainButton = new GameButton("Play again", V_WIDTH / 6f, V_HEIGHT / 1.5f - 40);
-        settingsButton = new GameButton("Settings", V_WIDTH / 6f, V_HEIGHT / 1.5f - 120);
+        playAgainButton = new GameButton("Play again", V_WIDTH / 6f, V_HEIGHT / 1.5f - 80);
         exitButton = new GameButton("Exit", V_WIDTH / 6f, V_HEIGHT / 1.5f - 160);
 
-        buttons = new HashSet<>(Arrays.asList(nextButton, playAgainButton, settingsButton, exitButton));
+        buttons = new HashSet<>(Arrays.asList(nextButton, playAgainButton, exitButton));
 
         buttonType = new HashMap<GameButton, block>() {{
             put(nextButton, block.NEXT);
             put(playAgainButton, block.NEWGAME);
-            put(settingsButton, block.SETTINGS);
             put(exitButton, block.EXIT);
         }};
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
@@ -55,15 +55,14 @@ public class EndMenu extends Scene{
     @Override
     public void handleInput() {
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            cam.zoom = 1f;
             switch (currBlock) {
                 case NEXT:
-                    //TODO: Select next map
+                    //TODO push next state
+                    GameStateManager.pushState(GameStateManager.State.PLAY, act, map);
                     break;
                 case NEWGAME:
                     GameStateManager.pushState(GameStateManager.State.PLAY, act, map);
-                    break;
-                case SETTINGS:
-                    openSettingsFunc.run();
                     break;
                 case EXIT:
                     GameStateManager.pushState(GameStateManager.State.MENU);
