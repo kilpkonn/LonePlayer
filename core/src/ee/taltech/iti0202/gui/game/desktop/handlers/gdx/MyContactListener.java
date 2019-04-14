@@ -21,6 +21,7 @@ public class MyContactListener implements ContactListener {
     private Body curCheckpoint;
     private Body toBeDeleted;
     private boolean isPlayerDead = false;
+    private boolean isPlayerSuperDead = false;
     private boolean initSpawn = true;
 
     // called when 2 fixtures start to collide
@@ -67,15 +68,16 @@ public class MyContactListener implements ContactListener {
         // detection happens when player goes outside of initial game border
         if (fa.getUserData() != null && (fa.getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
             if (fb.getUserData() != null && fb.getUserData().equals("barrier")) {
-                setPlayerDead(true); //TODO: Fix random deaths (wrong coords?)
+                setPlayerSuperDead(true);
+                setPlayerDead(true);
             }
             if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(MAGMAWORM)) {
-                setPlayerDead(true); //TODO: Fix random deaths (wrong coords?)
-                System.out.println(fb.getBody().getUserData());
+                setPlayerDead(true);
             }
         }
         if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
             if (fa.getUserData() != null && fa.getUserData().equals("barrier")) {
+                setPlayerSuperDead(true);
                 setPlayerDead(true);
             }
             if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(MAGMAWORM)) {
@@ -173,5 +175,13 @@ public class MyContactListener implements ContactListener {
 
     public void setWallJump(int wallJump) {
         this.wallJump = wallJump;
+    }
+
+    public boolean isPlayerSuperDead() {
+        return isPlayerSuperDead;
+    }
+
+    public void setPlayerSuperDead(boolean playerSuperDead) {
+        isPlayerSuperDead = playerSuperDead;
     }
 }

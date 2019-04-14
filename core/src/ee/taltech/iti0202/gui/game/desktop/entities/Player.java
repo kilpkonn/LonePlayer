@@ -44,4 +44,8 @@ public class Player extends B2DSprite {
         return health;
     }
 
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
 }

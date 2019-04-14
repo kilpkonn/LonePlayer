@@ -855,8 +855,16 @@ public class Play extends GameState {
         if (!cl.IsPlayerDead()) {
             player.update(dt);
         } else {
-            initPlayer();
+            if (cl.isPlayerSuperDead()) {
+                player.setHealth(0);
+            } else {
+                player.setHealth(player.getHealth() - 1);
+            }
+            if (player.getHealth() <= 0) {
+                initPlayer();
+            }
             cl.setPlayerDead(false);
+            cl.setPlayerSuperDead(false);
         }
 
         //update boss
