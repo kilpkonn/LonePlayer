@@ -192,10 +192,10 @@ public class Spriter {
      * @throws SpriterException if {@link #init(Class, Class)} was not called before
      */
     @SuppressWarnings("unchecked")
-    public static void updateAndDraw() {
+    public static void updateAndDraw(float dt) {
         if (!initialized) throw new SpriterException("Call init() before updating!");
         for (int i = 0; i < players.size(); i++) {
-            players.get(i).update();
+            players.get(i).update(dt);
             drawer.loader = entityToLoader.get(players.get(i).getEntity());
             drawer.draw(players.get(i));
         }
@@ -206,10 +206,10 @@ public class Spriter {
      *
      * @throws SpriterException if {@link #init(Class, Class)} was not called before
      */
-    public static void update() {
+    public static void update(float dt) {
         if (!initialized) throw new SpriterException("Call init() before updating!");
         for (int i = 0; i < players.size(); i++) {
-            players.get(i).update();
+            players.get(i).update(dt);
         }
     }
 

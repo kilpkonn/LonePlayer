@@ -13,12 +13,12 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A Player instance is responsible for updating an {@link Animation} properly.
- * With the {@link #update()} method an instance of this class will increase its current time
+ * A MyPlayer instance is responsible for updating an {@link Animation} properly.
+ * With the {@link #update(float)} method an instance of this class will increase its current time
  * and update the current set animation ({@link #setAnimation(Animation)}).
- * A Player can be positioned with {@link #setPivot(float, float)}, scaled with {@link #setScale(float)},
+ * A MyPlayer can be positioned with {@link #setPivot(float, float)}, scaled with {@link #setScale(float)},
  * flipped with {@link #flip(boolean, boolean)} and rotated {@link #setAngle(float)}.
- * A Player has various methods for runtime object manipulation such as {@link #setBone(String, Bone)} or {link #setObject(String, Bone)}.
+ * A MyPlayer has various methods for runtime object manipulation such as {@link #setBone(String, Bone)} or {link #setObject(String, Bone)}.
  * Events like the ending of an animation can be observed with the {@link PlayerListener} interface.
  * Character maps can be changed on the fly, just by assigning a character maps to {@link #characterMaps}, setting it to <code>null</code> will remove the current character map.
  *
@@ -35,7 +35,7 @@ public class Player {
     public boolean copyObjects = true;
     protected Entity entity;
     Animation animation;
-    int time;
+    float time;
     Timeline.Key[] tweenedKeys, unmappedTweenedKeys;
     Timeline.Key.Bone root = new Timeline.Key.Bone(new Point(0, 0));
     private Timeline.Key[] tempTweenedKeys, tempUnmappedTweenedKeys;
@@ -66,7 +66,7 @@ public class Player {
      * Updates this player.
      * This means the current time gets increased by {@link #speed} and is applied to the current animation.
      */
-    public void update() {
+    public void update(float dt) {
         for (int i = 0; i < listeners.size(); i++) {
             listeners.get(i).preProcess(this);
         }
@@ -95,7 +95,7 @@ public class Player {
         for (int i = 0; i < listeners.size(); i++) {
             listeners.get(i).postProcess(this);
         }
-        this.increaseTime();
+        this.increaseTime(dt);
     }
 
     private void copyObjects() {
@@ -107,8 +107,8 @@ public class Player {
         }
     }
 
-    private void increaseTime() {
-        time += speed;
+    private void increaseTime(float dt) {
+        time += dt * speed;
         if (time > animation.length) {
             time = time - animation.length;
             for (int i = 0; i < listeners.size(); i++) {
@@ -634,9 +634,9 @@ public class Player {
             throw new SpriterException("animation has to be in the same entity as the current set one!");
         if (animation != this.animation) time = 0;
         this.animation = animation;
-        int tempTime = this.time;
+        float tempTime = this.time;
         this.time = 0;
-        this.update();
+        this.update(0);
         this.time = tempTime;
         for (int i = 0; i < listeners.size(); i++) {
             listeners.get(i).animationChanged(prevAnim, animation);
@@ -729,7 +729,7 @@ public class Player {
      *
      * @return the current time
      */
-    public int getTime() {
+    public float getTime() {
         return time;
     }
 
@@ -740,11 +740,11 @@ public class Player {
      * @param time the new time
      * @return this player to enable chained operations
      */
-    public Player setTime(int time) {
+    public Player setTime(float time) {
         this.time = time;
         int prevSpeed = this.speed;
         this.speed = 0;
-        this.increaseTime();
+        this.increaseTime(0);
         this.speed = prevSpeed;
         return this;
     }

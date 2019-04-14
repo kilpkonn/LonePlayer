@@ -7,18 +7,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.MyPlayer;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 public class MagmaWorm extends Boss {
     private float max_speed = 3;
-    private Body body;
-    private Play play;
     private float time = 0;
 
     public MagmaWorm(Body body, String type, Play play, String part) {
         super(body, type, play);
-        this.body = body;
-        this.play = play;
         Texture tex = Game.res.getTexture(part);
         TextureRegion[] sprites = TextureRegion.split(tex, tex.getHeight(), tex.getHeight())[0];
         setAnimation(sprites, 1 / 12f);
@@ -50,7 +47,7 @@ public class MagmaWorm extends Boss {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        Player player = play.getPlayer();
+        MyPlayer player = play.getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),
@@ -92,7 +89,7 @@ public class MagmaWorm extends Boss {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 //
-        Player player = play.getPlayer();
+        MyPlayer player = play.getPlayer();
 //
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),
@@ -111,4 +108,3 @@ public class MagmaWorm extends Boss {
         return Math.min(Math.max(f, -max_speed), max_speed);
     }
 }
-
