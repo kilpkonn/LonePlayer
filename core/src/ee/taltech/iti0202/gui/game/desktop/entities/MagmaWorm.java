@@ -7,7 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.MyPlayer;
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 public class MagmaWorm extends Boss {
@@ -47,7 +47,7 @@ public class MagmaWorm extends Boss {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        MyPlayer player = play.getPlayer();
+        Player player = play.getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),
@@ -89,7 +89,7 @@ public class MagmaWorm extends Boss {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 //
-        MyPlayer player = play.getPlayer();
+        Player player = play.getPlayer();
 //
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),

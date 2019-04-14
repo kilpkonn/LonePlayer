@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 
 
-public class MyPlayer extends SpriteAnimation {
+public class Player extends SpriteAnimation {
 
     public enum PlayerAnimation {
         WALK ("walk"),
@@ -28,7 +28,7 @@ public class MyPlayer extends SpriteAnimation {
     private int totalCrystals;
     private int health;
 
-    public MyPlayer(Body body, SpriteBatch sb) {
+    public Player(Body body, SpriteBatch sb) {
         super(body, sb, "images/Player/Knights.scml");
         setScale(0.16f);
         setAnimationSpeed(100);
