@@ -49,7 +49,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.MyPlayer;
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
@@ -109,11 +109,11 @@ public class Play extends GameState {
     private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
     private OrthogonalTiledMapRenderer renderer;
 
-    public MyPlayer getPlayer() {
+    public Player getPlayer() {
         return player;
     }
 
-    private MyPlayer player;
+    private Player player;
     private boolean dimension;
     private boolean dimensionJump;
     private Array<Array<Boss>> bossArray;
@@ -350,7 +350,7 @@ public class Play extends GameState {
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
 
-        player = new MyPlayer(body, sb);
+        player = new Player(body, sb);
         if (dimensionJump) {
             dimensionJump = false;
             player.setHealth(tempPlayerHp);
@@ -568,7 +568,7 @@ public class Play extends GameState {
                 }
                 fixBleeding(cell.getTile().getTextureRegion());
                 if (cell.getTile().getProperties().containsKey("animation")) {
-                    Texture tex = Game.res.getTexture("MyPlayer");
+                    Texture tex = Game.res.getTexture("Player");
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
                     animatedCells.put(cell, new Animation(sprites, 1 / 12f));
                 }
@@ -736,7 +736,7 @@ public class Play extends GameState {
 
         //player jump / double jump / dash
         if (MyInput.isPressed(Game.settings.JUMP)) {
-            player.setAnimation(MyPlayer.PlayerAnimation.JUMP ,tempPlayerVelocity.x >= 0);
+            player.setAnimation(Player.PlayerAnimation.JUMP ,tempPlayerVelocity.x >= 0);
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
@@ -753,7 +753,7 @@ public class Play extends GameState {
             if (current_force.x > -MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
-                    player.setAnimation(MyPlayer.PlayerAnimation.RUN, false);
+                    player.setAnimation(Player.PlayerAnimation.RUN, false);
                 } else {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
                 }
@@ -778,7 +778,7 @@ public class Play extends GameState {
         if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
             if (current_force.x < MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
-                    player.setAnimation(MyPlayer.PlayerAnimation.RUN, true);
+                    player.setAnimation(Player.PlayerAnimation.RUN, true);
                     player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
                 } else {
                     player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
@@ -799,7 +799,7 @@ public class Play extends GameState {
         }
 
         if (!MyInput.isDown(-1)) {
-            player.setAnimation(MyPlayer.PlayerAnimation.IDLE, tempPlayerVelocity.x >= 0);
+            player.setAnimation(Player.PlayerAnimation.IDLE, tempPlayerVelocity.x >= 0);
         }
     }
 

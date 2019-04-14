@@ -13,12 +13,12 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * A MyPlayer instance is responsible for updating an {@link Animation} properly.
+ * A Player instance is responsible for updating an {@link Animation} properly.
  * With the {@link #update(float)} method an instance of this class will increase its current time
  * and update the current set animation ({@link #setAnimation(Animation)}).
- * A MyPlayer can be positioned with {@link #setPivot(float, float)}, scaled with {@link #setScale(float)},
+ * A Player can be positioned with {@link #setPivot(float, float)}, scaled with {@link #setScale(float)},
  * flipped with {@link #flip(boolean, boolean)} and rotated {@link #setAngle(float)}.
- * A MyPlayer has various methods for runtime object manipulation such as {@link #setBone(String, Bone)} or {link #setObject(String, Bone)}.
+ * A Player has various methods for runtime object manipulation such as {@link #setBone(String, Bone)} or {link #setObject(String, Bone)}.
  * Events like the ending of an animation can be observed with the {@link PlayerListener} interface.
  * Character maps can be changed on the fly, just by assigning a character maps to {@link #characterMaps}, setting it to <code>null</code> will remove the current character map.
  *
