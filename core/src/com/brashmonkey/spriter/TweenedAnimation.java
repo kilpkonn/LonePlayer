@@ -71,7 +71,7 @@ public class TweenedAnimation extends Animation {
     }
 
     @Override
-    public void update(int time, Bone root) {
+    public void update(float time, Bone root) {
         super.currentKey = onFirstMainLine() ? anim1.currentKey : anim2.currentKey;
         for (Timeline.Key timelineKey : this.unmappedTweenedKeys)
             timelineKey.active = false;
@@ -126,7 +126,7 @@ public class TweenedAnimation extends Animation {
     }
 
     @Override
-    protected void update(BoneRef ref, Bone root, int time) {
+    protected void update(BoneRef ref, Bone root, float time) {
         boolean isObject = ref instanceof ObjectRef;
         //Tween bone/object
         Bone bone1 = null, bone2 = null, tweenTarget = null;

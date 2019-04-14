@@ -92,7 +92,7 @@ public class Animation {
      * @param time The time which has to be between 0 and {@link #length} to work properly.
      * @param root The root bone which is not allowed to be null. The whole animation runs relative to the root bone.
      */
-    public void update(int time, Bone root) {
+    public void update(float time, Bone root) {
         if (!this.prepared)
             throw new SpriterException("This animation is not ready yet to animate itself. Please call prepare()!");
         if (root == null)
@@ -107,7 +107,7 @@ public class Animation {
             this.update(ref, root, time);
     }
 
-    protected void update(BoneRef ref, Bone root, int time) {
+    protected void update(BoneRef ref, Bone root, float time) {
         boolean isObject = ref instanceof ObjectRef;
         //Get the timelines, the refs pointing to
         Timeline timeline = getTimeline(ref.timeline);
@@ -191,7 +191,7 @@ public class Animation {
 
     /**
      * Prepares this animation to set this animation in any time state.
-     * This method has to be called before {@link #update(int, Bone)}.
+     * This method has to be called before {@link #update(float, Bone)}.
      */
     public void prepare() {
         if (this.prepared) return;

@@ -10,7 +10,7 @@ public class PlayerTweener extends Player {
 
     /**
      * Indicates whether to update the {@link Player} instances this instance is holding.
-     * If this variable is set to <code>false</code>, you will have to call {@link Player#update()} on your own.
+     * If this variable is set to <code>false</code>, you will have to call {@link Player#update(float)} on your own.
      */
     public boolean updatePlayers = true;
     /**
@@ -49,19 +49,19 @@ public class PlayerTweener extends Player {
      * @throws SpriterException if no bone with {@link #baseBoneName} exists
      */
     @Override
-    public void update() {
+    public void update(float dt) {
         if (updatePlayers) {
-            player1.update();
-            player2.update();
+            player1.update(dt * speed);
+            player2.update(dt * speed);
         }
         anim.setAnimations(player1.animation, player2.animation);
-        super.update();
+        super.update(dt);
         if (baseBoneName != null) {
             int index = anim.onFirstMainLine() ? player1.getBoneIndex(baseBoneName) : player2.getBoneIndex(baseBoneName);
             if (index == -1)
                 throw new SpriterException("A bone with name \"" + baseBoneName + "\" does no exist!");
             anim.base = anim.getCurrentKey().getBoneRef(index);
-            super.update();
+            super.update(dt);
         }
     }
 

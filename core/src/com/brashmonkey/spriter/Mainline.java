@@ -47,7 +47,7 @@ public class Mainline {
      * @return a key which has a time value before the given one.
      * The first key is returned if no key was found.
      */
-    public Key getKeyBeforeTime(int time) {
+    public Key getKeyBeforeTime(float time) {
         Key found = this.keys[0];
         for (Key key : this.keys) {
             if (key.time <= time) found = key;

@@ -715,7 +715,7 @@ public class Play extends GameState {
 
         //player jump / double jump / dash
         if (MyInput.isPressed(Game.settings.JUMP)) {
-            player.setAnimation(MyPlayer.PlayerAnimation.JUMP ,true); //TODO: Better flip
+            player.setAnimation(MyPlayer.PlayerAnimation.JUMP ,tempPlayerVelocity.x >= 0);
             if (cl.isPlayerOnGround()) {
                 player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
             } else if (cl.isWallJump() != 0) {
@@ -729,10 +729,10 @@ public class Play extends GameState {
 
         //player move left
         if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
-            player.setAnimation(MyPlayer.PlayerAnimation.RUN, false);
             if (current_force.x > -MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
+                    player.setAnimation(MyPlayer.PlayerAnimation.RUN, false);
                 } else {
                     player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
                 }
@@ -742,7 +742,6 @@ public class Play extends GameState {
 
         //player dash left
         if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
-            player.setAnimation(MyPlayer.PlayerAnimation.RUN, false);
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 current_force = player.getBody().getLinearVelocity();
                 if (current_force.x > 0) {
@@ -756,9 +755,9 @@ public class Play extends GameState {
 
         //player move right
         if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
-            player.setAnimation(MyPlayer.PlayerAnimation.RUN, true);
             if (current_force.x < MAX_SPEED) {
                 if (cl.isPlayerOnGround()) {
+                    player.setAnimation(MyPlayer.PlayerAnimation.RUN, true);
                     player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
                 } else {
                     player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
@@ -768,7 +767,6 @@ public class Play extends GameState {
 
         //player dash right
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
-            player.setAnimation(MyPlayer.PlayerAnimation.RUN, true);
             if (!cl.isPlayerOnGround() && cl.hasDash()) {
                 if (current_force.x < 0) {
                     player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
@@ -777,6 +775,10 @@ public class Play extends GameState {
                 }
                 cl.setDash(false);
             }
+        }
+
+        if (!MyInput.isDown(-1)) {
+            player.setAnimation(MyPlayer.PlayerAnimation.IDLE, tempPlayerVelocity.x >= 0);
         }
     }
 

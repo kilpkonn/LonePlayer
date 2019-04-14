@@ -18,11 +18,10 @@ public class MyPlayerTweener extends PlayerTweener {
             if (influence > 1) influence = 1;
             setWeight(influence);
         }
-
-        super.update(); //TODO: Add dt
+        super.update(dt); //TODO: Add dt
     }
 
-    public void setAnimation(String anim, boolean flipX) {
+    public void setAnimation(String anim) {
         if (!anim.equals(getSecondPlayer().getAnimation().name)) {
             influence = 0;
             getFirstPlayer().setAnimation(getSecondPlayer().getAnimation());

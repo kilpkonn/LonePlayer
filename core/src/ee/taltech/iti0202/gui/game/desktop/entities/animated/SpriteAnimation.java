@@ -38,7 +38,6 @@ public class SpriteAnimation {
 
         drawer = new LibGdxDrawer(loader, sb, null); // no shape rendering
         playerTweener = new MyPlayerTweener(data.getEntity(0));
-
     }
 
     public void update(float dt) {
@@ -58,12 +57,18 @@ public class SpriteAnimation {
         sb.end();
     }
 
-    protected void setAnimation(String animation, boolean flip) {
-        playerTweener.setAnimation(animation, flip);
+    protected void setAnimation(String animation, boolean flipX) {
+        playerTweener.setAnimation(animation);
+        if ((playerTweener.flippedX() == -1) != flipX)
+        playerTweener.flipX();
     }
 
     public void setScale(float scale) {
         playerTweener.setScale(scale);
+    }
+
+    public void setAnimationSpeed(int speed) {
+        playerTweener.speed = speed;
     }
 
     public void setOpacity(float opacity) {

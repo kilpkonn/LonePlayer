@@ -35,6 +35,7 @@ public class MyInput {
     }
 
     public static boolean isDown(Integer key) {
+        if (key == -1) return !keysDown.isEmpty();
         return keysDown.contains(key);
     }
 

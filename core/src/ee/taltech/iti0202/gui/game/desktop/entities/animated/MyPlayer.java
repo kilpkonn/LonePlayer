@@ -30,7 +30,8 @@ public class MyPlayer extends SpriteAnimation {
 
     public MyPlayer(Body body, SpriteBatch sb) {
         super(body, sb, "images/Player/Knights.scml");
-        setScale(0.2f);
+        setScale(0.16f);
+        setAnimationSpeed(100);
         health = 100;
     }
 
