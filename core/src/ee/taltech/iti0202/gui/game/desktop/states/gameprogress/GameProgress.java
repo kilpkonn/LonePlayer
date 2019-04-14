@@ -26,7 +26,8 @@ public class GameProgress {
         try {
             File f = new File(path);
             if (!f.exists()) {
-                boolean newFile = f.createNewFile();
+                boolean newFile = f.getParentFile().mkdirs();
+                newFile =  newFile && f.createNewFile();
                 System.out.println(newFile ? "Created new game progress file!" : "Failed to create file.");
             }
             FileWriter writer = new FileWriter(f, false);
