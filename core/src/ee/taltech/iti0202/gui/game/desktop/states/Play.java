@@ -848,7 +848,7 @@ public class Play extends GameState {
         if (bossArray.size != 0) {
             for (Array<Boss> bossList : bossArray)
                 for (int i = 0; i < bossList.size; i++) {
-                    if (bossList.size > 300) {
+                    if (bossList.size >= 1000) {
                         if (i == bossList.size - 1) {
                             bossList.get(i).updateHeadBig(dt);
                         } else {

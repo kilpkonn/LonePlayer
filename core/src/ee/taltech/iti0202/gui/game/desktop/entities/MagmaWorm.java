@@ -74,7 +74,7 @@ public class MagmaWorm extends Boss {
     public void updateHeadSmall(float dt) {
         super.update(dt);
         time += dt;
-        max_speed = 3;
+        max_speed = 2;
 
         float sinOffset = (float) Math.sin(time) * 20;
 
@@ -87,7 +87,7 @@ public class MagmaWorm extends Boss {
         Player player = play.getPlayer();
 
         body.setLinearVelocity(
-                velX + (player.getPosition().x - body.getPosition().x),
+                velX + (player.getPosition().x + 0.5f - body.getPosition().x),
                 velY + (player.getPosition().y - body.getPosition().y) + sinOffset);
 
 
