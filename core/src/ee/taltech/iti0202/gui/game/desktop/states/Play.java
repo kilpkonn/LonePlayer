@@ -350,7 +350,7 @@ public class Play extends GameState {
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
 
-        player = new Player(body);
+        player = new MyPlayer(body, sb);
         if (dimensionJump) {
             dimensionJump = false;
             player.setHealth(tempPlayerHp);
