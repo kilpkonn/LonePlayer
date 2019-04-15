@@ -29,7 +29,7 @@ public class Player extends SpriteAnimation {
     private int health;
 
     public Player(Body body, SpriteBatch sb) {
-        super(body, sb, "images/Player/Knights.scml");
+        super(body, sb, "images/player/Knights.scml");
         setScale(0.16f);
         setAnimationSpeed(100);
         health = 100;

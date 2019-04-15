@@ -18,10 +18,10 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 public class PauseMenu extends Scene{
 
     private enum block {
-        SAVE, RESUME, EXIT, SETTINGS, SAVEANDEXIT
+        SAVE, RESUME, EXIT, SETTINGS, SAVEANDEXIT, DEFAULT
     }
 
-    private PauseMenu.block currBlock;
+    private PauseMenu.block currBlock = block.DEFAULT;
 
     private HashMap<GameButton, PauseMenu.block> buttonType;
 

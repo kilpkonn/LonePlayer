@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import javax.xml.bind.annotation.XmlType;
+
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LevelSelectionMenu;
@@ -32,11 +34,9 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 public class Menu extends GameState {
 
     private enum state {
-        MAIN, SETTINGS, LEVELS, RESUME
+        MAIN, SETTINGS, LEVELS, RESUME, DEFAULT
     }
 
-    private Background bg;
-    private Animation animation;
     private Stage stage;
     private LevelSelectionMenu levelSelectionMenu;
     private SettingsMenu settingsMenu;
@@ -55,18 +55,12 @@ public class Menu extends GameState {
         this.menuState = state.MAIN;
 
         // get textures
-        player = Game.res.getTexture("Llama");
+        //player = Game.res.getTexture("Llama");
         logo = Game.res.getTexture("Logo");
 
         // init parallax background
         addParallax(MAIN_SCREENS[3]);
 
-        // init player animation
-        TextureRegion[] reg = new TextureRegion[4];
-        for (int i = 0; i < reg.length; i++) {
-            reg[i] = new TextureRegion(player, i * 32, 0, 32, 32);
-        }
-        animation = new Animation(reg, 1 / 12f);
         mouseInWorld2D = new Vector2();
 
         levelSelectionMenu = new LevelSelectionMenu(cam, new Runnable() {

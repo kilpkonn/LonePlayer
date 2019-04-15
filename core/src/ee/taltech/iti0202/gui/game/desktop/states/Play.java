@@ -221,7 +221,7 @@ public class Play extends GameState {
         });
         hud = new Hud(hudCam, this);
 
-        ShapeRenderer shapeRenderer = new ShapeRenderer();
+        //ShapeRenderer shapeRenderer = new ShapeRenderer();
         playState = pauseState.RUN;
 
         // set up background
@@ -835,7 +835,12 @@ public class Play extends GameState {
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
 
-        if (cl.isEnd()) playState = pauseState.END;
+        if (cl.isEnd() && (playState == pauseState.RUN || playState == pauseState.PAUSE)) {
+            UPDATE = false;
+            gameFadeOut = true;
+            gameFadeDone = false;
+            playState = pauseState.END;
+        }
 
         updateGameFade(dt);
         updateDimensionFade(dt);
@@ -985,6 +990,7 @@ public class Play extends GameState {
         drawAndSetCamera();
 
         if (playState == pauseState.SETTINGS) settingsMenu.render(sb);
+        else if (playState == pauseState.END) endMenu.render(sb);
         else pauseMenu.render(sb);
     }
 

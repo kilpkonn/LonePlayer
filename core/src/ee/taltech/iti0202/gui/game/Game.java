@@ -64,9 +64,6 @@ public class Game extends ApplicationAdapter {
 
         // load textures
         res = new Content();
-
-        res.loadTexture(PATH + "images/menu.png", "buttons");
-        res.loadTexture(PATH + "images/backLayer.png", "backLayer");
         res.loadTexture(PATH + "images/BackgroundStars/Stars-Big_1_2_PC.png", "starBackground");
 
         res.loadTexture(PATH + "images/bosses/magmawormbody0.5.png", "magmawormbody0.5");
@@ -74,7 +71,7 @@ public class Game extends ApplicationAdapter {
         res.loadTexture(PATH + "images/bosses/magmawormbody1.0.png", "magmawormbody1.0");
         res.loadTexture(PATH + "images/bosses/magmawormhead1.0.png", "magmawormhead1.0");
 
-        res.loadTexture(PATH + "images/Player/Llama.png", "Llama");
+        //res.loadTexture(PATH + "images/player/Llama.png", "Llama");
         res.loadTexture(PATH + "maps/tilesets/images/Flag.png", "Checkpoint");
         res.loadTexture(PATH + "maps/background/rock.png", "rock");
         res.loadTexture(PATH + "maps/background/snow.png", "snow");
