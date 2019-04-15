@@ -44,7 +44,7 @@ public class SpriteAnimation {
     public void update(float dt) {
         //animation.update(dt);
         playerTweener.update(dt);
-        playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM + 24);
+        playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM - 10);
         playerTweener.setAngle((float) Math.toDegrees(body.getAngle()));
     }
 

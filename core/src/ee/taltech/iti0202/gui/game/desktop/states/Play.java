@@ -783,7 +783,7 @@ public class Play extends GameState {
                     }
 
                 }
-                player.setFlipX(false);
+                player.setFlipX(true);
             }
 
             //player dash left
@@ -796,8 +796,9 @@ public class Play extends GameState {
                         player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
                     }
                     cl.setDash(false);
+                    player.setAnimation(Player.PlayerAnimation.DASH);
                 }
-                player.setFlipX(false);
+                player.setFlipX(true);
             }
 
             //player move right
@@ -810,7 +811,7 @@ public class Play extends GameState {
                         player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
                     }
                 }
-                player.setFlipX(true);
+                player.setFlipX(false);
             }
 
             //player dash right
@@ -822,8 +823,9 @@ public class Play extends GameState {
                         player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
                     }
                     cl.setDash(false);
+                    player.setAnimation(Player.PlayerAnimation.DASH);
                 }
-                player.setFlipX(true);
+                player.setFlipX(false);
             }
 
             if (!MyInput.isDown(-1)) {

@@ -11,7 +11,8 @@ public class Player extends SpriteAnimation {
         RUN ("run"),
         JUMP ("jump"),
         IDLE ("idle"),
-        DOUBLE_JUMP ("double_jump");
+        DOUBLE_JUMP ("double_jump"),
+        DASH ("dash");
 
         private final String name;
 
@@ -29,8 +30,8 @@ public class Player extends SpriteAnimation {
     private int health;
 
     public Player(Body body, SpriteBatch sb) {
-        super(body, sb, "images/player/Knights.scml");
-        setScale(0.16f);
+        super(body, sb, "images/player/rogue.scml");
+        setScale(0.08f);
         setAnimationSpeed(100);
         health = 100;
     }
