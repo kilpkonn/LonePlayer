@@ -382,11 +382,9 @@ public class Play extends GameState {
                 for (int i = 0; i < size; i++) {
                     initSnakePart("magmawormbody" + scale, tempArray);
 
-                    float cur_Lock = 0.45f;
-                    for (int j = 0; j < 3; j++) {
-                        craeteJointBetweenLinks(tempArray, cur_Lock);
-                        cur_Lock += 0.05f;
-                    }
+                    craeteJointBetweenLinks(tempArray, 0.05f);
+                    craeteJointBetweenLinks(tempArray, 0.95f);
+
                 }
 
                 // some random ass box
@@ -418,9 +416,9 @@ public class Play extends GameState {
         distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
         distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
         distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
-        distanceJointDef.collideConnected = false;
-        distanceJointDef.localAnchorA.set(lock * scale, 0.8f * scale);
-        distanceJointDef.localAnchorB.set(lock * scale, 0.4f * scale);
+        distanceJointDef.collideConnected = true;
+        distanceJointDef.localAnchorA.set(lock * scale, 0.985f * scale);
+        distanceJointDef.localAnchorB.set(lock * scale, 0.015f * scale);
         world.createJoint(distanceJointDef);
     }
 

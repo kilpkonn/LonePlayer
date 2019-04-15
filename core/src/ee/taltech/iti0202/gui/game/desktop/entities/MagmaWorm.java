@@ -79,7 +79,7 @@ public class MagmaWorm extends Boss {
         super.update(dt);
         // updateHeadBig(dt);
         time += dt;
-        max_speed = 3f;
+        max_speed = 2.5f;
 //
         float sinOffset = (float) Math.sin(time) * 15;
 //
