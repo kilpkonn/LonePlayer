@@ -101,6 +101,8 @@ public class Play extends GameState {
         DEFAULT,
     }
 
+    public static final int gotHitBySnek = 1;
+
     private World world;
     private Box2DDebugRenderer b2dr;
     private OrthographicCamera b2dcam;
@@ -385,11 +387,9 @@ public class Play extends GameState {
                 for (int i = 0; i < size; i++) {
                     initSnakePart("magmawormbody" + scale, tempArray);
 
-                    float cur_Lock = 0.45f;
-                    for (int j = 0; j < 3; j++) {
-                        craeteJointBetweenLinks(tempArray, cur_Lock);
-                        cur_Lock += 0.05f;
-                    }
+                    craeteJointBetweenLinks(tempArray, 0.45f);
+                    craeteJointBetweenLinks(tempArray, 0.55f);
+
                 }
 
                 // some random ass box
@@ -422,8 +422,9 @@ public class Play extends GameState {
         distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
         distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
         distanceJointDef.collideConnected = false;
-        distanceJointDef.localAnchorA.set(lock * scale, 0.8f * scale);
-        distanceJointDef.localAnchorB.set(lock * scale, 0.4f * scale);
+        distanceJointDef.localAnchorA.set(lock * scale, 0.985f * scale);
+        distanceJointDef.localAnchorB.set(lock * scale, 0.015f * scale);
+        distanceJointDef.length = 0.05f * scale;
         world.createJoint(distanceJointDef);
     }
 
@@ -583,7 +584,7 @@ public class Play extends GameState {
                 }
                 fixBleeding(cell.getTile().getTextureRegion());
                 if (cell.getTile().getProperties().containsKey("animation")) {
-                    Texture tex = Game.res.getTexture("player");
+                    Texture tex = Game.res.getTexture("Player");
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
                     animatedCells.put(cell, new Animation(sprites, 1 / 12f));
                 }
@@ -625,11 +626,14 @@ public class Play extends GameState {
                         break;
 
                     case "bosses_small":
-                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get(BOSS).toString(), false, (Integer) layer.getProperties().get("size"));
+                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), false, (Integer) layer.getProperties().get("size"));
                         break;
 
                     case "bosses_big":
-                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get(BOSS).toString(), true, (Integer) layer.getProperties().get("size"));
+                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
+                        break;
+                    case "bosses":
+                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
                         break;
 
                     case "player":
@@ -739,90 +743,92 @@ public class Play extends GameState {
             }
         }
 
-        //change dimension
-        if (MyInput.isPressed(Game.settings.CHANGE_DIMENTION)) {
-            System.out.println("changed dimension");
-            dimensionJump = true;
-            dimensionFadeDone = false;
-            tempPlayerHp = player.getHealth();
-            tempPlayerLocation = player.getPosition();
-            tempPlayerVelocity = player.getBody().getLinearVelocity();
-            tempCamLocation = cam.position;
-            dimension = !dimension;
-            cl.setPlayerDead(true);
-            cl.setPlayerSuperDead(true);
-        }
-
-        //player jump / double jump / dash
-        if (MyInput.isPressed(Game.settings.JUMP)) {
-            player.setAnimation(Player.PlayerAnimation.JUMP);
-            if (cl.isPlayerOnGround()) {
-                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
-            } else if (cl.isWallJump() != 0) {
-                player.getBody().applyLinearImpulse(new Vector2(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
-                cl.setWallJump(0);
-            } else if (cl.hasDoubleJump()) {
-                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
-                cl.setDoubleJump(false);
+        if (playState == pauseState.RUN) {
+            //change dimension
+            if (MyInput.isPressed(Game.settings.CHANGE_DIMENTION)) {
+                System.out.println("changed dimension");
+                dimensionJump = true;
+                dimensionFadeDone = false;
+                tempPlayerHp = player.getHealth();
+                tempPlayerLocation = player.getPosition();
+                tempPlayerVelocity = player.getBody().getLinearVelocity();
+                tempCamLocation = cam.position;
+                dimension = !dimension;
+                cl.setPlayerDead(true);
+                cl.setPlayerSuperDead(true);
             }
-        }
 
-        //player move left
-        if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
-            if (current_force.x > -MAX_SPEED) {
+            //player jump / double jump / dash
+            if (MyInput.isPressed(Game.settings.JUMP)) {
+                player.setAnimation(Player.PlayerAnimation.JUMP);
                 if (cl.isPlayerOnGround()) {
-                    player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
-                    player.setAnimation(Player.PlayerAnimation.RUN);
-                } else {
-                    player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
-                }
-
-            }
-            player.setFlipX(false);
-        }
-
-        //player dash left
-        if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
-            if (!cl.isPlayerOnGround() && cl.hasDash()) {
-                current_force = player.getBody().getLinearVelocity();
-                if (current_force.x > 0) {
-                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
-                } else {
-                    player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
-                }
-                cl.setDash(false);
-            }
-            player.setFlipX(false);
-        }
-
-        //player move right
-        if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
-            if (current_force.x < MAX_SPEED) {
-                if (cl.isPlayerOnGround()) {
-                    player.setAnimation(Player.PlayerAnimation.RUN);
-                    player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
-                } else {
-                    player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
+                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+                } else if (cl.isWallJump() != 0) {
+                    player.getBody().applyLinearImpulse(new Vector2(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
+                    cl.setWallJump(0);
+                } else if (cl.hasDoubleJump()) {
+                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
+                    cl.setDoubleJump(false);
                 }
             }
-            player.setFlipX(true);
-        }
 
-        //player dash right
-        if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
-            if (!cl.isPlayerOnGround() && cl.hasDash()) {
-                if (current_force.x < 0) {
-                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
-                } else {
-                    player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+            //player move left
+            if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
+                if (current_force.x > -MAX_SPEED) {
+                    if (cl.isPlayerOnGround()) {
+                        player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
+                        player.setAnimation(Player.PlayerAnimation.RUN);
+                    } else {
+                        player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
+                    }
+
                 }
-                cl.setDash(false);
+                player.setFlipX(false);
             }
-            player.setFlipX(true);
-        }
 
-        if (!MyInput.isDown(-1)) {
-            player.setAnimation(Player.PlayerAnimation.IDLE);
+            //player dash left
+            if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
+                if (!cl.isPlayerOnGround() && cl.hasDash()) {
+                    current_force = player.getBody().getLinearVelocity();
+                    if (current_force.x > 0) {
+                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
+                    } else {
+                        player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+                    }
+                    cl.setDash(false);
+                }
+                player.setFlipX(false);
+            }
+
+            //player move right
+            if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
+                if (current_force.x < MAX_SPEED) {
+                    if (cl.isPlayerOnGround()) {
+                        player.setAnimation(Player.PlayerAnimation.RUN);
+                        player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
+                    } else {
+                        player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
+                    }
+                }
+                player.setFlipX(true);
+            }
+
+            //player dash right
+            if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
+                if (!cl.isPlayerOnGround() && cl.hasDash()) {
+                    if (current_force.x < 0) {
+                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
+                    } else {
+                        player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+                    }
+                    cl.setDash(false);
+                }
+                player.setFlipX(true);
+            }
+
+            if (!MyInput.isDown(-1)) {
+                player.setAnimation(Player.PlayerAnimation.IDLE);
+            }
         }
     }
 
@@ -862,6 +868,13 @@ public class Play extends GameState {
                 settingsMenu.update(dt);
                 break;
 
+            case STOPPED:
+                if (cam.zoom < 5)
+                    cam.zoom += 0.01;
+                gameFadeOut = true;
+                gameFadeDone = false;
+                drawAndSetCamera();
+                cam.update();
             case END:
                 endMenu.update(dt);
                 break;
@@ -901,7 +914,7 @@ public class Play extends GameState {
             if (cl.isPlayerSuperDead()) {
                 player.setHealth(0);
             } else {
-                player.setHealth(player.getHealth() - 1);
+                player.setHealth(player.getHealth() - gotHitBySnek);
             }
             if (player.getHealth() <= 0) {
                 initPlayer();
@@ -915,7 +928,7 @@ public class Play extends GameState {
         if (bossArray.size != 0) {
             for (Array<Boss> bossList : bossArray)
                 for (int i = 0; i < bossList.size; i++) {
-                    if (bossList.size >= 1000) {
+                    if (bossList.size > 110) {
                         if (i == bossList.size - 1) {
                             bossList.get(i).updateHeadBig(dt);
                         } else {
@@ -977,7 +990,7 @@ public class Play extends GameState {
                 break;
             case END:
                 endMenu.handleInput();
-                drawPauseScreen();
+                endMenu.render(sb);
                 break;
             default:
                 break;
@@ -1055,7 +1068,7 @@ public class Play extends GameState {
         sb.begin();
         sb.draw(backgroundTexture, 0, 0);
         sb.end();
-        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 8)); //TODO: more advance stuff here, move with camera...
+        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 4)); //TODO: more advance stuff here, move with camera...
         stage.act();
         stage.draw();
 

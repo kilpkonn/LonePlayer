@@ -203,6 +203,10 @@ public class MyContactListener implements ContactListener {
         isPlayerSuperDead = playerSuperDead;
     }
 
+    public void setEnd(boolean end) {
+        this.end = end;
+    }
+
     public boolean isEnd() {
         return end;
     }

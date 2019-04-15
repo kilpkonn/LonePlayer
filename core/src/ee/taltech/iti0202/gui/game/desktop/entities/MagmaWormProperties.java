@@ -19,10 +19,10 @@ public class MagmaWormProperties {
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(position);
         bdef.allowSleep = false;
-        bdef.gravityScale = 0;
-        fdef.friction = 0f;
-        fdef.restitution = 0f;
-        fdef.density = 1f;
+        bdef.gravityScale = 0f;
+        fdef.friction = 1f;
+        fdef.restitution = 0.2f;
+        fdef.density = 10f;
         fdef.filter.categoryBits = BIT_WORM;
         fdef.filter.maskBits = DIMENTSION_1 | DIMENTSION_2;
     }
