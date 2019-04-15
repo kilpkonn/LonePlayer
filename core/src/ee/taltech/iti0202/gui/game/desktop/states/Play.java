@@ -384,8 +384,8 @@ public class Play extends GameState {
                 for (int i = 0; i < size; i++) {
                     initSnakePart("magmawormbody" + scale, tempArray);
 
-                    craeteJointBetweenLinks(tempArray, 0.05f);
-                    craeteJointBetweenLinks(tempArray, 0.95f);
+                    craeteJointBetweenLinks(tempArray, 0.45f);
+                    craeteJointBetweenLinks(tempArray, 0.55f);
 
                 }
 
