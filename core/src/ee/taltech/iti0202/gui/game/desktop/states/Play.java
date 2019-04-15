@@ -20,12 +20,12 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Ellipse;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -66,7 +66,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BAC
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.COLOSSEOS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DEBUG;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
@@ -101,7 +100,7 @@ public class Play extends GameState {
         DEFAULT,
     }
 
-    public static final int gotHitBySnek = 1;
+    private static final int gotHitBySnek = 1;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -118,15 +117,11 @@ public class Play extends GameState {
 
     private Player player;
     private boolean dimension;
-    private boolean dimensionJump;
     private Array<Array<Boss>> bossArray;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
     private Checkpoint checkpoint;
-    private int tempPlayerHp;
     private Vector2 tempPlayerLocation;
-    private Vector2 tempPlayerVelocity;
     private Vector2 initPlayerLocation;
-    private Vector3 tempCamLocation;
     private Vector2 tempPosition;
     private BodyDef bdef;
     private PolygonShape polyShape;
@@ -175,10 +170,8 @@ public class Play extends GameState {
         fdef = new FixtureDef();
 
         // create array for bosses
-        dimensionJump = false;
         dimension = true;
         tempPlayerLocation = new Vector2();
-        tempPlayerVelocity = new Vector2();
         bossArray = new Array<>();
 
         //set up cameras
@@ -293,11 +286,7 @@ public class Play extends GameState {
         circle = new CircleShape();
         polyShape = new PolygonShape();
 
-        if (dimensionJump) {
-            bdef.position.set(new Vector2(tempPlayerLocation.x, tempPlayerLocation.y + 1 / PPM));
-            bdef.linearVelocity.set(new Vector2(tempPlayerVelocity));
-            cam.position.set(tempCamLocation);
-        } else if (checkpoint == null) {
+        if (checkpoint == null) {
             if (initPlayerLocation == null) {
                 bdef.position.set(0, 0); // hopefully never get here
             } else {
@@ -354,10 +343,6 @@ public class Play extends GameState {
         body.createFixture(fdef).setUserData("foot");
 
         player = new Player(body, sb);
-        if (dimensionJump) {
-            dimensionJump = false;
-            player.setHealth(tempPlayerHp);
-        }
 
     }
 
@@ -747,15 +732,24 @@ public class Play extends GameState {
             //change dimension
             if (MyInput.isPressed(Game.settings.CHANGE_DIMENTION)) {
                 System.out.println("changed dimension");
-                dimensionJump = true;
                 dimensionFadeDone = false;
-                tempPlayerHp = player.getHealth();
-                tempPlayerLocation = player.getPosition();
-                tempPlayerVelocity = player.getBody().getLinearVelocity();
-                tempCamLocation = cam.position;
                 dimension = !dimension;
-                cl.setPlayerDead(true);
-                cl.setPlayerSuperDead(true);
+
+                short mask;
+                if (dimension) {
+                    mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
+                } else {
+                    mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
+                }
+
+                Filter filter = new Filter();
+                for (Fixture playerFixture : player.getBody().getFixtureList()) {
+                    filter.groupIndex = playerFixture.getFilterData().groupIndex;
+                    filter.categoryBits = playerFixture.getFilterData().categoryBits;
+                    filter.maskBits = mask;
+                    playerFixture.setFilterData(filter);
+                }
+
             }
 
             //player jump / double jump / dash
