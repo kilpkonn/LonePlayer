@@ -97,7 +97,8 @@ public class Play extends GameState {
         RUN,
         RESUME,
         SETTINGS,
-        STOPPED
+        END,
+        DEFAULT,
     }
 
     private World world;
@@ -141,7 +142,7 @@ public class Play extends GameState {
     private TiledMapTileLayer foreground;
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
-    private pauseState playState;
+    private pauseState playState = pauseState.DEFAULT;
     private boolean gameFadeOut = false;
     private boolean gameFadeDone = true;
     private boolean dimensionFadeDone = false;
@@ -582,7 +583,7 @@ public class Play extends GameState {
                 }
                 fixBleeding(cell.getTile().getTextureRegion());
                 if (cell.getTile().getProperties().containsKey("animation")) {
-                    Texture tex = Game.res.getTexture("Player");
+                    Texture tex = Game.res.getTexture("player");
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
                     animatedCells.put(cell, new Animation(sprites, 1 / 12f));
                 }
@@ -834,6 +835,8 @@ public class Play extends GameState {
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
 
+        if (cl.isEnd()) playState = pauseState.END;
+
         updateGameFade(dt);
         updateDimensionFade(dt);
 
@@ -854,7 +857,7 @@ public class Play extends GameState {
                 settingsMenu.update(dt);
                 break;
 
-            case STOPPED:
+            case END:
                 endMenu.update(dt);
                 break;
 
@@ -967,7 +970,7 @@ public class Play extends GameState {
                 settingsMenu.handleInput();
                 drawPauseScreen();
                 break;
-            case STOPPED:
+            case END:
                 endMenu.handleInput();
                 drawPauseScreen();
                 break;
