@@ -99,6 +99,8 @@ public class Play extends GameState {
         STOPPED
     }
 
+    public static final int gotHitBySnek = 1;
+
     private World world;
     private Box2DDebugRenderer b2dr;
     private OrthographicCamera b2dcam;
@@ -416,9 +418,10 @@ public class Play extends GameState {
         distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
         distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
         distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
-        distanceJointDef.collideConnected = true;
+        distanceJointDef.collideConnected = false;
         distanceJointDef.localAnchorA.set(lock * scale, 0.985f * scale);
         distanceJointDef.localAnchorB.set(lock * scale, 0.015f * scale);
+        distanceJointDef.length = 0.05f * scale;
         world.createJoint(distanceJointDef);
     }
 
@@ -624,6 +627,9 @@ public class Play extends GameState {
                         break;
 
                     case "bosses_big":
+                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
+                        break;
+                    case "bosses":
                         createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
                         break;
 
@@ -861,7 +867,7 @@ public class Play extends GameState {
                 break;
 
             case STOPPED:
-                if (cam.zoom < 4)
+                if (cam.zoom < 5)
                     cam.zoom += 0.01;
                 gameFadeOut = true;
                 gameFadeDone = false;
@@ -904,7 +910,7 @@ public class Play extends GameState {
             if (cl.isPlayerSuperDead()) {
                 player.setHealth(0);
             } else {
-                player.setHealth(player.getHealth() - 1);
+                player.setHealth(player.getHealth() - gotHitBySnek);
             }
             if (player.getHealth() <= 0) {
                 initPlayer();
@@ -918,7 +924,7 @@ public class Play extends GameState {
         if (bossArray.size != 0) {
             for (Array<Boss> bossList : bossArray)
                 for (int i = 0; i < bossList.size; i++) {
-                    if (bossList.size >= 1000) {
+                    if (bossList.size > 110) {
                         if (i == bossList.size - 1) {
                             bossList.get(i).updateHeadBig(dt);
                         } else {

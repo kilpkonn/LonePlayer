@@ -77,25 +77,30 @@ public class MagmaWorm extends Boss {
     @Override
     public void updateHeadSmall(float dt) {
         super.update(dt);
-        // updateHeadBig(dt);
         time += dt;
-        max_speed = 2.5f;
-//
-        float sinOffset = (float) Math.sin(time) * 15;
-//
+        max_speed = 3f;
+
+        float sinOffset = (float) Math.sin(time) * 2;
+
         float velocity = (float) Math.sqrt(Math.pow(body.linVelLoc.x, 2) + Math.pow(body.linVelLoc.y, 2)); // Your desired velocity of the car.
         float angle = body.getAngle(); // Body angle in radians.
-//
+
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
-//
+
         Player player = play.getPlayer();
-//
+
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),
-                velY + (player.getPosition().y - body.getPosition().y) + sinOffset);
-//
-//
+                velY + (player.getPosition().y - body.getPosition().y + sinOffset));
+
+        // Vector2 v = new Vector2(play.getPlayer().getPosition().x - body.getPosition().x, play.getPlayer().getPosition().x - body.getPosition().y);
+        // double len = sqrt(v.x * v.x + v.y * v.y);
+        // Vector2 dir = new Vector2((float) (v.x / len), (float) (v.y / len)); //v.x / len, v.y / len
+        // Vector2 movement = new Vector2(dir.x * max_speed, dir.y * max_speed);
+        // body.setLinearVelocity(body.getLinearVelocity().x + movement.x, body.linVelLoc.y + movement.y);
+
+
         Vector2 cur_vel = body.getLinearVelocity();
         body.setLinearVelocity(
                 minmax(cur_vel.x),

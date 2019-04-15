@@ -9,5 +9,5 @@
   "ENABLE_DEV_MAPS": true,
   "SHOW_FPS": true,
   "MAX_FPS": 300,
-  "ENABLE_VSYNC": true
+  "ENABLE_VSYNC": false
 }
