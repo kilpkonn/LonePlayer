@@ -18,10 +18,10 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 public class EndMenu extends Scene{
 
     private enum block {
-        NEWGAME, NEXT, EXIT, SETTINGS
+        NEWGAME, NEXT, EXIT, SETTINGS, DEFAULT
     }
 
-    private block currBlock;
+    private block currBlock = block.DEFAULT;
     private HashMap<GameButton, block> buttonType;
     private Runnable openSettingsFunc;
 
@@ -37,7 +37,7 @@ public class EndMenu extends Scene{
         hudCam.update();
 
         nextButton = new GameButton("Next level", V_WIDTH / 6f, V_HEIGHT / 1.5f - 40);
-        playAgainButton = new GameButton("Play again", V_WIDTH / 6f, V_HEIGHT / 1.5f - 40);
+        playAgainButton = new GameButton("Play again", V_WIDTH / 6f, V_HEIGHT / 1.5f - 80);
         settingsButton = new GameButton("Settings", V_WIDTH / 6f, V_HEIGHT / 1.5f - 120);
         exitButton = new GameButton("Exit", V_WIDTH / 6f, V_HEIGHT / 1.5f - 160);
 

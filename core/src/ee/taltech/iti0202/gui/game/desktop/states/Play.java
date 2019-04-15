@@ -868,16 +868,14 @@ public class Play extends GameState {
                 settingsMenu.update(dt);
                 break;
 
-            case STOPPED:
-                if (cam.zoom < 5)
-                    cam.zoom += 0.01;
-                gameFadeOut = true;
-                gameFadeDone = false;
-                drawAndSetCamera();
-                cam.update();
             case END:
+                if (cam.zoom < 5)
+                    cam.zoom += 0.01; //TODO: Fix this
+                //gameFadeOut = true;
+                //gameFadeDone = false;
+                //drawAndSetCamera();
+                cam.update();
                 endMenu.update(dt);
-                break;
 
             default:
                 break;
@@ -970,7 +968,6 @@ public class Play extends GameState {
     }
 
     public void render() {
-
         switch (playState) {
             case RUN:
                 drawAndSetCamera();
@@ -989,6 +986,7 @@ public class Play extends GameState {
                 drawPauseScreen();
                 break;
             case END:
+                drawPauseScreen();
                 endMenu.handleInput();
                 endMenu.render(sb);
                 break;
