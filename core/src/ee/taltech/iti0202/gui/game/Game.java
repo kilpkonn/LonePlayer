@@ -114,10 +114,12 @@ public class Game extends ApplicationAdapter {
             gsm.render();
             MyInput.update(); // this is to define the end state of current iteration
         }*/
+
         float dt = Gdx.graphics.getDeltaTime();
         GameStateManager.update(dt);
         GameStateManager.render();
         MyInput.update();
+
     }
 
     @Override
@@ -131,6 +133,10 @@ public class Game extends ApplicationAdapter {
         if ((Gdx.app.getType().equals(Application.ApplicationType.Desktop))) {
             B2DVars.V_HEIGHT = h;
             B2DVars.V_WIDTH = w;
+            super.resize(w, h);
+            cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            cam.update();
+            sb.setProjectionMatrix(cam.combined);
             System.out.println("resized");
         }
 

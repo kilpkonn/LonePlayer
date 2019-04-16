@@ -36,6 +36,7 @@ public class B2DVars {
     // bosses
     public static final String MAGMAWORM = "1";
     public static final String COLOSSEOS = "2";
+    public static final int gotHitBySnek = 1;
 
     // category bits
     public static final short NONE = 0;

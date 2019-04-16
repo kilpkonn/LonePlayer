@@ -268,7 +268,7 @@
  </layer>
  <layer id="18" name="bosses_big" width="128" height="32">
   <properties>
-   <property name="size" type="int" value="1000"/>
+   <property name="size" type="int" value="500"/>
    <property name="type" value="1"/>
   </properties>
   <data encoding="csv">

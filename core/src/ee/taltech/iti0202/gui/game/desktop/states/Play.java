@@ -88,6 +88,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TER
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.gotHitBySnek;
 
 public class Play extends GameState {
 
@@ -99,8 +100,6 @@ public class Play extends GameState {
         END,
         DEFAULT,
     }
-
-    private static final int gotHitBySnek = 1;
 
     private World world;
     private Box2DDebugRenderer b2dr;
@@ -263,6 +262,7 @@ public class Play extends GameState {
                 0);
         newPlayer = true;
         UPDATE = true;
+        cam.zoom = 1;
     }
 
     public Play(String act, String map) {
@@ -1084,15 +1084,17 @@ public class Play extends GameState {
 
         if (DEBUG) b2dr.render(world, b2dcam.combined);
 
+        // draw checkpoint
+        if (checkpoint != null) checkpoint.render(sb);
+
         //draw player
         sb.setProjectionMatrix(cam.combined);
         if (player != null) player.render(sb);
 
-        if (bossArray != null)
+        if (bossArray != null) {
             for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.render(sb, true);
+        }
 
-        // draw checkpoint
-        if (checkpoint != null) checkpoint.render(sb);
 
         hud.render(sb);
 
