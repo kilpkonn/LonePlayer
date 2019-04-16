@@ -58,8 +58,8 @@ public class SpriteAnimation {
         sb.end();
     }
 
-    protected void setAnimation(String animation) {
-        playerTweener.setAnimation(animation);
+    protected void setAnimation(String animation, boolean playOnce) {
+        playerTweener.setAnimation(animation, playOnce);
     }
 
     public void setFlipX(boolean flipX) {

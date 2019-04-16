@@ -7,6 +7,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 public class MyPlayerTweener extends PlayerTweener {
     private float influence;
+    private boolean playingOnce;
 
     public MyPlayerTweener(Entity entity) {
         super(entity);
@@ -23,9 +24,30 @@ public class MyPlayerTweener extends PlayerTweener {
 
     public void setAnimation(String anim) {
         if (!anim.equals(getSecondPlayer().getAnimation().name)) {
+            influence = 0;
+            getFirstPlayer().setAnimation(getSecondPlayer().getAnimation());
+            getSecondPlayer().setAnimation(anim);
+        }
+    }
+
+    public void setAnimation(String anim, final boolean playOnce) {
+        if (!anim.equals(getSecondPlayer().getAnimation().name)) {
             influence = anim.equals("roll") ? 0.5f : 0; //TODO: Detect roll end and return
             getFirstPlayer().setAnimation(getSecondPlayer().getAnimation());
             getSecondPlayer().setAnimation(anim);
+            if (playOnce) {
+                getSecondPlayer().addListener(new MyPlayerListener(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (playingOnce) {
+                            setAnimation(getFirstPlayer().getAnimation().name, false);
+                            influence = 1;
+                            playingOnce = false;
+                        }
+                    }
+                }));
+                playingOnce = true;
+            }
         }
     }
 
