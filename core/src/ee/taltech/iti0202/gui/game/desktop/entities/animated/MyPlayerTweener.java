@@ -50,7 +50,7 @@ public class MyPlayerTweener extends PlayerTweener {
             if (animToPlayOnce.contains(anim)) {
                 influence = 0.5f;
             } else if (animToPlayOnce.contains(getSecondPlayer().getAnimation().name)) {
-                influence = 1;
+                influence = 0.5f;
             } else {
                 influence = 0;
             }
