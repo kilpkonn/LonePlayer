@@ -18,12 +18,12 @@ public class MyPlayerTweener extends PlayerTweener {
             if (influence > 1) influence = 1;
             setWeight(influence);
         }
-        super.update(dt); //TODO: Add dt
+        super.update(dt);
     }
 
     public void setAnimation(String anim) {
         if (!anim.equals(getSecondPlayer().getAnimation().name)) {
-            influence = 0;
+            influence = anim.equals("roll") ? 0.5f : 0; //TODO: Detect roll end and return
             getFirstPlayer().setAnimation(getSecondPlayer().getAnimation());
             getSecondPlayer().setAnimation(anim);
         }

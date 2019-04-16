@@ -763,6 +763,7 @@ public class Play extends GameState {
                 } else if (cl.hasDoubleJump()) {
                     player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                     cl.setDoubleJump(false);
+                    player.setAnimation(Player.PlayerAnimation.ROLL);
                 }
             }
 
@@ -822,9 +823,11 @@ public class Play extends GameState {
                 player.setFlipX(false);
             }
 
-            if (!MyInput.isDown(-1)) {
+            if (!MyInput.isDown(-1) && cl.isPlayerOnGround()) {
                 player.setAnimation(Player.PlayerAnimation.IDLE);
             }
+
+            //TODO: roll on land -> need to detect landing
         }
     }
 

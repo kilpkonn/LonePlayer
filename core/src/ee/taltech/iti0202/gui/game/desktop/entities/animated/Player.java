@@ -12,6 +12,7 @@ public class Player extends SpriteAnimation {
         JUMP ("jump"),
         IDLE ("idle"),
         DOUBLE_JUMP ("double_jump"),
+        ROLL ("roll"),
         DASH ("dash");
 
         private final String name;
