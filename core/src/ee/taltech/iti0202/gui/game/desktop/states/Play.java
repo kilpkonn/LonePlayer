@@ -437,7 +437,8 @@ public class Play extends GameState {
         fdef.filter.maskBits = B2DVars.BIT_ALL;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("checkpoint");
-        checkpoint = new Checkpoint(body);
+        checkpoint = new Checkpoint(body, sb);
+        //checkpoint.onReached();
     }
 
     private void createEndPoint(Vector2 pos) {
@@ -453,7 +454,7 @@ public class Play extends GameState {
         fdef.filter.maskBits = B2DVars.BIT_ALL;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("end");
-        checkpoint = new Checkpoint(body);
+        checkpoint = new Checkpoint(body, sb);
     }
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
@@ -1085,7 +1086,7 @@ public class Play extends GameState {
         if (DEBUG) b2dr.render(world, b2dcam.combined);
 
         // draw checkpoint
-        if (checkpoint != null) checkpoint.render(sb);
+        if (checkpoint != null) checkpoint.render(sb); //TODO: Why is checkpoint following player ?!?
 
         //draw player
         sb.setProjectionMatrix(cam.combined);
