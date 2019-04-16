@@ -60,6 +60,8 @@ public class LevelSelectionMenu extends Scene {
         }
         buttons.addAll(actButtons.keySet());
 
+        //TODO: Load acts on every menu opening...
+
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
     }

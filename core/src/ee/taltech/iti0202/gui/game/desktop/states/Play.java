@@ -763,7 +763,7 @@ public class Play extends GameState {
                 } else if (cl.hasDoubleJump()) {
                     player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                     cl.setDoubleJump(false);
-                    player.setAnimation(Player.PlayerAnimation.ROLL);
+                    //player.setAnimation(Player.PlayerAnimation.ROLL);
                 }
             }
 
