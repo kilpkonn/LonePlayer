@@ -38,7 +38,7 @@ public class Player extends SpriteAnimation {
     }
 
     public void setAnimation(PlayerAnimation animation) {
-        setAnimation(animation.name);
+        setAnimation(animation.name, animation.name.equals("roll"));
     }
 
     public void collectCrystal() {

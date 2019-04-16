@@ -13,6 +13,8 @@ import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
 import com.brashmonkey.spriter.PlayerTweener;
 import com.brashmonkey.spriter.SCMLReader;
 
+import java.util.HashSet;
+
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 
@@ -39,6 +41,9 @@ public class SpriteAnimation {
         drawer = new LibGdxDrawer(loader, sb, null); // no shape rendering
         playerTweener = new MyPlayerTweener(data.getEntity(0));
         playerTweener.setPivot(0, 0);
+        HashSet<String> toPlayOnce = new HashSet<>();
+        toPlayOnce.add("roll");
+        playerTweener.setAnimToPlayOnce(toPlayOnce);
     }
 
     public void update(float dt) {
@@ -58,8 +63,8 @@ public class SpriteAnimation {
         sb.end();
     }
 
-    protected void setAnimation(String animation) {
-        playerTweener.setAnimation(animation);
+    protected void setAnimation(String animation, boolean playOnce) {
+        playerTweener.setAnimation(animation, playOnce);
     }
 
     public void setFlipX(boolean flipX) {
