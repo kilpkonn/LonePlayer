@@ -28,7 +28,7 @@ public class SpriteAnimation {
     protected Body body;
     private float opacity = 1;
 
-    SpriteAnimation(Body body, SpriteBatch sb, String path) {
+    public SpriteAnimation(Body body, SpriteBatch sb, String path) {
         System.out.println("New body: " + body.toString());
         this.body = body;
         //animation = new Animation();
