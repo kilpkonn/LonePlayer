@@ -46,7 +46,7 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
-import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
@@ -418,7 +418,7 @@ public class Play extends GameState {
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, bodyPart, alias.getFdef(), scale);
-        Boss boss = new MagmaWorm(body, MAGMAWORM, this, bodyPart);
+        Boss boss = new MagmaWorm(body, sb, MAGMAWORM, this, bodyPart);
         boss.getBody().setUserData(MAGMAWORM);
         tempArray.add(boss);
         tempPosition.y -= 50 * scale / PPM;
@@ -1093,7 +1093,7 @@ public class Play extends GameState {
         if (player != null) player.render(sb);
 
         if (bossArray != null) {
-            for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.render(sb, true);
+            for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.render(sb);
         }
 
 
