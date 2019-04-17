@@ -366,11 +366,11 @@ public class Play extends GameState {
                 this.tempPosition = position;
                 this.bossLoader = loader;
                 Array<Boss> tempArray = new Array<>();
-                initSnakePart("magmawormhead" + scale, tempArray);
+                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray);
                 tempPosition.y -= 60 * scale / PPM;
 
                 for (int i = 0; i < size; i++) {
-                    initSnakePart("magmawormbody" + scale, tempArray);
+                    initSnakePart(MagmaWorm.Part.BODY, scale, tempArray);
 
                     craeteJointBetweenLinks(tempArray, 0.45f);
                     craeteJointBetweenLinks(tempArray, 0.55f);
@@ -413,12 +413,12 @@ public class Play extends GameState {
         world.createJoint(distanceJointDef);
     }
 
-    private void initSnakePart(String bodyPart, Array<Boss> tempArray) {
+    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray) {
         MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, tempPosition);
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, bodyPart, alias.getFdef(), scale);
-        Boss boss = new MagmaWorm(body, sb, MAGMAWORM, this, bodyPart);
+        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
+        Boss boss = new MagmaWorm(body, sb, MAGMAWORM, this, part, size);
         boss.getBody().setUserData(MAGMAWORM);
         tempArray.add(boss);
         tempPosition.y -= 50 * scale / PPM;

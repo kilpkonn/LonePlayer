@@ -24,12 +24,29 @@ public class MagmaWorm extends Boss {
         }
     }
 
+    public enum Part {
+        HEAD ("magmawormhead"), BODY ("magmawormbody");
+
+        private final String name;
+
+        Part(String s) {
+            name = s;
+        }
+
+        public String toString() {
+            return this.name;
+        }
+    }
+
     private float max_speed = 3;
     private float time = 0;
 
-    public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, String part) {
-        super(body, sb, type, play);
+    public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size) {
+        super(body, sb, play, "images/bosses/magmaworm/magmaworm.scml", part == Part.HEAD ? "head" : "body");
+        body.setUserData(type); //TODO: Something more intelligent here
         setAnimation(MagmaWormAnimation.DEFAULT.name, false);
+        setAnimationSpeed(50);
+        setScale(size); //TODO: Bend animation / smoother bodies
     }
 
     @Override

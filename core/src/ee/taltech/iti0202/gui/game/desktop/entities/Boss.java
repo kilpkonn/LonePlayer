@@ -9,18 +9,14 @@ import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 public abstract class Boss extends SpriteAnimation {
 
-    private String type;
-
     public Play getPlay() {
         return play;
     }
 
     protected Play play;
 
-    Boss(Body body, SpriteBatch sb, String type, Play play) {
-        super(body, sb, "images/bosses/magmaworm/magmaworm.scml"); //TODO: Type...
-        body.setUserData(type);
-        this.type = type;
+    Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
+        super(body, sb, path, entity);
         this.play = play;
     }
 
