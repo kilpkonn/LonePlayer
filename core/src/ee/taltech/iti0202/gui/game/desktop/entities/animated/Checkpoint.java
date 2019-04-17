@@ -6,8 +6,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 public class Checkpoint extends SpriteAnimation {
 
     public enum CheckpointAnimation {
-        DEFAULT ("default"),
-        COLLECTED ("collected");
+        DEFAULT("default"),
+        COLLECTED("collected");
 
         private final String name;
 
