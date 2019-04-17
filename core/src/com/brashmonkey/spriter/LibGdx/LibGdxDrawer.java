@@ -1,5 +1,6 @@
 package com.brashmonkey.spriter.LibGdx;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -55,5 +56,9 @@ public class LibGdxDrawer extends Drawer<Sprite>{
         sprite.setColor(1f, 1f, 1f, object.alpha);
         sprite.setScale(object.scale.x, object.scale.y);
         sprite.draw(batch);
+    }
+
+    public void updateSpriteBatch(SpriteBatch sb) {
+        batch = sb;
     }
 }

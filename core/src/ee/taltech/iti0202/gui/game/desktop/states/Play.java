@@ -104,7 +104,7 @@ public class Play extends GameState {
     private World world;
     private Box2DDebugRenderer b2dr;
     private OrthographicCamera b2dcam;
-    private OrthographicCamera hudCam;
+    //private OrthographicCamera hudCam;
     private MyContactListener cl;
     private TiledMap tiledMap;
     private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
@@ -176,8 +176,8 @@ public class Play extends GameState {
         //set up cameras
         b2dcam = new OrthographicCamera();
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
-        hudCam = new OrthographicCamera();
-        hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
+        //hudCam = new OrthographicCamera();
+        //hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam, new Runnable() {
@@ -437,8 +437,10 @@ public class Play extends GameState {
         fdef.filter.maskBits = B2DVars.BIT_ALL;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("checkpoint");
+
+        //if (checkpoint != null) checkpoint.onReached(); //Mark old as reached
+
         checkpoint = new Checkpoint(body, sb);
-        //checkpoint.onReached();
     }
 
     private void createEndPoint(Vector2 pos) {
@@ -1085,11 +1087,12 @@ public class Play extends GameState {
 
         if (DEBUG) b2dr.render(world, b2dcam.combined);
 
+        sb.setProjectionMatrix(cam.combined);
+
         // draw checkpoint
-        if (checkpoint != null) checkpoint.render(sb); //TODO: Why is checkpoint following player ?!?
+        if (checkpoint != null) checkpoint.render(sb);
 
         //draw player
-        sb.setProjectionMatrix(cam.combined);
         if (player != null) player.render(sb);
 
         if (bossArray != null) {

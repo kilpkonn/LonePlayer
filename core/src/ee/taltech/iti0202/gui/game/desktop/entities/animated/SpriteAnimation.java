@@ -21,7 +21,7 @@ public class SpriteAnimation {
     private LibGdxLoader loader;
     private Data data;
 
-    private Drawer<Sprite> drawer;
+    private LibGdxDrawer drawer;
 
     protected Body body;
     private float opacity = 1;
@@ -59,7 +59,7 @@ public class SpriteAnimation {
     public void render(SpriteBatch sb) {
         sb.setColor(1, 1, 1, opacity);
         sb.begin();
-
+        drawer.updateSpriteBatch(sb);
         drawer.draw(playerTweener);
 
         sb.setColor(1, 1, 1, 1);
