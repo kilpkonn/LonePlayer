@@ -8,8 +8,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
 
-public class MagmaWormProperties extends Properties {
-    public MagmaWormProperties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
+public class PlantWormProperties extends Properties {
+    public PlantWormProperties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
         super(bdef, fdef, position);
 
         bdef.type = BodyDef.BodyType.DynamicBody;
