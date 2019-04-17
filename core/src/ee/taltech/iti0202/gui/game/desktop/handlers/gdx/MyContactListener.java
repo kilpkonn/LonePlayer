@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAGMAWORM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.WORM;
 
 
 public class MyContactListener implements ContactListener {
@@ -83,7 +83,7 @@ public class MyContactListener implements ContactListener {
                 setPlayerSuperDead(true);
                 setPlayerDead(true);
             }
-            if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(MAGMAWORM)) {
+            if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(WORM)) {
                 setPlayerDead(true);
             }
         }
@@ -92,7 +92,7 @@ public class MyContactListener implements ContactListener {
                 setPlayerSuperDead(true);
                 setPlayerDead(true);
             }
-            if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(MAGMAWORM)) {
+            if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(WORM)) {
                 setPlayerDead(true);
             }
         }

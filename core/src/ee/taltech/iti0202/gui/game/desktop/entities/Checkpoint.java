@@ -8,8 +8,8 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animated.SpriteAnimation;
 public class Checkpoint extends SpriteAnimation {
 
     public enum CheckpointAnimation {
-        DEFAULT ("default"),
-        COLLECTED ("collected");
+        DEFAULT("default"),
+        COLLECTED("collected");
 
         private final String name;
 
