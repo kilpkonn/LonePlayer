@@ -46,7 +46,7 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
-import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
@@ -366,11 +366,11 @@ public class Play extends GameState {
                 this.tempPosition = position;
                 this.bossLoader = loader;
                 Array<Boss> tempArray = new Array<>();
-                initSnakePart("magmawormhead" + scale, tempArray);
+                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray);
                 tempPosition.y -= 60 * scale / PPM;
 
                 for (int i = 0; i < size; i++) {
-                    initSnakePart("magmawormbody" + scale, tempArray);
+                    initSnakePart(MagmaWorm.Part.BODY, scale, tempArray);
 
                     craeteJointBetweenLinks(tempArray, 0.45f);
                     craeteJointBetweenLinks(tempArray, 0.55f);
@@ -413,12 +413,12 @@ public class Play extends GameState {
         world.createJoint(distanceJointDef);
     }
 
-    private void initSnakePart(String bodyPart, Array<Boss> tempArray) {
+    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray) {
         MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, tempPosition);
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, bodyPart, alias.getFdef(), scale);
-        Boss boss = new MagmaWorm(body, MAGMAWORM, this, bodyPart);
+        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
+        Boss boss = new MagmaWorm(body, sb, MAGMAWORM, this, part, size);
         boss.getBody().setUserData(MAGMAWORM);
         tempArray.add(boss);
         tempPosition.y -= 50 * scale / PPM;
@@ -1096,7 +1096,7 @@ public class Play extends GameState {
         if (player != null) player.render(sb);
 
         if (bossArray != null) {
-            for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.render(sb, true);
+            for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.render(sb);
         }
 
 
