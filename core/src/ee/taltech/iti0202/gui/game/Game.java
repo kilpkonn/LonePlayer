@@ -3,6 +3,7 @@ package ee.taltech.iti0202.gui.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -19,15 +20,13 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 
 
 public class Game extends ApplicationAdapter {
+
     public static final String TITLE = "Alone at Night";
-
-    private float accum;
-
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;
     public static Settings settings;
-
+    private Music sound;
     private GameStateManager gsm;
     public static Content res;
 
@@ -37,6 +36,7 @@ public class Game extends ApplicationAdapter {
 
     public void create() {
 
+        // set up relative paths for devices
         switch (Gdx.app.getType()) {
             case Android:
                 // android specific code
@@ -58,6 +58,16 @@ public class Game extends ApplicationAdapter {
                 break;
             case iOS:
                 break;
+        }
+
+        // set up music player
+        try {
+            this.sound = Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/forest.ogg"));
+            this.sound.play();
+            System.out.println("Music");
+        } catch (Exception e) {
+            System.out.println(PATH + "sounds/forest.ogg");
+            System.out.println("Sound couldn't be located.");
         }
 
         Gdx.input.setInputProcessor(new MyInputProcessor());
@@ -158,5 +168,13 @@ public class Game extends ApplicationAdapter {
     }
 
     public void setForegroundFPS(int value) {
+    }
+
+    public Music getSound() {
+        return sound;
+    }
+
+    public void setSound(Music sound) {
+        this.sound = sound;
     }
 }

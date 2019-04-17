@@ -159,6 +159,7 @@ public class Play extends GameState {
     private Play(String act, String map, GameProgress progress) {
         this.act = act;
         this.map = map;
+        game.getSound().stop();
         // sey up world
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
@@ -378,8 +379,9 @@ public class Play extends GameState {
                             } else {
                                 initSnakePart(MagmaWorm.Part.BODY, scale, tempArray);
                             }
-                            craeteJointBetweenLinks(tempArray, 0.30f);
-                            craeteJointBetweenLinks(tempArray, 0.70f);
+                            craeteJointBetweenLinks(tempArray, 0.40f);
+                            craeteJointBetweenLinks(tempArray, 0.50f);
+                            craeteJointBetweenLinks(tempArray, 0.60f);
 
                         }
 
@@ -394,7 +396,6 @@ public class Play extends GameState {
                         bossArray.add(tempArray);
                         break;
                     case 2:
-                        System.out.println("SS");
                         aurelienribon.bodyeditor.BodyEditorLoader loader2 = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses2.json"));
                         this.tempPosition = position;
                         this.bossLoader = loader2;
@@ -429,10 +430,10 @@ public class Play extends GameState {
         distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
         distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
         distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
-        distanceJointDef.collideConnected = false;
+        distanceJointDef.collideConnected = true;
         distanceJointDef.localAnchorA.set(lock * scale, 0.95f * scale);
         distanceJointDef.localAnchorB.set(lock * scale, 0.05f * scale);
-        distanceJointDef.length = 0.1f * scale;
+        distanceJointDef.length = 0.05f * scale;
         world.createJoint(distanceJointDef);
     }
 
@@ -930,15 +931,14 @@ public class Play extends GameState {
         cam.update();
 
         //call update animation
-        if (!cl.IsPlayerDead()) {
+        if (cl.getDeathState() == 0) {
             player.update(dt);
         } else {
-            if (cl.isPlayerMoreDead()) {
+            if (cl.getDeathState() == 2) {
                 player.setHealth(player.getHealth() - gotHitBySnek * 10);
                 playSoundOnce("sounds/sfx_deathscream_alien1.wav");
-                cl.setPlayerMoreDead(false);
             }
-            if (cl.isPlayerSuperDead()) {
+            if (cl.getDeathState() == 3) {
                 player.setHealth(0);
             } else {
                 playSoundOnce("sounds/sfx_damage_hit2.wav", 0.1f);
@@ -948,8 +948,7 @@ public class Play extends GameState {
                 playSoundOnce("sounds/sfx_sound_shutdown1.wav");
                 initPlayer();
             }
-            cl.setPlayerDead(false);
-            cl.setPlayerSuperDead(false);
+            cl.setDeathState((short) 0);
             player.update(dt);
         }
 

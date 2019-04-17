@@ -75,7 +75,7 @@ public class LoadGameMenu extends Scene {
                     playSoundOnce("sounds/menu_click.wav", 0.5f);
                     GameStateManager.pushState(GameStateManager.State.PLAY, getGameProgress());
                 case EXIT:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
+                    playSoundOnce("sounds/negative_2.wav", 0.5f);
                     backFunc.run();
             }
         }

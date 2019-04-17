@@ -90,7 +90,7 @@ public class LevelSelectionMenu extends Scene {
                     GameStateManager.pushState(GameStateManager.State.PLAY, selectedAct, selectedMap);
                     break;
                 case EXIT:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
+                    playSoundOnce("sounds/negative_2.wav", 0.5f);
                     backFunc.run();
                     break;
             }

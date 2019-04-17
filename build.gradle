@@ -10,7 +10,7 @@ buildscript {
         google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath 'com.android.tools.build:gradle:3.4.0'
         classpath 'com.mobidevelop.robovm:robovm-gradle-plugin:2.3.5'
         classpath 'org.multi-os-engine:moe-gradle:1.4.0'
 
@@ -138,22 +138,22 @@ project(":core") {
     }
 }
 
-project(":ios-moe") {
-    apply plugin: "moe"
-
-    configurations { natives }
-
-    dependencies {
-        implementation project(":core")
-        implementation "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
-        natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-        natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
-        natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
-        natives "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
-        implementation 'com.google.code.gson:gson:2.8.5'
-        
-    }
-}
+// project(":ios-moe") {
+//     apply plugin: "moe"
+// 
+//     configurations { natives }
+//
+//     dependencies {
+//         implementation project(":core")
+//         implementation "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
+//         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
+//         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
+//         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
+//         natives "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
+//         implementation 'com.google.code.gson:gson:2.8.5'
+//
+//     }
+// }
 
 tasks.eclipse.doLast {
     delete ".project"

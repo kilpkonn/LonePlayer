@@ -151,7 +151,7 @@ public class SettingsMenu extends Scene {
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (currBlock) {
                 case EXIT:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
+                    playSoundOnce("sounds/negative_2.wav", 0.5f);
                     try {
                         backFunc.run();
                     } catch (Exception e) {

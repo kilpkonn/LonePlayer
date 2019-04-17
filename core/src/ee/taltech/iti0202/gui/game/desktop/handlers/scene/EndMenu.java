@@ -70,7 +70,7 @@ public class EndMenu extends Scene{
                     openSettingsFunc.run();
                     break;
                 case EXIT:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
+                    playSoundOnce("sounds/negative_2.wav", 0.5f);
                     GameStateManager.pushState(GameStateManager.State.MENU);
                     break;
             }

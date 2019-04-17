@@ -20,9 +20,7 @@ public class MyContactListener implements ContactListener {
     private boolean newCheckpoint = false;
     private Body curCheckpoint;
     private Body toBeDeleted;
-    private boolean isPlayerDead = false;
-    private boolean isPlayerMoreDead = false;
-    private boolean isPlayerSuperDead = false;
+    private short deathState = 0;
     private boolean initSpawn = true;
     private boolean end = false;
 
@@ -81,30 +79,26 @@ public class MyContactListener implements ContactListener {
         // detection happens when player goes outside of initial game border
         if (fa.getUserData() != null && (fa.getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
             if (fb.getUserData() != null && fb.getUserData().equals("barrier")) {
-                setPlayerSuperDead(true);
-                setPlayerDead(true);
+                deathState = 3;
             }
             if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(WORM)) {
-                setPlayerDead(true);
-                setPlayerDead(true);
+                deathState = 1;
             }
-            System.out.println(fb.getBody().getUserData());
+
             if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(WORM + WORM)) {
-                setPlayerMoreDead(true);
+                deathState = 2;
             }
         }
         if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
             if (fa.getUserData() != null && fa.getUserData().equals("barrier")) {
-                setPlayerSuperDead(true);
-                setPlayerDead(true);
+                deathState = 3;
             }
             if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(WORM)) {
-                setPlayerDead(true);
+                deathState = 1;
             }
-            System.out.println(fb.getBody().getUserData());
+
             if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(WORM + WORM)) {
-                setPlayerDead(true);
-                setPlayerMoreDead(true);
+                deathState = 2;
             }
         }
     }
@@ -145,14 +139,6 @@ public class MyContactListener implements ContactListener {
 
     public void setNewCheckpoint(boolean state) {
         newCheckpoint = state;
-    }
-
-    public boolean IsPlayerDead() {
-        return isPlayerDead;
-    }
-
-    public void setPlayerDead(boolean state) {
-        isPlayerDead = state;
     }
 
     public boolean isPlayerOnGround() {
@@ -206,20 +192,12 @@ public class MyContactListener implements ContactListener {
         this.wallJump = wallJump;
     }
 
-    public boolean isPlayerSuperDead() {
-        return isPlayerSuperDead;
+    public short getDeathState() {
+        return deathState;
     }
 
-    public void setPlayerSuperDead(boolean playerSuperDead) {
-        isPlayerSuperDead = playerSuperDead;
-    }
-
-    public boolean isPlayerMoreDead() {
-        return isPlayerMoreDead;
-    }
-
-    public void setPlayerMoreDead(boolean playerMoreDead) {
-        isPlayerMoreDead = playerMoreDead;
+    public void setDeathState(short deathState) {
+        this.deathState = deathState;
     }
 
     public void setEnd(boolean end) {

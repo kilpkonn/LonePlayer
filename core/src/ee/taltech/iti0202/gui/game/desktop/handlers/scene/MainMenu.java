@@ -74,7 +74,7 @@ public class MainMenu extends Scene {
                     settingsFunc.run();
                     break;
                 case EXIT:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
+                    playSoundOnce("sounds/negative_2.wav", 0.5f);
                     Gdx.app.exit();
                     break;
             }
