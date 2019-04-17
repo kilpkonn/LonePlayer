@@ -1,9 +1,7 @@
-package ee.taltech.iti0202.gui.game.desktop.entities;
+package ee.taltech.iti0202.gui.game.desktop.entities.animated;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
-
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.SpriteAnimation;
 
 public class Checkpoint extends SpriteAnimation {
 
@@ -27,6 +25,7 @@ public class Checkpoint extends SpriteAnimation {
 
         setScale(0.1f);
         setAnimationSpeed(50);
+        setHeightOffset(50);
         setAnimation(CheckpointAnimation.DEFAULT);
     }
 
