@@ -14,12 +14,15 @@ import com.brashmonkey.spriter.SCMLReader;
 
 import java.util.HashSet;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.loader.AnimationLoader;
+
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 
 public class SpriteAnimation {
 
     private MyPlayerTweener playerTweener;
+    private Data data;
     private LibGdxLoader loader;
     private LibGdxDrawer drawer;
     private float heightOffset;
@@ -35,11 +38,9 @@ public class SpriteAnimation {
         System.out.println("New body: " + body.toString());
         this.body = body;
         //animation = new Animation();
-        FileHandle handle = Gdx.files.internal(PATH + path);
-        Data data = new SCMLReader(handle.read()).getData();
+        data = AnimationLoader.getData(path);
+        loader = AnimationLoader.getLoader(path);
 
-        loader = new LibGdxLoader(data);
-        loader.load(handle.file());
 
         drawer = new LibGdxDrawer(loader, sb, null); // no shape rendering
         if (entity != null) {
