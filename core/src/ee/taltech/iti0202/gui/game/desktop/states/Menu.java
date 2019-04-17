@@ -3,7 +3,6 @@ package ee.taltech.iti0202.gui.game.desktop.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -11,20 +10,15 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.List;
-import java.util.concurrent.Callable;
-
-import javax.xml.bind.annotation.XmlType;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LevelSelectionMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.LoadGameMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.MainMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.Scene;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Background;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -55,7 +49,6 @@ public class Menu extends GameState {
         this.menuState = state.MAIN;
 
         // get textures
-        //player = Game.res.getTexture("Llama");
         logo = Game.res.getTexture("Logo");
 
         // init parallax background
@@ -206,6 +199,7 @@ public class Menu extends GameState {
         sb.draw(animation.getFrame(), 146, 151);
         sb.end();*/
     }
+
 
     @Override
     public void dispose() {

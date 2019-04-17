@@ -21,6 +21,7 @@ public class MyContactListener implements ContactListener {
     private Body curCheckpoint;
     private Body toBeDeleted;
     private boolean isPlayerDead = false;
+    private boolean isPlayerMoreDead = false;
     private boolean isPlayerSuperDead = false;
     private boolean initSpawn = true;
     private boolean end = false;
@@ -85,6 +86,11 @@ public class MyContactListener implements ContactListener {
             }
             if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(WORM)) {
                 setPlayerDead(true);
+                setPlayerDead(true);
+            }
+            System.out.println(fb.getBody().getUserData());
+            if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(WORM + WORM)) {
+                setPlayerMoreDead(true);
             }
         }
         if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
@@ -94,6 +100,11 @@ public class MyContactListener implements ContactListener {
             }
             if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(WORM)) {
                 setPlayerDead(true);
+            }
+            System.out.println(fb.getBody().getUserData());
+            if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(WORM + WORM)) {
+                setPlayerDead(true);
+                setPlayerMoreDead(true);
             }
         }
     }
@@ -201,6 +212,14 @@ public class MyContactListener implements ContactListener {
 
     public void setPlayerSuperDead(boolean playerSuperDead) {
         isPlayerSuperDead = playerSuperDead;
+    }
+
+    public boolean isPlayerMoreDead() {
+        return isPlayerMoreDead;
+    }
+
+    public void setPlayerMoreDead(boolean playerMoreDead) {
+        isPlayerMoreDead = playerMoreDead;
     }
 
     public void setEnd(boolean end) {

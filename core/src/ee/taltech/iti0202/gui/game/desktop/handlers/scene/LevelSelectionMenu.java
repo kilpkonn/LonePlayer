@@ -16,7 +16,6 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
-import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
@@ -60,6 +59,8 @@ public class LevelSelectionMenu extends Scene {
         }
         buttons.addAll(actButtons.keySet());
 
+        for (GameButton button : buttons) played.put(button, false);
+
         //TODO: Load acts on every menu opening...
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
@@ -85,9 +86,11 @@ public class LevelSelectionMenu extends Scene {
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (currBlock) {
                 case MAP:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     GameStateManager.pushState(GameStateManager.State.PLAY, selectedAct, selectedMap);
                     break;
                 case EXIT:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     backFunc.run();
                     break;
             }

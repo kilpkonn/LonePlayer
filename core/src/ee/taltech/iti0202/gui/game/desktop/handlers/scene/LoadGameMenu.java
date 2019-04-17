@@ -16,7 +16,6 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
-import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -51,6 +50,8 @@ public class LoadGameMenu extends Scene {
 
         showSaves();
 
+        for (GameButton button : buttons) played.put(button, false);
+
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
     }
@@ -71,8 +72,10 @@ public class LoadGameMenu extends Scene {
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (currBlock) {
                 case LOAD:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     GameStateManager.pushState(GameStateManager.State.PLAY, getGameProgress());
                 case EXIT:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     backFunc.run();
             }
         }

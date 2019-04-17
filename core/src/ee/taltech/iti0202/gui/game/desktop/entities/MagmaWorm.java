@@ -49,7 +49,7 @@ public class MagmaWorm extends Boss {
 
     public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
         super(body, sb, play, "images/bosses/magmaworm/magmaworm.scml", part == Part.HEAD ? "head" : "body", x, y);
-        body.setUserData(type); //TODO: Something more intelligent here
+        body.setUserData(type + type);
         setAnimation(MagmaWormAnimation.DEFAULT.name, false);
         setAnimationSpeed(50);
         setScale(size); //TODO: Bend animation / smoother bodies

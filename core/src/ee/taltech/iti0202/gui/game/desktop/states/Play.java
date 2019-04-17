@@ -362,11 +362,9 @@ public class Play extends GameState {
 
         switch (type) {
             case WORM:
-                String element;
                 System.out.println(act);
                 switch (MAP_TO_ACT.get(act)) {
                     case 1:
-                        element = "magma";
                         aurelienribon.bodyeditor.BodyEditorLoader loader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses.json"));
                         this.tempPosition = position;
                         this.bossLoader = loader;
@@ -387,8 +385,8 @@ public class Play extends GameState {
 
                         Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
                         brokenFixture.setSensor(true);
-                        brokenFixture.setUserData("I am broken");
-                        brokenFixture.getBody().setUserData("I am broken");
+                        brokenFixture.setUserData(WORM + WORM);
+                        brokenFixture.getBody().setUserData(WORM + WORM);
                         brokenFixture.getFilterData().maskBits = NONE;
                         brokenFixture.refilter();
                         tempArray.reverse();
@@ -405,7 +403,7 @@ public class Play extends GameState {
                         Body body = world.createBody(alias.getBdef());
                         body.createFixture(alias.getFdef());
                         bossLoader.attachFixture(body, "head1", alias.getFdef(), 4.5f);
-                        Boss boss = new PlantWorm(body, sb,  WORM, this, PlantWorm.Part.HEAD, 1);
+                        Boss boss = new PlantWorm(body, sb, WORM, this, PlantWorm.Part.HEAD, 1);
                         boss.getBody().setUserData(WORM);
                         tempArray2.add(boss);
                         tempPosition.y -= 50 * scale / PPM;
@@ -935,12 +933,19 @@ public class Play extends GameState {
         if (!cl.IsPlayerDead()) {
             player.update(dt);
         } else {
+            if (cl.isPlayerMoreDead()) {
+                player.setHealth(player.getHealth() - gotHitBySnek * 10);
+                playSoundOnce("sounds/sfx_deathscream_alien1.wav");
+                cl.setPlayerMoreDead(false);
+            }
             if (cl.isPlayerSuperDead()) {
                 player.setHealth(0);
             } else {
+                playSoundOnce("sounds/sfx_damage_hit2.wav", 0.1f);
                 player.setHealth(player.getHealth() - gotHitBySnek);
             }
             if (player.getHealth() <= 0) {
+                playSoundOnce("sounds/sfx_sound_shutdown1.wav");
                 initPlayer();
             }
             cl.setPlayerDead(false);

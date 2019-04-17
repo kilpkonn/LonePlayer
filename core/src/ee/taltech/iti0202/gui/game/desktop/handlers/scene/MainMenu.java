@@ -10,8 +10,6 @@ import java.util.HashSet;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
-import ee.taltech.iti0202.gui.game.desktop.states.Menu;
-import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
@@ -54,6 +52,8 @@ public class MainMenu extends Scene {
             put(exitButton, block.EXIT);
         }};
 
+        for (GameButton button : buttons) played.put(button, false);
+
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
     }
 
@@ -62,15 +62,19 @@ public class MainMenu extends Scene {
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (currBlock) {
                 case NEWGAME:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     newGameFunc.run();
                     break;
                 case RESUME:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     resumeGameFunc.run();
                     break;
                 case SETTINGS:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     settingsFunc.run();
                     break;
                 case EXIT:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     Gdx.app.exit();
                     break;
             }

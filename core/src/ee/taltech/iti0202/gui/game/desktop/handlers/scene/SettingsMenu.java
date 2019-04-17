@@ -8,15 +8,11 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.function.Consumer;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
-import ee.taltech.iti0202.gui.game.desktop.states.Menu;
-import jdk.nashorn.internal.objects.annotations.Function;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
@@ -143,6 +139,8 @@ public class SettingsMenu extends Scene {
         }
         buttons.addAll(keyBindButtons.values());
 
+        for (GameButton button : buttons) played.put(button, false);
+
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
     }
 
@@ -153,6 +151,7 @@ public class SettingsMenu extends Scene {
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (currBlock) {
                 case EXIT:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     try {
                         backFunc.run();
                     } catch (Exception e) {
@@ -161,17 +160,21 @@ public class SettingsMenu extends Scene {
                     }
                     break;
                 case SAVE:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     Game.settings.save(B2DVars.PATH + "settings/settings.json");
                     break;
                 case NEXT:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     Game.settings = Game.settings.loadDefault();
                     updateAllBindsDisplayed();
                     break;
                 case LOAD:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
                     updateAllBindsDisplayed();
                     break;
                 case SETTINGS:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     handleSettingsButtonClick();
                     break;
             }

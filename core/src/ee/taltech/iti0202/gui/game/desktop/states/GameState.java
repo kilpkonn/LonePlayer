@@ -1,10 +1,14 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
+
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 
 
 public abstract class GameState {
@@ -21,6 +25,19 @@ public abstract class GameState {
         sb = game.getSpriteBatch();
         cam = game.getCamera();
         hudCam = game.getHUDCamera();
+    }
+
+    void playSoundOnce(String source) {
+        playSoundOnce(source, 1.0f);
+    }
+
+    void playSoundOnce(String source, float db) {
+        try {
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal(PATH + source));
+            sound.play(db);
+        } catch (Exception e) {
+            System.out.println("Sound couldn't be located.");
+        }
     }
 
     public abstract void handleInput();

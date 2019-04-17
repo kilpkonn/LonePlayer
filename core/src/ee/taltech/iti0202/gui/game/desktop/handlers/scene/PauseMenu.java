@@ -15,7 +15,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_H
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 
-public class PauseMenu extends Scene{
+public class PauseMenu extends Scene {
 
     private enum block {
         SAVE, RESUME, EXIT, SETTINGS, SAVEANDEXIT, DEFAULT
@@ -61,6 +61,9 @@ public class PauseMenu extends Scene{
             put(settingsButton, block.SETTINGS);
             put(exitButton, block.EXIT);
         }};
+
+        for (GameButton button : buttons) played.put(button, false);
+
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
     }
 
@@ -69,19 +72,24 @@ public class PauseMenu extends Scene{
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (currBlock) {
                 case RESUME:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     resumeFunc.run();
                     break;
                 case SAVE:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     saveFunc.run();
                     break;
                 case SAVEANDEXIT:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     saveFunc.run();
                     GameStateManager.pushState(GameStateManager.State.MENU);
                     break;
                 case EXIT:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     GameStateManager.pushState(GameStateManager.State.MENU);
                     break;
                 case SETTINGS:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     openSettingsFunc.run();
                     break;
             }

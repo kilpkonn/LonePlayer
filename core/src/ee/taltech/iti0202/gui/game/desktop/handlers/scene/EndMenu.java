@@ -50,6 +50,8 @@ public class EndMenu extends Scene{
             put(exitButton, block.EXIT);
         }};
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
+
+        for (GameButton button : buttons) played.put(button, false);
     }
 
     @Override
@@ -60,12 +62,15 @@ public class EndMenu extends Scene{
                     //TODO: Select next map
                     break;
                 case NEWGAME:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     GameStateManager.pushState(GameStateManager.State.PLAY, act, map);
                     break;
                 case SETTINGS:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     openSettingsFunc.run();
                     break;
                 case EXIT:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
                     GameStateManager.pushState(GameStateManager.State.MENU);
                     break;
             }

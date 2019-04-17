@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.scene;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -11,7 +12,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 
 public abstract class Scene {
     protected Stage stage;
@@ -20,12 +22,13 @@ public abstract class Scene {
     protected Vector2 mouseInWorld2D;
     protected HashSet<GameButton> buttons;
     protected String act, map;
+    protected HashMap<GameButton, Boolean> played = new HashMap<>();
 
     public Scene(OrthographicCamera cam) {
         this("", "", cam);
     }
 
-    public Scene(String act, String map, OrthographicCamera cam){
+    public Scene(String act, String map, OrthographicCamera cam) {
         this.hudCam = cam;
         this.act = act;
         this.map = map;
@@ -52,9 +55,24 @@ public abstract class Scene {
 
         for (GameButton button : buttons) {
             if (button.hoverOver()) {
+                if (!played.get(button)) {
+                    played.put(button, true);
+                    playSoundOnce("sounds/menu_hover.wav", 1.0f);
+                }
                 updateCurrentBlock(button);
+            } else {
+                played.put(button, false);
             }
             button.render(sb);
+        }
+    }
+
+    void playSoundOnce(String source, float db) {
+        try {
+            Sound sound = Gdx.audio.newSound(Gdx.files.internal(PATH + source));
+            sound.play(db);
+        } catch (Exception e) {
+            System.out.println("Sound couldn't be located.");
         }
     }
 
