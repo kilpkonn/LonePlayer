@@ -23,11 +23,16 @@ public class SpriteAnimation {
     private LibGdxLoader loader;
 
     private Drawer<Sprite> drawer;
+    private float heightOffset;
 
     protected Body body;
     private float opacity = 1;
 
     public SpriteAnimation(Body body, SpriteBatch sb, String path) {
+        this(body, sb, path, null);
+    }
+
+    public SpriteAnimation(Body body, SpriteBatch sb, String path, String entity) {
         System.out.println("New body: " + body.toString());
         this.body = body;
         //animation = new Animation();
@@ -38,7 +43,11 @@ public class SpriteAnimation {
         loader.load(handle.file());
 
         drawer = new LibGdxDrawer(loader, sb, null); // no shape rendering
-        playerTweener = new MyPlayerTweener(data.getEntity(0));
+        if (entity != null) {
+            playerTweener = new MyPlayerTweener(data.getEntity(entity));
+        } else {
+            playerTweener = new MyPlayerTweener(data.getEntity(0));
+        }
         playerTweener.setPivot(0, 0);
         HashSet<String> toPlayOnce = new HashSet<>();
         toPlayOnce.add("roll");
@@ -48,7 +57,7 @@ public class SpriteAnimation {
     public void update(float dt) {
         //animation.update(dt);
         playerTweener.update(dt);
-        playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM);
+        playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM + heightOffset);
         playerTweener.setAngle((float) Math.toDegrees(body.getAngle()));
     }
 
@@ -81,6 +90,10 @@ public class SpriteAnimation {
 
     public void setOpacity(float opacity) {
         this.opacity = opacity;
+    }
+
+    public void setHeightOffset(float offset) {
+        this.heightOffset = offset;
     }
 
     public Body getBody() {

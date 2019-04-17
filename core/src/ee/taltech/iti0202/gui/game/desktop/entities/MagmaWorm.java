@@ -25,7 +25,9 @@ public class MagmaWorm extends Boss {
     }
 
     public enum Part {
-        HEAD ("magmawormhead"), BODY ("magmawormbody");
+        HEAD ("magmawormhead"),
+        BODY ("magmawormbody"),
+        TAIL ("magmawormtail");
 
         private final String name;
 
