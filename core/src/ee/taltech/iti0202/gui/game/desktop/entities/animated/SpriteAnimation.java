@@ -1,22 +1,16 @@
 package ee.taltech.iti0202.gui.game.desktop.entities.animated;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Data;
-import com.brashmonkey.spriter.Drawer;
 import com.brashmonkey.spriter.LibGdx.LibGdxDrawer;
 import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
-import com.brashmonkey.spriter.SCMLReader;
 
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.loader.AnimationLoader;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 
 public class SpriteAnimation {
@@ -31,10 +25,14 @@ public class SpriteAnimation {
     private float opacity = 1;
 
     public SpriteAnimation(Body body, SpriteBatch sb, String path) {
-        this(body, sb, path, null);
+        this(body, sb, path, null, 0, 0);
     }
 
     public SpriteAnimation(Body body, SpriteBatch sb, String path, String entity) {
+        this(body, sb, path, entity, 0, 0);
+    }
+
+    public SpriteAnimation(Body body, SpriteBatch sb, String path, String entity, float x, float y) {
         System.out.println("New body: " + body.toString());
         this.body = body;
         //animation = new Animation();
@@ -48,7 +46,7 @@ public class SpriteAnimation {
         } else {
             playerTweener = new MyPlayerTweener(data.getEntity(0));
         }
-        playerTweener.setPivot(0, 0);
+        playerTweener.setPivot(x, y);
         HashSet<String> toPlayOnce = new HashSet<>();
         toPlayOnce.add("roll");
         playerTweener.setAnimToPlayOnce(toPlayOnce);

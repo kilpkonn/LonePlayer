@@ -44,7 +44,11 @@ public class MagmaWorm extends Boss {
     private float time = 0;
 
     public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size) {
-        super(body, sb, play, "images/bosses/magmaworm/magmaworm.scml", part == Part.HEAD ? "head" : "body");
+        this(body, sb, type, play, part, size, 0, 0);
+    }
+
+    public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
+        super(body, sb, play, "images/bosses/magmaworm/magmaworm.scml", part == Part.HEAD ? "head" : "body", x, y);
         body.setUserData(type); //TODO: Something more intelligent here
         setAnimation(MagmaWormAnimation.DEFAULT.name, false);
         setAnimationSpeed(50);

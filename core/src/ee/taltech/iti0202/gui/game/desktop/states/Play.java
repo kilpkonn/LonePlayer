@@ -46,11 +46,11 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.PlantWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.PlantWormProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
@@ -443,7 +443,7 @@ public class Play extends GameState {
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
-        Boss boss = new MagmaWorm(body, sb, WORM, this, part, size);
+        Boss boss = new MagmaWorm(body, sb, WORM, this, part, size, 50 * scale, 50 * scale);
         boss.getBody().setUserData(WORM);
         tempArray.add(boss);
         tempPosition.y -= 50 * scale / PPM;

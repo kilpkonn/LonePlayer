@@ -20,6 +20,11 @@ public abstract class Boss extends SpriteAnimation {
         this.play = play;
     }
 
+    Boss(Body body, SpriteBatch sb, Play play, String path, String entity, float x, float y) {
+        super(body, sb, path, entity, x, y);
+        this.play = play;
+    }
+
     @Override
     public void update(float dt) {
         super.update(dt);
