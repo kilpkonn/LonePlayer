@@ -2,6 +2,7 @@ package ee.taltech.iti0202.gui.game.desktop.entities.animated;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -23,7 +24,7 @@ public class SpriteAnimation {
     private MyPlayerTweener playerTweener;
     private LibGdxLoader loader;
 
-    private Drawer<Sprite> drawer;
+    private LibGdxDrawer drawer;
 
     protected Body body;
     private float opacity = 1;
@@ -56,7 +57,7 @@ public class SpriteAnimation {
     public void render(SpriteBatch sb) {
         sb.setColor(1, 1, 1, opacity);
         sb.begin();
-
+        drawer.updateSpriteBatch(sb);
         drawer.draw(playerTweener);
 
         sb.setColor(1, 1, 1, 1);
