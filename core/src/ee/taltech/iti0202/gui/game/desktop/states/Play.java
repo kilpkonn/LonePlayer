@@ -1111,12 +1111,13 @@ public class Play extends GameState {
 
         if (DEBUG) b2dr.render(world, b2dcam.combined);
 
+        sb.setProjectionMatrix(cam.combined);
+
         // draw checkpoint
         if (checkpoint != null)
-            checkpoint.render(sb); //TODO: Why is checkpoint following player ?!?
+            checkpoint.render(sb);
 
         //draw player
-        sb.setProjectionMatrix(cam.combined);
         if (player != null) player.render(sb);
 
         if (bossArray != null) {
