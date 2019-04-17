@@ -20,8 +20,8 @@ public class SpriteAnimation {
     private MyPlayerTweener playerTweener;
     private LibGdxLoader loader;
     private Data data;
-
     private LibGdxDrawer drawer;
+    private float heightOffset;
 
     protected Body body;
     private float opacity = 1;
@@ -52,7 +52,7 @@ public class SpriteAnimation {
     public void update(float dt) {
         //animation.update(dt);
         playerTweener.update(dt);
-        playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM);
+        playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM + heightOffset);
         playerTweener.setAngle((float) Math.toDegrees(body.getAngle()));
     }
 
@@ -81,6 +81,10 @@ public class SpriteAnimation {
 
     public void setAnimationSpeed(int speed) {
         playerTweener.speed = speed;
+    }
+
+    public void setHeightOffset(float heightOffset) {
+        this.heightOffset = heightOffset;
     }
 
     public void setOpacity(float opacity) {

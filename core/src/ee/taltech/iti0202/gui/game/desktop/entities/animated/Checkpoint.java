@@ -25,6 +25,7 @@ public class Checkpoint extends SpriteAnimation {
 
         setScale(0.1f);
         setAnimationSpeed(50);
+        setHeightOffset(50);
         setAnimation(CheckpointAnimation.DEFAULT);
     }
 

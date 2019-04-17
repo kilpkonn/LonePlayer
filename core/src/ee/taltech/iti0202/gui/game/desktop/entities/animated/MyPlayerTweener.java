@@ -10,6 +10,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 public class MyPlayerTweener extends PlayerTweener {
     private float influence;
+    private float changeSpeed;
     private boolean playingOnce;
     private Animation prevAnimation;
     private HashSet<String> animToPlayOnce = new HashSet<>();
@@ -20,9 +21,11 @@ public class MyPlayerTweener extends PlayerTweener {
             @Override
             public void run() {
                 if (playingOnce) {
-                    setAnimation(prevAnimation.name, false); //TODO: Safer launch -> handle return on first anim
-                    influence = 1;
                     playingOnce = false;
+                    if (prevAnimation != null) {
+                        setAnimation(prevAnimation.name, false);
+                    }
+                    influence = 1;
                 }
             }
         }));
@@ -30,30 +33,27 @@ public class MyPlayerTweener extends PlayerTweener {
 
     public void update(float dt) {
         if (influence < 1) {
-            influence += dt / B2DVars.PLAYER_ANIMATION_CHANGE_SPEED;
+            influence += dt * changeSpeed / B2DVars.PLAYER_ANIMATION_CHANGE_SPEED;
             if (influence > 1) influence = 1;
             setWeight(influence);
         }
         super.update(dt);
     }
 
-    /*public void setAnimation(String anim) {
-        if (!anim.equals(getSecondPlayer().getAnimation().name)) {
-            influence = 0;
-            getFirstPlayer().setAnimation(getSecondPlayer().getAnimation());
-            getSecondPlayer().setAnimation(anim);
-        }
-    }*/
-
     public void setAnimation(String anim, boolean playOnce) {
+        if (playingOnce && !animToPlayOnce.contains(anim)) {
+            prevAnimation = getEntity().getAnimation(anim); //Life hack
+            return;
+        }
         if (!anim.equals(getSecondPlayer().getAnimation().name)) {
             if (animToPlayOnce.contains(anim)) {
-                influence = 0.5f;
+                changeSpeed = 2f;
             } else if (animToPlayOnce.contains(getSecondPlayer().getAnimation().name)) {
-                influence = 0.5f;
+                changeSpeed = 2f;
             } else {
-                influence = 0;
+                changeSpeed = 1;
             }
+            influence = 0;
             getFirstPlayer().setAnimation(getSecondPlayer().getAnimation());
             getSecondPlayer().setAnimation(anim);
 
