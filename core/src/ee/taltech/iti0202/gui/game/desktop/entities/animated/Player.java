@@ -43,6 +43,7 @@ public class Player extends SpriteAnimation {
 
     public void onCheckpointReached(Checkpoint checkpoint) {
         checkpoint.onReached();
+        System.out.println("HERE");
         //TODO: Celebrate?
     }
 

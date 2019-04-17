@@ -85,7 +85,7 @@ public class MyContactListener implements ContactListener {
                 deathState = 1;
             }
 
-            if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals(WORM + WORM)) {
+            if (fb.getUserData() != null && fb.getUserData().equals(WORM + WORM)) {
                 deathState = 2;
             }
         }
@@ -93,11 +93,11 @@ public class MyContactListener implements ContactListener {
             if (fa.getUserData() != null && fa.getUserData().equals("barrier")) {
                 deathState = 3;
             }
-            if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(WORM)) {
+            if (fa.getUserData() != null && fa.getBody().getUserData().equals(WORM)) {
                 deathState = 1;
             }
 
-            if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals(WORM + WORM)) {
+            if (fa.getBody().getUserData() != null && fa.getUserData().equals(WORM + WORM)) {
                 deathState = 2;
             }
         }
@@ -207,4 +207,5 @@ public class MyContactListener implements ContactListener {
     public boolean isEnd() {
         return end;
     }
+
 }

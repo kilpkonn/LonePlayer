@@ -112,11 +112,6 @@ public class Play extends GameState {
     private TiledMap tiledMap;
     private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
     private OrthogonalTiledMapRenderer renderer;
-
-    public Player getPlayer() {
-        return player;
-    }
-
     private Player player;
     private boolean dimension;
     private Array<Array<Boss>> bossArray;
@@ -152,6 +147,7 @@ public class Play extends GameState {
     private String act;
     private String map;
     private float scale = 1f;
+    private boolean executeEnd = true;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
@@ -160,6 +156,17 @@ public class Play extends GameState {
         this.act = act;
         this.map = map;
         game.getSound().stop();
+        switch (act) {
+            case "Desert":
+                break;
+            case "Plains":
+                break;
+            case "Snow":
+                game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/wind1.wav")));
+                game.getSound().setLooping(true);
+                game.getSound().play();
+                break;
+        }
         // sey up world
         world = new World(new Vector2(0, GRAVITY), true);
         cl = new MyContactListener();
@@ -387,10 +394,13 @@ public class Play extends GameState {
 
                         Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
                         brokenFixture.setSensor(true);
-                        brokenFixture.setUserData(WORM + WORM);
-                        brokenFixture.getBody().setUserData(WORM + WORM);
+                        brokenFixture.setUserData(WORM + WORM + WORM);
+                        brokenFixture.getBody().setUserData(WORM + WORM + WORM);
                         brokenFixture.getFilterData().maskBits = NONE;
                         brokenFixture.refilter();
+                        for (Fixture fixture : tempArray.get(0).getBody().getFixtureList()) {
+                            fixture.setUserData(WORM + WORM);
+                        }
                         tempArray.reverse();
 
                         bossArray.add(tempArray);
@@ -896,6 +906,8 @@ public class Play extends GameState {
             case END:
                 if (cam.zoom < 5)
                     cam.zoom += 0.01; //TODO: Fix this
+                if (executeEnd) playSoundOnce("sounds/end.ogg");
+                executeEnd = false;
                 //gameFadeOut = true;
                 //gameFadeDone = false;
                 //drawAndSetCamera();
@@ -984,6 +996,7 @@ public class Play extends GameState {
             if (cl.isNewCheckpoint()) {
                 cl.setNewCheckpoint(false);
                 createCheckpoints(cl.getCurCheckpoint());
+                playSoundOnce("sounds/checkpoint.ogg");
             }
             checkpoint.update(dt);
         }
@@ -1165,5 +1178,9 @@ public class Play extends GameState {
     public void dispose() {
         stage.dispose();
         System.gc();
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 }

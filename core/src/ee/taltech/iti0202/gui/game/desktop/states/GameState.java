@@ -36,7 +36,7 @@ public abstract class GameState {
             Sound sound = Gdx.audio.newSound(Gdx.files.internal(PATH + source));
             sound.play(db);
         } catch (Exception e) {
-            System.out.println("Sound couldn't be located.");
+            System.out.println(e.getCause().getCause().toString());
         }
     }
 

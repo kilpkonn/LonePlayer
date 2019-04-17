@@ -95,6 +95,8 @@ public class Menu extends GameState {
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
+        cam.zoom = 1.0f;
+
         world = new World(new Vector2(0, -9.8f * 5), true);
     }
 
