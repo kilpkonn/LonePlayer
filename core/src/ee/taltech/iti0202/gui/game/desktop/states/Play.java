@@ -104,7 +104,7 @@ public class Play extends GameState {
     private World world;
     private Box2DDebugRenderer b2dr;
     private OrthographicCamera b2dcam;
-    private OrthographicCamera hudCam;
+    //private OrthographicCamera hudCam;
     private MyContactListener cl;
     private TiledMap tiledMap;
     private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
@@ -176,8 +176,8 @@ public class Play extends GameState {
         //set up cameras
         b2dcam = new OrthographicCamera();
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
-        hudCam = new OrthographicCamera();
-        hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
+        //hudCam = new OrthographicCamera();
+        //hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
         // create pause state
         pauseMenu = new PauseMenu(act, map, hudCam, new Runnable() {
@@ -1086,11 +1086,11 @@ public class Play extends GameState {
         if (DEBUG) b2dr.render(world, b2dcam.combined);
 
         // draw checkpoint
-        if (checkpoint != null) checkpoint.render(sb); //TODO: Why is checkpoint following player ?!?
+        if (checkpoint != null) checkpoint.render(sb, cam); //TODO: Why is checkpoint following player ?!?
 
         //draw player
         sb.setProjectionMatrix(cam.combined);
-        if (player != null) player.render(sb);
+        if (player != null) player.render(sb, cam);
 
         if (bossArray != null) {
             for (Array<Boss> bossList : bossArray) for (Boss boss : bossList) boss.render(sb, true);
