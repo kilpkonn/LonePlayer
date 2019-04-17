@@ -8,18 +8,31 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
 
-public class MagmaWormProperties extends Properties {
+public class MagmaWormProperties {
+    private BodyDef bdef;
+    private FixtureDef fdef;
+
     public MagmaWormProperties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
-        super(bdef, fdef, position);
+        this.bdef = bdef;
+        this.fdef = fdef;
 
         bdef.type = BodyDef.BodyType.DynamicBody;
         bdef.position.set(position);
         bdef.allowSleep = false;
         bdef.gravityScale = 0f;
         fdef.friction = 1f;
-        fdef.restitution = 0f;
+        fdef.restitution = 0.2f;
         fdef.density = 10f;
         fdef.filter.categoryBits = BIT_WORM;
         fdef.filter.maskBits = DIMENTSION_1 | DIMENTSION_2;
+    }
+
+
+    public BodyDef getBdef() {
+        return bdef;
+    }
+
+    public FixtureDef getFdef() {
+        return fdef;
     }
 }

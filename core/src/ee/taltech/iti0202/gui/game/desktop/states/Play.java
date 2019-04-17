@@ -49,8 +49,6 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.PlantWorm;
-import ee.taltech.iti0202.gui.game.desktop.entities.PlantWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
@@ -74,8 +72,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIM
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAGMAWORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAP_TO_ACT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -90,7 +88,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TER
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.WORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.gotHitBySnek;
 
 public class Play extends GameState {
@@ -344,6 +341,7 @@ public class Play extends GameState {
         fdef.filter.maskBits = mask;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
+
         player = new Player(body, sb);
 
     }
@@ -361,54 +359,35 @@ public class Play extends GameState {
         scale = decider ? 1f : 0.5f;
 
         switch (type) {
-            case WORM:
-                String element;
-                System.out.println(act);
-                switch (MAP_TO_ACT.get(act)) {
-                    case 1:
-                        element = "magma";
-                        aurelienribon.bodyeditor.BodyEditorLoader loader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses.json"));
-                        this.tempPosition = position;
-                        this.bossLoader = loader;
-                        Array<Boss> tempArray = new Array<>();
-                        initSnakePart(element + "wormhead" + scale, tempArray);
-                        tempPosition.y -= 60 * scale / PPM;
+            case MAGMAWORM:
 
-                        for (int i = 0; i < size; i++) {
-                            initSnakePart((i == size - 1 ? element + "wormtail" : element + "wormbody") + scale, tempArray);
-                            craeteJointBetweenLinks(tempArray, 0.30f);
-                            craeteJointBetweenLinks(tempArray, 0.70f);
+                System.out.println("BOSS");
+                aurelienribon.bodyeditor.BodyEditorLoader loader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses.json"));
+                this.tempPosition = position;
+                this.bossLoader = loader;
+                Array<Boss> tempArray = new Array<>();
+                initSnakePart("magmawormhead" + scale, tempArray);
+                tempPosition.y -= 60 * scale / PPM;
 
-                        }
+                for (int i = 0; i < size; i++) {
+                    initSnakePart("magmawormbody" + scale, tempArray);
 
-                        Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
-                        brokenFixture.setSensor(true);
-                        brokenFixture.setUserData("I am broken");
-                        brokenFixture.getBody().setUserData("I am broken");
-                        brokenFixture.getFilterData().maskBits = NONE;
-                        brokenFixture.refilter();
-                        tempArray.reverse();
+                    craeteJointBetweenLinks(tempArray, 0.45f);
+                    craeteJointBetweenLinks(tempArray, 0.55f);
 
-                        bossArray.add(tempArray);
-                        break;
-                    case 2:
-                        System.out.println("SS");
-                        aurelienribon.bodyeditor.BodyEditorLoader loader2 = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses2.json"));
-                        this.tempPosition = position;
-                        this.bossLoader = loader2;
-                        Array<Boss> tempArray2 = new Array<>();
-                        PlantWormProperties alias = new PlantWormProperties(bdef, fdef, tempPosition);
-                        Body body = world.createBody(alias.getBdef());
-                        body.createFixture(alias.getFdef());
-                        bossLoader.attachFixture(body, "head1", alias.getFdef(), 4.5f);
-                        Boss boss = new PlantWorm(body, WORM, this, "head1");
-                        boss.getBody().setUserData(WORM);
-                        tempArray2.add(boss);
-                        tempPosition.y -= 50 * scale / PPM;
-
-                        bossArray.add(tempArray2);
-                        break;
                 }
+
+                // some random ass box
+                //world.destroyBody(tempArray.get(0).getBody());
+                Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
+                brokenFixture.setSensor(true);
+                brokenFixture.setUserData("I am broken");
+                brokenFixture.getBody().setUserData("I am broken");
+                brokenFixture.getFilterData().maskBits = NONE;
+                brokenFixture.refilter();
+                tempArray.reverse();
+
+                bossArray.add(tempArray);
 
                 break;
 
@@ -428,9 +407,9 @@ public class Play extends GameState {
         distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
         distanceJointDef.length = bossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
         distanceJointDef.collideConnected = false;
-        distanceJointDef.localAnchorA.set(lock * scale, 0.95f * scale);
-        distanceJointDef.localAnchorB.set(lock * scale, 0.05f * scale);
-        distanceJointDef.length = 0.1f * scale;
+        distanceJointDef.localAnchorA.set(lock * scale, 0.985f * scale);
+        distanceJointDef.localAnchorB.set(lock * scale, 0.015f * scale);
+        distanceJointDef.length = 0.05f * scale;
         world.createJoint(distanceJointDef);
     }
 
@@ -439,8 +418,8 @@ public class Play extends GameState {
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, bodyPart, alias.getFdef(), scale);
-        Boss boss = new MagmaWorm(body, WORM, this, bodyPart);
-        boss.getBody().setUserData(WORM);
+        Boss boss = new MagmaWorm(body, MAGMAWORM, this, bodyPart);
+        boss.getBody().setUserData(MAGMAWORM);
         tempArray.add(boss);
         tempPosition.y -= 50 * scale / PPM;
     }
@@ -448,7 +427,6 @@ public class Play extends GameState {
     private void createCheckpoints(Vector2 pos) {
         System.out.println("new checkpoint");
         bdef = new BodyDef();
-        fdef = new FixtureDef();
         bdef.position.set(pos);
         bdef.type = BodyDef.BodyType.StaticBody;
         Body body = world.createBody(bdef);
@@ -1108,8 +1086,7 @@ public class Play extends GameState {
         if (DEBUG) b2dr.render(world, b2dcam.combined);
 
         // draw checkpoint
-        if (checkpoint != null)
-            checkpoint.render(sb); //TODO: Why is checkpoint following player ?!?
+        if (checkpoint != null) checkpoint.render(sb); //TODO: Why is checkpoint following player ?!?
 
         //draw player
         sb.setProjectionMatrix(cam.combined);

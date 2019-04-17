@@ -23,7 +23,7 @@ public class B2DVars {
     public static final float DIMENSION_FADE_TIME = 0.4f;
     public static final float DIMENSION_FADE_AMOUNT = 0.6f;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static boolean UPDATE = true;
 
     public static String PATH = "";
@@ -31,8 +31,11 @@ public class B2DVars {
     public static int V_HEIGHT = 1080;
     public static int SCALE = 1;
 
+    // map variables
+    public static final String BOSS = "2";
+
     // bosses
-    public static final String WORM = "1";
+    public static final String MAGMAWORM = "1";
     public static final String COLOSSEOS = "2";
     public static final int gotHitBySnek = 1;
 
@@ -67,12 +70,6 @@ public class B2DVars {
             "images/game_background_5/layers/",
             "images/game_background_6/layers/"
     };
-
-    public static final Map<String, Integer> MAP_TO_ACT = new HashMap<String, Integer>() {{
-        put("Desert", 1);
-        put("Plains", 2);
-        put("Snow", 3);
-    }};
 
     public static final Map<String, Float> BACKGROUND_SPEEDS = new HashMap<String, Float>() {{
         put("Desert", 1f);
