@@ -16,6 +16,9 @@ import "@babel/polyfill";
 import * as mobilenetModule from '@tensorflow-models/mobilenet';
 import * as tf from '@tensorflow/tfjs';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost');
 
 // Number of classes to classify
 const NUM_CLASSES = 5;
@@ -129,10 +132,9 @@ class Main {
 
           // Make the predicted class bold
           if (res.classIndex == i) {
-            //TODO: socket.io / create connection between desktrop launcher in game.java and this
             // here is new "update" - so desktop launcher needs to be updated
-
-            // TODO: sender here
+            console.log("c");
+            socket.send("[Data to send]");  //TODO: Send actually meaningful data
 
             //
             this.infoTexts[i].style.fontWeight = 'bold';

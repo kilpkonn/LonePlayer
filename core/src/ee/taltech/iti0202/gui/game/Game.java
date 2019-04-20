@@ -7,12 +7,15 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import net.corpwar.lib.corpnet.Server;
+
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.Content;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInputProcessor;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
+import ee.taltech.iti0202.gui.game.networking.AiServerListener;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
@@ -25,15 +28,19 @@ public class Game extends ApplicationAdapter {
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;
-    public static Settings settings;
     private Music sound;
     private GameStateManager gsm;
     public static Content res;
+    public static Settings settings;
     private String readString;
+
+    private Server aiServer;
+    private int aiPort = 9967;
+    private String aiIpAddress = "localhost";
+    private int aiMaxRetries = 2;
 
     public Game(Settings s) {
         settings = s;
-
     }
 
     public void create() {
@@ -64,19 +71,11 @@ public class Game extends ApplicationAdapter {
 
         // TODO: make it work .ref - https://socket.io/blog/native-socket-io-and-android/
 
-        new Thread(new Runnable() {
-
-            @Override
-            public void run() {
-
-                // Loop forever
-                while (true) {
-
-                    // TODO: Listener here
-
-                }
-            }
-        }).start(); // And, start the thread running
+        aiServer = new Server();
+        aiServer.setPortAndIp(aiPort, aiIpAddress); // Listen to port 55433 and ip 127.0.0.1
+        aiServer.setWaitingQue(true); // Use a listen queue
+        aiServer.startServer(); // Start the server
+        aiServer.registerServerListerner(new AiServerListener());
 
 
         // set up music player
