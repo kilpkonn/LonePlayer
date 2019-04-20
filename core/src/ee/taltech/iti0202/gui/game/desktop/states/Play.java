@@ -410,7 +410,7 @@ public class Play extends GameState {
                         for (int i = 0; i < size; i++) {
                             tempArray2.add(new Array<Boss>());
                         }
-                        initPlantPart(tempArray2, PlantWorm.Part.HEAD, 0);
+                        initPlantPart(tempArray2, PlantWorm.Part.FLOWER_HEAD, 0);
                         for (int i = 1; i < size; i++) {
                             tempArray2.get(i).add(tempArray2.get(0).get(0));
                         }
@@ -419,8 +419,8 @@ public class Play extends GameState {
 
                         for (int i = 0; i < 10; i++) {
                             for (int j = 0; j < size; j++) {
-                                if (i == size - 1) {
-                                    initPlantPart(tempArray2, PlantWorm.Part.TAIL, j);
+                                if (i == 9) {
+                                    initPlantPart(tempArray2, PlantWorm.Part.CLAW_HEAD, j);
                                 } else {
                                     initPlantPart(tempArray2, PlantWorm.Part.BODY, j);
                                 }
@@ -473,10 +473,11 @@ public class Play extends GameState {
         PlantWormProperties alias = new PlantWormProperties(bdef, fdef, tempPosition);
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.HEAD) ? 2f : 1f);
-        Boss boss = new PlantWorm(body, sb, WORM, this, part, 2f, part.equals(PlantWorm.Part.HEAD) ? 100 : 50, part.equals(PlantWorm.Part.HEAD) ? 100 : 50);
-        for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(WORM);
-        boss.getBody().setUserData(WORM);
+        bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
+        Boss boss = new PlantWorm(body, sb, WORM, this, part, 2f, part.equals(PlantWorm.Part.BODY) ? 50 : 100, part.equals(PlantWorm.Part.BODY) ? 50 : 100);
+        for (Fixture fixture : boss.getBody().getFixtureList())
+            fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? WORM + WORM : WORM);
+        boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? WORM + WORM : WORM);
         tempArray2.get(size).add(boss);
     }
 
