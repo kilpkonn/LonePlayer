@@ -56,17 +56,6 @@ public class MagmaWorm extends Boss {
     }
 
     @Override
-    public void update(float dt) {
-        super.update(dt);
-        // max_speed = 3;
-        // Vector2 cur_vel = body.getLinearVelocity();
-        // body.setLinearVelocity(
-        //         minmax(cur_vel.x),
-        //         minmax(cur_vel.y)
-        // );
-    }
-
-    @Override
     public void updateHeadBig(float dt) {
         super.update(dt);
         time += dt;
