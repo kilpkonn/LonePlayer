@@ -1174,7 +1174,7 @@ public class Play extends GameState {
     private void drawAndSetCamera() {
 
         //clear screen
-        Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT | (Gdx.graphics.getBufferFormat().coverageSampling?GL20.GL_COVERAGE_BUFFER_BIT_NV:0));
         Gdx.gl20.glClear(GL20.GL_ALPHA_BITS);
 
         //set camera to follow player
