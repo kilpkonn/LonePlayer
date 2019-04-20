@@ -4,26 +4,29 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
 
 
 public class Player extends SpriteAnimation {
 
-    public enum PlayerAnimation {
-        RUN ("run"),
-        JUMP ("jump"),
-        IDLE ("idle"),
-        ROLL ("roll"),
-        DASH ("dash");
-
-        private final String name;
-
-        PlayerAnimation(String s) {
-            name = s;
+    public void onLanded(Vector2 velocity) {
+        //System.out.println(Math.abs(velocity.x));
+        //System.out.println(Math.abs(velocity.y));
+        //System.out.println();
+        if (Math.abs(velocity.y) > DMG_ON_LANDING) {
+            if (Math.abs(velocity.x) < ROLL_ON_LANDING_SPEED) {
+                health -= Math.abs(velocity.y / 10);
+            }
+            health -= Math.abs(velocity.y / 10);
+            health = Math.max(0, health);
         }
-
-        public String toString() {
-            return this.name;
+        if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
+            if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED * 2) {
+                health -= Math.abs(velocity.x / 5);
+                health = Math.max(health, 0);
+            }
+            setAnimation(PlayerAnimation.ROLL);
         }
     }
 
@@ -47,12 +50,21 @@ public class Player extends SpriteAnimation {
         //TODO: Celebrate?
     }
 
-    public void onLanded(Vector2 velocity) {
-        if (velocity.y > 3) {
-            health -= velocity.y; //TODO: Some fancy function here
+    public enum PlayerAnimation {
+        RUN("run"),
+        JUMP("jump"),
+        IDLE("idle"),
+        ROLL("roll"),
+        DASH("dash");
+
+        private final String name;
+
+        PlayerAnimation(String s) {
+            name = s;
         }
-        if (velocity.x > B2DVars.ROLL_ON_LANDING_SPEED) {
-            setAnimation(PlayerAnimation.ROLL);
+
+        public String toString() {
+            return this.name;
         }
     }
 

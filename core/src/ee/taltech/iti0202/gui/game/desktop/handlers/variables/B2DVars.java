@@ -16,7 +16,8 @@ public class B2DVars {
     public static float PLAYER_DASH_FORCE_SIDE = 150 * STEP;
 
     public static float PLAYER_ANIMATION_CHANGE_SPEED = 0.5f;
-    public static float ROLL_ON_LANDING_SPEED = 2f;
+    public static float ROLL_ON_LANDING_SPEED = 3;
+    public static float DMG_ON_LANDING = 10;
 
     public static final float MENU_FADE_TIME = 1;
     public static final float MENU_FADE_AMOUNT = 0.7f;

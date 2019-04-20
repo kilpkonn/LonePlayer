@@ -33,7 +33,6 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
-import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -168,6 +167,7 @@ public class Play extends GameState {
                 game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/wind1.wav")));
                 game.getSound().setLooping(true);
                 game.getSound().play();
+                game.getSound().setVolume(0.2f);
                 break;
         }
         // sey up world
@@ -394,7 +394,7 @@ public class Play extends GameState {
                             createDistanceJointBetweenLinks(tempArray, 0.40f);
                             createDistanceJointBetweenLinks(tempArray, 0.50f);
                             createDistanceJointBetweenLinks(tempArray, 0.60f);
-                            //createWheelJointBetweenLinks(tempArray, 0.50f);
+                            //createRopeJointGEOCordBetweenLinksPlantWorm(tempArray, 0.50f);
 
                         }
                         refilterTextures(tempArray);
@@ -406,33 +406,42 @@ public class Play extends GameState {
                         aurelienribon.bodyeditor.BodyEditorLoader loader2 = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses2.json"));
                         this.tempPosition = position;
                         this.bossLoader = loader2;
-                        Array<Boss> tempArray2 = new Array<>();
-                        initPlantPart(tempArray2, PlantWorm.Part.HEAD);
+                        Array<Array<Boss>> tempArray2 = new Array<>();
+                        for (int i = 0; i < size; i++) {
+                            tempArray2.add(new Array<Boss>());
+                        }
+                        initPlantPart(tempArray2, PlantWorm.Part.HEAD, 0);
+                        for (int i = 1; i < size; i++) {
+                            tempArray2.get(i).add(tempArray2.get(0).get(0));
+                        }
                         tempPosition.x += 50 / PPM;
                         tempPosition.y -= 50 / PPM;
 
                         for (int i = 0; i < 10; i++) {
                             for (int j = 0; j < size; j++) {
                                 if (i == size - 1) {
-                                    initPlantPart(tempArray2, PlantWorm.Part.TAIL);
+                                    initPlantPart(tempArray2, PlantWorm.Part.TAIL, j);
                                 } else {
-                                    initPlantPart(tempArray2, PlantWorm.Part.BODY);
+                                    initPlantPart(tempArray2, PlantWorm.Part.BODY, j);
                                 }
                                 if (i == 0) {
-                                    createWheelJointBetweenLinks(tempArray2);
+                                    createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j));
                                 } else {
-                                    createDistanceJointBetweenLinks(tempArray2, 0.4f);
-                                    createDistanceJointBetweenLinks(tempArray2, 0.5f);
-                                    createDistanceJointBetweenLinks(tempArray2, 0.6f);
+                                    createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f);
+                                    createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f);
+                                    createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f);
                                 }
                             }
                             tempPosition.y -= 100 / PPM;
                         }
 
-                        refilterTextures(tempArray2);
-                        System.out.println(tempArray2);
+                        refilterTextures(tempArray2.get(0));
+                        for (int i = 1; i < size; i++) {
+                            tempArray2.get(i).reverse();
+                        }
 
-                        PlantbossArray.add(tempArray2);
+                        for (Array<Boss> bosses : tempArray2)
+                            PlantbossArray.add(bosses);
                         break;
                 }
 
@@ -460,7 +469,7 @@ public class Play extends GameState {
         tempArray.reverse();
     }
 
-    private void initPlantPart(Array<Boss> tempArray2, PlantWorm.Part part) {
+    private void initPlantPart(Array<Array<Boss>> tempArray2, PlantWorm.Part part, int size) {
         PlantWormProperties alias = new PlantWormProperties(bdef, fdef, tempPosition);
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
@@ -468,7 +477,7 @@ public class Play extends GameState {
         Boss boss = new PlantWorm(body, sb, WORM, this, part, 2f, part.equals(PlantWorm.Part.HEAD) ? 100 : 50, part.equals(PlantWorm.Part.HEAD) ? 100 : 50);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(WORM);
         boss.getBody().setUserData(WORM);
-        tempArray2.add(boss);
+        tempArray2.get(size).add(boss);
     }
 
     private void createDistanceJointBetweenLinks(Array<Boss> tempArray, float lock) {
@@ -485,16 +494,18 @@ public class Play extends GameState {
     }
 
 
-    private void createWheelJointBetweenLinks(Array<Boss> tempArray) {
+    private void createRopeJointGEOCordBetweenLinksPlantWorm(Array<Boss> tempArray) {
         // create joint between bodies
-        WheelJointDef wheelJointDef = new WheelJointDef();
-        wheelJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
-        wheelJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
-        //ropeJointDef.length = MagmabossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
-        wheelJointDef.collideConnected = false;
-        wheelJointDef.localAnchorA.set(0.2f, 0.95f);
-        wheelJointDef.localAnchorB.set(70 / PPM, 0.05f + 1);
-        world.createJoint(wheelJointDef);
+        for (int i = 0; i < 3; i++) {
+            DistanceJointDef distanceJointDef = new DistanceJointDef();
+            distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
+            distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
+            distanceJointDef.collideConnected = false;
+            distanceJointDef.localAnchorA.set(0.4f + i * 0.1f, 0.95f);
+            distanceJointDef.localAnchorB.set((65 + i * 5) / PPM, 0.05f + 1);
+            distanceJointDef.length = 0.05f;
+            world.createJoint(distanceJointDef);
+        }
     }
 
     private void createRopeJointBetweenLinks(Array<Boss> tempArray, float lock) {
@@ -1007,6 +1018,9 @@ public class Play extends GameState {
         cam.update();
 
         //call update animation
+        if (player.getHealth() == 0) {
+            cl.setDeathState((short) 3);
+        }
         if (cl.getDeathState() == 0) {
             player.update(dt);
         } else {
@@ -1027,6 +1041,10 @@ public class Play extends GameState {
             cl.setDeathState((short) 0);
             player.update(dt);
         }
+
+        //calculate falling dmg
+        player.onLanded(cl.isImpact());
+
 
         //update boss
         if (MagmabossArray.size != 0) {
@@ -1053,6 +1071,8 @@ public class Play extends GameState {
                 for (int i = 0; i < bossList.size; i++) {
                     if (i == 0) {
                         bossList.get(i).updateHeadBig(dt);
+                    } else if (i == bossList.size - 1) {
+                        bossList.get(i).updateRotation(dt);
                     } else {
                         bossList.get(i).update(dt);
                     }

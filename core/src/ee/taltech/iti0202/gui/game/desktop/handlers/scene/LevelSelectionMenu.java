@@ -83,17 +83,21 @@ public class LevelSelectionMenu extends Scene {
 
     @Override
     public void handleInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            switch (currBlock) {
-                case MAP:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    GameStateManager.pushState(GameStateManager.State.PLAY, selectedAct, selectedMap);
-                    break;
-                case EXIT:
-                    playSoundOnce("sounds/negative_2.wav", 0.5f);
-                    backFunc.run();
-                    break;
+        try {
+            if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+                switch (currBlock) {
+                    case MAP:
+                        playSoundOnce("sounds/menu_click.wav", 0.5f);
+                        GameStateManager.pushState(GameStateManager.State.PLAY, selectedAct, selectedMap);
+                        break;
+                    case EXIT:
+                        playSoundOnce("sounds/negative_2.wav", 0.5f);
+                        backFunc.run();
+                        break;
+                }
             }
+        } catch (NullPointerException nuk) {
+            nuk.printStackTrace();
         }
     }
 

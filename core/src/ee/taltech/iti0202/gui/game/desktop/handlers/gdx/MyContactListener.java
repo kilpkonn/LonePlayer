@@ -23,8 +23,10 @@ public class MyContactListener implements ContactListener {
     private short deathState = 0;
     private boolean initSpawn = true;
     private boolean end = false;
+    private Vector2 impact = new Vector2().add(0, 0);
 
     // called when 2 fixtures start to collide
+    @Override
     public void beginContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
@@ -76,27 +78,25 @@ public class MyContactListener implements ContactListener {
         }
 
 
-        // detection happens when player goes outside of initial game border
-        if (fa.getUserData() != null && (fa.getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
+        // detection happens when player goes outside of initial game borderd
+        if (fa.getUserData() != null && (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
             if (fb.getUserData() != null && fb.getUserData().equals("barrier")) {
                 deathState = 3;
             }
             if (fb.getUserData() != null && fb.getUserData().equals(WORM)) {
                 deathState = 1;
             }
-
             if (fb.getUserData() != null && fb.getUserData().equals(WORM + WORM)) {
                 deathState = 2;
             }
         }
-        if (fb.getUserData() != null && (fb.getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
+        if (fb.getUserData() != null && (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
             if (fa.getUserData() != null && fa.getUserData().equals("barrier")) {
                 deathState = 3;
             }
             if (fa.getUserData() != null && fa.getUserData().equals(WORM)) {
                 deathState = 1;
             }
-
             if (fa.getUserData() != null && fa.getUserData().equals(WORM + WORM)) {
                 deathState = 2;
             }
@@ -105,6 +105,7 @@ public class MyContactListener implements ContactListener {
 
 
     // called when two fixtures no longer collide
+    @Override
     public void endContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
@@ -126,10 +127,21 @@ public class MyContactListener implements ContactListener {
     }
 
     //presolve
+    @Override
     public void preSolve(Contact c, Manifold m) {
+        Fixture fa = c.getFixtureA();
+        Fixture fb = c.getFixtureB();
+
+        if (fa.getUserData() != null && (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
+            impact = fa.getBody().getLinearVelocity();
+        }
+        if (fb.getUserData() != null && (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
+            impact = fb.getBody().getLinearVelocity();
+        }
     }
 
     // handling
+    @Override
     public void postSolve(Contact c, ContactImpulse ci) {
     }
 
@@ -198,6 +210,14 @@ public class MyContactListener implements ContactListener {
 
     public void setDeathState(short deathState) {
         this.deathState = deathState;
+    }
+
+    public Vector2 isImpact() {
+        return impact;
+    }
+
+    public void setImpact(Vector2 impact) {
+        this.impact = impact;
     }
 
     public void setEnd(boolean end) {
