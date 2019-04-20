@@ -64,7 +64,7 @@ var Main = function () {
     // Add video element to DOM
     document.body.appendChild(this.video);
 
-    // Create training buttons and info texts    
+    // Create training buttons and info texts
 
     var _loop = function _loop(i) {
       var div = document.createElement('div');

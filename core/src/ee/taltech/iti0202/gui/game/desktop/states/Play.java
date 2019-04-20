@@ -407,7 +407,7 @@ public class Play extends GameState {
                         this.tempPosition = position;
                         this.bossLoader = loader2;
                         Array<Boss> tempArray2 = new Array<>();
-                        initPlantPart(tempArray2, PlantWorm.Part.HEAD);
+                        initPlantPart(tempArray2, PlantWorm.Part.CLAW_HEAD);
                         tempPosition.x += 50 / PPM;
                         tempPosition.y -= 50 / PPM;
 
@@ -464,8 +464,8 @@ public class Play extends GameState {
         PlantWormProperties alias = new PlantWormProperties(bdef, fdef, tempPosition);
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.HEAD) ? 2f : 1f);
-        Boss boss = new PlantWorm(body, sb, WORM, this, part, 2f, part.equals(PlantWorm.Part.HEAD) ? 100 : 50, part.equals(PlantWorm.Part.HEAD) ? 100 : 50);
+        bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.CLAW_HEAD) ? 2f : 1f);
+        Boss boss = new PlantWorm(body, sb, WORM, this, part, 2f, part.equals(PlantWorm.Part.CLAW_HEAD) ? 100 : 50, part.equals(PlantWorm.Part.CLAW_HEAD) ? 100 : 50);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(WORM);
         boss.getBody().setUserData(WORM);
         tempArray2.add(boss);

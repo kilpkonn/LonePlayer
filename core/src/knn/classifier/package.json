@@ -10,7 +10,8 @@
     "@tensorflow-models/posenet": "^1.0.1",
     "@tensorflow-models/speech-commands": "^0.3.5",
     "@tensorflow/tfjs": "^0.13.0",
-    "socket.io": "^2.2.0"
+    "socket.io": "^2.2.0",
+    "webtcp": "^1.0.0"
   },
   "scripts": {
     "start": "budo main.js:dist/build.js --live --host localhost",

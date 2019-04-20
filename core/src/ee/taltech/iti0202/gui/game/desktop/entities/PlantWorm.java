@@ -71,8 +71,8 @@ public class PlantWorm extends Boss {
     }
 
     public enum PlantWormAnimation {
-        IDLE("idle"),
-        ATTACK("attack");
+        IDLE ("idle"),
+        ATTACK ("attack");
 
         private final String name;
 
@@ -86,9 +86,10 @@ public class PlantWorm extends Boss {
     }
 
     public enum Part {
-        HEAD("plantwormhead"),
-        BODY("plantwormbody"),
-        TAIL("plantwormbody"); //TODO: make tail / root
+        FLOWER_HEAD ("plantwormflowerhead"),
+        CLAW_HEAD ("plantwormclawhead"),
+        BODY ("plantwormbody"),
+        TAIL ("plantwormbody"); //TODO: make tail / root
 
         private final String name;
 

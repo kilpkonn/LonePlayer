@@ -1,7 +1,7 @@
 {
   "rigidBodies": [
     {
-      "name": "plantwormhead",
+      "name": "plantwormclawhead",
       "imagePath": "images/bosses/plantworm/head_base.png",
       "origin": {
         "x": 0,
