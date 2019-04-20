@@ -6,7 +6,6 @@ import java.util.Map;
 public class B2DVars {
 
     // pixel per meter
-    public static final int PORT = 9021;
     public static final float PPM = 100;
     public static final float STEP = 1 / 60f;
     public static final float GRAVITY = -9.81f;

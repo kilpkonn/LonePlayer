@@ -3,16 +3,9 @@ package ee.taltech.iti0202.gui.game;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.net.ServerSocket;
-import com.badlogic.gdx.net.ServerSocketHints;
-import com.badlogic.gdx.net.Socket;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.Content;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
@@ -22,7 +15,6 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PORT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
@@ -70,11 +62,11 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
-        // i am seriously dumb.
+        // i am seriously dumb. TODO: make it work ref - https://socket.io/blog/native-socket-io-and-android/
         // try {
         //     SocketHints socketHints = new SocketHints();
         //     // Socket will time our in 4 seconds
-        //     socketHints.connectTimeout = 4000;
+        //     socketHints.connectTimeout = 0;
         //     //create the socket and connect to the server entered in the text box on port 9966
         //     connection = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 9966, socketHints);
         //     byte[] read = new byte[1024]; // some bytes
@@ -90,27 +82,11 @@ public class Game extends ApplicationAdapter {
 
             @Override
             public void run() {
-                ServerSocketHints serverSocketHint = new ServerSocketHints();
-                // 0 means no timeout.  Probably not the greatest idea in production!
-                serverSocketHint.acceptTimeout = 0;
-
-                // Create the socket server using TCP protocol and listening on 9021
-                ServerSocket serverSocket = Gdx.net.newServerSocket(Net.Protocol.TCP, PORT, serverSocketHint);
 
                 // Loop forever
                 while (true) {
-                    // Create a socket
-                    Socket socket = serverSocket.accept(null);
 
-                    // Read data from the socket into a BufferedReader
-                    BufferedReader buffer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
-                    try {
-                        // Read to the next newline (\n) and display that text on labelMessage
-                        readString = buffer.readLine();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                 }
             }
         }).start(); // And, start the thread running

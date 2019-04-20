@@ -129,22 +129,8 @@ class Main {
 
           // Make the predicted class bold
           if (res.classIndex == i) {
-            var net = require('net');
+            //TODO: socket.io / create connection between desktrop launcher in game.java and this
 
-            var client = new Socket();
-            client.connect(9021, '127.0.0.1', function() {
-            	console.log('Connected');
-            	client.write('Hello, server! Love, Client.');
-            });
-
-            client.on('data', function(data) {
-            	console.log('Received: ' + data);
-            	client.destroy(); // kill client after server's response
-            });
-
-            client.on('close', function() {
-            	console.log('Connection closed');
-            });
 
             this.infoTexts[i].style.fontWeight = 'bold';
           } else {
