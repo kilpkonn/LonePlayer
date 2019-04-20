@@ -25,6 +25,7 @@ public class DesktopLauncher {
 
         config.title = Game.TITLE;
         config.width = V_WIDTH * SCALE;
+        config.samples = 3;
         config.forceExit = true;
         config.fullscreen = false;
         config.height = V_HEIGHT * SCALE;
