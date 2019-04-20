@@ -29,9 +29,11 @@ public class Game extends ApplicationAdapter {
     private Music sound;
     private GameStateManager gsm;
     public static Content res;
+    private String readString;
 
     public Game(Settings s) {
         settings = s;
+
     }
 
     public void create() {
@@ -59,6 +61,23 @@ public class Game extends ApplicationAdapter {
             case iOS:
                 break;
         }
+
+        // TODO: make it work .ref - https://socket.io/blog/native-socket-io-and-android/
+
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+
+                // Loop forever
+                while (true) {
+
+                    // TODO: Listener here
+
+                }
+            }
+        }).start(); // And, start the thread running
+
 
         // set up music player
         try {
@@ -176,5 +195,9 @@ public class Game extends ApplicationAdapter {
 
     public void setSound(Music sound) {
         this.sound = sound;
+    }
+
+    public String getReadString() {
+        return readString;
     }
 }

@@ -340,13 +340,13 @@ public class Play extends GameState {
         body.createFixture(fdef).setFriction(FRICTION);
         body.setUserData("playerBody");
 
-        polyShape.setAsBox(8 / PPM, 16 / PPM, new Vector2(0, 12 / PPM), 0);
+        polyShape.setAsBox(8 / PPM, 18 / PPM, new Vector2(0, 12 / PPM), 0);
         fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
         body.createFixture(fdef).setUserData("playerBody");
 
-        polyShape.setAsBox(1 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
+        polyShape.setAsBox(4 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
         fdef.shape = polyShape;
         fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
         fdef.filter.maskBits = mask;
@@ -642,7 +642,7 @@ public class Play extends GameState {
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
                             createEndPoint(new Vector2(polygon[1].x + tileSize / PPM, polygon[0].y));
                         } else {
-                            createCheckpoints(new Vector2(polygon[1].x, polygon[0].y));
+                            createCheckpoints(new Vector2(polygon[1].x + (polygon[3].x - polygon[1].x) / 2, polygon[0].y));
                         }
                         break;
 
@@ -904,8 +904,8 @@ public class Play extends GameState {
                 break;
 
             case END:
-                if (cam.zoom < 5)
-                    cam.zoom += 0.01; //TODO: Fix this
+                // if (cam.zoom < 5)
+                //     cam.zoom += 0.01; //TODO: Fix this
                 if (executeEnd) playSoundOnce("sounds/end.ogg");
                 executeEnd = false;
                 //gameFadeOut = true;
