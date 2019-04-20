@@ -1,19 +1,31 @@
 package ee.taltech.iti0202.gui.game.desktop.entities;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 public class PlantWorm extends Boss {
 
+    public enum PlantWormAnimation {
+        IDLE ("idle"),
+        ATTACK ("attack");
+
+        private final String name;
+
+        PlantWormAnimation(String s) {
+            name = s;
+        }
+
+        public String toString() {
+            return this.name;
+        }
+    }
+
     public enum Part {
         HEAD ("plantwormhead"),
         BODY ("plantwormbody"),
-        TAIL ("plantwormtail");
+        TAIL ("plantwormbody"); //TODO: make tail / root
 
         private final String name;
 
@@ -27,9 +39,9 @@ public class PlantWorm extends Boss {
     }
 
     public PlantWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size) {
-        super(body, sb, play, "images/bosses/magmaworm/magmaworm.scml", (part == Part.HEAD) ? "head" : "body");
+        super(body, sb, play, "images/bosses/plantworm/plantworm.scml", part.name);
         body.setUserData(type); //TODO: Something more intelligent here
-        setAnimation(MagmaWorm.MagmaWormAnimation.DEFAULT.toString(), false); //TODO: Plantworm animations
+        setAnimation(PlantWormAnimation.IDLE.toString(), false);
         setAnimationSpeed(50);
         setScale(size);
     }
