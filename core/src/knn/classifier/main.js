@@ -130,8 +130,11 @@ class Main {
           // Make the predicted class bold
           if (res.classIndex == i) {
             //TODO: socket.io / create connection between desktrop launcher in game.java and this
+            // here is new "update" - so desktop launcher needs to be updated
 
+            // TODO: sender here
 
+            //
             this.infoTexts[i].style.fontWeight = 'bold';
           } else {
             this.infoTexts[i].style.fontWeight = 'normal';

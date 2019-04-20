@@ -62,21 +62,7 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
-        // i am seriously dumb. TODO: make it work ref - https://socket.io/blog/native-socket-io-and-android/
-        // try {
-        //     SocketHints socketHints = new SocketHints();
-        //     // Socket will time our in 4 seconds
-        //     socketHints.connectTimeout = 0;
-        //     //create the socket and connect to the server entered in the text box on port 9966
-        //     connection = Gdx.net.newClientSocket(Net.Protocol.TCP, "localhost", 9966, socketHints);
-        //     byte[] read = new byte[1024]; // some bytes
-        //     int read1 = connection.getInputStream().read(new byte[1024]);
-        //     readString = new String(read).trim();
-        //     System.out.println(readString);
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
-
+        // TODO: make it work .ref - https://socket.io/blog/native-socket-io-and-android/
 
         new Thread(new Runnable() {
 
@@ -86,6 +72,7 @@ public class Game extends ApplicationAdapter {
                 // Loop forever
                 while (true) {
 
+                    // TODO: Listener here
 
                 }
             }
