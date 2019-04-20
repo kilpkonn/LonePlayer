@@ -30,5 +30,6 @@ public class DesktopLauncher {
         config.height = V_HEIGHT * SCALE;
         //config.foregroundFPS = 300; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized
+
     }
 }

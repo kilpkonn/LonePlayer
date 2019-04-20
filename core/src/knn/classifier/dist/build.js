@@ -29,6 +29,8 @@ var _knnClassifier = require('@tensorflow-models/knn-classifier');
 
 var knnClassifier = _interopRequireWildcard(_knnClassifier);
 
+var fs = require("fs");
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -206,6 +208,7 @@ var Main = function () {
 
                 if (res.classIndex == i) {
                   this.infoTexts[i].style.fontWeight = 'bold';
+
                 } else {
                   this.infoTexts[i].style.fontWeight = 'normal';
                 }

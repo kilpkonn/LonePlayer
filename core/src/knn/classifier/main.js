@@ -18,7 +18,7 @@ import * as tf from '@tensorflow/tfjs';
 import * as knnClassifier from '@tensorflow-models/knn-classifier';
 
 // Number of classes to classify
-const NUM_CLASSES = 3;
+const NUM_CLASSES = 5;
 // Webcam Image size. Must be 227. 
 const IMAGE_SIZE = 227;
 // K value for KNN
@@ -129,6 +129,23 @@ class Main {
 
           // Make the predicted class bold
           if (res.classIndex == i) {
+            var net = require('net');
+
+            var client = new Socket();
+            client.connect(9021, '127.0.0.1', function() {
+            	console.log('Connected');
+            	client.write('Hello, server! Love, Client.');
+            });
+
+            client.on('data', function(data) {
+            	console.log('Received: ' + data);
+            	client.destroy(); // kill client after server's response
+            });
+
+            client.on('close', function() {
+            	console.log('Connection closed');
+            });
+
             this.infoTexts[i].style.fontWeight = 'bold';
           } else {
             this.infoTexts[i].style.fontWeight = 'normal';
