@@ -414,7 +414,7 @@ public class Play extends GameState {
                         Body body = world.createBody(alias.getBdef());
                         body.createFixture(alias.getFdef());
                         bossLoader.attachFixture(body, "head1", alias.getFdef(), 4.5f);
-                        Boss boss = new PlantWorm(body, sb, WORM, this, PlantWorm.Part.HEAD, 1);
+                        Boss boss = new PlantWorm(body, sb, WORM, this, PlantWorm.Part.CLAW_HEAD, 1);
                         boss.getBody().setUserData(WORM);
                         tempArray2.add(boss);
                         tempPosition.y -= 50 * scale / PPM;

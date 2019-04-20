@@ -23,7 +23,8 @@ public class PlantWorm extends Boss {
     }
 
     public enum Part {
-        HEAD ("plantwormhead"),
+        FLOWER_HEAD ("plantwormflowerhead"),
+        CLAW_HEAD ("plantwormclawhead"),
         BODY ("plantwormbody"),
         TAIL ("plantwormbody"); //TODO: make tail / root
 
