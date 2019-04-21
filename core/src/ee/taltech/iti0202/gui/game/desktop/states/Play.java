@@ -152,6 +152,7 @@ public class Play extends GameState {
     private int timeElapsed = 0;
     private int PlantBossSize = 1;
     private boolean executeEnd = true;
+    private B2DVars.gameDifficulty difficulty;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
@@ -159,6 +160,8 @@ public class Play extends GameState {
     private Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
         this.act = act;
         this.map = map;
+        this.difficulty = difficulty;
+
         game.getSound().stop();
         switch (act) {
             case "Desert":
@@ -264,14 +267,14 @@ public class Play extends GameState {
         animatedCells = new HashMap<>();
 
         if (progress != null) {
-            initPlayerLocation = new Vector2(progress.playerLocationX, progress.playerLocationY);
             dimension = progress.dimension;
             drawLayers();
-            initPlayer();
+            initPlayer(progress);
         } else {
             initPlayer();
             drawLayers();
         }
+
 
         cam.position.set(
                 player.getPosition().x * PPM,
@@ -293,10 +296,21 @@ public class Play extends GameState {
 
     ////////////////////////////////////////////////////////////////////   Create Animated bodies   ////////////////////////////////////////////////////////////////////
 
+    private void initPlayer(GameProgress progress) {
+        if (player != null) world.destroyBody(player.getBody());
+        bdef = new BodyDef();
+        fdef = new FixtureDef();
+        circle = new CircleShape();
+        polyShape = new PolygonShape();
+
+        bdef.position.set(progress.playerLocationX, progress.playerVelocityY);
+        bdef.linearVelocity.set(progress.playerVelocityX, progress.playerLocationY);
+
+        buildPlayer();
+    }
+
+
     private void initPlayer() {
-        //TODO: Better logic for loading saved game
-
-
         if (player != null) world.destroyBody(player.getBody());
         bdef = new BodyDef();
         fdef = new FixtureDef();
@@ -314,7 +328,10 @@ public class Play extends GameState {
         } else {
             bdef.position.set(new Vector2(checkpoint.getPosition()));
         }
+        buildPlayer();
+    }
 
+    private void buildPlayer() {
         short mask;
         if (dimension) {
             mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
@@ -359,7 +376,6 @@ public class Play extends GameState {
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
         player = new Player(body, sb);
-
     }
 
     private void createBosses(Vector2 position, String type, boolean decider, int size) {
@@ -934,8 +950,6 @@ public class Play extends GameState {
             if (!MyInput.isDown(-1) && cl.isPlayerOnGround()) {
                 player.setAnimation(Player.PlayerAnimation.IDLE);
             }
-
-            //TODO: roll on land -> need to detect landing
         }
     }
 
@@ -1026,7 +1040,7 @@ public class Play extends GameState {
                 playSoundOnce("sounds/sfx_deathscream_alien1.wav");
             }
             if (cl.getDeathState() == 3) {
-                player.setHealth(0);
+                player.setHealth(0); //TODO: Fix instant death on load game
             } else {
                 playSoundOnce("sounds/sfx_damage_hit2.wav", 0.1f);
                 player.setHealth(player.getHealth() - gotHitBySnek);
@@ -1288,6 +1302,7 @@ public class Play extends GameState {
         progress.act = act;
         progress.map = map;
         progress.dimension = dimension;
+        progress.difficulty = difficulty;
 
         progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }
