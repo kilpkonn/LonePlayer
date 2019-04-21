@@ -431,7 +431,7 @@
             </timeline>
         </animation>
     </entity>
-    <entity id="2" name="plantwormflower">
+    <entity id="2" name="plantwormflowerhead">
         <obj_info name="bone_000" type="bone" w="123.054" h="10"/>
         <obj_info name="bone_001" type="bone" w="52.7446" h="10"/>
         <obj_info name="bone_002" type="bone" w="42.6159" h="10"/>

@@ -410,29 +410,30 @@ public class Play extends GameState {
                         for (int i = 0; i < size; i++) {
                             tempArray2.add(new Array<Boss>());
                         }
-                        initPlantPart(tempArray2, PlantWorm.Part.FLOWER_HEAD, 0);
+                        initPlantPart(tempArray2, PlantWorm.Part.FLOWER_HEAD, 0, 100, 100);
                         for (int i = 1; i < size; i++) {
                             tempArray2.get(i).add(tempArray2.get(0).get(0));
                         }
                         tempPosition.x += 50 / PPM;
                         tempPosition.y -= 50 / PPM;
 
-                        for (int i = 0; i < 10; i++) {
+                        int vine = size * 5;
+                        for (int i = 0; i < vine; i++) {
                             for (int j = 0; j < size; j++) {
-                                if (i == 9) {
-                                    initPlantPart(tempArray2, PlantWorm.Part.CLAW_HEAD, j);
+                                if (i == vine - 1) {
+                                    initPlantPart(tempArray2, PlantWorm.Part.CLAW_HEAD, j, 100, 100);
                                 } else {
-                                    initPlantPart(tempArray2, PlantWorm.Part.BODY, j);
+                                    initPlantPart(tempArray2, PlantWorm.Part.BODY, j, 50, 50);
                                 }
-                                if (i == 0) {
-                                    createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j));
+                                if (i == 0 || i == vine - 1) {
+                                    createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j), i);
                                 } else {
                                     createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f);
                                     createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f);
                                     createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f);
                                 }
                             }
-                            tempPosition.y -= 100 / PPM;
+                            tempPosition.y -= 10 / PPM;
                         }
 
                         refilterTextures(tempArray2.get(0));
@@ -469,12 +470,12 @@ public class Play extends GameState {
         tempArray.reverse();
     }
 
-    private void initPlantPart(Array<Array<Boss>> tempArray2, PlantWorm.Part part, int size) {
+    private void initPlantPart(Array<Array<Boss>> tempArray2, PlantWorm.Part part, int size, float x, float y) {
         PlantWormProperties alias = new PlantWormProperties(bdef, fdef, tempPosition);
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
-        Boss boss = new PlantWorm(body, sb, WORM, this, part, 2f, part.equals(PlantWorm.Part.BODY) ? 50 : 100, part.equals(PlantWorm.Part.BODY) ? 50 : 100);
+        Boss boss = new PlantWorm(body, sb, WORM, this, part, 2f, x, y);
         for (Fixture fixture : boss.getBody().getFixtureList())
             fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? WORM + WORM : WORM);
         boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? WORM + WORM : WORM);
@@ -495,15 +496,17 @@ public class Play extends GameState {
     }
 
 
-    private void createRopeJointGEOCordBetweenLinksPlantWorm(Array<Boss> tempArray) {
+    private void createRopeJointGEOCordBetweenLinksPlantWorm(Array<Boss> tempArray, int p) {
         // create joint between bodies
+        float split = p == 0 ? 1f : 0f;
+        float delta = p == 0 ? 0f : 0.4f;
         for (int i = 0; i < 3; i++) {
             DistanceJointDef distanceJointDef = new DistanceJointDef();
             distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
             distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
             distanceJointDef.collideConnected = false;
-            distanceJointDef.localAnchorA.set(0.4f + i * 0.1f, 0.95f);
-            distanceJointDef.localAnchorB.set((65 + i * 5) / PPM, 0.05f + 1);
+            distanceJointDef.localAnchorA.set(0.5f + i * 0.1f + delta, 0.95f); // done
+            distanceJointDef.localAnchorB.set((95 + i * 5) / PPM, 0.05f + split);
             distanceJointDef.length = 0.05f;
             world.createJoint(distanceJointDef);
         }
@@ -1044,7 +1047,7 @@ public class Play extends GameState {
         }
 
         //calculate falling dmg
-        player.onLanded(cl.isImpact());
+        player.onLanded(cl.isImpact(), cl.isPlayerOnGround());
 
 
         //update boss
@@ -1072,6 +1075,7 @@ public class Play extends GameState {
                 for (int i = 0; i < bossList.size; i++) {
                     if (i == 0) {
                         bossList.get(i).updateHeadBig(dt);
+                        bossList.get(i).updateRotation(dt);
                     } else if (i == bossList.size - 1) {
                         bossList.get(i).updateRotation(dt);
                     } else {
@@ -1240,8 +1244,10 @@ public class Play extends GameState {
         }
 
         if (PlantbossArray != null) {
-            for (Array<Boss> bossList : PlantbossArray)
+            for (Array<Boss> bossList : PlantbossArray) {
                 for (Boss boss : bossList) boss.render(sb);
+                bossList.get(0).render(sb);
+            }
         }
 
 

@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
+import java.util.Random;
+
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
@@ -19,6 +21,7 @@ public abstract class Boss extends SpriteAnimation {
     protected Play play;
 
     private float time = 0;
+    private final Random RANDOM = new Random();
 
     Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
         super(body, sb, path, entity);
@@ -32,6 +35,24 @@ public abstract class Boss extends SpriteAnimation {
 
     public void updateRotation(float dt) {
         super.update(dt);
+
+        // Get the positions of both Entities
+        Vector2 playerPos = play.getPlayer().getPosition();
+        Vector2 enemyPos = body.getPosition();
+
+        float angle = body.getAngle();
+        Vector2 target = new Vector2(playerPos.x - enemyPos.x, playerPos.y - enemyPos.y);
+        float newAngle = (float) Math.atan2(-target.x, target.y);
+        if (newAngle < 0) newAngle += 2 * Math.PI;
+
+        body.setTransform(body.getPosition(), newAngle);
+
+
+
+        // body.setLinearVelocity(
+        //         (float) (body.linVelLoc.x - 1 + Math.random() * (2)),
+        //         (float) (body.linVelLoc.y - 1 + Math.random() * (2))
+        // );
     }
 
     @Override

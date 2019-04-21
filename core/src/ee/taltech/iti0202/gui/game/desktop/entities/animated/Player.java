@@ -10,7 +10,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROL
 
 public class Player extends SpriteAnimation {
 
-    public void onLanded(Vector2 velocity) {
+    public void onLanded(Vector2 velocity, Boolean grounded) {
         //System.out.println(Math.abs(velocity.x));
         //System.out.println(Math.abs(velocity.y));
         //System.out.println();
@@ -23,10 +23,11 @@ public class Player extends SpriteAnimation {
         }
         if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
             if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED * 2) {
-                health -= Math.abs(velocity.x / 5);
+                health -= Math.abs(velocity.x / 15);
                 health = Math.max(health, 0);
             }
-            setAnimation(PlayerAnimation.ROLL);
+            if (grounded)
+                setAnimation(PlayerAnimation.ROLL);
         }
     }
 
