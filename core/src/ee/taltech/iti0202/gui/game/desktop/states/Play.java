@@ -147,7 +147,7 @@ public class Play extends GameState {
     private String act;
     private String map;
     private float scale = 1f;
-    private final int takingTurnsBase = 10; // how long one boss attacks
+    private int takingTurnsBase = 15; // how long one boss attacks
     private int curtentlyActiveBoss = 0;
     private int timeElapsed = 0;
     private int PlantBossSize = 1;
@@ -403,7 +403,7 @@ public class Play extends GameState {
                 break;
 
             case "2":
-
+                takingTurnsBase = 15 - size;
                 PlantBossSize = size;
                 aurelienribon.bodyeditor.BodyEditorLoader loader2 = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses2.json"));
                 this.tempPosition = position;
@@ -1040,7 +1040,7 @@ public class Play extends GameState {
         }
 
         //calculate falling dmg
-        player.onLanded(cl.isImpact(), cl.isPlayerOnGround());
+        player.onLanded(player.getBody().getLinearVelocity(), cl.isPlayerOnGround());
 
 
         //update boss

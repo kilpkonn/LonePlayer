@@ -4,31 +4,51 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
 
 
 public class Player extends SpriteAnimation {
 
+    private List<Vector2> doneDmg = new ArrayList<>();
+
     public void onLanded(Vector2 velocity, Boolean grounded) {
         //System.out.println(Math.abs(velocity.x));
-        //System.out.println(Math.abs(velocity.y)); TODO: sound fall dmg
-        //System.out.println();
-        if (Math.abs(velocity.y) > DMG_ON_LANDING) {
-            if (Math.abs(velocity.x) < ROLL_ON_LANDING_SPEED) {
-                health -= Math.abs(velocity.y / 10);
-            }
-            health -= Math.abs(velocity.y / 10);
-            health = Math.max(0, health);
+        if (doneDmg.size() < 10) {
+            doneDmg.add(new Vector2(velocity.x, velocity.y));
+        } else {
+            doneDmg.remove(0);
+            doneDmg.add(new Vector2(velocity.x, velocity.y));
         }
-        if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
-            if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED * 2) {
-                health -= Math.abs(velocity.x / 15);
-                health = Math.max(health, 0);
+
+        for (Vector2 dmg : doneDmg) {
+            if (Math.abs(dmg.y) > Math.abs(velocity.y)) {
+                velocity = dmg;
             }
-            if (grounded)
+        }
+
+        if (grounded && doneDmg.size() > 4) {
+            doneDmg = new ArrayList<>();
+            if (Math.abs(velocity.y) > DMG_ON_LANDING) {
+                if (Math.abs(velocity.x) < ROLL_ON_LANDING_SPEED) {
+                    health -= Math.abs(velocity.y * Math.abs(velocity.y) / DMG_ON_LANDING * DMG_MULTIPLIER);
+                }
+                health -= Math.abs(velocity.y * 2);
+                health = Math.max(0, health);
+            }
+            if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
+                if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED * 2) {
+                    health -= Math.abs(velocity.x);
+                    health = Math.max(health, 0);
+                }
                 setAnimation(PlayerAnimation.ROLL);
+            }
         }
+
     }
 
     private int health;

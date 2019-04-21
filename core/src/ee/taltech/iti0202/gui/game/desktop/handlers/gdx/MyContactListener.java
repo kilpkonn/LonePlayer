@@ -23,7 +23,6 @@ public class MyContactListener implements ContactListener {
     private short deathState = 0;
     private boolean initSpawn = true;
     private boolean end = false;
-    private Vector2 impact = new Vector2().add(0, 0);
 
     // called when 2 fixtures start to collide
     @Override
@@ -129,15 +128,15 @@ public class MyContactListener implements ContactListener {
     //presolve
     @Override
     public void preSolve(Contact c, Manifold m) {
-        Fixture fa = c.getFixtureA();
-        Fixture fb = c.getFixtureB();
+        // Fixture fa = c.getFixtureA();
+        // Fixture fb = c.getFixtureB();
 
-        if (fa.getUserData() != null && (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
-            impact = fa.getBody().getLinearVelocity();
-        }
-        if (fb.getUserData() != null && (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
-            impact = fb.getBody().getLinearVelocity();
-        }
+        // if (fa.getUserData() != null && (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
+        //     impact = fa.getBody().getLinearVelocity();
+        // }
+        // if (fb.getUserData() != null && (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
+        //     impact = fb.getBody().getLinearVelocity();
+        // }
     }
 
     // handling
@@ -212,13 +211,13 @@ public class MyContactListener implements ContactListener {
         this.deathState = deathState;
     }
 
-    public Vector2 isImpact() {
-        return impact;
-    }
+    // public Vector2 isImpact() {
+    //     return impact;
+    // }
 
-    public void setImpact(Vector2 impact) {
-        this.impact = impact;
-    }
+    // public void setImpact(Vector2 impact) {
+    //     this.impact = impact;
+    // }
 
     public void setEnd(boolean end) {
         this.end = end;
