@@ -156,7 +156,7 @@ public class Play extends GameState {
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    private Play(String act, String map, GameProgress progress) {
+    private Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
         this.act = act;
         this.map = map;
         game.getSound().stop();
@@ -224,7 +224,7 @@ public class Play extends GameState {
             }
         });
 
-        endMenu = new EndMenu(act, map, hudCam, new Runnable() {
+        endMenu = new EndMenu(act, map, hudCam, difficulty, new Runnable() {
             @Override
             public void run() {
                 playState = pauseState.SETTINGS;
@@ -282,12 +282,12 @@ public class Play extends GameState {
         cam.zoom = 1;
     }
 
-    public Play(String act, String map) {
-        this(act, map, null);
+    public Play(String act, String map, B2DVars.gameDifficulty difficulty) {
+        this(act, map, difficulty,null);
     }
 
     public Play(GameProgress progress) {
-        this(progress.act, progress.map, progress);
+        this(progress.act, progress.map, progress.difficulty ,progress);
     }
 
 

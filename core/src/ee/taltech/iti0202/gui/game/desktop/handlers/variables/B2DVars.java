@@ -1,5 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.variables;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,9 +23,25 @@ public class B2DVars {
     public static float DMG_ON_LANDING = 7; //TODO if easy then +3, hard +1, brutal stays
 
     public enum gameDifficulty {
-        EASY,
-        HARD,
-        BRUTAL
+
+        @SerializedName("1")
+        EASY (1),
+
+        @SerializedName("2")
+        HARD (2),
+
+        @SerializedName("3")
+        BRUTAL (3);
+
+        private final int value;
+
+        public int getValue() {
+            return value;
+        }
+
+        gameDifficulty(int value) {
+            this.value = value;
+        }
     }
 
     public static final float MENU_FADE_TIME = 1;

@@ -16,6 +16,7 @@ public class GameProgressSerializer implements JsonSerializer<GameProgress> {
         result.add("playerLocationY", new JsonPrimitive(progress.playerLocationY));
         result.add("act", new JsonPrimitive(progress.act));
         result.add("map", new JsonPrimitive(progress.map));
+        result.add("difficulty", new JsonPrimitive(progress.difficulty.getValue()));
         result.add("dimension", new JsonPrimitive(progress.dimension));
         result.add("playerVelocityX", new JsonPrimitive(progress.playerVelocityX));
         result.add("playerVelocityY", new JsonPrimitive(progress.playerVelocityY));

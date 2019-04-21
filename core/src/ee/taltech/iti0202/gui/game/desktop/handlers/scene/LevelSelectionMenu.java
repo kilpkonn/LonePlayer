@@ -16,6 +16,7 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
@@ -24,30 +25,35 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 public class LevelSelectionMenu extends Scene {
 
     private enum block {
-        MAP, ACT, EXIT
+        MAP, ACT, EXIT, DIFFICULTY
     }
     private Runnable backFunc;
 
     private LevelSelectionMenu.block currBlock;
 
     private GameButton backButton;
+    private GameButton difficultyButton;
     private HashMap<GameButton, String> actButtons = new HashMap<>();
     private HashMap<GameButton, String> mapButtons = new HashMap<>();
     private HashMap<GameButton, LevelSelectionMenu.block> buttonType;
 
     private String selectedAct = "";
     private String selectedMap;
+    private B2DVars.gameDifficulty difficulty = B2DVars.gameDifficulty.EASY;
+    //private
 
     public LevelSelectionMenu(OrthographicCamera cam, Runnable backFunc) {
         super(cam);
         this.backFunc = backFunc;
 
         backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.2f - 40);
+        difficultyButton = new GameButton(difficulty.toString(), V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f - 40);
 
-        buttons = new HashSet<>(Arrays.asList(backButton));
+        buttons = new HashSet<>(Arrays.asList(backButton, difficultyButton));
 
         buttonType = new HashMap<GameButton, block>() {{
             put(backButton, block.EXIT);
+            put(difficultyButton, block.DIFFICULTY);
         }};
 
         List<String> acts = loadActs();
@@ -88,7 +94,11 @@ public class LevelSelectionMenu extends Scene {
                 switch (currBlock) {
                     case MAP:
                         playSoundOnce("sounds/menu_click.wav", 0.5f);
-                        GameStateManager.pushState(GameStateManager.State.PLAY, selectedAct, selectedMap);
+                        GameStateManager.pushState(GameStateManager.State.PLAY, selectedAct, selectedMap, difficulty);
+                        break;
+                    case DIFFICULTY:
+                        playSoundOnce("sounds/menu_click.wav", 0.5f);
+                        updateDifficulty();
                         break;
                     case EXIT:
                         playSoundOnce("sounds/negative_2.wav", 0.5f);
@@ -99,6 +109,21 @@ public class LevelSelectionMenu extends Scene {
         } catch (NullPointerException nuk) {
             nuk.printStackTrace();
         }
+    }
+
+    private void updateDifficulty() {
+        switch (difficulty) {
+            case EASY:
+                difficulty = B2DVars.gameDifficulty.HARD;
+                break;
+            case HARD:
+                difficulty = B2DVars.gameDifficulty.BRUTAL;
+                break;
+            case BRUTAL:
+                difficulty = B2DVars.gameDifficulty.EASY;
+                break;
+        }
+        difficultyButton.setText(difficulty.toString());
     }
 
     public void showMaps() {

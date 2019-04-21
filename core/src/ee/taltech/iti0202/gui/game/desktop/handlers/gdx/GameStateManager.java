@@ -3,6 +3,7 @@ package ee.taltech.iti0202.gui.game.desktop.handlers.gdx;
 import java.util.Stack;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.GameState;
 import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
@@ -48,17 +49,17 @@ public class GameStateManager {
         return null;
     }
 
-    private static GameState getState(State state, String act, String level) {
+    private static GameState getState(State state, GameProgress progress) {
         if (state == State.PLAY) {
-            return new Play( act, level);
+            return new Play(progress);
         }
         System.out.println("desired state was no found!");
         return null;
     }
 
-    private static GameState getState(State state, GameProgress progress) {
+    private static GameState getState(State state, String act, String map, B2DVars.gameDifficulty difficulty) {
         if (state == State.PLAY) {
-            return new Play(progress);
+            return new Play(act, map, difficulty);
         }
         System.out.println("desired state was no found!");
         return null;
@@ -74,12 +75,12 @@ public class GameStateManager {
         System.out.println(state);
     }
 
-    public static void pushState(State state, String act, String level) {
-        gameStates.push(getState(state, act, level));
-    }
-
     public static void pushState(State state, GameProgress progress) {
         gameStates.push(getState(state, progress));
+    }
+
+    public static void pushState(State state, String act, String map, B2DVars.gameDifficulty difficulty) {
+        gameStates.push(getState(state, act, map, difficulty));
     }
 
     public static void popState() {

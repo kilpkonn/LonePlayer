@@ -10,6 +10,7 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.components.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
@@ -24,15 +25,17 @@ public class EndMenu extends Scene{
     private block currBlock = block.DEFAULT;
     private HashMap<GameButton, block> buttonType;
     private Runnable openSettingsFunc;
+    private B2DVars.gameDifficulty difficulty;
 
     private GameButton exitButton;
     private GameButton settingsButton;
     private GameButton nextButton;
     private GameButton playAgainButton;
 
-    public EndMenu(String act, String map, OrthographicCamera cam, Runnable openSettingsFunc) {
+    public EndMenu(String act, String map, OrthographicCamera cam, B2DVars.gameDifficulty difficulty, Runnable openSettingsFunc) {
         super(act, map, cam);
         this.openSettingsFunc = openSettingsFunc;
+        this.difficulty = difficulty;
 
         hudCam.update();
 
@@ -63,7 +66,7 @@ public class EndMenu extends Scene{
                     break;
                 case NEWGAME:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    GameStateManager.pushState(GameStateManager.State.PLAY, act, map);
+                    GameStateManager.pushState(GameStateManager.State.PLAY, act, map, difficulty);
                     break;
                 case SETTINGS:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);

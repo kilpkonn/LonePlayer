@@ -10,6 +10,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+
 
 public class GameProgress {
     public float playerLocationX;
@@ -17,6 +19,7 @@ public class GameProgress {
     public float playerVelocityX;
     public float playerVelocityY;
     public boolean dimension;
+    public B2DVars.gameDifficulty difficulty;
     public String act;
     public String map;
 
