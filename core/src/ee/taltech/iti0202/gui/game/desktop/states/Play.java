@@ -149,6 +149,10 @@ public class Play extends GameState {
     private String act;
     private String map;
     private float scale = 1f;
+    private final int takingTurnsBase = 10; // how long one boss attacks
+    private int curtentlyActiveBoss = 0;
+    private int timeElapsed = 0;
+    private int PlantBossSize = 1;
     private boolean executeEnd = true;
 
 
@@ -403,6 +407,8 @@ public class Play extends GameState {
                         break;
 
                     case 2:
+
+                        PlantBossSize = size;
                         aurelienribon.bodyeditor.BodyEditorLoader loader2 = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses2.json"));
                         this.tempPosition = position;
                         this.bossLoader = loader2;
@@ -1070,11 +1076,24 @@ public class Play extends GameState {
                 }
         }
 
+
         if (PlantbossArray.size != 0) {
-            for (Array<Boss> bossList : PlantbossArray)
+
+            int takingTurns = takingTurnsBase * Gdx.graphics.getFramesPerSecond();
+            timeElapsed++;
+            if (timeElapsed > takingTurns) {
+                timeElapsed = 0;
+                curtentlyActiveBoss = (curtentlyActiveBoss + 1) % PlantBossSize;
+            }
+            int j = 0;
+            for (Array<Boss> bossList : PlantbossArray) {
                 for (int i = 0; i < bossList.size; i++) {
                     if (i == 0) {
-                        bossList.get(i).updateHeadBig(dt);
+                        if (j == curtentlyActiveBoss) {
+                            bossList.get(i).updateHeadBig(dt);
+                        } else {
+                            bossList.get(i).updateCircularMotion(dt);
+                        }
                         bossList.get(i).updateRotation(dt);
                     } else if (i == bossList.size - 1) {
                         bossList.get(i).updateRotation(dt);
@@ -1083,6 +1102,8 @@ public class Play extends GameState {
                     }
 
                 }
+                j++;
+            }
         }
 
         //draw tilemap animations

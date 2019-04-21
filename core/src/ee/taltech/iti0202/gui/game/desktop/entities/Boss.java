@@ -21,6 +21,7 @@ public abstract class Boss extends SpriteAnimation {
     protected Play play;
 
     private float time = 0;
+    private final float optimalDistanceFromPlayer = 5f;
     private final Random RANDOM = new Random();
 
     Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
@@ -48,7 +49,6 @@ public abstract class Boss extends SpriteAnimation {
         body.setTransform(body.getPosition(), newAngle);
 
 
-
         // body.setLinearVelocity(
         //         (float) (body.linVelLoc.x - 1 + Math.random() * (2)),
         //         (float) (body.linVelLoc.y - 1 + Math.random() * (2))
@@ -58,6 +58,29 @@ public abstract class Boss extends SpriteAnimation {
     @Override
     public void update(float dt) {
         super.update(dt);
+    }
+
+    public void updateCircularMotion(float dt) {
+        super.update(dt);
+
+        Vector2 player = play.getPlayer().getPosition();
+        Vector2 boss = this.body.getPosition();
+        System.out.println(body.getLinearVelocity());
+
+        float distance = (float) Math.sqrt(Math.pow(player.x - boss.x, 2) + Math.pow(player.y - boss.x, 2));
+
+        if (distance < optimalDistanceFromPlayer) {
+
+            body.setLinearVelocity(body.getLinearVelocity().x * 0.99f + ((player.x - boss.x) * -1) * 0.005f,
+                    body.getLinearVelocity().y * 0.99f + ((player.y - boss.y) * -1) * 0.005f);
+
+        } else if (distance > optimalDistanceFromPlayer) {
+
+            body.setLinearVelocity(body.getLinearVelocity().x * 0.99f + (player.x - boss.x) * 0.005f,
+                    body.getLinearVelocity().y * 0.99f + ((player.y - boss.y) * 1) * 0.005f);
+        }
+
+
     }
 
     public void updateHeadBig(float dt) {

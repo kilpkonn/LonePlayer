@@ -12,7 +12,7 @@ public class Player extends SpriteAnimation {
 
     public void onLanded(Vector2 velocity, Boolean grounded) {
         //System.out.println(Math.abs(velocity.x));
-        //System.out.println(Math.abs(velocity.y));
+        //System.out.println(Math.abs(velocity.y)); TODO: sound fall dmg
         //System.out.println();
         if (Math.abs(velocity.y) > DMG_ON_LANDING) {
             if (Math.abs(velocity.x) < ROLL_ON_LANDING_SPEED) {
