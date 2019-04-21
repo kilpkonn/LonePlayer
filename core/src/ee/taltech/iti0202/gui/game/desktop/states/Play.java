@@ -69,14 +69,12 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BAC
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.COLOSSEOS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DEBUG;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAP_TO_ACT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -377,90 +375,79 @@ public class Play extends GameState {
         scale = decider ? 1f : 0.5f;
 
         switch (type) {
-            case WORM:
-                System.out.println(act);
-                switch (MAP_TO_ACT.get(act)) {
-                    case 1:
-                        aurelienribon.bodyeditor.BodyEditorLoader loader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses.json"));
-                        this.tempPosition = position;
-                        this.bossLoader = loader;
-                        Array<Boss> tempArray = new Array<>();
-                        initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray);
-                        tempPosition.y -= 60 * scale / PPM;
 
-                        for (int i = 0; i < size; i++) {
-                            if (i == size - 1) {
-                                initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray);
-                            } else {
-                                initSnakePart(MagmaWorm.Part.BODY, scale, tempArray);
-                            }
-                            //createRopeJointBetweenLinks(tempArray, -1f);
-                            createDistanceJointBetweenLinks(tempArray, 0.40f);
-                            createDistanceJointBetweenLinks(tempArray, 0.50f);
-                            createDistanceJointBetweenLinks(tempArray, 0.60f);
-                            //createRopeJointGEOCordBetweenLinksPlantWorm(tempArray, 0.50f);
+            case "1":
+                aurelienribon.bodyeditor.BodyEditorLoader loader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses.json"));
+                this.tempPosition = position;
+                this.bossLoader = loader;
+                Array<Boss> tempArray = new Array<>();
+                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray);
+                tempPosition.y -= 60 * scale / PPM;
 
+                for (int i = 0; i < size; i++) {
+                    if (i == size - 1) {
+                        initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray);
+                    } else {
+                        initSnakePart(MagmaWorm.Part.BODY, scale, tempArray);
+                    }
+                    //createRopeJointBetweenLinks(tempArray, -1f);
+                    createDistanceJointBetweenLinks(tempArray, 0.40f);
+                    createDistanceJointBetweenLinks(tempArray, 0.50f);
+                    createDistanceJointBetweenLinks(tempArray, 0.60f);
+                    //createRopeJointGEOCordBetweenLinksPlantWorm(tempArray, 0.50f);
+
+                }
+                refilterTextures(tempArray);
+
+                MagmabossArray.add(tempArray);
+                break;
+
+            case "2":
+
+                PlantBossSize = size;
+                aurelienribon.bodyeditor.BodyEditorLoader loader2 = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses2.json"));
+                this.tempPosition = position;
+                this.bossLoader = loader2;
+                Array<Array<Boss>> tempArray2 = new Array<>();
+                for (int i = 0; i < size; i++) {
+                    tempArray2.add(new Array<Boss>());
+                }
+                initPlantPart(tempArray2, PlantWorm.Part.FLOWER_HEAD, 0, 100, 100);
+                for (int i = 1; i < size; i++) {
+                    tempArray2.get(i).add(tempArray2.get(0).get(0));
+                }
+                tempPosition.x += 50 / PPM;
+                tempPosition.y -= 50 / PPM;
+
+                int vine = size * 5;
+                for (int i = 0; i < vine; i++) {
+                    for (int j = 0; j < size; j++) {
+                        if (i == vine - 1) {
+                            initPlantPart(tempArray2, PlantWorm.Part.CLAW_HEAD, j, 100, 100);
+                        } else {
+                            initPlantPart(tempArray2, PlantWorm.Part.BODY, j, 50, 50);
                         }
-                        refilterTextures(tempArray);
-
-                        MagmabossArray.add(tempArray);
-                        break;
-
-                    case 2:
-
-                        PlantBossSize = size;
-                        aurelienribon.bodyeditor.BodyEditorLoader loader2 = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses2.json"));
-                        this.tempPosition = position;
-                        this.bossLoader = loader2;
-                        Array<Array<Boss>> tempArray2 = new Array<>();
-                        for (int i = 0; i < size; i++) {
-                            tempArray2.add(new Array<Boss>());
+                        if (i == 0 || i == vine - 1) {
+                            createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j), i);
+                        } else {
+                            createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f);
+                            createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f);
+                            createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f);
                         }
-                        initPlantPart(tempArray2, PlantWorm.Part.FLOWER_HEAD, 0, 100, 100);
-                        for (int i = 1; i < size; i++) {
-                            tempArray2.get(i).add(tempArray2.get(0).get(0));
-                        }
-                        tempPosition.x += 50 / PPM;
-                        tempPosition.y -= 50 / PPM;
-
-                        int vine = size * 5;
-                        for (int i = 0; i < vine; i++) {
-                            for (int j = 0; j < size; j++) {
-                                if (i == vine - 1) {
-                                    initPlantPart(tempArray2, PlantWorm.Part.CLAW_HEAD, j, 100, 100);
-                                } else {
-                                    initPlantPart(tempArray2, PlantWorm.Part.BODY, j, 50, 50);
-                                }
-                                if (i == 0 || i == vine - 1) {
-                                    createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j), i);
-                                } else {
-                                    createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f);
-                                    createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f);
-                                    createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f);
-                                }
-                            }
-                            tempPosition.y -= 10 / PPM;
-                        }
-
-                        refilterTextures(tempArray2.get(0));
-                        for (int i = 1; i < size; i++) {
-                            tempArray2.get(i).reverse();
-                        }
-
-                        for (Array<Boss> bosses : tempArray2)
-                            PlantbossArray.add(bosses);
-                        break;
+                    }
+                    tempPosition.y -= 10 / PPM;
                 }
 
-                break;
+                refilterTextures(tempArray2.get(0));
+                for (int i = 1; i < size; i++) {
+                    tempArray2.get(i).reverse();
+                }
 
-            case COLOSSEOS:
+                for (Array<Boss> bosses : tempArray2)
+                    PlantbossArray.add(bosses);
                 break;
-
-            default:
-                break;
-
         }
+
     }
 
     private void refilterTextures(Array<Boss> tempArray) {
