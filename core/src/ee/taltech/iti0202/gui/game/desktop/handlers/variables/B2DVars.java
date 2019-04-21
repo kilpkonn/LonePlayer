@@ -20,6 +20,12 @@ public class B2DVars {
     public static float DMG_MULTIPLIER = 3; //TODO if easy then -2, hard -1, brutal stays
     public static float DMG_ON_LANDING = 7; //TODO if easy then +3, hard +1, brutal stays
 
+    public enum gameDifficulty {
+        EASY,
+        HARD,
+        BRUTAL
+    }
+
     public static final float MENU_FADE_TIME = 1;
     public static final float MENU_FADE_AMOUNT = 0.7f;
     public static final float DIMENSION_FADE_TIME = 0.4f;
