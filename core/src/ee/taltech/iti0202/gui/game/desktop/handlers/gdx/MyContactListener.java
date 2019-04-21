@@ -19,7 +19,6 @@ public class MyContactListener implements ContactListener {
     private boolean dash = false;
     private boolean newCheckpoint = false;
     private Body curCheckpoint;
-    private Body toBeDeleted;
     private short deathState = 0;
     private boolean initSpawn = true;
     private boolean end = false;
@@ -36,7 +35,7 @@ public class MyContactListener implements ContactListener {
                 playerOnGround = true;
                 if (fb.getUserData().equals("checkpoint")) {
                     if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
-                        setCurCheckpoint(fb.getBody());
+                        newCheckpoint = true;
                     }
                 }
                 if (fb.getUserData().equals("end")) {
@@ -49,7 +48,7 @@ public class MyContactListener implements ContactListener {
                 playerOnGround = true;
                 if (fa.getUserData().equals("checkpoint")) {
                     if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
-                        setCurCheckpoint(fa.getBody());
+                        newCheckpoint = true;
                     }
                 }
 
@@ -172,22 +171,13 @@ public class MyContactListener implements ContactListener {
         dash = a;
     }
 
-    public Body removeOldCheckpoint() {
-        return toBeDeleted;
-    }
-
-    public void resetOldCheckpoint() {
-        toBeDeleted = null;
-    }
-
     public boolean isInitSpawn() {
         return initSpawn;
     }
 
-    private void setCurCheckpoint(Body new_vec) {
+    public void setCurCheckpoint(Body new_vec) {
         initSpawn = false;
-        newCheckpoint = true;
-        toBeDeleted = curCheckpoint;
+        newCheckpoint = false;
         curCheckpoint = new_vec;
     }
 

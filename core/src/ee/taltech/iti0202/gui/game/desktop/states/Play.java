@@ -72,6 +72,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DEBUG;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
@@ -116,7 +118,8 @@ public class Play extends GameState {
     private Array<Array<Boss>> MagmabossArray;
     private Array<Array<Boss>> PlantbossArray;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
-    private Checkpoint checkpoint;
+    private Array<Checkpoint> checkpointList;
+    private Checkpoint activeCheckpoint;
     private Vector2 tempPlayerLocation;
     private Vector2 initPlayerLocation;
     private Vector2 tempPosition;
@@ -153,6 +156,8 @@ public class Play extends GameState {
     private int PlantBossSize = 1;
     private boolean executeEnd = true;
     private B2DVars.gameDifficulty difficulty;
+    private boolean checkpoints = true;
+    private boolean bosses = true;
 
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
@@ -161,6 +166,32 @@ public class Play extends GameState {
         this.act = act;
         this.map = map;
         this.difficulty = difficulty;
+
+        // set the difficulty
+        System.out.println(difficulty);
+
+        switch (difficulty) {
+            case EASY:
+                DMG_MULTIPLIER = 1;
+                DMG_ON_LANDING = 10;
+                checkpoints = true;
+                bosses = false;
+                break;
+
+            case HARD:
+                DMG_MULTIPLIER = 2;
+                DMG_ON_LANDING = 8;
+                checkpoints = true;
+                bosses = true;
+                break;
+
+            case BRUTAL:
+                DMG_MULTIPLIER = 3;
+                DMG_ON_LANDING = 7;
+                checkpoints = false;
+                bosses = true;
+                break;
+        }
 
         game.getSound().stop();
         switch (act) {
@@ -180,6 +211,7 @@ public class Play extends GameState {
         cl = new MyContactListener();
         world.setContactListener(cl);
         if (DEBUG) b2dr = new Box2DDebugRenderer();
+        checkpointList = new Array<>();
 
         // create shapes
         bdef = new BodyDef();
@@ -286,11 +318,11 @@ public class Play extends GameState {
     }
 
     public Play(String act, String map, B2DVars.gameDifficulty difficulty) {
-        this(act, map, difficulty,null);
+        this(act, map, difficulty, null);
     }
 
     public Play(GameProgress progress) {
-        this(progress.act, progress.map, progress.difficulty ,progress);
+        this(progress.act, progress.map, progress.difficulty, progress);
     }
 
 
@@ -309,26 +341,19 @@ public class Play extends GameState {
         buildPlayer();
     }
 
+    private static void fixBleeding(TextureRegion region) {
+        float fix = 0.01f;
 
-    private void initPlayer() {
-        if (player != null) world.destroyBody(player.getBody());
-        bdef = new BodyDef();
-        fdef = new FixtureDef();
-        circle = new CircleShape();
-        polyShape = new PolygonShape();
+        float x = region.getRegionX();
+        float y = region.getRegionY();
+        float width = region.getRegionWidth();
+        float height = region.getRegionHeight();
+        float invTexWidth = 1f / region.getTexture().getWidth();
+        float invTexHeight = 1f / region.getTexture().getHeight();
+        region.setRegion((x + fix) * invTexWidth, (y + fix) * invTexHeight, (x + width - fix) * invTexWidth, (y + height - fix) * invTexHeight); // Trims
 
-        if (checkpoint == null) {
-            if (initPlayerLocation == null) {
-                bdef.position.set(0, 0); // hopefully never get here
-            } else {
-                bdef.position.set(initPlayerLocation);
-            }
-        } else if (cl.isInitSpawn()) {
-            bdef.position.set(initPlayerLocation);
-        } else {
-            bdef.position.set(new Vector2(checkpoint.getPosition()));
-        }
-        buildPlayer();
+        region.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        region.getTexture().getTextureData().useMipMaps();
     }
 
     private void buildPlayer() {
@@ -504,7 +529,6 @@ public class Play extends GameState {
         world.createJoint(distanceJointDef);
     }
 
-
     private void createRopeJointGEOCordBetweenLinksPlantWorm(Array<Boss> tempArray, int p) {
         // create joint between bodies
         float split = p == 0 ? 1f : 0f;
@@ -546,6 +570,27 @@ public class Play extends GameState {
         tempPosition.y -= 50 * scale / PPM;
     }
 
+    private void initPlayer() {
+        if (player != null) world.destroyBody(player.getBody());
+        bdef = new BodyDef();
+        fdef = new FixtureDef();
+        circle = new CircleShape();
+        polyShape = new PolygonShape();
+
+        if (activeCheckpoint == null) {
+            if (initPlayerLocation == null) {
+                bdef.position.set(0, 0); // hopefully never get here
+            } else {
+                bdef.position.set(initPlayerLocation);
+            }
+        } else if (cl.isInitSpawn()) {
+            bdef.position.set(initPlayerLocation);
+        } else {
+            bdef.position.set(new Vector2(activeCheckpoint.getPosition()));
+        }
+        buildPlayer();
+    }
+
     private void createCheckpoints(Vector2 pos) {
         System.out.println("new checkpoint");
         bdef = new BodyDef();
@@ -560,24 +605,9 @@ public class Play extends GameState {
         fdef.filter.maskBits = B2DVars.BIT_ALL;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("checkpoint");
-        checkpoint = new Checkpoint(body, sb);
+        Checkpoint checkpoint = new Checkpoint(body, sb);
+        checkpointList.add(checkpoint);
         //checkpoint.onReached();
-    }
-
-    private void createEndPoint(Vector2 pos) {
-        System.out.println("new endpoint");
-        bdef = new BodyDef();
-        bdef.position.set(pos);
-        bdef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bdef);
-        polyShape = new PolygonShape();
-        polyShape.setAsBox(64 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-        fdef.filter.maskBits = B2DVars.BIT_ALL;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("end");
-        checkpoint = new Checkpoint(body, sb);
     }
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
@@ -629,6 +659,80 @@ public class Play extends GameState {
             world.createBody(bdef).createFixture(fdef).setUserData(layer.getName());
         }
     }
+
+    private void createEndPoint(Vector2 pos) {
+        System.out.println("new endpoint");
+        bdef = new BodyDef();
+        bdef.position.set(pos);
+        bdef.type = BodyDef.BodyType.StaticBody;
+        Body body = world.createBody(bdef);
+        polyShape = new PolygonShape();
+        polyShape.setAsBox(64 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
+        fdef.shape = polyShape;
+        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = B2DVars.BIT_ALL;
+        fdef.isSensor = true;
+        body.createFixture(fdef).setUserData("end");
+        Checkpoint checkpoint = new Checkpoint(body, sb);
+        checkpointList.add(checkpoint);
+    }
+
+    private static PolygonShape getRectangle(RectangleMapObject rectangleObject) {
+        Rectangle rectangle = rectangleObject.getRectangle();
+        PolygonShape polygon = new PolygonShape();
+        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / PPM,
+                (rectangle.y + rectangle.height * 0.5f) / PPM);
+        polygon.setAsBox(rectangle.width * 0.5f / PPM,
+                rectangle.height * 0.5f / PPM,
+                size,
+                0.0f);
+        return polygon;
+    }
+
+    private static CircleShape getCircle(EllipseMapObject circleObject) {
+        Ellipse circle = circleObject.getEllipse();
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(circle.width / PPM);
+        circleShape.setPosition(new Vector2(circle.x / PPM, circle.y / PPM));
+        return circleShape;
+    }
+
+    private static PolygonShape getPolygon(PolygonMapObject polygonObject) {
+        PolygonShape polygon = new PolygonShape();
+        float[] vertices = polygonObject.getPolygon().getTransformedVertices();
+
+        float[] worldVertices = new float[vertices.length];
+
+        for (int i = 0; i < vertices.length; ++i) {
+            worldVertices[i] = vertices[i] / PPM;
+        }
+
+        polygon.set(worldVertices);
+        return polygon;
+    }
+
+    private static ChainShape getPolyline(PolylineMapObject polylineObject) {
+        float[] vertices = polylineObject.getPolyline().getTransformedVertices();
+        Vector2[] worldVertices = new Vector2[vertices.length / 2];
+
+        for (int i = 0; i < vertices.length / 2; ++i) {
+            worldVertices[i] = new Vector2();
+            worldVertices[i].x = vertices[i * 2] / PPM;
+            worldVertices[i].y = vertices[i * 2 + 1] / PPM;
+        }
+
+        ChainShape chain = new ChainShape();
+        chain.createChain(worldVertices);
+        return chain;
+    }
+
+    // private static void fixBleeding(TextureRegion[][] region) {
+    //     for (TextureRegion[] array : region) {
+    //         for (TextureRegion texture : array) {
+    //             fixBleeding(texture);
+    //         }
+    //     }
+    // }
 
     private void ReadVertices(TiledMapTileLayer layer) {
         int[] corner_coords = SQUARE_CORNERS;
@@ -691,7 +795,9 @@ public class Play extends GameState {
                     v = new Vector2[4];
                     continue;
                 }
-                fixBleeding(cell.getTile().getTextureRegion());
+
+                fixBleeding(cell.getTile().getTextureRegion()); // fix bleeding hopefully
+
                 if (cell.getTile().getProperties().containsKey("animation")) {
                     Texture tex = Game.res.getTexture("Player");
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
@@ -730,19 +836,28 @@ public class Play extends GameState {
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
                             createEndPoint(new Vector2(polygon[1].x + tileSize / PPM, polygon[0].y));
                         } else {
-                            createCheckpoints(new Vector2(polygon[1].x + (polygon[3].x - polygon[1].x) / 2, polygon[0].y));
+                            if (checkpoints) {
+                                createCheckpoints(new Vector2(polygon[1].x + (polygon[3].x - polygon[1].x) / 2, polygon[0].y));
+                            }
+
                         }
                         break;
 
                     case "bosses_small":
-                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), false, (Integer) layer.getProperties().get("size"));
+                        if (bosses) {
+                            createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), false, (Integer) layer.getProperties().get("size"));
+                        }
                         break;
 
                     case "bosses_big":
-                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
+                        if (bosses) {
+                            createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
+                        }
                         break;
                     case "bosses":
-                        createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
+                        if (bosses) {
+                            createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
+                        }
                         break;
 
                     case "player":
@@ -758,76 +873,6 @@ public class Play extends GameState {
                 }
             }
         }
-    }
-
-    private static PolygonShape getRectangle(RectangleMapObject rectangleObject) {
-        Rectangle rectangle = rectangleObject.getRectangle();
-        PolygonShape polygon = new PolygonShape();
-        Vector2 size = new Vector2((rectangle.x + rectangle.width * 0.5f) / PPM,
-                (rectangle.y + rectangle.height * 0.5f) / PPM);
-        polygon.setAsBox(rectangle.width * 0.5f / PPM,
-                rectangle.height * 0.5f / PPM,
-                size,
-                0.0f);
-        return polygon;
-    }
-
-    private static CircleShape getCircle(EllipseMapObject circleObject) {
-        Ellipse circle = circleObject.getEllipse();
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(circle.width / PPM);
-        circleShape.setPosition(new Vector2(circle.x / PPM, circle.y / PPM));
-        return circleShape;
-    }
-
-    private static PolygonShape getPolygon(PolygonMapObject polygonObject) {
-        PolygonShape polygon = new PolygonShape();
-        float[] vertices = polygonObject.getPolygon().getTransformedVertices();
-
-        float[] worldVertices = new float[vertices.length];
-
-        for (int i = 0; i < vertices.length; ++i) {
-            worldVertices[i] = vertices[i] / PPM;
-        }
-
-        polygon.set(worldVertices);
-        return polygon;
-    }
-
-    private static ChainShape getPolyline(PolylineMapObject polylineObject) {
-        float[] vertices = polylineObject.getPolyline().getTransformedVertices();
-        Vector2[] worldVertices = new Vector2[vertices.length / 2];
-
-        for (int i = 0; i < vertices.length / 2; ++i) {
-            worldVertices[i] = new Vector2();
-            worldVertices[i].x = vertices[i * 2] / PPM;
-            worldVertices[i].y = vertices[i * 2 + 1] / PPM;
-        }
-
-        ChainShape chain = new ChainShape();
-        chain.createChain(worldVertices);
-        return chain;
-    }
-
-    // private static void fixBleeding(TextureRegion[][] region) {
-    //     for (TextureRegion[] array : region) {
-    //         for (TextureRegion texture : array) {
-    //             fixBleeding(texture);
-    //         }
-    //     }
-    // }
-
-    private static void fixBleeding(TextureRegion region) {
-        float fix = 0.01f;
-
-        float x = region.getRegionX();
-        float y = region.getRegionY();
-        float width = region.getRegionWidth();
-        float height = region.getRegionHeight();
-        float invTexWidth = 1f / region.getTexture().getWidth();
-        float invTexHeight = 1f / region.getTexture().getHeight();
-        region.setRegion((x + fix) * invTexWidth, (y + fix) * invTexHeight, (x + width - fix) * invTexWidth, (y + height - fix) * invTexHeight); // Trims
-        // region
     }
 
 
@@ -1018,13 +1063,23 @@ public class Play extends GameState {
                     player.getPosition().x * PPM,
                     player.getPosition().y * PPM,
                     0);
+
             b2dcam.update();
+
+            cl.setDoubleJump(true);
 
         } else {
 
             cam.position.x += (player.getPosition().x - cam.position.x / PPM) * 2 * PPM * dt;
             cam.position.y += (player.getPosition().y - cam.position.y / PPM) * 2 * PPM * dt;
         }
+
+        cam.position.x = Math.round(cam.position.x);
+        cam.position.y = Math.round(cam.position.y);
+
+        // System.out.println(cam.position.x);
+        // System.out.println(cam.position.y);
+        // System.out.println();
 
         cam.update();
 
@@ -1115,21 +1170,25 @@ public class Play extends GameState {
         }
 
         // create a new checkpoint if needed
-        if (checkpoint != null) {
+        if (checkpointList.size != 0) {
             if (cl.isNewCheckpoint()) {
-                cl.setNewCheckpoint(false);
-                createCheckpoints(cl.getCurCheckpoint());
+                Checkpoint curTemp = checkpointList.get(0); // just in case
+                for (Checkpoint checkpoint : checkpointList) {
+                    if (Math.abs(checkpoint.getPosition().x - player.getBody().getPosition().x) < 1 &&
+                            Math.abs(checkpoint.getPosition().x - player.getBody().getPosition().x) < 1) {
+                        curTemp = checkpoint;
+                    }
+                }
+                cl.setCurCheckpoint(curTemp.getBody());
+                curTemp.onReached();
+                if (activeCheckpoint != null)
+                    activeCheckpoint.lostItsPurposeAsANewBetterCheckpointWasFoundAndTheOldOneWasTossedAwayLikeAnOldCondom();
+                activeCheckpoint = curTemp;
+
                 playSoundOnce("sounds/checkpoint.ogg");
             }
-            checkpoint.update(dt);
-        }
-
-
-        // dispose of old bodies
-        Body temp = cl.removeOldCheckpoint();
-        if (temp != null) {
-            world.destroyBody(temp);
-            cl.resetOldCheckpoint();
+            for (Checkpoint checkpoint : checkpointList)
+                checkpoint.update(dt);
         }
     }
 
@@ -1221,8 +1280,11 @@ public class Play extends GameState {
     private void drawAndSetCamera() {
 
         //clear screen
-        Gdx.gl20.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Gdx.gl20.glClear(GL20.GL_ALPHA_BITS);
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //set camera to follow player
         /*if (current_force.x < -1) parallaxBackground.setSpeed(-60f);
@@ -1254,8 +1316,10 @@ public class Play extends GameState {
         sb.setProjectionMatrix(cam.combined);
 
         // draw checkpoint
-        if (checkpoint != null)
-            checkpoint.render(sb);
+        if (checkpointList.size != 0)
+            for (Checkpoint checkpoint : checkpointList) {
+                checkpoint.render(sb);
+            }
 
         //draw player
         if (player != null) player.render(sb);
@@ -1271,7 +1335,6 @@ public class Play extends GameState {
                 bossList.get(0).render(sb);
             }
         }
-
 
         hud.render(sb);
 

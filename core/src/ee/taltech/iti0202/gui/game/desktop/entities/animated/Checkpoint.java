@@ -36,5 +36,9 @@ public class Checkpoint extends SpriteAnimation {
     public void onReached() {
         setAnimation(CheckpointAnimation.COLLECTED);
     }
+
+    public void lostItsPurposeAsANewBetterCheckpointWasFoundAndTheOldOneWasTossedAwayLikeAnOldCondom() {
+        setAnimation(CheckpointAnimation.DEFAULT);
+    }
 }
 

@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
@@ -31,6 +32,11 @@ public class EndMenu extends Scene{
     private GameButton settingsButton;
     private GameButton nextButton;
     private GameButton playAgainButton;
+    private List<String> levels = Arrays.asList(
+            "Desert@Big_leaps.tmx", "Desert@Desert_1.tmx", "Desert@Desert_2.tmx", "Desert@Parkour_madness.tmx", "Desert@Toggle_Drop.tmx",
+            "Plains@Dimension_parkour.tmx", "Plains@Islands.tmx", "Plains@Plains_1.tmx", "Plains@Plains_2.tmx", "Plains@The_Drop.tmx",
+            "Snow@Santa's_Fort.tmx", "Snow@Snow_1.tmx", "Snow@Snow_2.tmx", "Snow@Snowy_climb.tmx", "Snow@Snowy_drop.tmx"
+    );
 
     public EndMenu(String act, String map, OrthographicCamera cam, B2DVars.gameDifficulty difficulty, Runnable openSettingsFunc) {
         super(act, map, cam);
@@ -62,7 +68,10 @@ public class EndMenu extends Scene{
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
             switch (currBlock) {
                 case NEXT:
-                    //TODO: Select next map
+                    System.out.println(act);
+                    System.out.println(map);
+                    String[] newLevel = levels.get(levels.indexOf(act + "@" + map) + 1).split("@");
+                    GameStateManager.pushState(GameStateManager.State.PLAY, newLevel[0], newLevel[1], difficulty);
                     break;
                 case NEWGAME:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);

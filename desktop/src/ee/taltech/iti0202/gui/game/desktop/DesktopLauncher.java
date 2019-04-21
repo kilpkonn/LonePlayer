@@ -27,7 +27,7 @@ public class DesktopLauncher {
         config.width = V_WIDTH * SCALE;
         config.samples = 3;
         config.forceExit = true;
-        config.fullscreen = false;
+        config.fullscreen = true;
         config.height = V_HEIGHT * SCALE;
         //config.foregroundFPS = 300; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized

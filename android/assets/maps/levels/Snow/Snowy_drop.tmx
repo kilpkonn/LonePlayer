@@ -10,9 +10,9 @@
   <object id="283" x="2460.61" y="5012.12" width="1230.3" height="30.303"/>
   <object id="284" x="2730.3" y="9639.39" width="830.303" height="57.5758"/>
  </objectgroup>
- <objectgroup id="13" name="hitboxes_1" visible="0"/>
- <objectgroup id="14" name="hitboxes_2" visible="0"/>
- <layer id="21" name="dimension_1" width="32" height="96" visible="0">
+ <objectgroup id="13" name="hitboxes_1"/>
+ <objectgroup id="14" name="hitboxes_2"/>
+ <layer id="21" name="dimension_1" width="32" height="96">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -112,7 +112,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="22" name="dimension_2" width="32" height="96" visible="0">
+ <layer id="22" name="dimension_2" width="32" height="96">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -212,7 +212,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <objectgroup id="4" name="hitboxes" visible="0">
+ <objectgroup id="4" name="hitboxes">
   <object id="244" x="1408" y="11648" width="1151.33" height="55.3333"/>
   <object id="245" x="2688" y="11392" width="385.333" height="52"/>
   <object id="246" x="2048" y="11136" width="384" height="54.6667"/>
@@ -351,7 +351,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="24" name="player" width="32" height="96" visible="0">
+ <layer id="24" name="player" width="32" height="96">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -451,7 +451,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="25" name="background" width="32" height="96" visible="0">
+ <layer id="25" name="background" width="32" height="96">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -651,7 +651,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="27" name="bosses" width="32" height="96" visible="0">
+ <layer id="27" name="bosses" width="32" height="96">
   <properties>
    <property name="2" value="1"/>
   </properties>
