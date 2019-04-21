@@ -149,7 +149,7 @@ public class Play extends GameState {
     private String act;
     private String map;
     private float scale = 1f;
-    private final int takingTurnsBase = 10; // how long one boss attacks
+    private final int takingTurnsBase = 5; // how long one boss attacks
     private int curtentlyActiveBoss = 0;
     private int timeElapsed = 0;
     private int PlantBossSize = 1;

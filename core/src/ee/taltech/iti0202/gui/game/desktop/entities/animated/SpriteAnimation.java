@@ -49,6 +49,7 @@ public class SpriteAnimation {
         playerTweener.setPivot(x, y);
         HashSet<String> toPlayOnce = new HashSet<>();
         toPlayOnce.add("roll");
+        toPlayOnce.add("attack");
         playerTweener.setAnimToPlayOnce(toPlayOnce);
     }
 
