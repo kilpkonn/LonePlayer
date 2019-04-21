@@ -157,7 +157,7 @@ public abstract class Boss extends SpriteAnimation {
 
     }
 
-    private float minmax(float f, float max) {
+    protected float minmax(float f, float max) {
         return Math.min(Math.max(f, -max), max);
     }
 }
