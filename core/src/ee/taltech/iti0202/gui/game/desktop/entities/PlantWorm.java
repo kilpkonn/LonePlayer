@@ -61,7 +61,6 @@ public class PlantWorm extends Boss {
     public void updateHeadBig(float dt) {
         super.update(dt);
         time += dt;
-        float max_speed = 5;
 
         Vector2 playerLoc = play.getPlayer().getPosition();
         Vector2 bossLoc = this.body.getPosition();
@@ -88,7 +87,7 @@ public class PlantWorm extends Boss {
                 minmax(cur_vel.y, max_speed)
         );
 
-        System.out.println("Distance: " + distance);
+        //System.out.println("Distance: " + distance);
         if (distance < 2) {
             setAnimation(PlantWormAnimation.ATTACK.name, true);
         }

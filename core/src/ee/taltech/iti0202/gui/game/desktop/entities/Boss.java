@@ -57,6 +57,7 @@ public abstract class Boss extends SpriteAnimation {
 
     public void updateCircularMotion(float dt) {
         super.update(dt);
+        float x = 0.3f;
 
         Vector2 player = play.getPlayer().getPosition();
         Vector2 boss = this.body.getPosition();
@@ -65,13 +66,15 @@ public abstract class Boss extends SpriteAnimation {
 
         if (distance < optimalDistanceFromPlayer) {
 
-            body.setLinearVelocity(body.getLinearVelocity().x * 0.99f + ((player.x - boss.x) * -1) * 0.005f,
-                    body.getLinearVelocity().y * 0.99f + ((player.y - boss.y) * -1) * 0.005f);
+            /*body.setLinearVelocity(body.getLinearVelocity().x * 0.99f + ((player.x - boss.x) * -1) * 0.005f,
+                    body.getLinearVelocity().y * 0.99f + ((player.y - boss.y) * -1) * 0.005f);*/
+            body.applyForceToCenter(new Vector2((player.x - boss.x) * -2 * x, (player.y - boss.y) * -2 * x), true);
 
         } else if (distance > optimalDistanceFromPlayer) {
 
-            body.setLinearVelocity(body.getLinearVelocity().x * 0.99f + (player.x - boss.x) * 0.005f,
-                    body.getLinearVelocity().y * 0.99f + ((player.y - boss.y) * 1) * 0.005f);
+            /*body.setLinearVelocity(body.getLinearVelocity().x * 0.99f + (player.x - boss.x) * 0.005f,
+                    body.getLinearVelocity().y * 0.99f + ((player.y - boss.y) * 1) * 0.005f);*/
+            body.applyForceToCenter(new Vector2((player.x - boss.x) * x, (player.y - boss.y) * x), true);
         }
 
 
