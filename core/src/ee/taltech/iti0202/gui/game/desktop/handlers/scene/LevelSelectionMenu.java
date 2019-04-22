@@ -39,6 +39,7 @@ public class LevelSelectionMenu extends Scene {
 
     private String selectedAct = "";
     private String selectedMap;
+    private boolean showDevMaps = Game.settings.ENABLE_DEV_MAPS;
     private B2DVars.gameDifficulty difficulty = B2DVars.gameDifficulty.HARD;
     //private
 
@@ -56,18 +57,9 @@ public class LevelSelectionMenu extends Scene {
             put(difficultyButton, block.DIFFICULTY);
         }};
 
-        List<String> acts = loadActs();
-        Collections.sort(acts);
-        for (int i = 0; i < acts.size(); i++) {
-            GameButton btn = new GameButton(acts.get(i).replace("_", " "), V_WIDTH / 3f, V_HEIGHT / 2f - i * 40);
-            actButtons.put(btn, acts.get(i));
-            buttonType.put(btn, block.ACT);
-        }
-        buttons.addAll(actButtons.keySet());
+        updateActs();
 
         for (GameButton button : buttons) played.put(button, false);
-
-        //TODO: Load acts on every menu opening...
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
@@ -84,6 +76,7 @@ public class LevelSelectionMenu extends Scene {
             if (button.hoverOver() && buttonType.get(button) == block.ACT && !selectedAct.equals(actButtons.get(button))) actChanged = actButtons.get(button);
             if (button.hoverOver() && buttonType.get(button) == block.MAP) selectedMap = mapButtons.get(button);
         }
+        if (showDevMaps != Game.settings.ENABLE_DEV_MAPS) updateActs();
         if (!actChanged.equals("")) setSelectedAct(actChanged);
     }
 
@@ -138,6 +131,25 @@ public class LevelSelectionMenu extends Scene {
             buttonType.put(btn, block.MAP);
         }
         buttons.addAll(mapButtons.keySet());
+    }
+
+    public void updateActs() {
+        buttons.removeAll(actButtons.keySet());
+        actButtons.clear();
+        showActs();
+        setSelectedAct("");
+        showDevMaps = Game.settings.ENABLE_DEV_MAPS;
+    }
+
+    private void showActs() {
+        List<String> acts = loadActs();
+        Collections.sort(acts);
+        for (int i = 0; i < acts.size(); i++) {
+            GameButton btn = new GameButton(acts.get(i).replace("_", " "), V_WIDTH / 3f, V_HEIGHT / 2f - i * 40);
+            actButtons.put(btn, acts.get(i));
+            buttonType.put(btn, block.ACT);
+        }
+        buttons.addAll(actButtons.keySet());
     }
 
     private List<String> loadMapNames(final String act) {
