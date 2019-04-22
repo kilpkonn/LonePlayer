@@ -116,7 +116,7 @@ public class SettingsMenu extends Scene {
         moveRightDisplay = new GameButton(Input.Keys.toString(Game.settings.MOVE_RIGHT), displayXLocation, V_HEIGHT / 3f + 160);
         jumpDisplay = new GameButton(Input.Keys.toString(Game.settings.JUMP), displayXLocation, V_HEIGHT / 3f + 120);
         escDisplay = new GameButton(Input.Keys.toString(Game.settings.ESC), displayXLocation, V_HEIGHT / 3f + 80);
-        changeDimensionDisplay = new GameButton(Input.Keys.toString(Game.settings.CHANGE_DIMENTION), displayXLocation, V_HEIGHT / 3f + 40);
+        changeDimensionDisplay = new GameButton(Input.Keys.toString(Game.settings.CHANGE_DIMENSION), displayXLocation, V_HEIGHT / 3f + 40);
 
 
         keyBindButtons.put(enableVSyncButton, enableVSyncDisplay);
@@ -197,7 +197,7 @@ public class SettingsMenu extends Scene {
                 Game.settings.JUMP = key;
                 break;
             case TOGGLE_DIMENSION:
-                Game.settings.CHANGE_DIMENTION = key;
+                Game.settings.CHANGE_DIMENSION = key;
                 break;
             case ESC:
                 Game.settings.ESC = key;
@@ -212,7 +212,7 @@ public class SettingsMenu extends Scene {
         moveRightDisplay.setText(Input.Keys.toString(Game.settings.MOVE_RIGHT));
         jumpDisplay.setText(Input.Keys.toString(Game.settings.JUMP));
         escDisplay.setText(Input.Keys.toString(Game.settings.ESC));
-        changeDimensionDisplay.setText(Input.Keys.toString(Game.settings.CHANGE_DIMENTION));
+        changeDimensionDisplay.setText(Input.Keys.toString(Game.settings.CHANGE_DIMENSION));
         enableVSyncDisplay.setText(Game.settings.ENABLE_VSYNC ? "Yes" : "No");
         showFpsDisplay.setText(Game.settings.SHOW_FPS ? "Yes" : "No");
         enableDevMapsDisplay.setText(Game.settings.ENABLE_DEV_MAPS ? "Yes" : "No");

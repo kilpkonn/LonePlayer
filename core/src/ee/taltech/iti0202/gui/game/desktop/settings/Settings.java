@@ -15,7 +15,7 @@ public class Settings {
     public int MOVE_LEFT = Input.Keys.A;
     public int MOVE_RIGHT = Input.Keys.D;
     public int JUMP = Input.Keys.SPACE;
-    public int CHANGE_DIMENTION = Input.Keys.S;
+    public int CHANGE_DIMENSION = Input.Keys.S;
     public int MENU = Input.Keys.MENU;
     public int SHOOT = Input.Buttons.LEFT;
     public int ESC = Input.Keys.ESCAPE;

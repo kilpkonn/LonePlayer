@@ -910,7 +910,7 @@ public class Play extends GameState {
 
         if (playState == pauseState.RUN) {
             //change dimension
-            if (MyInput.isPressed(Game.settings.CHANGE_DIMENTION)) {
+            if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
                 System.out.println("changed dimension");
                 dimensionFadeDone = false;
                 dimension = !dimension;

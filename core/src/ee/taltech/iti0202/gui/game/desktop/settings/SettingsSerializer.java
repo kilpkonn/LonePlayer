@@ -13,7 +13,7 @@ public class SettingsSerializer implements JsonSerializer<Settings> {
         JsonObject result = new JsonObject();
         result.add("MOVE_LEFT", new JsonPrimitive(settings.MOVE_LEFT));
         result.add("MOVE_RIGHT", new JsonPrimitive(settings.MOVE_RIGHT));
-        result.add("CHANGE_DIMENSION", new JsonPrimitive(settings.CHANGE_DIMENTION));
+        result.add("CHANGE_DIMENSION", new JsonPrimitive(settings.CHANGE_DIMENSION));
         result.add("JUMP", new JsonPrimitive(settings.JUMP));
         result.add("SHOOT", new JsonPrimitive(settings.SHOOT));
         result.add("MENU", new JsonPrimitive(settings.MENU));
