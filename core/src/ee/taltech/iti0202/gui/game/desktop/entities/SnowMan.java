@@ -12,7 +12,7 @@ public class SnowMan extends Boss {
         body.setUserData(type);
         setAnimation(SnowManAnimation.IDLE.toString(), false);
         setAnimationSpeed(50);
-        setScale(1);
+        setScale(0.2f);
     }
 
     public enum SnowManAnimation {

@@ -496,7 +496,7 @@ public class Play extends GameState {
                 Boss boss = new SnowMan(body, sb, BOSS, this, 0, 0);
                 boss.getBody().setUserData(BOSS);
                 for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
-
+                SnowManArray.add(boss);
                 break;
         }
 
