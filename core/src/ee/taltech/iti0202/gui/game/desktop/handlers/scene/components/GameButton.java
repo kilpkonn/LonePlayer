@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 
@@ -23,13 +24,16 @@ public class GameButton {
     private boolean hoverOver;
     private boolean acceptHover = true;
 
-    private BitmapFont font = new BitmapFont(Gdx.files.internal(PATH + "fonts/bullfrog.fnt"), false);
+    private BitmapFont font; // = new BitmapFont(Gdx.files.internal(PATH + "fonts/bullfrog.fnt"), false);
 
     private String text;
 
     public GameButton(String text, float x, float y) {
         this.x = x;
         this.y = y;
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
+        setFontParameters(parameter);
         font.setColor(new Color(0.47f, 1f, 1f, 1));
         setText(text);
     }
@@ -72,6 +76,12 @@ public class GameButton {
         width = layout.width;// contains the width of the current set text
         height = layout.height; // contains the height of the current set text
         this.text = text;
+    }
+
+    public void setFontParameters(FreeTypeFontGenerator.FreeTypeFontParameter parameters) {
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(PATH + "fonts/bullfrog.ttf"));
+        font = generator.generateFont(parameters);
+        generator.dispose();
     }
 
     public String getText() {
