@@ -19,7 +19,7 @@ public class PlantWorm extends Boss {
 
     public PlantWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
         super(body, sb, play, "images/bosses/plantworm/plantworm.scml", part.name, x, y);
-        body.setUserData(type); //TODO: Something more intelligent here
+        body.setUserData(type);
         setAnimation(PlantWormAnimation.IDLE.toString(), false);
         setAnimationSpeed(50);
         setScale(size);
@@ -44,7 +44,7 @@ public class PlantWorm extends Boss {
         FLOWER_HEAD ("plantwormflowerhead"),
         CLAW_HEAD ("plantwormclawhead"),
         BODY ("plantwormbody"),
-        TAIL ("plantwormbody"); //TODO: make tail / root
+        TAIL("plantwormbody");
 
         private final String name;
 

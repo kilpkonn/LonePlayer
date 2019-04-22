@@ -39,7 +39,7 @@ public class LevelSelectionMenu extends Scene {
 
     private String selectedAct = "";
     private String selectedMap;
-    private B2DVars.gameDifficulty difficulty = B2DVars.gameDifficulty.EASY;
+    private B2DVars.gameDifficulty difficulty = B2DVars.gameDifficulty.HARD;
     //private
 
     public LevelSelectionMenu(OrthographicCamera cam, Runnable backFunc) {

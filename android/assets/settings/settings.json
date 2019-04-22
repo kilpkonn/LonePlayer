@@ -6,8 +6,8 @@
   "SHOOT": 0,
   "MENU": 82,
   "ESC": 131,
-  "ENABLE_DEV_MAPS": false,
+  "ENABLE_DEV_MAPS": true,
   "SHOW_FPS": true,
   "MAX_FPS": 60,
-  "ENABLE_VSYNC": false
+  "ENABLE_VSYNC": true
 }

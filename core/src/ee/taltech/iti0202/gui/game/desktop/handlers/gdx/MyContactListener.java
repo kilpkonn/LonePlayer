@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.WORM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
 
 
 public class MyContactListener implements ContactListener {
@@ -28,75 +28,89 @@ public class MyContactListener implements ContactListener {
     public void beginContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
+
         if (fa.getUserData() != null && fb.getUserData() != null) {
 
             // set up a new checkpoint and double jump
-            if (fa.getUserData() != null && fa.getUserData().equals("foot")) {
-                playerOnGround = true;
-                if (fb.getUserData().equals("checkpoint")) {
-                    if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
-                        newCheckpoint = true;
-                    }
-                }
-                if (fb.getUserData().equals("end")) {
-                    if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
-                        end = true;
-                    }
-                }
-            }
-            if (fb.getUserData() != null && fb.getUserData().equals("foot")) {
-                playerOnGround = true;
-                if (fa.getUserData().equals("checkpoint")) {
-                    if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
-                        newCheckpoint = true;
-                    }
-                }
-
-                if (fa.getUserData().equals("end")) {
-                    if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
-                        end = true;
-                    }
-                }
-            }
+            checkpointDetection(fa, fb);
 
             //set wall jump
-            if (fa.getUserData() != null && fa.getUserData().equals("side_r")) {
-                wallJump = -1;
-            }
-            if (fb.getUserData() != null && fb.getUserData().equals("side_r")) {
-                wallJump = -1;
-            }
+            setWallJump(fa, fb);
 
-            if (fa.getUserData() != null && fa.getUserData().equals("side_l")) {
-                wallJump = 1;
-            }
-            if (fb.getUserData() != null && fb.getUserData().equals("side_l")) {
-                wallJump = 1;
-            }
+            // detection happens when player goes outside of initial game border
+            dmgDetection(fa, fb);
         }
 
+    }
 
-        // detection happens when player goes outside of initial game borderd
-        if (fa.getUserData() != null && (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
-            if (fb.getUserData() != null && fb.getUserData().equals("barrier")) {
+    private void dmgDetection(Fixture fa, Fixture fb) {
+        if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot")) {
+            if (fb.getUserData().equals("barrier")) {
                 deathState = 3;
             }
-            if (fb.getUserData() != null && fb.getUserData().equals(WORM)) {
+            if (fb.getUserData().equals(BOSS)) {
                 deathState = 1;
             }
-            if (fb.getUserData() != null && fb.getUserData().equals(WORM + WORM)) {
+            if (fb.getUserData().equals(BOSS + BOSS)) {
                 deathState = 2;
             }
         }
-        if (fb.getUserData() != null && (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
-            if (fa.getUserData() != null && fa.getUserData().equals("barrier")) {
+        if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot")) {
+            if (fa.getUserData().equals("barrier")) {
                 deathState = 3;
             }
-            if (fa.getUserData() != null && fa.getUserData().equals(WORM)) {
+            if (fa.getUserData().equals(BOSS)) {
                 deathState = 1;
             }
-            if (fa.getUserData() != null && fa.getUserData().equals(WORM + WORM)) {
+            if (fa.getUserData().equals(BOSS + BOSS)) {
                 deathState = 2;
+            }
+        }
+    }
+
+    private void setWallJump(Fixture fa, Fixture fb) {
+        if (!fb.getUserData().equals("checkpoint") && fa.getUserData().equals("side_r")) {
+            wallJump = -1;
+        }
+        if (!fa.getUserData().equals("checkpoint") && fb.getUserData().equals("side_r")) {
+            wallJump = -1;
+        }
+
+        if (!fb.getUserData().equals("checkpoint") && fa.getUserData().equals("side_l")) {
+            wallJump = 1;
+        }
+        if (!fa.getUserData().equals("checkpoint") && fb.getUserData().equals("side_l")) {
+            wallJump = 1;
+        }
+    }
+
+    private void checkpointDetection(Fixture fa, Fixture fb) {
+        if (fa.getUserData().equals("foot")) {
+            playerOnGround = true;
+            if (fb.getUserData().equals("checkpoint")) {
+                if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
+                    newCheckpoint = true;
+                }
+            }
+            if (fb.getUserData().equals("end")) {
+                if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
+                    end = true;
+                }
+            }
+        }
+
+        if (fb.getUserData().equals("foot")) {
+            playerOnGround = true;
+            if (fa.getUserData().equals("checkpoint")) {
+                if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
+                    newCheckpoint = true;
+                }
+            }
+
+            if (fa.getUserData().equals("end")) {
+                if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
+                    end = true;
+                }
             }
         }
     }
@@ -112,13 +126,13 @@ public class MyContactListener implements ContactListener {
             if (fb.getUserData() != null && fb.getUserData().equals("checkpoint")) return;
             playerOnGround = false;
             doubleJump = true;
-            wallJump = 0;
+            //wallJump = 0;
             dash = true;
         } else if (fb.getUserData() != null && (fb.getUserData().equals("foot") || fb.getUserData().equals("side"))) {
             if (fa.getUserData() != null && fa.getUserData().equals("checkpoint")) return;
             playerOnGround = false;
             doubleJump = true;
-            wallJump = 0;
+            //wallJump = 0;
             dash = true;
         }
 

@@ -51,6 +51,8 @@ import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.PlantWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.PlantWormProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.SnowMan;
+import ee.taltech.iti0202.gui.game.desktop.entities.SnowManProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
@@ -69,6 +71,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BAC
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DEBUG;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
@@ -91,7 +94,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TER
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.WORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.gotHitBySnek;
 
 public class Play extends GameState {
@@ -115,6 +117,7 @@ public class Play extends GameState {
     private OrthogonalTiledMapRenderer renderer;
     private Player player;
     private boolean dimension;
+    private Array<Boss> SnowManArray;
     private Array<Array<Boss>> MagmabossArray;
     private Array<Array<Boss>> PlantbossArray;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
@@ -150,6 +153,7 @@ public class Play extends GameState {
     private String act;
     private String map;
     private float scale = 1f;
+    private int gracePeriod = 60;
     private int takingTurnsBase = 15; // how long one boss attacks
     private int curtentlyActiveBoss = 0;
     private int timeElapsed = 0;
@@ -222,6 +226,7 @@ public class Play extends GameState {
         // create array for bosses
         dimension = true;
         tempPlayerLocation = new Vector2();
+        SnowManArray = new Array<>();
         MagmabossArray = new Array<>();
         PlantbossArray = new Array<>();
 
@@ -407,20 +412,18 @@ public class Play extends GameState {
 
         /////////////////////////////////////////////////////////////////////////
         //                                                                     //
-        //   TYPE 1: MAGMA WORM, can flu through walls n shit                  //
+        //   TYPE 1: MAGMA BOSS, can flu through walls n shit                  //
         //   TYPE 2: COLOSSEOS, net.dermetfan.gdx.physics.box2d.Breakable      //
         //   TYPE 3: idk                                                       //
         //                                                                     //
         /////////////////////////////////////////////////////////////////////////
 
         scale = decider ? 1f : 0.5f;
+        this.tempPosition = position;
+        this.bossLoader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses" + type + ".json"));
 
         switch (type) {
-
             case "1":
-                aurelienribon.bodyeditor.BodyEditorLoader loader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses.json"));
-                this.tempPosition = position;
-                this.bossLoader = loader;
                 Array<Boss> tempArray = new Array<>();
                 initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray);
                 tempPosition.y -= 60 * scale / PPM;
@@ -446,9 +449,6 @@ public class Play extends GameState {
             case "2":
                 takingTurnsBase = 15 - size;
                 PlantBossSize = size;
-                aurelienribon.bodyeditor.BodyEditorLoader loader2 = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses2.json"));
-                this.tempPosition = position;
-                this.bossLoader = loader2;
                 Array<Array<Boss>> tempArray2 = new Array<>();
                 for (int i = 0; i < size; i++) {
                     tempArray2.add(new Array<Boss>());
@@ -487,6 +487,17 @@ public class Play extends GameState {
                 for (Array<Boss> bosses : tempArray2)
                     PlantbossArray.add(bosses);
                 break;
+
+            case "3":
+                SnowManProperties alias = new SnowManProperties(bdef, fdef, tempPosition);
+                Body body = world.createBody(alias.getBdef());
+                body.createFixture(alias.getFdef());
+                bossLoader.attachFixture(body, "snowman", alias.getFdef(), 1f * size);
+                Boss boss = new SnowMan(body, sb, BOSS, this, 0, 0);
+                boss.getBody().setUserData(BOSS);
+                for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
+
+                break;
         }
 
     }
@@ -494,12 +505,12 @@ public class Play extends GameState {
     private void refilterTextures(Array<Boss> tempArray) {
         Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
         brokenFixture.setSensor(true);
-        brokenFixture.setUserData(WORM + WORM + WORM);
-        brokenFixture.getBody().setUserData(WORM + WORM + WORM);
+        brokenFixture.setUserData(BOSS + BOSS + BOSS);
+        brokenFixture.getBody().setUserData(BOSS + BOSS + BOSS);
         brokenFixture.getFilterData().maskBits = NONE;
         brokenFixture.refilter();
         for (Fixture fixture : tempArray.get(0).getBody().getFixtureList()) {
-            fixture.setUserData(WORM + WORM);
+            fixture.setUserData(BOSS + BOSS);
         }
         tempArray.reverse();
     }
@@ -509,10 +520,10 @@ public class Play extends GameState {
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
-        Boss boss = new PlantWorm(body, sb, WORM, this, part, 2f, x, y);
+        Boss boss = new PlantWorm(body, sb, BOSS, this, part, 2f, x, y);
         for (Fixture fixture : boss.getBody().getFixtureList())
-            fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? WORM + WORM : WORM);
-        boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? WORM + WORM : WORM);
+            fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
+        boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
         tempArray2.get(size).add(boss);
     }
 
@@ -563,9 +574,9 @@ public class Play extends GameState {
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
-        Boss boss = new MagmaWorm(body, sb, WORM, this, part, size, 50 * scale, 50 * scale);
-        boss.getBody().setUserData(WORM);
-        for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(WORM);
+        Boss boss = new MagmaWorm(body, sb, BOSS, this, part, size, 50 * scale, 50 * scale);
+        boss.getBody().setUserData(BOSS);
+        for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
         tempArray.add(boss);
         tempPosition.y -= 50 * scale / PPM;
     }
@@ -1089,13 +1100,14 @@ public class Play extends GameState {
         }
         if (cl.getDeathState() == 0) {
             player.update(dt);
-        } else {
+        } else if (gracePeriod == 0) {
             if (cl.getDeathState() == 2) {
                 player.setHealth(player.getHealth() - gotHitBySnek * 10);
                 playSoundOnce("sounds/sfx_deathscream_alien1.wav");
             }
             if (cl.getDeathState() == 3) {
-                player.setHealth(0); //TODO: Fix instant death on load game
+                if (!newPlayer)
+                    player.setHealth(0); //TODO: Fix instant death on load game
             } else {
                 playSoundOnce("sounds/sfx_damage_hit2.wav", 0.1f);
                 player.setHealth(player.getHealth() - gotHitBySnek);
@@ -1105,62 +1117,15 @@ public class Play extends GameState {
                 initPlayer();
             }
             cl.setDeathState((short) 0);
-            player.update(dt);
         }
+        player.update(dt);
 
         //calculate falling dmg
         player.onLanded(player.getBody().getLinearVelocity(), cl.isPlayerOnGround());
 
 
-        //update boss
-        if (MagmabossArray.size != 0) {
-            for (Array<Boss> bossList : MagmabossArray)
-                for (int i = 0; i < bossList.size; i++) {
-                    if (bossList.size > 110) {
-                        if (i == bossList.size - 1) {
-                            bossList.get(i).updateHeadBig(dt);
-                        } else {
-                            bossList.get(i).update(dt);
-                        }
-                    } else {
-                        if (i == bossList.size - 1) {
-                            bossList.get(i).updateHeadSmall(dt);
-                        } else {
-                            bossList.get(i).update(dt);
-                        }
-                    }
-                }
-        }
-
-
-        if (PlantbossArray.size != 0) {
-
-            int takingTurns = takingTurnsBase * Gdx.graphics.getFramesPerSecond();
-            timeElapsed++;
-            if (timeElapsed > takingTurns) {
-                timeElapsed = 0;
-                curtentlyActiveBoss = (curtentlyActiveBoss + 1) % PlantBossSize;
-            }
-            int j = 0;
-            for (Array<Boss> bossList : PlantbossArray) {
-                for (int i = 0; i < bossList.size; i++) {
-                    if (i == 0) {
-                        if (j == curtentlyActiveBoss) {
-                            bossList.get(i).updateHeadBig(dt);
-                        } else {
-                            bossList.get(i).updateCircularMotion(dt);
-                        }
-                        bossList.get(i).updateRotation(dt);
-                    } else if (i == bossList.size - 1) {
-                        bossList.get(i).updateRotation(dt);
-                    } else {
-                        bossList.get(i).update(dt);
-                    }
-
-                }
-                j++;
-            }
-        }
+        //update bosses
+        updateBosses(dt);
 
         //draw tilemap animations
         if (animatedCells != null) {
@@ -1189,6 +1154,65 @@ public class Play extends GameState {
             }
             for (Checkpoint checkpoint : checkpointList)
                 checkpoint.update(dt);
+        }
+
+        if (gracePeriod > 0)
+            gracePeriod -= 1;
+    }
+
+    private void updateBosses(float dt) {
+        if (SnowManArray.size != 0) {
+            for (Boss boss : SnowManArray) {
+                boss.update(dt);
+            }
+        }
+
+        if (MagmabossArray.size != 0) {
+            for (Array<Boss> bossList : MagmabossArray)
+                for (int i = 0; i < bossList.size; i++) {
+                    if (bossList.size > 110) {
+                        if (i == bossList.size - 1) {
+                            bossList.get(i).updateHeadBig(dt);
+                        } else {
+                            bossList.get(i).update(dt);
+                        }
+                    } else {
+                        if (i == bossList.size - 1) {
+                            bossList.get(i).updateHeadSmall(dt);
+                        } else {
+                            bossList.get(i).update(dt);
+                        }
+                    }
+                }
+        }
+
+
+        if (PlantbossArray.size != 0) {
+            int takingTurns = takingTurnsBase * Gdx.graphics.getFramesPerSecond();
+            timeElapsed++;
+            if (timeElapsed > takingTurns) {
+                timeElapsed = 0;
+                curtentlyActiveBoss = (curtentlyActiveBoss + 1) % PlantBossSize;
+            }
+            int j = 0;
+            for (Array<Boss> bossList : PlantbossArray) {
+                for (int i = 0; i < bossList.size; i++) {
+                    if (i == 0) {
+                        if (j == curtentlyActiveBoss) {
+                            bossList.get(i).updateHeadBig(dt);
+                        } else {
+                            bossList.get(i).updateCircularMotion(dt);
+                        }
+                        bossList.get(i).updateRotation(dt);
+                    } else if (i == bossList.size - 1) {
+                        bossList.get(i).updateRotation(dt);
+                    } else {
+                        bossList.get(i).update(dt);
+                    }
+
+                }
+                j++;
+            }
         }
     }
 
@@ -1323,6 +1347,10 @@ public class Play extends GameState {
 
         //draw player
         if (player != null) player.render(sb);
+
+        if (SnowManArray != null)
+            for (Boss boss : SnowManArray)
+                boss.render(sb);
 
         if (MagmabossArray != null) {
             for (Array<Boss> bossList : MagmabossArray)

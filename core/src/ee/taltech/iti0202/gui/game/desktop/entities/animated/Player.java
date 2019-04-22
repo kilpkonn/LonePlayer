@@ -14,7 +14,35 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROL
 
 public class Player extends SpriteAnimation {
 
+    private int health;
     private List<Vector2> doneDmg = new ArrayList<>();
+
+    public Player(Body body, SpriteBatch sb) {
+        super(body, sb, "images/player/rogue.scml");
+        setScale(0.08f);
+        setAnimationSpeed(100);
+        setHeightOffset(10);
+        health = 100;
+    }
+
+    public enum PlayerAnimation {
+        RUN("run"),
+        JUMP("jump"),
+        IDLE("idle"),
+        ROLL("roll"),
+        DASH("dash");
+
+        private final String name;
+
+        PlayerAnimation(String s) {
+            name = s;
+        }
+
+        public String toString() {
+            return this.name;
+        }
+    }
+
 
     public void onLanded(Vector2 velocity, Boolean grounded) {
         //System.out.println(Math.abs(velocity.x));
@@ -51,16 +79,6 @@ public class Player extends SpriteAnimation {
 
     }
 
-    private int health;
-
-    public Player(Body body, SpriteBatch sb) {
-        super(body, sb, "images/player/rogue.scml");
-        setScale(0.08f);
-        setAnimationSpeed(100);
-        setHeightOffset(10);
-        health = 100;
-    }
-
     public void setAnimation(PlayerAnimation animation) {
         setAnimation(animation.name, animation.name.equals("roll"));
     }
@@ -69,24 +87,6 @@ public class Player extends SpriteAnimation {
         checkpoint.onReached();
         System.out.println("HERE");
         //TODO: Celebrate?
-    }
-
-    public enum PlayerAnimation {
-        RUN("run"),
-        JUMP("jump"),
-        IDLE("idle"),
-        ROLL("roll"),
-        DASH("dash");
-
-        private final String name;
-
-        PlayerAnimation(String s) {
-            name = s;
-        }
-
-        public String toString() {
-            return this.name;
-        }
     }
 
     public int getHealth() {

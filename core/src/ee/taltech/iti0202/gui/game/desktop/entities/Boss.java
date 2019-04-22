@@ -55,17 +55,11 @@ public abstract class Boss extends SpriteAnimation {
         // );
     }
 
-    @Override
-    public void update(float dt) {
-        super.update(dt);
-    }
-
     public void updateCircularMotion(float dt) {
         super.update(dt);
 
         Vector2 player = play.getPlayer().getPosition();
         Vector2 boss = this.body.getPosition();
-        System.out.println(body.getLinearVelocity());
 
         float distance = (float) Math.sqrt(Math.pow(player.x - boss.x, 2) + Math.pow(player.y - boss.x, 2));
 

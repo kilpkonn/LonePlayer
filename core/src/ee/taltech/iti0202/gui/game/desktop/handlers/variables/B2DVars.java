@@ -58,8 +58,7 @@ public class B2DVars {
     public static int SCALE = 1;
 
     // bosses
-    public static final String WORM = "1";
-    public static final String COLOSSEOS = "2";
+    public static final String BOSS = "1";
     public static final int gotHitBySnek = 1;
 
     // category bits
