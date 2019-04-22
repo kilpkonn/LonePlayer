@@ -17,13 +17,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.badlogic.gdx.math.Ellipse;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -46,15 +43,15 @@ import java.util.Locale;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.entities.Boss;
-import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWorm;
-import ee.taltech.iti0202.gui.game.desktop.entities.MagmaWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.PlantWorm;
-import ee.taltech.iti0202.gui.game.desktop.entities.PlantWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.SnowMan;
-import ee.taltech.iti0202.gui.game.desktop.entities.SnowManProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.Checkpoint;
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.MagmaWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.MagmaWormProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.PlantWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.PlantWormProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.SnowMan;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.SnowManProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
@@ -896,7 +893,7 @@ public class Play extends GameState {
                 } else if (cl.hasDoubleJump()) {
                     player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                     cl.setDoubleJump(false);
-                    player.setAnimation(Player.PlayerAnimation.ROLL);
+                    player.setAnimation(Player.PlayerAnimation.ROLL, true);
                 }
             }
 

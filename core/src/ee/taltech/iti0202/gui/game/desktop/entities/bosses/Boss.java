@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities;
+package ee.taltech.iti0202.gui.game.desktop.entities.bosses;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.Random;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.animated.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 

@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.animated;
+package ee.taltech.iti0202.gui.game.desktop.entities.player;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -6,6 +6,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.animated.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
@@ -30,7 +35,10 @@ public class Player extends SpriteAnimation {
         JUMP("jump"),
         IDLE("idle"),
         ROLL("roll"),
-        DASH("dash");
+        ROLL2("roll2"),
+        FACEPLANT("faceplant"),
+        DASH("dash"),
+        Wave("wave");
 
         private final String name;
 
@@ -65,22 +73,28 @@ public class Player extends SpriteAnimation {
                 if (Math.abs(velocity.x) < ROLL_ON_LANDING_SPEED) {
                     health -= Math.abs(velocity.y * Math.abs(velocity.y) / DMG_ON_LANDING * DMG_MULTIPLIER);
                 }
-                health -= Math.abs(velocity.y * 2);
+                health -= Math.abs(velocity.y / 2);
                 health = Math.max(0, health);
             }
             if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
-                if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED * 2) {
-                    health -= Math.abs(velocity.x);
+                if (MyInput.isPressed(Game.settings.JUMP)) {
+                    setAnimation(PlayerAnimation.ROLL2, true);
+                } else if (!getCurrentAnimation().name.equals(PlayerAnimation.ROLL2.name)) {
+                    health -= Math.abs(velocity.y / 2);
                     health = Math.max(health, 0);
+                    setAnimation(PlayerAnimation.FACEPLANT, false);
                 }
-                setAnimation(PlayerAnimation.ROLL);
             }
         }
 
     }
 
     public void setAnimation(PlayerAnimation animation) {
-        setAnimation(animation.name, animation.name.equals("roll"));
+        setAnimation(animation.name, false);
+    }
+
+    public void setAnimation(PlayerAnimation animation, boolean playOnce) {
+        setAnimation(animation.name, playOnce);
     }
 
     public void onCheckpointReached(Checkpoint checkpoint) {

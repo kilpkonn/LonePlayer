@@ -49,7 +49,7 @@ public class B2DVars {
     public static final float DIMENSION_FADE_TIME = 0.4f;
     public static final float DIMENSION_FADE_AMOUNT = 0.6f;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static boolean UPDATE = true;
 
     public static String PATH = "";

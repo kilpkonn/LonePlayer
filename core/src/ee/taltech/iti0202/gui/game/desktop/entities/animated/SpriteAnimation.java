@@ -3,6 +3,7 @@ package ee.taltech.iti0202.gui.game.desktop.entities.animated;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.brashmonkey.spriter.Animation;
 import com.brashmonkey.spriter.Data;
 import com.brashmonkey.spriter.LibGdx.LibGdxDrawer;
 import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
@@ -50,6 +51,7 @@ public class SpriteAnimation {
         HashSet<String> toPlayOnce = new HashSet<>();
         toPlayOnce.add("roll");
         toPlayOnce.add("attack");
+        toPlayOnce.add("faceplant");
         playerTweener.setAnimToPlayOnce(toPlayOnce);
     }
 
@@ -73,6 +75,10 @@ public class SpriteAnimation {
 
     protected void setAnimation(String animation, boolean playOnce) {
         playerTweener.setAnimation(animation, playOnce);
+    }
+
+    protected Animation getCurrentAnimation() {
+        return playerTweener.getAnimation();
     }
 
     public void setFlipX(boolean flipX) {

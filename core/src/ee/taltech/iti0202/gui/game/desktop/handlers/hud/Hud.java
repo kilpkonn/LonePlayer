@@ -27,7 +27,7 @@ public class Hud {
 
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontParameter.size = 64;
-        fontParameter.borderColor = Color.BLACK;
+        fontParameter.borderColor = Color.GRAY;
         fontParameter.renderCount = 3;
         fontParameter.borderWidth = 1f;
 
