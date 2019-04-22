@@ -152,12 +152,7 @@ public class SettingsMenu extends Scene {
             switch (currBlock) {
                 case EXIT:
                     playSoundOnce("sounds/negative_2.wav", 0.5f);
-                    try {
-                        backFunc.run();
-                    } catch (Exception e) {
-                        System.out.println(e.getMessage());
-                        //TODO: gsm.push -> main
-                    }
+                    backFunc.run();
                     break;
                 case SAVE:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);
