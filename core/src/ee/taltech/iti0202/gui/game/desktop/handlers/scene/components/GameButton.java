@@ -31,7 +31,9 @@ public class GameButton {
     public GameButton(String text, float x, float y) {
         this.x = x;
         this.y = y;
-        setSize(32);
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 32;
+        setFontParameters(parameter);
         font.setColor(new Color(0.47f, 1f, 1f, 1));
         setText(text);
     }
@@ -76,11 +78,9 @@ public class GameButton {
         this.text = text;
     }
 
-    public void setSize(int size) {
+    public void setFontParameters(FreeTypeFontGenerator.FreeTypeFontParameter parameters) {
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal(PATH + "fonts/bullfrog.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = size;
-        font = generator.generateFont(parameter);
+        font = generator.generateFont(parameters);
         generator.dispose();
     }
 

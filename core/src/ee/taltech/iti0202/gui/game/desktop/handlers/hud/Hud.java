@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
@@ -24,8 +25,17 @@ public class Hud {
         stage = new Stage(new ScreenViewport());
         this.play = play;
 
-        health = new GameButton("100hp", B2DVars.V_WIDTH - 150, B2DVars.V_HEIGHT - 50);
+        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        fontParameter.size = 64;
+        fontParameter.borderColor = Color.BLACK;
+        fontParameter.renderCount = 3;
+        fontParameter.borderWidth = 1f;
+
+        health = new GameButton("100hp", B2DVars.V_WIDTH - 250, B2DVars.V_HEIGHT - 50);
         fps = new GameButton("0", 100, B2DVars.V_HEIGHT - 50);
+
+        health.setFontParameters(fontParameter);
+        fps.setFontParameters(fontParameter);
     }
 
     public void update(float dt) {
