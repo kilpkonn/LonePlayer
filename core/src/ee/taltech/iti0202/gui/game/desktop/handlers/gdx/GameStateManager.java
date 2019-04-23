@@ -6,7 +6,7 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.GameState;
 import ee.taltech.iti0202.gui.game.desktop.states.Menu;
-import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import ee.taltech.iti0202.gui.game.desktop.states.PlayBuilder;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 public class GameStateManager {
@@ -51,7 +51,7 @@ public class GameStateManager {
 
     private static GameState getState(State state, GameProgress progress) {
         if (state == State.PLAY) {
-            return new Play(progress);
+            return new PlayBuilder().setProgress(progress).createPlay();
         }
         System.out.println("desired state was no found!");
         return null;
@@ -59,7 +59,7 @@ public class GameStateManager {
 
     private static GameState getState(State state, String act, String map, B2DVars.gameDifficulty difficulty) {
         if (state == State.PLAY) {
-            return new Play(act, map, difficulty);
+            return new PlayBuilder().setAct(act).setMap(map).setDifficulty(difficulty).createPlay();
         }
         System.out.println("desired state was no found!");
         return null;

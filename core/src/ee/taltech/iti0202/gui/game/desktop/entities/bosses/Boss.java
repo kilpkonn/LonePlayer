@@ -5,14 +5,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import java.util.Random;
-
-import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 
 
-public abstract class Boss extends SpriteAnimation {
+public class Boss extends SpriteAnimation {
 
     public Play getPlay() {
         return play;
@@ -22,7 +20,6 @@ public abstract class Boss extends SpriteAnimation {
 
     private float time = 0;
     private final float optimalDistanceFromPlayer = 5f;
-    private final Random RANDOM = new Random();
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
         super(body, sb, path, entity);

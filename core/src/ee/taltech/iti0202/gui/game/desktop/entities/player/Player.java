@@ -8,13 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
 
 
@@ -79,7 +78,7 @@ public class Player extends SpriteAnimation {
             }
             if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
                 if (MyInput.isDown(Game.settings.JUMP)) {
-                    body.applyForceToCenter(new Vector2(PLAYER_SPEED * velocity.x / Math.abs(velocity.x), 0), true); // Change to impulse?
+                    //body.applyForceToCenter(new Vector2(PLAYER_SPEED * velocity.x / Math.abs(velocity.x), 0), true); // Change to impulse?
                     setAnimation(PlayerAnimation.ROLL2, true);
                 } else if (!getCurrentAnimation().name.equals(PlayerAnimation.ROLL2.name)) {
                     health -= Math.abs(velocity.y / 2);

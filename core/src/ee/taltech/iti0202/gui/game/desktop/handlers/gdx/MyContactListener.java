@@ -35,7 +35,7 @@ public class MyContactListener implements ContactListener {
             checkpointDetection(fa, fb);
 
             //set wall jump
-            setWallJump(fa, fb);
+            setWallJump(fa, fb, 1);
 
             // detection happens when player goes outside of initial game border
             dmgDetection(fa, fb);
@@ -68,19 +68,19 @@ public class MyContactListener implements ContactListener {
         }
     }
 
-    private void setWallJump(Fixture fa, Fixture fb) {
+    private void setWallJump(Fixture fa, Fixture fb, int i) {
         if (!fb.getUserData().equals("checkpoint") && fa.getUserData().equals("side_r")) {
-            wallJump = -1;
+            wallJump = -1 * i;
         }
         if (!fa.getUserData().equals("checkpoint") && fb.getUserData().equals("side_r")) {
-            wallJump = -1;
+            wallJump = -1 * i;
         }
 
         if (!fb.getUserData().equals("checkpoint") && fa.getUserData().equals("side_l")) {
-            wallJump = 1;
+            wallJump = i;
         }
         if (!fa.getUserData().equals("checkpoint") && fb.getUserData().equals("side_l")) {
-            wallJump = 1;
+            wallJump = i;
         }
     }
 
@@ -121,21 +121,25 @@ public class MyContactListener implements ContactListener {
     public void endContact(Contact c) {
         Fixture fa = c.getFixtureA();
         Fixture fb = c.getFixtureB();
+        if (fa.getUserData() != null && fb.getUserData() != null) {
 
-        if (fa.getUserData() != null && (fa.getUserData().equals("foot") || fa.getUserData().equals("side"))) {
-            if (fb.getUserData() != null && fb.getUserData().equals("checkpoint")) return;
-            playerOnGround = false;
-            doubleJump = true;
-            //wallJump = 0;
-            dash = true;
-        } else if (fb.getUserData() != null && (fb.getUserData().equals("foot") || fb.getUserData().equals("side"))) {
-            if (fa.getUserData() != null && fa.getUserData().equals("checkpoint")) return;
-            playerOnGround = false;
-            doubleJump = true;
-            //wallJump = 0;
-            dash = true;
+            setWallJump(fa, fb, 0);
+
+            if (fa.getUserData().equals("foot")) {
+                if (fb.getUserData().equals("checkpoint")) return;
+                playerOnGround = false;
+                doubleJump = true;
+                //wallJump = 0;
+                dash = true;
+            } else if (fb.getUserData().equals("foot")) {
+                if (fa.getUserData().equals("checkpoint")) return;
+                playerOnGround = false;
+                doubleJump = true;
+                //wallJump = 0;
+                dash = true;
+            }
+
         }
-
     }
 
     //presolve

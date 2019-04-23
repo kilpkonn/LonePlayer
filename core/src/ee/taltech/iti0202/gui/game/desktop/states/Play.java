@@ -45,13 +45,15 @@ import java.util.Map;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWormBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowMan;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
@@ -164,7 +166,7 @@ public class Play extends GameState {
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    private Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
+    Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
         this.act = act;
         this.map = map;
         this.difficulty = difficulty;
@@ -181,15 +183,15 @@ public class Play extends GameState {
                 break;
 
             case HARD:
-                DMG_MULTIPLIER = 2;
-                DMG_ON_LANDING = 8;
+                DMG_MULTIPLIER = 1.5f;
+                DMG_ON_LANDING = 9;
                 checkpoints = true;
                 bosses = true;
                 break;
 
             case BRUTAL:
-                DMG_MULTIPLIER = 3;
-                DMG_ON_LANDING = 7;
+                DMG_MULTIPLIER = 2;
+                DMG_ON_LANDING = 8;
                 checkpoints = false;
                 bosses = true;
                 break;
@@ -348,21 +350,6 @@ public class Play extends GameState {
         buildPlayer();
     }
 
-    private static void fixBleeding(TextureRegion region) {
-        float fix = 0.01f;
-
-        float x = region.getRegionX();
-        float y = region.getRegionY();
-        float width = region.getRegionWidth();
-        float height = region.getRegionHeight();
-        float invTexWidth = 1f / region.getTexture().getWidth();
-        float invTexHeight = 1f / region.getTexture().getHeight();
-        region.setRegion((x + fix) * invTexWidth, (y + fix) * invTexHeight, (x + width - fix) * invTexWidth, (y + height - fix) * invTexHeight); // Trims
-
-        region.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        region.getTexture().getTextureData().useMipMaps();
-    }
-
     private void buildPlayer() {
         short mask;
         if (dimension) {
@@ -386,7 +373,6 @@ public class Play extends GameState {
         fdef.filter.maskBits = mask;
         body.createFixture(fdef).setUserData("side_r");
 
-
         fdef.isSensor = false;
         circle.setRadius(9 / PPM);
         fdef.shape = circle;
@@ -408,6 +394,29 @@ public class Play extends GameState {
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
         player = new Player(body, sb);
+    }
+
+    private static void fixBleeding(TextureRegion region) {
+        float fix = 0.01f;
+
+        float x = region.getRegionX();
+        float y = region.getRegionY();
+        float width = region.getRegionWidth();
+        float height = region.getRegionHeight();
+        float invTexWidth = 1f / region.getTexture().getWidth();
+        float invTexHeight = 1f / region.getTexture().getHeight();
+        region.setRegion((x + fix) * invTexWidth, (y + fix) * invTexHeight, (x + width - fix) * invTexWidth, (y + height - fix) * invTexHeight); // Trims
+
+        region.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+        region.getTexture().getTextureData().useMipMaps();
+    }
+
+    private static void fixBleeding(TextureRegion[][] region) {
+        for (TextureRegion[] array : region) {
+            for (TextureRegion texture : array) {
+                fixBleeding(texture);
+            }
+        }
     }
 
     private void createBosses(Vector2 position, String type, boolean decider, int size) {
@@ -443,7 +452,7 @@ public class Play extends GameState {
                     //createRopeJointGEOCordBetweenLinksPlantWorm(tempArray, 0.50f);
 
                 }
-                refilterTextures(tempArray);
+                filterTextures(tempArray);
 
                 MagmabossArray.add(tempArray);
                 break;
@@ -481,7 +490,7 @@ public class Play extends GameState {
                     tempPosition.y -= 10 / PPM;
                 }
 
-                refilterTextures(tempArray2.get(0));
+                filterTextures(tempArray2.get(0));
                 for (int i = 1; i < size; i++) {
                     tempArray2.get(i).reverse();
                 }
@@ -495,38 +504,13 @@ public class Play extends GameState {
                 Body body = world.createBody(alias.getBdef());
                 body.createFixture(alias.getFdef());
                 bossLoader.attachFixture(body, "snowman", alias.getFdef(), 1f * size);
-                Boss boss = new SnowMan(body, sb, BOSS, this, 0, 0);
+                Boss boss = new SnowManBuilder().setBody(body).setSb(sb).setType(BOSS).setPlay(this).setX(0).setY(0).createSnowMan();
                 boss.getBody().setUserData(BOSS);
                 for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
                 SnowManArray.add(boss);
                 break;
         }
 
-    }
-
-    private void refilterTextures(Array<Boss> tempArray) {
-        Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
-        brokenFixture.setSensor(true);
-        brokenFixture.setUserData(BOSS + BOSS + BOSS);
-        brokenFixture.getBody().setUserData(BOSS + BOSS + BOSS);
-        brokenFixture.getFilterData().maskBits = NONE;
-        brokenFixture.refilter();
-        for (Fixture fixture : tempArray.get(0).getBody().getFixtureList()) {
-            fixture.setUserData(BOSS + BOSS);
-        }
-        tempArray.reverse();
-    }
-
-    private void initPlantPart(Array<Array<Boss>> tempArray2, PlantWorm.Part part, int size, float x, float y) {
-        PlantWormProperties alias = new PlantWormProperties(bdef, fdef, tempPosition);
-        Body body = world.createBody(alias.getBdef());
-        body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
-        Boss boss = new PlantWorm(body, sb, BOSS, this, part, 2f, x, y);
-        for (Fixture fixture : boss.getBody().getFixtureList())
-            fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
-        boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
-        tempArray2.get(size).add(boss);
     }
 
     private void createDistanceJointBetweenLinks(Array<Boss> tempArray, float lock) {
@@ -571,16 +555,17 @@ public class Play extends GameState {
         world.createJoint(ropeJointDef);
     }
 
-    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray) {
-        MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, tempPosition);
-        Body body = world.createBody(alias.getBdef());
-        body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
-        Boss boss = new MagmaWorm(body, sb, BOSS, this, part, size, 50 * scale, 50 * scale);
-        boss.getBody().setUserData(BOSS);
-        for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
-        tempArray.add(boss);
-        tempPosition.y -= 50 * scale / PPM;
+    private void filterTextures(Array<Boss> tempArray) {
+        Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
+        brokenFixture.setSensor(true);
+        brokenFixture.setUserData(BOSS + BOSS + BOSS);
+        brokenFixture.getBody().setUserData(BOSS + BOSS + BOSS);
+        brokenFixture.getFilterData().maskBits = NONE;
+        brokenFixture.refilter();
+        for (Fixture fixture : tempArray.get(0).getBody().getFixtureList()) {
+            fixture.setUserData(BOSS + BOSS);
+        }
+        tempArray.reverse();
     }
 
     private void initPlayer() {
@@ -625,33 +610,16 @@ public class Play extends GameState {
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
-    private void drawLayers() {
-        for (MapLayer layer : tiledMap.getLayers()) {
-            switch (layer.getName()) {
-                case "barrier":
-                    fdef.filter.categoryBits = BACKGROUND;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
-                    determineMapObject(layer);
-                    break;
-                case "hitboxes_1":
-                    fdef.filter.categoryBits = TERRA_DIMENTSION_1;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1;
-                    determineMapObject(layer);
-                    break;
-                case "hitboxes_2":
-                    fdef.filter.categoryBits = TERRA_DIMENTSION_2;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_2;
-                    determineMapObject(layer);
-                    break;
-                case "hitboxes":
-                    fdef.filter.categoryBits = TERRA_SQUARES;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
-                    determineMapObject(layer);
-                    break;
-                default:
-                    ReadVertices((TiledMapTileLayer) layer);
-            }
-        }
+    private void initPlantPart(Array<Array<Boss>> tempArray2, PlantWorm.Part part, int size, float x, float y) {
+        PlantWormProperties alias = new PlantWormProperties(bdef, fdef, tempPosition);
+        Body body = world.createBody(alias.getBdef());
+        body.createFixture(alias.getFdef());
+        bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
+        Boss boss = new PlantWormBuilder().setBody(body).setSb(sb).setType(BOSS).setPlay(this).setPart(part).setSize(2f).setX(x).setY(y).createPlantWorm();
+        for (Fixture fixture : boss.getBody().getFixtureList())
+            fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
+        boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
+        tempArray2.get(size).add(boss);
     }
 
     private void determineMapObject(MapLayer layer) {
@@ -690,16 +658,48 @@ public class Play extends GameState {
         checkpointList.add(checkpoint);
     }
 
+    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray) {
+        MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, tempPosition);
+        Body body = world.createBody(alias.getBdef());
+        body.createFixture(alias.getFdef());
+        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
+        Boss boss = new MagmaWormBuilder().setBody(body).setSb(sb).setType(BOSS).setPlay(this).setPart(part).setSize(size).setX(50 * scale).setY(50 * scale).createMagmaWorm();
+        boss.getBody().setUserData(BOSS);
+        for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
+        tempArray.add(boss);
+        tempPosition.y -= 50 * scale / PPM;
+    }
 
-    // private static void fixBleeding(TextureRegion[][] region) {
-    //     for (TextureRegion[] array : region) {
-    //         for (TextureRegion texture : array) {
-    //             fixBleeding(texture);
-    //         }
-    //     }
-    // }
+    private void drawLayers() {
+        for (MapLayer layer : tiledMap.getLayers()) {
+            switch (layer.getName()) {
+                case "barrier":
+                    fdef.filter.categoryBits = BACKGROUND;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                    determineMapObject(layer);
+                    break;
+                case "hitboxes_1":
+                    fdef.filter.categoryBits = TERRA_DIMENTSION_1;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1;
+                    determineMapObject(layer);
+                    break;
+                case "hitboxes_2":
+                    fdef.filter.categoryBits = TERRA_DIMENTSION_2;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_2;
+                    determineMapObject(layer);
+                    break;
+                case "hitboxes":
+                    fdef.filter.categoryBits = TERRA_SQUARES;
+                    fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2;
+                    determineMapObject(layer);
+                    break;
+                default:
+                    readVertices((TiledMapTileLayer) layer);
+            }
+        }
+    }
 
-    private void ReadVertices(TiledMapTileLayer layer) {
+    private void readVertices(TiledMapTileLayer layer) {
         int[] corner_coords = SQUARE_CORNERS;
         String type = layer.getName();
         boolean isSensor = false;
@@ -888,13 +888,15 @@ public class Play extends GameState {
 
             //player jump / double jump / dash
             if (MyInput.isPressed(Game.settings.JUMP)) {
-                player.setAnimation(Player.PlayerAnimation.JUMP);
                 if (cl.isPlayerOnGround()) {
                     player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+                    player.setAnimation(Player.PlayerAnimation.JUMP);
                 } else if (cl.isWallJump() != 0) {
+                    System.out.println("Walljump");
                     player.getBody().applyLinearImpulse(new Vector2(cl.isWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                     cl.setWallJump(0);
                 } else if (cl.hasDoubleJump()) {
+                    System.out.println("Double jump");
                     player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                     cl.setDoubleJump(false);
                     player.setAnimation(Player.PlayerAnimation.ROLL, true);
@@ -984,7 +986,7 @@ public class Play extends GameState {
 
         switch (playState) {
             case RUN:
-                UpdateProps(dt);
+                updateProps(dt);
                 hud.update(dt);
                 break;
 
@@ -1015,7 +1017,7 @@ public class Play extends GameState {
         }
     }
 
-    private void UpdateProps(float dt) {
+    private void updateProps(float dt) {
         //update camera
         if (DEBUG) {
 
