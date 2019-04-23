@@ -8,7 +8,7 @@ public abstract class Properties {
     private BodyDef bdef;
     private FixtureDef fdef;
 
-    Properties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
+    protected Properties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
         this.bdef = bdef;
         this.fdef = fdef;
     }

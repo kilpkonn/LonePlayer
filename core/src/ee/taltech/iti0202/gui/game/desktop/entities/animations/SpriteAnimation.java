@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.animated;
+package ee.taltech.iti0202.gui.game.desktop.entities.animations;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,7 +10,7 @@ import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
 
 import java.util.HashSet;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.loader.AnimationLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 

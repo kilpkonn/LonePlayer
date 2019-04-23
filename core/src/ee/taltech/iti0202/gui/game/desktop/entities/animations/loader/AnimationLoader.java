@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.animated.loader;
+package ee.taltech.iti0202.gui.game.desktop.entities.animations.loader;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;

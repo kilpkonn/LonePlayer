@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.animated;
+package ee.taltech.iti0202.gui.game.desktop.entities.animations;
 
 import com.brashmonkey.spriter.Animation;
 import com.brashmonkey.spriter.Mainline;

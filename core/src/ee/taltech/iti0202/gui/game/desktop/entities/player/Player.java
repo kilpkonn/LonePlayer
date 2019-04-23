@@ -9,7 +9,7 @@ import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
-import ee.taltech.iti0202.gui.game.desktop.entities.animated.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;

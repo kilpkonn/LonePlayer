@@ -44,12 +44,12 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.MagmaWorm;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.MagmaWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.PlantWorm;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.PlantWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.SnowMan;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.SnowManProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWormProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowMan;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
@@ -146,13 +146,13 @@ public class Play extends GameState {
     private boolean dimensionFadeDone = false;
     private boolean newPlayer;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
-    private float currentMenuFade = 0;
+    private float currentMenuFade = 1;
     private float backgroundSpeed;
     private String act;
     private String map;
     private float scale = 1f;
     private int gracePeriod = 60;
-    private int takingTurnsBase = 15; // how long one boss attacks
+    private int takingTurnsBase = 10; // how long one boss attacks
     private int curtentlyActiveBoss = 0;
     private int timeElapsed = 0;
     private int PlantBossSize = 1;
@@ -318,6 +318,10 @@ public class Play extends GameState {
         newPlayer = true;
         UPDATE = true;
         cam.zoom = 1;
+
+        currentMenuFade = 1;
+        gameFadeDone = false;
+        gameFadeOut = false;
     }
 
     public Play(String act, String map, B2DVars.gameDifficulty difficulty) {
@@ -445,7 +449,7 @@ public class Play extends GameState {
                 break;
 
             case "2":
-                takingTurnsBase = 15 - size;
+                takingTurnsBase = 10 - size;
                 PlantBossSize = size;
                 Array<Array<Boss>> tempArray2 = new Array<>();
                 for (int i = 0; i < size; i++) {
