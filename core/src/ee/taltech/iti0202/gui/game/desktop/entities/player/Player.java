@@ -14,6 +14,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
 
 
@@ -77,12 +78,13 @@ public class Player extends SpriteAnimation {
                 health = Math.max(0, health);
             }
             if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
-                if (MyInput.isPressed(Game.settings.JUMP)) {
+                if (MyInput.isDown(Game.settings.JUMP)) {
+                    body.applyForceToCenter(new Vector2(PLAYER_SPEED * velocity.x / Math.abs(velocity.x), 0), true); // Change to impulse?
                     setAnimation(PlayerAnimation.ROLL2, true);
                 } else if (!getCurrentAnimation().name.equals(PlayerAnimation.ROLL2.name)) {
                     health -= Math.abs(velocity.y / 2);
                     health = Math.max(health, 0);
-                    setAnimation(PlayerAnimation.FACEPLANT, false);
+                    setAnimation(PlayerAnimation.FACEPLANT, true);
                 }
             }
         }
