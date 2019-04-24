@@ -663,7 +663,16 @@ public class Play extends GameState {
         Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
-        Boss boss = new MagmaWormBuilder().setBody(body).setSb(sb).setType(BOSS).setPlay(this).setPart(part).setSize(size).setX(50 * scale).setY(50 * scale).createMagmaWorm();
+        Boss boss = new MagmaWormBuilder()
+                .setBody(body)
+                .setSb(sb)
+                .setType(BOSS)
+                .setPlay(this)
+                .setPart(part)
+                .setSize(size)
+                .setX(50 * scale)
+                .setY(50 * scale)
+                .createMagmaWorm();
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
         tempArray.add(boss);
