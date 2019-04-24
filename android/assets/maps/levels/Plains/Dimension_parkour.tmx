@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="128" tileheight="128" infinite="0" nextlayerid="28" nextobjectid="257">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="64" height="64" tilewidth="128" tileheight="128" infinite="0" nextlayerid="28" nextobjectid="258">
  <tileset firstgid="1" name="gameart2d-desert" tilewidth="128" tileheight="128" tilecount="40" columns="5">
   <image source="../../tilesets/images/gameart2d-desert.png" width="640" height="1024"/>
   <tile id="2">
@@ -19,6 +19,7 @@
   <object id="207" x="4" y="8064" width="8186.91" height="126.909"/>
   <object id="208" x="8066.67" y="3.0303" width="124.242" height="8190.91"/>
   <object id="209" x="0" y="0" width="8192" height="128"/>
+  <object id="257" x="20" y="7552" width="8084" height="608"/>
  </objectgroup>
  <objectgroup id="13" name="hitboxes_1">
   <object id="211" x="3712" y="7295.33" width="256.333" height="54.3333"/>
@@ -342,7 +343,7 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer id="25" name="background" width="64" height="64" visible="0">
+ <layer id="25" name="background" width="64" height="64">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
