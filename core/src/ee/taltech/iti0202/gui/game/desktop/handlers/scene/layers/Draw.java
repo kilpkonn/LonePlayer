@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.BossLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.bleeding.Bleeding;
@@ -214,6 +215,7 @@ public class Draw {
                 play.getFdef().filter.categoryBits = NONE;
                 play.getFdef().filter.maskBits = NONE;
                 play.getFdef().isSensor = isSensor;
+                BossLoader bossLoader = new BossLoader(play, spriteBatch);
                 switch (layer.getName()) {
                     case "checkpoints":
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
@@ -228,18 +230,18 @@ public class Draw {
 
                     case "bosses_small":
                         if (play.isBosses()) {
-                            play.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), false, (Integer) layer.getProperties().get("size"));
+                            bossLoader.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), false, (Integer) layer.getProperties().get("size"));
                         }
                         break;
 
                     case "bosses_big":
                         if (play.isBosses()) {
-                            play.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
+                            bossLoader.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
                         }
                         break;
                     case "bosses":
                         if (play.isBosses()) {
-                            play.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
+                            bossLoader.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
                         }
                         break;
 

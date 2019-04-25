@@ -20,8 +20,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
-import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -34,12 +32,6 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWorm;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWorm;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowMan;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
@@ -54,13 +46,13 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.layers.Draw;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DEBUG;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
@@ -70,7 +62,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRI
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
@@ -84,6 +75,7 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_H
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.gotHitBySnek;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Play extends GameState {
 
@@ -109,12 +101,10 @@ public class Play extends GameState {
     private Array<Boss> SnowManArray;
     private Array<Array<Boss>> MagmabossArray;
     private Array<Array<Boss>> PlantbossArray;
-    private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
     private Array<Checkpoint> checkpointList;
     private Checkpoint activeCheckpoint;
     private Vector2 tempPlayerLocation;
     private Vector2 initPlayerLocation;
-    private Vector2 tempPosition;
     private BodyDef bdef;
     private PolygonShape polyShape;
     private CircleShape circle;
@@ -141,7 +131,6 @@ public class Play extends GameState {
     private float backgroundSpeed;
     private String act;
     private String map;
-    private float scale = 1f;
     private int gracePeriod = 60;
     private int takingTurnsBase = 10; // how long one boss attacks
     private int curtentlyActiveBoss = 0;
@@ -325,7 +314,6 @@ public class Play extends GameState {
         this(progress.act, progress.map, progress.difficulty, progress);
     }
 
-
     ////////////////////////////////////////////////////////////////////   Create Animated bodies   ////////////////////////////////////////////////////////////////////
 
     private void initPlayer(GameProgress progress) {
@@ -387,155 +375,6 @@ public class Play extends GameState {
         player = new Player(body, sb);
     }
 
-    public void createBosses(Vector2 position, String type, boolean decider, int size) {
-
-        /////////////////////////////////////////////////////////////////////////
-        //                                                                     //
-        //   TYPE 1: MAGMA BOSS, can flu through walls n shit                  //
-        //   TYPE 2: COLOSSEOS, net.dermetfan.gdx.physics.box2d.Breakable      //
-        //   TYPE 3: idk                                                       //
-        //                                                                     //
-        /////////////////////////////////////////////////////////////////////////
-
-        scale = decider ? 1f : 0.5f;
-        this.tempPosition = position;
-        this.bossLoader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses" + type + ".json"));
-
-        switch (type) {
-            case "1":
-                Array<Boss> tempArray = new Array<>();
-                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray);
-                tempPosition.y -= 60 * scale / PPM;
-
-                for (int i = 0; i < size; i++) {
-                    if (i == size - 1) {
-                        initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray);
-                    } else {
-                        initSnakePart(MagmaWorm.Part.BODY, scale, tempArray);
-                    }
-                    //createRopeJointBetweenLinks(tempArray, -1f);
-                    createDistanceJointBetweenLinks(tempArray, 0.40f);
-                    createDistanceJointBetweenLinks(tempArray, 0.50f);
-                    createDistanceJointBetweenLinks(tempArray, 0.60f);
-                    //createRopeJointGEOCordBetweenLinksPlantWorm(tempArray, 0.50f);
-
-                }
-                filterTextures(tempArray);
-
-                MagmabossArray.add(tempArray);
-                break;
-
-            case "2":
-                takingTurnsBase = 10 - size;
-                PlantBossSize = size;
-                Array<Array<Boss>> tempArray2 = new Array<>();
-                for (int i = 0; i < size; i++) {
-                    tempArray2.add(new Array<Boss>());
-                }
-                initPlantPart(tempArray2, PlantWorm.Part.FLOWER_HEAD, 0, 100, 100);
-                for (int i = 1; i < size; i++) {
-                    tempArray2.get(i).add(tempArray2.get(0).get(0));
-                }
-                tempPosition.x += 50 / PPM;
-                tempPosition.y -= 50 / PPM;
-
-                int vine = size * 5;
-                for (int i = 0; i < vine; i++) {
-                    for (int j = 0; j < size; j++) {
-                        if (i == vine - 1) {
-                            initPlantPart(tempArray2, PlantWorm.Part.CLAW_HEAD, j, 100, 100);
-                        } else {
-                            initPlantPart(tempArray2, PlantWorm.Part.BODY, j, 50, 50);
-                        }
-                        if (i == 0 || i == vine - 1) {
-                            createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j), i);
-                        } else {
-                            createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f);
-                            createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f);
-                            createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f);
-                        }
-                    }
-                    tempPosition.y -= 10 / PPM;
-                }
-
-                filterTextures(tempArray2.get(0));
-                for (int i = 1; i < size; i++) {
-                    tempArray2.get(i).reverse();
-                }
-
-                for (Array<Boss> bosses : tempArray2)
-                    PlantbossArray.add(bosses);
-                break;
-
-            case "3":
-                SnowManProperties alias = new SnowManProperties(bdef, fdef, tempPosition);
-                Body body = world.createBody(alias.getBdef());
-                body.createFixture(alias.getFdef());
-                bossLoader.attachFixture(body, "snowman", alias.getFdef(), 1f * size);
-                Boss boss = SnowMan.builder().body(body).spriteBatch(sb).type(type).play(this).xOffset(0).yOffset(0).build();
-                boss.getBody().setUserData(BOSS);
-                for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
-                SnowManArray.add(boss);
-                break;
-        }
-
-    }
-
-    private void createDistanceJointBetweenLinks(Array<Boss> tempArray, float lock) {
-        // create joint between bodies
-        DistanceJointDef distanceJointDef = new DistanceJointDef();
-        distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
-        distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
-        distanceJointDef.length = MagmabossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
-        distanceJointDef.collideConnected = true;
-        distanceJointDef.localAnchorA.set(lock * scale, 0.95f * scale);
-        distanceJointDef.localAnchorB.set(lock * scale, 0.05f * scale);
-        distanceJointDef.length = 0.05f * scale;
-        world.createJoint(distanceJointDef);
-    }
-
-    private void createRopeJointGEOCordBetweenLinksPlantWorm(Array<Boss> tempArray, int p) {
-        // create joint between bodies
-        float split = p == 0 ? 1f : 0f;
-        float delta = p == 0 ? 0f : 0.4f;
-        for (int i = 0; i < 3; i++) {
-            DistanceJointDef distanceJointDef = new DistanceJointDef();
-            distanceJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
-            distanceJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
-            distanceJointDef.collideConnected = false;
-            distanceJointDef.localAnchorA.set(0.5f + i * 0.1f + delta, 0.95f); // done
-            distanceJointDef.localAnchorB.set((95 + i * 5) / PPM, 0.05f + split);
-            distanceJointDef.length = 0.05f;
-            world.createJoint(distanceJointDef);
-        }
-    }
-
-    private void createRopeJointBetweenLinks(Array<Boss> tempArray, float lock) {
-        // create joint between bodies
-        RopeJointDef ropeJointDef = new RopeJointDef();
-        ropeJointDef.bodyA = tempArray.get(tempArray.size - 1).getBody();
-        ropeJointDef.bodyB = tempArray.get(tempArray.size - 2).getBody();
-        //ropeJointDef.length = MagmabossArray.size == 2 ? 40 * scale / PPM : 20 * scale / PPM;
-        ropeJointDef.collideConnected = true;
-        ropeJointDef.maxLength = 0.02f * scale;
-        ropeJointDef.localAnchorA.set(lock * scale, 1f * scale);
-        ropeJointDef.localAnchorB.set(lock * scale, 0f * scale);
-        world.createJoint(ropeJointDef);
-    }
-
-    private void filterTextures(Array<Boss> tempArray) {
-        Fixture brokenFixture = tempArray.get(0).getBody().getFixtureList().removeIndex(0); //.get(0);
-        brokenFixture.setSensor(true);
-        brokenFixture.setUserData(BOSS + BOSS + BOSS);
-        brokenFixture.getBody().setUserData(BOSS + BOSS + BOSS);
-        brokenFixture.getFilterData().maskBits = NONE;
-        brokenFixture.refilter();
-        for (Fixture fixture : tempArray.get(0).getBody().getFixtureList()) {
-            fixture.setUserData(BOSS + BOSS);
-        }
-        tempArray.reverse();
-    }
-
     public void initPlayer() {
         if (player != null) world.destroyBody(player.getBody());
         bdef = new BodyDef();
@@ -555,31 +394,6 @@ public class Play extends GameState {
             bdef.position.set(new Vector2(activeCheckpoint.getPosition()));
         }
         buildPlayer();
-    }
-
-
-    private void initPlantPart(Array<Array<Boss>> tempArray2, PlantWorm.Part part, int size, float x, float y) {
-        PlantWormProperties alias = new PlantWormProperties(bdef, fdef, tempPosition);
-        Body body = world.createBody(alias.getBdef());
-        body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
-        Boss boss = PlantWorm.builder().body(body).yOffset(y).xOffset(x).size(size).type(BOSS).part(part).play(this).spriteBatch(sb).build();
-        for (Fixture fixture : boss.getBody().getFixtureList())
-            fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
-        boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
-        tempArray2.get(size).add(boss);
-    }
-
-    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray) {
-        MagmaWormProperties alias = new MagmaWormProperties(bdef, fdef, tempPosition);
-        Body body = world.createBody(alias.getBdef());
-        body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
-        Boss boss = MagmaWorm.builder().body(body).spriteBatch(sb).type(BOSS).play(this).part(part).size(size).xOffset(50 * scale).yOffset(50 * scale).build();
-        boss.getBody().setUserData(BOSS);
-        for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
-        tempArray.add(boss);
-        tempPosition.y -= 50 * scale / PPM;
     }
 
     ////////////////////////////////////////////////////////////////////      Handle I/O devices    ////////////////////////////////////////////////////////////////////
