@@ -5,8 +5,19 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import lombok.Builder;
 
+@Builder
 public class MagmaWorm extends Boss {
+
+    private Body body;
+    private SpriteBatch spriteBatch;
+    private String type;
+    private Play play;
+    private MagmaWorm.Part part;
+    private float size;
+    private float xOffset;
+    private float yOffset;
 
     public enum MagmaWormAnimation {
         DEFAULT ("default");

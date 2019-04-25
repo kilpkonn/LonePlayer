@@ -8,18 +8,41 @@ import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import lombok.Builder;
+import lombok.Data;
 
+@Builder
+@Data
 public class PlantWorm extends Boss {
 
-    private float max_speed = 3;
+    private final float max_speed = 3;
     private float time = 0;
 
+    private Body body;
+    private SpriteBatch spriteBatch;
+    private String type;
+    private Play play;
+    private PlantWorm.Part part;
+    private float size;
+    private float xOffset;
+    private float yOffset;
+
     public PlantWorm(Body body, SpriteBatch sb, String type, Play play, PlantWorm.Part part, float size) {
-        this(body, sb, type, play, part, size, 0, 0);
+        this(0, body, sb, type, play, part, size, 0, 0);
     }
 
-    public PlantWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
+    public PlantWorm(float time, Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
         super(body, sb, play, "images/bosses/plantworm/plantworm.scml", part.name, x, y);
+        this.body = body;
+        this.spriteBatch = sb;
+        this.type = type;
+        this.play = play;
+        this.part = part;
+        this.size = size;
+        this.xOffset = x;
+        this.yOffset = y;
+        this.time = 0;
+
         body.setUserData(type);
         setAnimation(PlantWormAnimation.IDLE.toString(), false);
         setAnimationSpeed(50);

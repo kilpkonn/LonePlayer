@@ -9,14 +9,14 @@ import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
-import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import lombok.Data;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
 
-
+@Data
 public class Player extends SpriteAnimation {
 
     private int health;
@@ -97,20 +97,4 @@ public class Player extends SpriteAnimation {
     public void setAnimation(PlayerAnimation animation, boolean playOnce) {
         setAnimation(animation.name, playOnce);
     }
-
-    public void onCheckpointReached(Checkpoint checkpoint) {
-        checkpoint.onReached();
-        System.out.println("HERE");
-        //TODO: Celebrate?
-    }
-
-    public int getHealth() {
-        return health;
-    }
-
-    public void setHealth(int health) {
-        this.health = health;
-    }
-
-
 }

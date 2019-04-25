@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.gdx;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -8,9 +7,11 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import lombok.Data;
+
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
 
-
+@Data
 public class MyContactListener implements ContactListener {
 
     private boolean playerOnGround = false;
@@ -161,78 +162,10 @@ public class MyContactListener implements ContactListener {
     public void postSolve(Contact c, ContactImpulse ci) {
     }
 
-    public boolean isNewCheckpoint() {
-        return newCheckpoint;
-    }
-
-    public void setNewCheckpoint(boolean state) {
-        newCheckpoint = state;
-    }
-
-    public boolean isPlayerOnGround() {
-        return playerOnGround;
-    }
-
-    public boolean hasDoubleJump() {
-        return doubleJump;
-    }
-
-    public void setDoubleJump(boolean a) {
-        doubleJump = a;
-    }
-
-    public boolean hasDash() {
-        return dash;
-    }
-
-    public void setDash(boolean a) {
-        dash = a;
-    }
-
-    public boolean isInitSpawn() {
-        return initSpawn;
-    }
-
     public void setCurCheckpoint(Body new_vec) {
         initSpawn = false;
         newCheckpoint = false;
         curCheckpoint = new_vec;
-    }
-
-    public Vector2 getCurCheckpoint() {
-        return curCheckpoint.getPosition();
-    }
-
-    public int isWallJump() {
-        return wallJump;
-    }
-
-    public void setWallJump(int wallJump) {
-        this.wallJump = wallJump;
-    }
-
-    public short getDeathState() {
-        return deathState;
-    }
-
-    public void setDeathState(short deathState) {
-        this.deathState = deathState;
-    }
-
-    // public Vector2 isImpact() {
-    //     return impact;
-    // }
-
-    // public void setImpact(Vector2 impact) {
-    //     this.impact = impact;
-    // }
-
-    public void setEnd(boolean end) {
-        this.end = end;
-    }
-
-    public boolean isEnd() {
-        return end;
     }
 
 }
