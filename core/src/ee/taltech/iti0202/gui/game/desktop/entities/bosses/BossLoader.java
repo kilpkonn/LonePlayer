@@ -24,7 +24,6 @@ public class BossLoader {
 
     private Play play;
     private SpriteBatch spriteBatch;
-    private float scale = 1f;
     private Vector2 tempPosition;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
 
@@ -43,26 +42,26 @@ public class BossLoader {
         //                                                                     //
         /////////////////////////////////////////////////////////////////////////
 
-        scale = decider ? 1f : 0.5f;
+        float scale = decider ? 1f : 0.5f;
         tempPosition = position;
         bossLoader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses" + type + ".json"));
 
         switch (type) {
             case "1":
                 Array<Boss> tempArray = new Array<>();
-                initSnakePart(MagmaWorm.Part.HEAD, this.scale, tempArray);
-                tempPosition.y -= 60 * this.scale / PPM;
+                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray, scale);
+                tempPosition.y -= 60 * scale / PPM;
 
                 for (int i = 0; i < size; i++) {
                     if (i == size - 1) {
-                        initSnakePart(MagmaWorm.Part.TAIL, this.scale, tempArray);
+                        initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray, scale);
                     } else {
-                        initSnakePart(MagmaWorm.Part.BODY, this.scale, tempArray);
+                        initSnakePart(MagmaWorm.Part.BODY, scale, tempArray, scale);
                     }
                     //createRopeJointBetweenLinks(tempArray, -1f);
-                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.40f, this.scale, play.getWorld());
-                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.50f, this.scale, play.getWorld());
-                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.60f, this.scale, play.getWorld());
+                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.40f, scale, play.getWorld());
+                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.50f, scale, play.getWorld());
+                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.60f, scale, play.getWorld());
                     //createRopeJointGEOCordBetweenLinksPlantWorm(tempArray, 0.50f);
 
                 }
@@ -96,9 +95,9 @@ public class BossLoader {
                         if (i == 0 || i == vine - 1) {
                             BossHelper.createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j), i, play.getWorld());
                         } else {
-                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f, this.scale, play.getWorld());
-                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f, this.scale, play.getWorld());
-                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f, this.scale, play.getWorld());
+                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f, scale, play.getWorld());
+                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f, scale, play.getWorld());
+                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f, scale, play.getWorld());
                         }
                     }
                     tempPosition.y -= 10 / PPM;
@@ -132,22 +131,22 @@ public class BossLoader {
         Body body = play.getWorld().createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
-        Boss boss = PlantWorm.builder().body(body).yOffset(y).xOffset(x).size(size).type(BOSS).part(part).play(play).spriteBatch(spriteBatch).build();
+        Boss boss = PlantWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).xOffset(x).yOffset(y).time(0).build();
         for (Fixture fixture : boss.getBody().getFixtureList())
             fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
         boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
         tempArray2.get(size).add(boss);
     }
 
-    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray) {
+    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray, float scale) {
         MagmaWormProperties alias = new MagmaWormProperties(play.getBdef(), play.getFdef(), tempPosition);
         Body body = play.getWorld().createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), this.scale);
-        Boss boss = MagmaWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * this.scale).yOffset(50 * this.scale).build();
+        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
+        Boss boss = MagmaWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * scale).yOffset(50 * scale).build();
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
         tempArray.add(boss);
-        play.getTempPlayerLocation().y -= 50 * this.scale / PPM;
+        play.getTempPlayerLocation().y -= 50 * scale / PPM;
     }
 }

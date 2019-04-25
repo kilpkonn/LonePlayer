@@ -11,7 +11,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -33,6 +32,7 @@ import java.util.Map;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
@@ -58,7 +58,6 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIM
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
@@ -283,12 +282,13 @@ public class Play extends GameState {
 
         Draw draw = new Draw(this, sb);
 
+        PlayerLoader playerLoader = new PlayerLoader(this, sb);
         if (progress != null) {
             dimension = progress.dimension;
             draw.drawLayers();
-            initPlayer(progress);
+            playerLoader.initPlayer(progress);
         } else {
-            initPlayer();
+            playerLoader.initPlayer();
             draw.drawLayers();
         }
 
@@ -312,88 +312,6 @@ public class Play extends GameState {
 
     public Play(GameProgress progress) {
         this(progress.act, progress.map, progress.difficulty, progress);
-    }
-
-    ////////////////////////////////////////////////////////////////////   Create Animated bodies   ////////////////////////////////////////////////////////////////////
-
-    private void initPlayer(GameProgress progress) {
-        if (player != null) world.destroyBody(player.getBody());
-        bdef = new BodyDef();
-        fdef = new FixtureDef();
-        circle = new CircleShape();
-        polyShape = new PolygonShape();
-
-        bdef.position.set(progress.playerLocationX, progress.playerVelocityY);
-        bdef.linearVelocity.set(progress.playerVelocityX, progress.playerLocationY);
-
-        buildPlayer();
-    }
-
-    private void buildPlayer() {
-        short mask;
-        if (dimension) {
-            mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
-        } else {
-            mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
-        }
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        Body body = world.createBody(bdef);
-
-        polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(-20 / PPM, 20 / PPM), 0);
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-        fdef.filter.maskBits = mask;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("side_l");
-
-        polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(20 / PPM, 20 / PPM), 0);
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-        fdef.filter.maskBits = mask;
-        body.createFixture(fdef).setUserData("side_r");
-
-        fdef.isSensor = false;
-        circle.setRadius(9 / PPM);
-        fdef.shape = circle;
-        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-        fdef.filter.maskBits = mask;
-        body.createFixture(fdef).setFriction(FRICTION);
-        body.setUserData("playerBody");
-
-        polyShape.setAsBox(8 / PPM, 18 / PPM, new Vector2(0, 12 / PPM), 0);
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-        fdef.filter.maskBits = mask;
-        body.createFixture(fdef).setUserData("playerBody");
-
-        polyShape.setAsBox(4 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-        fdef.filter.maskBits = mask;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("foot");
-        player = new Player(body, sb);
-    }
-
-    public void initPlayer() {
-        if (player != null) world.destroyBody(player.getBody());
-        bdef = new BodyDef();
-        fdef = new FixtureDef();
-        circle = new CircleShape();
-        polyShape = new PolygonShape();
-
-        if (activeCheckpoint == null) {
-            if (initPlayerLocation == null) {
-                bdef.position.set(0, 0); // hopefully never get here
-            } else {
-                bdef.position.set(initPlayerLocation);
-            }
-        } else if (cl.isInitSpawn()) {
-            bdef.position.set(initPlayerLocation);
-        } else {
-            bdef.position.set(new Vector2(activeCheckpoint.getPosition()));
-        }
-        buildPlayer();
     }
 
     ////////////////////////////////////////////////////////////////////      Handle I/O devices    ////////////////////////////////////////////////////////////////////
@@ -625,7 +543,8 @@ public class Play extends GameState {
             }
             if (player.getHealth() <= 0) {
                 playSoundOnce("sounds/sfx_sound_shutdown1.wav");
-                initPlayer();
+                PlayerLoader playerLoader = new PlayerLoader(this, sb);
+                playerLoader.initPlayer();
             }
             cl.setDeathState((short) 0);
         }
@@ -912,9 +831,5 @@ public class Play extends GameState {
     public void dispose() {
         stage.dispose();
         System.gc();
-    }
-
-    public Player getPlayer() {
-        return player;
     }
 }

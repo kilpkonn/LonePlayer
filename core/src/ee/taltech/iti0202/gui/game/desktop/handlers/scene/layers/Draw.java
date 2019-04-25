@@ -22,6 +22,7 @@ import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.BossLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.bleeding.Bleeding;
@@ -248,7 +249,8 @@ public class Draw {
                     case "player":
                         if (play.getInitPlayerLocation() == null) {
                             play.setInitPlayerLocation(new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y));
-                            play.initPlayer();
+                            PlayerLoader playerLoader = new PlayerLoader(play, spriteBatch);
+                            playerLoader.initPlayer();
                         }
                         break;
 
@@ -277,4 +279,5 @@ public class Draw {
         Checkpoint checkpoint = new Checkpoint(body, spriteBatch);
         play.getCheckpointList().add(checkpoint);
     }
+
 }
