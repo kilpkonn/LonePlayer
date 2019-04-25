@@ -46,7 +46,7 @@ public class PlantWorm extends Boss {
         body.setUserData(type);
         setAnimation(PlantWormAnimation.IDLE.toString(), false);
         setAnimationSpeed(50);
-        setScale(size);
+        setScale(2); // support for only big plants
     }
 
     public enum PlantWormAnimation {
