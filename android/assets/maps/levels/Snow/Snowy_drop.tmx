@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="32" height="96" tilewidth="128" tileheight="128" infinite="0" nextlayerid="28" nextobjectid="285">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="32" height="96" tilewidth="128" tileheight="128" infinite="0" nextlayerid="28" nextobjectid="287">
  <tileset firstgid="1" source="../../tilesets/gamerart2d-plains.tsx"/>
  <tileset firstgid="56" source="../../tilesets/gamerart2d-snow.tsx"/>
  <objectgroup id="12" name="barrier">
@@ -9,6 +9,8 @@
   <object id="243" x="0" y="0" width="128" height="12288"/>
   <object id="283" x="2460.61" y="5012.12" width="1230.3" height="30.303"/>
   <object id="284" x="2730.3" y="9639.39" width="830.303" height="57.5758"/>
+  <object id="285" x="0" y="11776" width="4096" height="512"/>
+  <object id="286" x="6078.79" y="11545.5"/>
  </objectgroup>
  <objectgroup id="13" name="hitboxes_1"/>
  <objectgroup id="14" name="hitboxes_2"/>
