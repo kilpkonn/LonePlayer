@@ -12,7 +12,6 @@ import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 public class GameStateManager {
 
     private static Game game;
-    private static boolean booting = true;
     private static Stack<GameState> gameStates;
 
     public enum State {
@@ -35,10 +34,6 @@ public class GameStateManager {
 
     public static void render() {
         gameStates.peek().render();
-        if (booting) {
-            setState(State.MENU);
-            booting = false;
-        }
     }
 
     private static GameState getState(State state) {
