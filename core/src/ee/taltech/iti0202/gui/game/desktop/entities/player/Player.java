@@ -11,11 +11,13 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class Player extends SpriteAnimation {
 

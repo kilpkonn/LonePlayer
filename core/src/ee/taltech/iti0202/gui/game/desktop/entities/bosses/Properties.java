@@ -8,7 +8,7 @@ public abstract class Properties {
     private BodyDef bdef;
     private FixtureDef fdef;
 
-    protected Properties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
+    protected Properties(BodyDef bdef, FixtureDef fdef, Vector2 position) { //here is abstract class to construct boss base and fixture upon it
         this.bdef = bdef;
         this.fdef = fdef;
     }

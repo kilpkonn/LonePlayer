@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.joints.BossHelper;
@@ -26,10 +28,14 @@ public class BossLoader {
     private SpriteBatch spriteBatch;
     private Vector2 tempPosition;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
+    private FixtureDef fdef;
+    private BodyDef bdef;
 
-    public BossLoader(Play play, SpriteBatch spriteBatch) {
+    public BossLoader(Play play, SpriteBatch spriteBatch, FixtureDef fdef, BodyDef bdef) {
         this.play = play;
         this.spriteBatch = spriteBatch;
+        this.fdef = fdef;
+        this.bdef = bdef;
     }
 
     public void createBosses(Vector2 position, String type, boolean decider, int size) {
@@ -67,7 +73,7 @@ public class BossLoader {
                 }
                 BossHelper.filterTextures(tempArray);
 
-                play.getMagmabossArray().add(tempArray);
+                play.getMagmaBossArray().add(tempArray);
                 break;
 
             case "2":
@@ -109,11 +115,11 @@ public class BossLoader {
                 }
 
                 for (Array<Boss> bosses : tempArray2)
-                    play.getPlantbossArray().add(bosses);
+                    play.getPlantBossArray().add(bosses);
                 break;
 
             case "3":
-                SnowManProperties alias = new SnowManProperties(play.getBdef(), play.getFdef(), tempPosition);
+                SnowManProperties alias = new SnowManProperties(this.bdef, this.fdef, tempPosition);
                 Body body = play.getWorld().createBody(alias.getBdef());
                 body.createFixture(alias.getFdef());
                 bossLoader.attachFixture(body, "snowman", alias.getFdef(), 1f * size);
@@ -127,7 +133,7 @@ public class BossLoader {
     }
 
     private void initPlantPart(Array<Array<Boss>> tempArray2, PlantWorm.Part part, int size, float x, float y) {
-        PlantWormProperties alias = new PlantWormProperties(play.getBdef(), play.getFdef(), tempPosition);
+        PlantWormProperties alias = new PlantWormProperties(this.bdef, this.fdef, tempPosition);
         Body body = play.getWorld().createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
@@ -139,7 +145,7 @@ public class BossLoader {
     }
 
     private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray, float scale) {
-        MagmaWormProperties alias = new MagmaWormProperties(play.getBdef(), play.getFdef(), tempPosition);
+        MagmaWormProperties alias = new MagmaWormProperties(this.bdef, this.fdef, tempPosition);
         Body body = play.getWorld().createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);

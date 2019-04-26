@@ -4,20 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -25,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -53,6 +45,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BAC
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.CHECKPOINTS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DEBUG;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
@@ -87,63 +81,57 @@ public class Play extends GameState {
         DEFAULT,
     }
 
+    // set up LibGdx variables to set up game
     private World world;
+    private Draw draw;
+    private MyContactListener cl;
     private Box2DDebugRenderer b2dr;
     private OrthographicCamera b2dcam;
     private OrthographicCamera hudCam;
-    private MyContactListener cl;
-    private TiledMap tiledMap;
-    private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
+    private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
-    private Player player;
-    private boolean dimension;
+
+    // set up Entity based variables
+    private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
     private Array<Boss> SnowManArray;
-    private Array<Array<Boss>> MagmabossArray;
-    private Array<Array<Boss>> PlantbossArray;
+    private Array<Array<Boss>> MagmaBossArray;
+    private Array<Array<Boss>> PlantBossArray;
     private Array<Checkpoint> checkpointList;
     private Checkpoint activeCheckpoint;
+
+    // set up Player based variables
+    private Player player;
     private Vector2 tempPlayerLocation;
     private Vector2 initPlayerLocation;
-    private BodyDef bdef;
-    private PolygonShape polyShape;
-    private CircleShape circle;
-    private FixtureDef fdef;
+    private Vector2 current_force = new Vector2(0, 0);
+    private boolean newPlayer;
+    private int gracePeriod = 60;
+
+    // set up States
     private PauseMenu pauseMenu;
+    private pauseState playState = pauseState.DEFAULT;
     private SettingsMenu settingsMenu;
     private EndMenu endMenu;
-    private Hud hud;
+    private boolean executeEnd = true;
     private Stage stage;
-    private Texture backgroundTexture;
-    private ParallaxBackground parallaxBackground;
-    private Vector2 current_force = new Vector2(0, 0);
-    private TiledMapTileLayer background;
-    private TiledMapTileLayer foreground;
-    private TiledMapTileLayer dimension_2;
-    private TiledMapTileLayer dimension_1;
-    private pauseState playState = pauseState.DEFAULT;
-    private boolean gameFadeOut = false;
-    private boolean gameFadeDone = true;
-    private boolean dimensionFadeDone = false;
-    private boolean newPlayer;
-    private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
-    private float currentMenuFade = 1;
-    private float backgroundSpeed;
     private String act;
     private String map;
-    private int gracePeriod = 60;
+    private B2DVars.gameDifficulty difficulty;
+
+    // set up background based variables
+    private Texture backgroundTexture;
+    private ParallaxBackground parallaxBackground;
+    private float backgroundSpeed;
+
+    // boss logic, helpful variables
     private int takingTurnsBase = 10; // how long one boss attacks
-    private int curtentlyActiveBoss = 0;
+    private int currentlyActiveBoss = 0;
     private int timeElapsed = 0;
     private int PlantBossSize = 1;
-    private boolean executeEnd = true;
-    private B2DVars.gameDifficulty difficulty;
-    private boolean checkpoints = true;
-    private boolean bosses = true;
-
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
-    Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
+    private Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
         this.act = act;
         this.map = map;
         this.difficulty = difficulty;
@@ -155,22 +143,22 @@ public class Play extends GameState {
             case EASY:
                 DMG_MULTIPLIER = 1;
                 DMG_ON_LANDING = 10;
-                checkpoints = true;
-                bosses = false;
+                CHECKPOINTS = true;
+                BOSSES = false;
                 break;
 
             case HARD:
                 DMG_MULTIPLIER = 1.5f;
                 DMG_ON_LANDING = 9;
-                checkpoints = true;
-                bosses = true;
+                CHECKPOINTS = true;
+                BOSSES = true;
                 break;
 
             case BRUTAL:
                 DMG_MULTIPLIER = 2;
                 DMG_ON_LANDING = 8;
-                checkpoints = false;
-                bosses = true;
+                CHECKPOINTS = false;
+                BOSSES = true;
                 break;
         }
 
@@ -194,18 +182,11 @@ public class Play extends GameState {
         if (DEBUG) b2dr = new Box2DDebugRenderer();
         checkpointList = new Array<>();
 
-        // create shapes
-        bdef = new BodyDef();
-        polyShape = new PolygonShape();
-        circle = new CircleShape();
-        fdef = new FixtureDef();
-
         // create array for bosses
-        dimension = true;
         tempPlayerLocation = new Vector2();
         SnowManArray = new Array<>();
-        MagmabossArray = new Array<>();
-        PlantbossArray = new Array<>();
+        MagmaBossArray = new Array<>();
+        PlantBossArray = new Array<>();
 
         //set up cameras
         b2dcam = new OrthographicCamera();
@@ -219,8 +200,6 @@ public class Play extends GameState {
             public void run() {
                 playState = pauseState.RUN;
                 UPDATE = true;
-                gameFadeOut = false;
-                gameFadeDone = false;
             }
         }, new Runnable() {
             @Override
@@ -274,17 +253,11 @@ public class Play extends GameState {
         ////////////////////////////////    Tiled stuff here    ///////////////////////
 
 
-        // load tiled map
-        String path = PATH + "maps/levels/" + act + "/" + map;
-        tiledMap = new TmxMapLoader().load(path);
-        renderer = new OrthogonalTiledMapRenderer(tiledMap);
-        animatedCells = new HashMap<>();
-
-        Draw draw = new Draw(this, sb);
+        draw = new Draw(this, sb);
 
         PlayerLoader playerLoader = new PlayerLoader(this, sb);
         if (progress != null) {
-            dimension = progress.dimension;
+            draw.setDimension(progress.dimension);
             draw.drawLayers();
             playerLoader.initPlayer(progress);
         } else {
@@ -300,10 +273,6 @@ public class Play extends GameState {
         newPlayer = true;
         UPDATE = true;
         cam.zoom = 1;
-
-        currentMenuFade = 1;
-        gameFadeDone = false;
-        gameFadeOut = false;
     }
 
     public Play(String act, String map, B2DVars.gameDifficulty difficulty) {
@@ -325,13 +294,13 @@ public class Play extends GameState {
             if (playState == pauseState.RUN) {
                 UPDATE = false;
                 playState = pauseState.PAUSE;
-                gameFadeOut = true;
-                gameFadeDone = false;
+                draw.setGameFadeOut(true);
+                draw.setGameFadeDone(false);
             } else {
                 UPDATE = true;
                 playState = pauseState.RUN;
-                gameFadeOut = false;
-                gameFadeDone = false;
+                draw.setGameFadeOut(false);
+                draw.setGameFadeDone(false);
             }
         }
 
@@ -339,11 +308,11 @@ public class Play extends GameState {
             //change dimension
             if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
                 System.out.println("changed dimension");
-                dimensionFadeDone = false;
-                dimension = !dimension;
+                draw.setDimensionFadeDone(false);
+                draw.setDimension(!draw.isDimension());
 
                 short mask;
-                if (dimension) {
+                if (draw.isDimension()) {
                     mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
                 } else {
                     mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
@@ -449,13 +418,13 @@ public class Play extends GameState {
 
         if (cl.isEnd() && (playState == pauseState.RUN || playState == pauseState.PAUSE)) {
             UPDATE = false;
-            gameFadeOut = true;
-            gameFadeDone = false;
+            draw.setGameFadeOut(true);
+            draw.setGameFadeDone(false);
             playState = pauseState.END;
         }
 
-        updateGameFade(dt);
-        updateDimensionFade(dt);
+        draw.updateGameFade(dt);
+        draw.updateDimensionFade(dt);
 
         switch (playState) {
             case RUN:
@@ -597,8 +566,8 @@ public class Play extends GameState {
             }
         }
 
-        if (MagmabossArray.size != 0) {
-            for (Array<Boss> bossList : MagmabossArray)
+        if (MagmaBossArray.size != 0) {
+            for (Array<Boss> bossList : MagmaBossArray)
                 for (int i = 0; i < bossList.size; i++) {
                     if (bossList.size > 110) {
                         if (i == bossList.size - 1) {
@@ -617,18 +586,18 @@ public class Play extends GameState {
         }
 
 
-        if (PlantbossArray.size != 0) {
+        if (PlantBossArray.size != 0) {
             int takingTurns = takingTurnsBase * Gdx.graphics.getFramesPerSecond();
             timeElapsed++;
             if (timeElapsed > takingTurns) {
                 timeElapsed = 0;
-                curtentlyActiveBoss = (curtentlyActiveBoss + 1) % PlantBossSize;
+                currentlyActiveBoss = (currentlyActiveBoss + 1) % PlantBossSize;
             }
             int j = 0;
-            for (Array<Boss> bossList : PlantbossArray) {
+            for (Array<Boss> bossList : PlantBossArray) {
                 for (int i = 0; i < bossList.size; i++) {
                     if (i == 0) {
-                        if (j == curtentlyActiveBoss) {
+                        if (j == currentlyActiveBoss) {
                             bossList.get(i).updateHeadBig(dt);
                         } else {
                             bossList.get(i).updateCircularMotion(dt);
@@ -684,53 +653,6 @@ public class Play extends GameState {
         else pauseMenu.render(sb);
     }
 
-    private void updateGameFade(float dt) {
-        if (!gameFadeDone) {
-            if (gameFadeOut) {
-                if (currentMenuFade < B2DVars.MENU_FADE_AMOUNT) {
-                    currentMenuFade += (B2DVars.MENU_FADE_AMOUNT / B2DVars.MENU_FADE_TIME) * dt;
-                } else {
-                    currentMenuFade = B2DVars.MENU_FADE_AMOUNT;
-                    gameFadeDone = true;
-                }
-            } else {
-                if (currentMenuFade > 0) {
-                    currentMenuFade -= (B2DVars.MENU_FADE_AMOUNT / B2DVars.MENU_FADE_TIME) * dt;
-                } else {
-                    currentMenuFade = 0;
-                    gameFadeDone = true;
-                }
-            }
-
-            /*parallaxBackground.setColor(1, 1, 1, 1 - currentMenuFade);
-            player.setOpacity(1 - currentMenuFade);
-            if (checkpoint != null) checkpoint.setOpacity(1 - currentMenuFade);*/
-        }
-    }
-
-    private void updateDimensionFade(float dt) {
-        if (!dimensionFadeDone) {
-            if (dimension) {
-                if (currentDimensionFade > 0) {
-                    currentDimensionFade -= (B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
-                } else {
-                    currentDimensionFade = 0;
-                    dimensionFadeDone = true;
-                }
-            } else {
-                if (currentDimensionFade < B2DVars.DIMENSION_FADE_AMOUNT) {
-                    currentDimensionFade += (B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
-                } else {
-                    currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
-                    dimensionFadeDone = true;
-                }
-            }
-            if (dimension_1 != null) dimension_1.setOpacity(1 - currentDimensionFade);
-            if (dimension_2 != null)
-                dimension_2.setOpacity((1 - B2DVars.DIMENSION_FADE_AMOUNT) + currentDimensionFade);
-        }
-    }
-
     private void drawAndSetCamera() {
 
         //clear screen
@@ -757,17 +679,7 @@ public class Play extends GameState {
             cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
 
         //draw tilemap
-        renderer.setView(cam);
-        renderer.getBatch().begin();
-        if (background != null) renderer.renderTileLayer(background);
-        if (foreground != null) renderer.renderTileLayer(foreground);
-        if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
-        if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
-        renderer.getBatch().end();
-
-        if (DEBUG) b2dr.render(world, b2dcam.combined);
-
-        sb.setProjectionMatrix(cam.combined);
+        draw.render(cam);
 
         // draw checkpoint
         if (checkpointList.size != 0)
@@ -782,13 +694,13 @@ public class Play extends GameState {
             for (Boss boss : SnowManArray)
                 boss.render(sb);
 
-        if (MagmabossArray != null) {
-            for (Array<Boss> bossList : MagmabossArray)
+        if (MagmaBossArray != null) {
+            for (Array<Boss> bossList : MagmaBossArray)
                 for (Boss boss : bossList) boss.render(sb);
         }
 
-        if (PlantbossArray != null) {
-            for (Array<Boss> bossList : PlantbossArray) {
+        if (PlantBossArray != null) {
+            for (Array<Boss> bossList : PlantBossArray) {
                 for (Boss boss : bossList) boss.render(sb);
                 bossList.get(0).render(sb);
             }
@@ -796,22 +708,7 @@ public class Play extends GameState {
 
         hud.render(sb);
 
-        if (currentMenuFade > 0) {
-            /*renderer.getBatch().setColor(0, 0, 0, 1);
-            if (background != null) renderer.renderTileLayer(background);
-            if (foreground != null) renderer.renderTileLayer(foreground);
-            if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
-            if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
-            renderer.getBatch().setColor(1, 1, 1, 1 - currentMenuFade);*/
-            Gdx.gl.glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-            ShapeRenderer shapeRenderer = new ShapeRenderer();
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(0, 0, 0, currentMenuFade);
-            shapeRenderer.rect(0, 0, B2DVars.V_WIDTH, B2DVars.V_HEIGHT);
-            shapeRenderer.end();
-        }
+        draw.renderFade();
     }
 
     private void saveGame() {
@@ -822,7 +719,7 @@ public class Play extends GameState {
         progress.playerVelocityY = player.getBody().getLinearVelocity().y;
         progress.act = act;
         progress.map = map;
-        progress.dimension = dimension;
+        progress.dimension = draw.isDimension();
         progress.difficulty = difficulty;
 
         progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");

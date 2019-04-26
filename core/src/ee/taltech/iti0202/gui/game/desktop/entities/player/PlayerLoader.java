@@ -34,7 +34,7 @@ public class PlayerLoader {
 
     private void buildPlayer(BodyDef bdef) {
         short mask;
-        if (play.isDimension()) {
+        if (play.getDraw().isDimension()) {
             mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
         } else {
             mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;

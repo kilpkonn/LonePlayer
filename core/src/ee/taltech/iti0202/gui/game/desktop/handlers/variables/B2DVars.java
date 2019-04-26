@@ -17,10 +17,13 @@ public class B2DVars {
     public static float PLAYER_DASH_FORCE_UP = 250 * STEP;
     public static float PLAYER_DASH_FORCE_SIDE = 150 * STEP;
 
+    // difficulty variables
     public static float PLAYER_ANIMATION_CHANGE_SPEED = 0.5f;
     public static float ROLL_ON_LANDING_SPEED = 3;
     public static float DMG_MULTIPLIER = 3;
     public static float DMG_ON_LANDING = 7;
+    public static boolean CHECKPOINTS = true;
+    public static boolean BOSSES = true;
 
     public enum gameDifficulty {
 
