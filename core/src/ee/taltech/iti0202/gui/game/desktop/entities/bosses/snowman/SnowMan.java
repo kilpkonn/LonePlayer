@@ -6,10 +6,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import lombok.Builder;
-import lombok.Data;
 
 @Builder
-@Data
 public class SnowMan extends Boss {
 
     private Body body;

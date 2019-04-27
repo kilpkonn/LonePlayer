@@ -20,7 +20,7 @@ public class PlantWorm extends Boss {
     private final float max_speed = 3;
     private float time = 0;
 
-    private Body body; //TODO: <- this is definitely not how OOP works (protected <-> private)
+    private Body body;
     private SpriteBatch spriteBatch;
     private String type;
     private Play play;

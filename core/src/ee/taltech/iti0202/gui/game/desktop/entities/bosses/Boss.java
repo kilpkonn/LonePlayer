@@ -8,29 +8,45 @@ import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class Boss extends SpriteAnimation {
 
     public Play getPlay() {
         return play;
     }
 
-    protected Body body;
-    protected SpriteBatch spriteBatch;
-    protected String type;
     protected Play play;
+    protected SpriteBatch spriteBatch;
+    protected String path;
+    protected String entity;
+    protected float xOffset;
+    protected float yOffset;
     private float time = 0;
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
         super(body, sb, path, entity);
         this.play = play;
+        this.body = body;
+        this.spriteBatch = sb;
+        this.path = path;
+        this.entity = entity;
+        this.yOffset = 0;
+        this.xOffset = 0;
+
     }
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity, float x, float y) {
         super(body, sb, path, entity, x, y);
         this.play = play;
+        this.body = body;
+        this.spriteBatch = sb;
+        this.path = path;
+        this.entity = entity;
+        this.yOffset = y;
+        this.xOffset = x;
+
     }
 
     public void updateRotation(float dt) {
