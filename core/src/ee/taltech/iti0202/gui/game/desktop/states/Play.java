@@ -83,7 +83,7 @@ public class Play extends GameState {
         DEFAULT,
     }
 
-    // set up LibGdx variables to set up game
+    // LibGdx variables
     private World world;
     private Draw draw;
     private MyContactListener cl;
@@ -93,7 +93,7 @@ public class Play extends GameState {
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
 
-    // set up Entity based variables
+    // Entity based variables
     private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
     private Array<Boss> SnowManArray;
     private Array<Array<Boss>> MagmaBossArray;
@@ -101,7 +101,7 @@ public class Play extends GameState {
     private Array<Checkpoint> checkpointList;
     private Checkpoint activeCheckpoint;
 
-    // set up Player based variables
+    // Player based variables
     private Player player;
     private Vector2 tempPlayerLocation;
     private Vector2 initPlayerLocation;
@@ -109,7 +109,7 @@ public class Play extends GameState {
     private boolean newPlayer;
     private int gracePeriod = 60;
 
-    // set up States
+    // States
     private PauseMenu pauseMenu;
     private pauseState playState = pauseState.DEFAULT;
     private SettingsMenu settingsMenu;
@@ -120,15 +120,16 @@ public class Play extends GameState {
     private String map;
     private B2DVars.gameDifficulty difficulty;
 
-    // set up background based variables
+    // Background based variables
     private Texture backgroundTexture;
     private ParallaxBackground parallaxBackground;
     private float backgroundSpeed;
 
-    // boss logic, helpful variables
+    // Boss logic, helpful variables
     private int takingTurnsBase = 10; // how long one boss attacks
     private int currentlyActiveBoss = 0;
     private int timeElapsed = 0;
+    private Vector2 camSpeed = new Vector2(0, 0);
     private int PlantBossSize = 1;
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
@@ -295,6 +296,7 @@ public class Play extends GameState {
         if (MyInput.isPressed(Game.settings.ESC)) {
             if (playState == pauseState.RUN) {
                 UPDATE = false;
+                parallaxBackground.setSpeed(0);
                 playState = pauseState.PAUSE;
                 draw.setGameFadeOut(true);
                 draw.setGameFadeDone(false);
@@ -480,9 +482,11 @@ public class Play extends GameState {
             cl.setDoubleJump(true);
 
         } else {
+            camSpeed = new Vector2((player.getPosition().x - cam.position.x / PPM) * 2 * PPM,
+                    (player.getPosition().y - cam.position.y / PPM) * 2 * PPM);
 
-            cam.position.x += (player.getPosition().x - cam.position.x / PPM) * 2 * PPM * dt;
-            cam.position.y += (player.getPosition().y - cam.position.y / PPM) * 2 * PPM * dt;
+            cam.position.x += camSpeed.x * dt;
+            cam.position.y += camSpeed.y * dt;
         }
 
         cam.position.x = Math.round(cam.position.x);
@@ -672,7 +676,7 @@ public class Play extends GameState {
         sb.begin();
         sb.draw(backgroundTexture, 0, 0);
         sb.end();
-        parallaxBackground.setSpeed(backgroundSpeed * (current_force.x * 5 + 4)); //TODO: more advance stuff here, move with camera...
+        parallaxBackground.setSpeed(backgroundSpeed + camSpeed.x / 10);
         stage.act();
         stage.draw();
 
@@ -723,6 +727,7 @@ public class Play extends GameState {
         progress.map = map;
         progress.dimension = draw.isDimension();
         progress.difficulty = difficulty;
+        //TODO: Save bosses location and speed
 
         progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }
