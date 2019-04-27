@@ -72,6 +72,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.got
 @Data
 public class Play extends GameState {
 
+    // Play is the root node for most of the action
+
     public enum pauseState {
         PAUSE,
         RUN,
@@ -538,8 +540,8 @@ public class Play extends GameState {
             if (cl.isNewCheckpoint()) {
                 Checkpoint curTemp = checkpointList.get(0); // just in case
                 for (Checkpoint checkpoint : checkpointList) {
-                    if (Math.abs(checkpoint.getPosition().x - player.getBody().getPosition().x) < 1 &&
-                            Math.abs(checkpoint.getPosition().x - player.getBody().getPosition().x) < 1) {
+                    if (Math.pow(checkpoint.getPosition().x - player.getBody().getPosition().x, 2) + Math.pow(checkpoint.getPosition().y - player.getBody().getPosition().y, 2) <=
+                            Math.pow(curTemp.getPosition().x - player.getBody().getPosition().x, 2) + Math.pow(curTemp.getPosition().y - player.getBody().getPosition().y, 2)) {
                         curTemp = checkpoint;
                     }
                 }

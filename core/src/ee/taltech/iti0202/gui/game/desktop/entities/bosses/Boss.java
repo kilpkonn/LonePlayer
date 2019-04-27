@@ -8,17 +8,20 @@ import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import lombok.Getter;
 
+@Getter
 public class Boss extends SpriteAnimation {
 
     public Play getPlay() {
         return play;
     }
 
+    protected Body body;
+    protected SpriteBatch spriteBatch;
+    protected String type;
     protected Play play;
-
     private float time = 0;
-    private final float optimalDistanceFromPlayer = 5f;
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
         super(body, sb, path, entity);
@@ -60,6 +63,7 @@ public class Boss extends SpriteAnimation {
 
         float distance = (float) Math.sqrt(Math.pow(player.x - boss.x, 2) + Math.pow(player.y - boss.x, 2));
 
+        float optimalDistanceFromPlayer = 5f;
         if (distance < optimalDistanceFromPlayer) {
 
             /*body.setLinearVelocity(body.getLinearVelocity().x * 0.99f + ((player.x - boss.x) * -1) * 0.005f,

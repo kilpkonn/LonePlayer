@@ -7,9 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import java.util.ArrayList;
 import java.util.List;
 
-import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -79,18 +77,17 @@ public class Player extends SpriteAnimation {
                 health = Math.max(0, health);
             }
             if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
-                if (MyInput.isDown(Game.settings.JUMP)) {
-                    //body.applyForceToCenter(new Vector2(PLAYER_SPEED * velocity.x / Math.abs(velocity.x), 0), true); // Change to impulse?
-                    setAnimation(PlayerAnimation.ROLL2, true);
-                } else if (!getCurrentAnimation().name.equals(PlayerAnimation.ROLL2.name)) {
+                //body.applyForceToCenter(new Vector2(PLAYER_SPEED * velocity.x / Math.abs(velocity.x), 0), true); // Change to impulse?
+                setAnimation(PlayerAnimation.ROLL2, true);
+                if (Math.abs(velocity.y) < ROLL_ON_LANDING_SPEED) {
                     health -= Math.abs(velocity.y / 2);
                     health = Math.max(health, 0);
                     setAnimation(PlayerAnimation.FACEPLANT, true);
                 }
             }
         }
-
     }
+
 
     public void setAnimation(PlayerAnimation animation) {
         setAnimation(animation.name, false);

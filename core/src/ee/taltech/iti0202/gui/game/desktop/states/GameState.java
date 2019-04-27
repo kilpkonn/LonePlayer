@@ -15,7 +15,6 @@ public abstract class GameState {
 
     //protected GameStateManager gsm;
     protected Game game;
-
     protected SpriteBatch sb;
     protected OrthographicCamera cam; // follows the player
     protected OrthographicCamera hudCam; // stationary hud
