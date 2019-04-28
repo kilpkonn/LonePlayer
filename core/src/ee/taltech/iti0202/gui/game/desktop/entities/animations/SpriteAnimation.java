@@ -11,9 +11,11 @@ import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
+import lombok.AllArgsConstructor;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 
+@AllArgsConstructor
 public class SpriteAnimation {
 
     private MyPlayerTweener playerTweener;
@@ -109,5 +111,7 @@ public class SpriteAnimation {
     public Vector2 getPosition() {
         return body.getPosition();
     }
+
+    public Vector2 getVelocity() {return body.getLinearVelocity(); }
 
 }

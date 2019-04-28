@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
@@ -23,6 +24,7 @@ public class Boss extends SpriteAnimation {
     protected String entity;
     protected float xOffset;
     protected float yOffset;
+    protected float size;
     private float time = 0;
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
@@ -37,13 +39,14 @@ public class Boss extends SpriteAnimation {
 
     }
 
-    protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity, float x, float y) {
+    protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity, float size, float x, float y) {
         super(body, sb, path, entity, x, y);
         this.play = play;
         this.body = body;
         this.spriteBatch = sb;
         this.path = path;
         this.entity = entity;
+        this.size = size;
         this.yOffset = y;
         this.xOffset = x;
 

@@ -2,6 +2,7 @@ package ee.taltech.iti0202.gui.game.desktop.states.gameprogress;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -9,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
@@ -18,6 +21,7 @@ public class GameProgress {
     public float playerLocationY;
     public float playerVelocityX;
     public float playerVelocityY;
+    public List<BossData> bosses = new ArrayList<>();
     public boolean dimension;
     public B2DVars.gameDifficulty difficulty;
     public String act;
@@ -30,7 +34,7 @@ public class GameProgress {
             File f = new File(path);
             if (!f.exists()) {
                 boolean newFile = f.getParentFile().mkdirs();
-                newFile =  newFile && f.createNewFile();
+                newFile =  newFile || f.createNewFile();
                 System.out.println(newFile ? "Created new game progress file!" : "Failed to create file.");
             }
             FileWriter writer = new FileWriter(f, false);

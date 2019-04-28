@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.states.gameprogress;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
@@ -20,6 +21,20 @@ public class GameProgressSerializer implements JsonSerializer<GameProgress> {
         result.add("dimension", new JsonPrimitive(progress.dimension));
         result.add("playerVelocityX", new JsonPrimitive(progress.playerVelocityX));
         result.add("playerVelocityY", new JsonPrimitive(progress.playerVelocityY));
+
+        JsonArray bossesArray = new JsonArray();
+        for (BossData b : progress.bosses) {
+            JsonObject obj = new JsonObject();
+            obj.add("type", new JsonPrimitive(b.type));
+            obj.add("size", new JsonPrimitive(b.size));
+            obj.add("location_x", new JsonPrimitive(b.locationX));
+            obj.add("location_y", new JsonPrimitive(b.locationY));
+            obj.add("speed_x", new JsonPrimitive(b.speedX));
+            obj.add("speed_y", new JsonPrimitive(b.speedY));
+            bossesArray.add(obj);
+        }
+        result.add("bosses", bossesArray);
+
         return result;
     }
 }

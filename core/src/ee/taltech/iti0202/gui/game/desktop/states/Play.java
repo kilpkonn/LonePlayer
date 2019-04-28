@@ -36,6 +36,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.layers.Draw;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -728,6 +729,31 @@ public class Play extends GameState {
         progress.dimension = draw.isDimension();
         progress.difficulty = difficulty;
         //TODO: Save bosses location and speed
+
+        if (SnowManArray != null)
+            for (Boss boss: SnowManArray) {
+                BossData bossData = new BossData("3", boss.getSize(), boss.getPosition().x, boss.getPosition().y, boss.getVelocity().x, boss.getVelocity().y );
+                progress.bosses.add(bossData);
+            }
+
+        if (MagmaBossArray != null) {
+            for (Array<Boss> bossArray : MagmaBossArray) {
+                for (Boss boss : bossArray) {
+                    BossData bossData = new BossData("1", boss.getSize(), boss.getPosition().x, boss.getPosition().y, boss.getVelocity().x, boss.getVelocity().y);
+                    progress.bosses.add(bossData);
+                }
+            }
+        }
+
+        if (PlantBossArray != null) {
+            for (Array<Boss> bossArray : PlantBossArray) {
+                for (Boss boss : bossArray) {
+                    BossData bossData = new BossData("2", boss.getSize(), boss.getPosition().x, boss.getPosition().y, boss.getVelocity().x, boss.getVelocity().y);
+                    progress.bosses.add(bossData);
+                }
+            }
+        }
+
 
         progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }

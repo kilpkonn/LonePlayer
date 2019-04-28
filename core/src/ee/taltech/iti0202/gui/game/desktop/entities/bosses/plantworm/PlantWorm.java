@@ -34,7 +34,7 @@ public class PlantWorm extends Boss {
     }
 
     public PlantWorm(float time, Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
-        super(body, sb, play, "images/bosses/plantworm/plantworm.scml", part.name, x, y);
+        super(body, sb, play, "images/bosses/plantworm/plantworm.scml", part.name, size, x, y);
         this.body = body;
         this.spriteBatch = sb;
         this.type = type;
@@ -43,7 +43,7 @@ public class PlantWorm extends Boss {
         this.size = size;
         this.xOffset = x;
         this.yOffset = y;
-        this.time = 0;
+        this.time = time;
 
         body.setUserData(type);
         setAnimation(PlantWormAnimation.IDLE.toString(), false);
