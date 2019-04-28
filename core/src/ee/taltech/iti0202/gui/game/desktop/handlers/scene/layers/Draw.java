@@ -29,6 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.BossLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
@@ -36,6 +37,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.bleeding.Bleeding;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
 import lombok.Data;
 
@@ -128,7 +130,7 @@ public class Draw {
         play.getCheckpointList().add(checkpoint);
     }
 
-    public void drawLayers() {
+    public void drawLayers(boolean defaultSpawn, List<BossData> bosses) {
         for (MapLayer layer : tiledMap.getLayers()) {
             switch (layer.getName()) {
                 case "barrier":
@@ -152,12 +154,17 @@ public class Draw {
                     determineMapObject(layer);
                     break;
                 default:
-                    readVertices((TiledMapTileLayer) layer);
+                    readVertices((TiledMapTileLayer) layer, defaultSpawn);
             }
+        }
+
+        if (!defaultSpawn) {
+            BossLoader bossLoader = new BossLoader(play, spriteBatch, fdef, bdef);
+            bossLoader.createAllBosses(bosses);
         }
     }
 
-    private void readVertices(TiledMapTileLayer layer) {
+    private void readVertices(TiledMapTileLayer layer, boolean defaultSpawn) {
         int[] corner_coords = SQUARE_CORNERS;
         String type = layer.getName();
         boolean isSensor = false;
@@ -222,7 +229,7 @@ public class Draw {
                 Bleeding.fixBleeding(cell.getTile().getTextureRegion()); // fix bleeding hopefully
 
                 if (cell.getTile().getProperties().containsKey("animation")) {
-                    Texture tex = Game.res.getTexture("Player");
+                    Texture tex = Game.res.getTexture("Player"); // TODO: <- Wut is dis? misleading names or obsolete?
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
                     play.getAnimatedCells().put(cell, new Animation(sprites, 1 / 12f));
                 }
@@ -269,18 +276,18 @@ public class Draw {
                         break;
 
                     case "bosses_small":
-                        if (B2DVars.BOSSES) {
+                        if (B2DVars.BOSSES && defaultSpawn) {
                             bossLoader.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), false, (Integer) layer.getProperties().get("size"));
                         }
                         break;
 
                     case "bosses_big":
-                        if (B2DVars.BOSSES) {
+                        if (B2DVars.BOSSES && defaultSpawn) {
                             bossLoader.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
                         }
                         break;
                     case "bosses":
-                        if (B2DVars.BOSSES) {
+                        if (B2DVars.BOSSES && defaultSpawn) {
                             bossLoader.createBosses(new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y), layer.getProperties().get("type").toString(), true, (Integer) layer.getProperties().get("size"));
                         }
                         break;

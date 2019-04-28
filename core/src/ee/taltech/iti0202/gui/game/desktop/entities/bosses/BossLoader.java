@@ -9,6 +9,8 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.List;
+
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.joints.BossHelper;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWormProperties;
@@ -17,6 +19,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormPr
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowMan;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManProperties;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
@@ -38,8 +41,14 @@ public class BossLoader {
         this.bdef = bdef;
     }
 
-    public void createBosses(Vector2 position, String type, boolean decider, int size) {
+    public void createAllBosses(List<BossData> bosses) {
+        for (BossData boss : bosses) {
+            createBosses(new Vector2(boss.locationX, boss.locationY), boss.type, boss.decider, boss.size);
+        }
+    }
 
+    public void createBosses(Vector2 position, String type, boolean decider, int size) {
+        //TODO: Fix this thing
         /////////////////////////////////////////////////////////////////////////
         //                                                                     //
         //   TYPE 1: MAGMA BOSS, can flu through walls n shit                  //
@@ -55,14 +64,14 @@ public class BossLoader {
         switch (type) {
             case "1":
                 Array<Boss> tempArray = new Array<>();
-                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray, scale);
+                initSnakePart(MagmaWorm.Part.HEAD, size, tempArray, scale);
                 tempPosition.y -= 60 * scale / PPM;
 
                 for (int i = 0; i < size; i++) {
                     if (i == size - 1) {
-                        initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray, scale);
+                        initSnakePart(MagmaWorm.Part.TAIL, size, tempArray, scale);
                     } else {
-                        initSnakePart(MagmaWorm.Part.BODY, scale, tempArray, scale);
+                        initSnakePart(MagmaWorm.Part.BODY, size, tempArray, scale);
                     }
                     //createRopeJointBetweenLinks(tempArray, -1f);
                     BossHelper.createDistanceJointBetweenLinks(tempArray, 0.40f, scale, play.getWorld());
@@ -144,7 +153,7 @@ public class BossLoader {
         tempArray2.get(size).add(boss);
     }
 
-    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray, float scale) {
+    private void initSnakePart(MagmaWorm.Part part, int size, Array<Boss> tempArray, float scale) {
         MagmaWormProperties alias = new MagmaWormProperties(this.bdef, this.fdef, tempPosition);
         Body body = play.getWorld().createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
