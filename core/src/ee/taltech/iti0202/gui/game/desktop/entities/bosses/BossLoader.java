@@ -55,14 +55,14 @@ public class BossLoader {
         switch (type) {
             case "1":
                 Array<Boss> tempArray = new Array<>();
-                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray, scale);
+                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray);
                 tempPosition.y -= 60 * scale / PPM;
 
                 for (int i = 0; i < size; i++) {
                     if (i == size - 1) {
-                        initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray, scale);
+                        initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray);
                     } else {
-                        initSnakePart(MagmaWorm.Part.BODY, scale, tempArray, scale);
+                        initSnakePart(MagmaWorm.Part.BODY, scale, tempArray);
                     }
                     //createRopeJointBetweenLinks(tempArray, -1f);
                     BossHelper.createDistanceJointBetweenLinks(tempArray, 0.40f, scale, play.getWorld());
@@ -144,15 +144,15 @@ public class BossLoader {
         tempArray2.get(size).add(boss);
     }
 
-    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray, float scale) {
+    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray) {
         MagmaWormProperties alias = new MagmaWormProperties(this.bdef, this.fdef, tempPosition);
         Body body = play.getWorld().createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), scale);
-        Boss boss = MagmaWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * scale).yOffset(50 * scale).build();
+        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), size);
+        Boss boss = MagmaWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build();
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
         tempArray.add(boss);
-        play.getTempPlayerLocation().y -= 50 * scale / PPM;
+        play.getTempPlayerLocation().y -= 50 * size / PPM;
     }
 }
