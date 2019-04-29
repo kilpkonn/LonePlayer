@@ -207,6 +207,8 @@ public class Play extends GameState {
             @Override
             public void run() {
                 playState = pauseState.RUN;
+                draw.setGameFadeOut(false);
+                draw.setGameFadeDone(false);
                 UPDATE = true;
             }
         }, new Runnable() {
