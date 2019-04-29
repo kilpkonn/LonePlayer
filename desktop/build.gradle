@@ -7,17 +7,6 @@ project.ext.mainClassName = "ee.taltech.iti0202.gui.game.desktop.DesktopLauncher
 project.ext.assetsDir = new File("../android/assets")
 
 
-task fatJar(type: Jar) {
-    manifest {
-        attributes 'Implementation-Title': 'Gradle Jar File Example',
-                'Implementation-Version': version,
-                'Main-Class': 'com.mkyong.DateUtils'
-    }
-    baseName = project.name + '-all'
-    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-
 dependencies {
     compile 'ch.qos.logback:logback-classic:1.2.3'
 }
@@ -37,7 +26,6 @@ task dist(type: Jar) {
     from files(sourceSets.main.output.classesDirs)
     from files(sourceSets.main.output.resourcesDir)
     from { configurations.compile.collect { zipTree(it) } }
-    from files(project.assetsDir)
 
     manifest {
         attributes 'Main-Class': project.mainClassName

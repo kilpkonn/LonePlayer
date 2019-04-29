@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.scene.bleeding;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Bleeding {
@@ -15,8 +14,8 @@ public class Bleeding {
         float invTexHeight = 1f / region.getTexture().getHeight();
         region.setRegion((x + fix) * invTexWidth, (y + fix) * invTexHeight, (x + width - fix) * invTexWidth, (y + height - fix) * invTexHeight); // Trims
 
-        region.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
-        region.getTexture().getTextureData().useMipMaps();
+        ///region.getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear); //linear no good
+        //region.getTexture().getTextureData().useMipMaps();
     }
 
     public static void fixBleeding(TextureRegion[][] region) {
