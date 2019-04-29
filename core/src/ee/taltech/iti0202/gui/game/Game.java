@@ -66,9 +66,7 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
-        B2DVars.PATH = "assets/"; //TODO: this?
-
-        // // TODO: make it work .ref - https://socket.io/blog/native-socket-io-and-android/
+        //B2DVars.PATH = "assets/"; //TODO: this?
 
         // aiServer = new Server();
         // aiServer.setPortAndIp(aiPort, aiIpAddress); // Listen to port 55433 and ip 127.0.0.1

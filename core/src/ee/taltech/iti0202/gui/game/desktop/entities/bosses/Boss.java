@@ -28,6 +28,7 @@ public class Boss extends SpriteAnimation {
     protected float yOffset;
     protected float size;
     private float time = 0;
+    private boolean decider = true;
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
         super(body, sb, path, entity);

@@ -132,6 +132,8 @@ public class Play extends GameState {
     private int timeElapsed = 0;
     private Vector2 camSpeed = new Vector2(0, 0);
     private int PlantBossSize = 1;
+    private float playTime = 0;
+    private boolean loading = true;
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
@@ -413,6 +415,12 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
+        if (loading && playTime < 5 && dt > 1 / 15) {
+            playTime += dt;
+            return;
+        } else if (loading) {
+            loading = false;
+        }
 
         if (newPlayer) {
             if (Math.abs(player.getPosition().x - cam.position.x / PPM) < 1 && Math.abs(player.getPosition().y - cam.position.y / PPM) < 1)
@@ -623,6 +631,11 @@ public class Play extends GameState {
     }
 
     public void render() {
+        if (loading) {
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            return;
+        }
+
         switch (playState) {
             case RUN:
                 drawAndSetCamera();
@@ -734,7 +747,7 @@ public class Play extends GameState {
         if (SnowManArray != null)
             for (Boss boss : SnowManArray) {
                 BossData bossData = new BossData("3", 1, boss.getPosition().x,
-                        boss.getPosition().y, true);
+                        boss.getPosition().y, boss.isDecider());
                 progress.bosses.add(bossData);
             }
 
@@ -742,7 +755,7 @@ public class Play extends GameState {
             for (Array<Boss> bossArray : MagmaBossArray) {
                 Boss boss = bossArray.get(1);
                 BossData bossData = new BossData("1", bossArray.size, boss.getPosition().x,
-                        boss.getPosition().y, true);
+                        boss.getPosition().y, boss.isDecider());
                 progress.bosses.add(bossData);
             }
         }
@@ -751,7 +764,7 @@ public class Play extends GameState {
             for (Array<Boss> bossArray : PlantBossArray) {
                 Boss boss = bossArray.get(1);
                 BossData bossData = new BossData("2", getPlantBossSize(), boss.getPosition().x,
-                        boss.getPosition().y, true);
+                        boss.getPosition().y, boss.isDecider());
                 progress.bosses.add(bossData);
             }
         }
