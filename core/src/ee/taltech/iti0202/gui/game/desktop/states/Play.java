@@ -588,7 +588,7 @@ public class Play extends GameState {
         if (MagmaBossArray.size != 0) {
             for (Array<Boss> bossList : MagmaBossArray)
                 for (int i = 0; i < bossList.size; i++) {
-                    if (bossList.size > 110) {
+                    if (bossList.size >= 100) {
                         if (i == bossList.size - 1) {
                             bossList.get(i).updateHeadBig(dt);
                         } else {
