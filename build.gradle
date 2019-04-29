@@ -23,7 +23,7 @@ allprojects {
     apply plugin: 'maven'
     apply plugin: 'com.moowork.node'
 
-    version = '1.0'
+    version = '2.1'
     ext {
         appName = "iti0202-2019-gui"
         gdxVersion = '1.9.9'
@@ -48,17 +48,17 @@ project(":desktop") {
 
 
     dependencies {
-        implementation project(":core")
-        implementation "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
-        implementation "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
-        implementation "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
-        implementation "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
-        implementation "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
-        implementation 'com.google.code.gson:gson:2.8.5'
-        implementation 'net.corpwar.lib:corpnet:2.0.0'
+        compile  project(":core")
+        compile  "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile  "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile  "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        compile  "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
+        compile  "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+        compile  "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile  "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
+        compile  "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
+        compile  'com.google.code.gson:gson:2.8.5'
+        compile  'net.corpwar.lib:corpnet:2.0.0'
     }
 }
 
@@ -128,23 +128,23 @@ project(":core") {
     apply plugin: "java"
 
     dependencies {
-        implementation ('io.socket:socket.io-client:1.0.0') {
+        compile  ('io.socket:socket.io-client:1.0.0') {
             // excluding org.json which is provided by Android
             exclude group: 'org.json', module: 'json'
         }
         compileOnly 'org.projectlombok:lombok:1.18.6'
         annotationProcessor 'org.projectlombok:lombok:1.18.6'
         compile files('java-json.jar')
-        implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-ai:$aiVersion"
-        implementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
-        implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
-        implementation "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
-        implementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
-        implementation 'com.google.code.gson:gson:2.8.5'
-        implementation 'net.corpwar.lib:corpnet:2.0.0'
+        compile  "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile  "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+        compile  "com.badlogicgames.gdx:gdx-controllers:$gdxVersion"
+        compile  "com.badlogicgames.gdx:gdx-ai:$aiVersion"
+        compile  "com.badlogicgames.ashley:ashley:$ashleyVersion"
+        compile  "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        compile  "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+        compile  "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+        compile  'com.google.code.gson:gson:2.8.5'
+        compile  'net.corpwar.lib:corpnet:2.0.0'
         
     }
 }
