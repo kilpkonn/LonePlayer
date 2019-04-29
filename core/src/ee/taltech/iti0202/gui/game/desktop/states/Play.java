@@ -55,7 +55,9 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_LOAD_TIME;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MIN_FPS_EXPECTED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
@@ -415,7 +417,7 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
-        if (loading && playTime < 5 && dt > 1 / 15) {
+        if (loading && playTime < MAX_LOAD_TIME && dt > MIN_FPS_EXPECTED) {
             playTime += dt;
             return;
         } else if (loading) {
@@ -632,7 +634,7 @@ public class Play extends GameState {
 
     public void render() {
         if (loading) {
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //TODO: some loading screen?
             return;
         }
 
