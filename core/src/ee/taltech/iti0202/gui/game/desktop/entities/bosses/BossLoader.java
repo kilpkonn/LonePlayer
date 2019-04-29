@@ -18,6 +18,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowMan;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManProperties;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowworrm.SnowWorm;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 
@@ -60,6 +61,11 @@ public class BossLoader {
         //   TYPE 3: idk                                                       //
         //                                                                     //
         /////////////////////////////////////////////////////////////////////////
+        boolean snowTheme = false;
+        if (type.equals("1_snow")) {
+            type = "1";
+            snowTheme = true;
+        }
 
         float scale = decider ? 1f : 0.5f;
         tempPosition = position;
@@ -68,15 +74,29 @@ public class BossLoader {
         switch (type) {
             case "1":
                 Array<Boss> tempArray = new Array<>();
-                initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray, decider);
+                if (snowTheme) {
+                    initSnakePart(SnowWorm.Part.HEAD, scale, tempArray, decider);
+                }
+                else {
+                    initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray, decider);
+                }
+
                 if (!reload)
                     tempPosition.y -= 60 * scale / PPM;
 
                 for (int i = 0; i < size; i++) {
                     if (i == size - 1) {
-                        initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray, decider);
+                        if (snowTheme) {
+                            initSnakePart(SnowWorm.Part.TAIL, scale, tempArray, decider);
+                        } else {
+                            initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray, decider);
+                        }
                     } else {
-                        initSnakePart(MagmaWorm.Part.BODY, scale, tempArray, decider);
+                        if (snowTheme) {
+                            initSnakePart(SnowWorm.Part.BODY, scale, tempArray, decider);
+                        } else {
+                            initSnakePart(MagmaWorm.Part.BODY, scale, tempArray, decider);
+                        }
                     }
                     //createRopeJointBetweenLinks(tempArray, -1f);
                     BossHelper.createDistanceJointBetweenLinks(tempArray, 0.40f, scale, play.getWorld());
@@ -166,6 +186,19 @@ public class BossLoader {
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), size);
         Boss boss = MagmaWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build();
+        boss.setDecider(decider);
+        boss.getBody().setUserData(BOSS);
+        for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
+        tempArray.add(boss);
+        play.getTempPlayerLocation().y -= 50 * size / PPM;
+    }
+
+    private void initSnakePart(SnowWorm.Part part, float size, Array<Boss> tempArray, boolean decider) {
+        MagmaWormProperties alias = new MagmaWormProperties(this.bdef, this.fdef, tempPosition);
+        Body body = play.getWorld().createBody(alias.getBdef());
+        body.createFixture(alias.getFdef());
+        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), size);
+        Boss boss = SnowWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build();
         boss.setDecider(decider);
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
