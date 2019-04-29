@@ -18,8 +18,7 @@ import lombok.EqualsAndHashCode;
 public class PlantWorm extends Boss {
 
     private final float max_speed = 3;
-    private float time = 0;
-
+    private float time;
     private Body body;
     private SpriteBatch spriteBatch;
     private String type;

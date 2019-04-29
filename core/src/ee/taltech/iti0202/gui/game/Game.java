@@ -66,6 +66,8 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
+        B2DVars.PATH = ""; //TODO: this?
+
         // // TODO: make it work .ref - https://socket.io/blog/native-socket-io-and-android/
 
         // aiServer = new Server();

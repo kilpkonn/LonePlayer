@@ -105,7 +105,7 @@ public class Menu extends GameState {
         stage = new Stage(new ScreenViewport());
         Array<Texture> textures = new Array<>();
         int layersCount = Gdx.files.internal(PATH + path).list().length;
-        for (int i = 1; i < layersCount; i++) {
+        for (int i = 1; i < 8; i++) { //TODO: swap back to layerscount
             textures.add(new Texture(Gdx.files.internal(PATH + path + "backgroundLayer" + i + ".png")));
             textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }

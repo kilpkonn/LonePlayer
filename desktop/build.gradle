@@ -6,6 +6,60 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 project.ext.mainClassName = "ee.taltech.iti0202.gui.game.desktop.DesktopLauncher"
 project.ext.assetsDir = new File("../android/assets")
 
+
+task fatJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': 'com.mkyong.DateUtils'
+    }
+    baseName = project.name + '-all'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+dependencies {
+    compile 'ch.qos.logback:logback-classic:1.2.3'
+}
+
+apply plugin: 'gradle-one-jar'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
+    }
+}
+
+task dist(type: Jar) {
+    from files(sourceSets.main.output.classesDirs)
+    from files(sourceSets.main.output.resourcesDir)
+    from { configurations.compile.collect { zipTree(it) } }
+    from files(project.assetsDir)
+
+    manifest {
+        attributes 'Main-Class': project.mainClassName
+    }
+}
+
+dist.dependsOn classes
+
+task javaPackager(type: Exec, dependsOn: dist) {
+    workingDir project.projectDir
+    def commands = [
+            'javapackager',
+            '-deploy',
+            '-nosign',
+            '-outdir', "${buildDir}/distribution",
+            '-srcdir', "${buildDir}/libs",
+            '-native', 'image',
+            '-name', project.appName,
+            '-appclass', project.mainClassName
+    ]
+}
+
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
     classpath = sourceSets.main.runtimeClasspath
@@ -22,16 +76,3 @@ task debug(dependsOn: classes, type: JavaExec) {
     ignoreExitValue = true
     debug = true
 }
-
-task dist(type: Jar) {
-    // from files(sourceSets.main.output.classesDir)
-    from files(sourceSets.main.output.resourcesDir)
-    from {configurations.compile.collect {zipTree(it)}}
-    from files(project.assetsDir)
- 
-    manifest {
-        attributes 'Main-Class': project.mainClassName
-    }
-}
-
-dist.dependsOn classes
