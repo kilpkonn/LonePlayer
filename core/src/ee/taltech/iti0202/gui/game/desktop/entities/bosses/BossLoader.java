@@ -12,13 +12,13 @@ import com.badlogic.gdx.utils.Array;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.joints.BossHelper;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWorm;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.magmaworm.MagmaWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowMan;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManProperties;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowworrm.SnowWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.MagmaWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.SnowWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.WormProperties;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 
@@ -74,29 +74,17 @@ public class BossLoader {
         switch (type) {
             case "1":
                 Array<Boss> tempArray = new Array<>();
-                if (snowTheme) {
-                    initSnakePart(SnowWorm.Part.HEAD, scale, tempArray, decider);
-                }
-                else {
-                    initSnakePart(MagmaWorm.Part.HEAD, scale, tempArray, decider);
-                }
+                initSnakePart(Boss.Part.HEAD, scale, tempArray, decider, snowTheme);
 
-                if (!reload)
+                if (!reload) {
                     tempPosition.y -= 60 * scale / PPM;
+                }
 
                 for (int i = 0; i < size; i++) {
                     if (i == size - 1) {
-                        if (snowTheme) {
-                            initSnakePart(SnowWorm.Part.TAIL, scale, tempArray, decider);
-                        } else {
-                            initSnakePart(MagmaWorm.Part.TAIL, scale, tempArray, decider);
-                        }
+                        initSnakePart(Boss.Part.TAIL, scale, tempArray, decider, snowTheme);
                     } else {
-                        if (snowTheme) {
-                            initSnakePart(SnowWorm.Part.BODY, scale, tempArray, decider);
-                        } else {
-                            initSnakePart(MagmaWorm.Part.BODY, scale, tempArray, decider);
-                        }
+                        initSnakePart(Boss.Part.BODY, scale, tempArray, decider, snowTheme);
                     }
                     //createRopeJointBetweenLinks(tempArray, -1f);
                     BossHelper.createDistanceJointBetweenLinks(tempArray, 0.40f, scale, play.getWorld());
@@ -106,7 +94,6 @@ public class BossLoader {
 
                 }
                 BossHelper.filterTextures(tempArray);
-
                 play.getMagmaBossArray().add(tempArray);
                 break;
 
@@ -180,25 +167,14 @@ public class BossLoader {
         tempArray2.get(size).add(boss);
     }
 
-    private void initSnakePart(MagmaWorm.Part part, float size, Array<Boss> tempArray, boolean decider) {
-        MagmaWormProperties alias = new MagmaWormProperties(this.bdef, this.fdef, tempPosition);
+    private void initSnakePart(Boss.Part part, float size, Array<Boss> tempArray, boolean decider, boolean snowTheme) {
+        WormProperties alias = new WormProperties(this.bdef, this.fdef, tempPosition);
         Body body = play.getWorld().createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), size);
-        Boss boss = MagmaWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build();
-        boss.setDecider(decider);
-        boss.getBody().setUserData(BOSS);
-        for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
-        tempArray.add(boss);
-        play.getTempPlayerLocation().y -= 50 * size / PPM;
-    }
-
-    private void initSnakePart(SnowWorm.Part part, float size, Array<Boss> tempArray, boolean decider) {
-        MagmaWormProperties alias = new MagmaWormProperties(this.bdef, this.fdef, tempPosition);
-        Body body = play.getWorld().createBody(alias.getBdef());
-        body.createFixture(alias.getFdef());
-        bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), size);
-        Boss boss = SnowWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build();
+        Boss boss = snowTheme ?
+                SnowWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build() :
+                MagmaWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build();
         boss.setDecider(decider);
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
