@@ -25,15 +25,15 @@ public class PlantWorm extends Boss {
     private String type;
     private Play play;
     private PlantWorm.Part part;
-    private int size;
+    private float size;
     private float xOffset;
     private float yOffset;
 
-    public PlantWorm(Body body, SpriteBatch sb, String type, Play play, PlantWorm.Part part, int size) {
+    public PlantWorm(Body body, SpriteBatch sb, String type, Play play, PlantWorm.Part part, float size) {
         this(0, body, sb, type, play, part, size, 0, 0);
     }
 
-    public PlantWorm(float time, Body body, SpriteBatch sb, String type, Play play, Part part, int size, float x, float y) {
+    public PlantWorm(float time, Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
         super(body, sb, play, "images/bosses/plantworm/plantworm.scml", part.name, size, x, y);
         this.body = body;
         this.spriteBatch = sb;

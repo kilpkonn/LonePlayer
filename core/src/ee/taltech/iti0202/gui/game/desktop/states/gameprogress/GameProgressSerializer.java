@@ -13,14 +13,16 @@ import java.lang.reflect.Type;
 public class GameProgressSerializer implements JsonSerializer<GameProgress> {
     public JsonElement serialize(final GameProgress progress, final Type type, final JsonSerializationContext context) {
         JsonObject result = new JsonObject();
-        result.add("playerLocationX", new JsonPrimitive(progress.playerLocationX));
-        result.add("playerLocationY", new JsonPrimitive(progress.playerLocationY));
+        /*result.add("playerLocationX", new JsonPrimitive(progress.playerLocationX));
+        result.add("playerLocationY", new JsonPrimitive(progress.playerLocationY));*/
+        result.add("checkpointX", new JsonPrimitive(progress.checkpointX));
+        result.add("checkpointY", new JsonPrimitive(progress.checkpointY));
         result.add("act", new JsonPrimitive(progress.act));
         result.add("map", new JsonPrimitive(progress.map));
         result.add("difficulty", new JsonPrimitive(progress.difficulty.getValue()));
         result.add("dimension", new JsonPrimitive(progress.dimension));
-        result.add("playerVelocityX", new JsonPrimitive(progress.playerVelocityX));
-        result.add("playerVelocityY", new JsonPrimitive(progress.playerVelocityY));
+        /*result.add("playerVelocityX", new JsonPrimitive(progress.playerVelocityX));
+        result.add("playerVelocityY", new JsonPrimitive(progress.playerVelocityY));*/
 
         JsonArray bossesArray = new JsonArray();
         for (BossData b : progress.bosses) {
@@ -29,8 +31,6 @@ public class GameProgressSerializer implements JsonSerializer<GameProgress> {
             obj.add("size", new JsonPrimitive(b.size));
             obj.add("location_x", new JsonPrimitive(b.locationX));
             obj.add("location_y", new JsonPrimitive(b.locationY));
-            obj.add("speed_x", new JsonPrimitive(b.speedX));
-            obj.add("speed_y", new JsonPrimitive(b.speedY));
             obj.add("decider", new JsonPrimitive(b.decider));
             bossesArray.add(obj);
         }

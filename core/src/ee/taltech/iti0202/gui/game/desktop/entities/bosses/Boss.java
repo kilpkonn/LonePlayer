@@ -24,7 +24,7 @@ public class Boss extends SpriteAnimation {
     protected String entity;
     protected float xOffset;
     protected float yOffset;
-    protected int size;
+    protected float size;
     private float time = 0;
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
@@ -39,7 +39,7 @@ public class Boss extends SpriteAnimation {
 
     }
 
-    protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity, int size, float x, float y) {
+    protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity, float size, float x, float y) {
         super(body, sb, path, entity, x, y);
         this.play = play;
         this.body = body;

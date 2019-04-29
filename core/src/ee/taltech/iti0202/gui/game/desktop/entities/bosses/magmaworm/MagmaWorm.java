@@ -15,7 +15,7 @@ public class MagmaWorm extends Boss {
     private String type;
     private Play play;
     private MagmaWorm.Part part;
-    private int size;
+    private float size;
     private float xOffset;
     private float yOffset;
 
@@ -49,11 +49,11 @@ public class MagmaWorm extends Boss {
         }
     }
 
-    public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, Part part, int size) {
+    public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size) {
         this(body, sb, type, play, part, size, 0, 0);
     }
 
-    public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, Part part, int size, float x, float y) {
+    public MagmaWorm(Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
         super(body, sb, play, "images/bosses/magmaworm/magmaworm.scml", part.name, size, x, y); //TODO: fix Part toString
         body.setUserData(type + type);
         setAnimation(MagmaWormAnimation.DEFAULT.name, false);

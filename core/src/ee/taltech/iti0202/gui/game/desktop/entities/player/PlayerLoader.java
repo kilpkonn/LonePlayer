@@ -86,8 +86,8 @@ public class PlayerLoader {
         if (play.getPlayer() != null) play.getWorld().destroyBody(play.getPlayer().getBody());
 
         BodyDef bdef = new BodyDef();
-        bdef.position.set(progress.playerLocationX, progress.playerVelocityY);
-        bdef.linearVelocity.set(progress.playerVelocityX, progress.playerLocationY);
+        bdef.position.set(progress.checkpointX, progress.checkpointY);
+        //bdef.linearVelocity.set(progress.playerVelocityX, progress.playerLocationY);
 
         buildPlayer(bdef);
     }

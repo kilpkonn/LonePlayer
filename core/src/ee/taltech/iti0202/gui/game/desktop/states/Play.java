@@ -720,40 +720,39 @@ public class Play extends GameState {
 
     private void saveGame() {
         GameProgress progress = new GameProgress();
-        progress.playerLocationX = player.getPosition().x;
+        /*progress.playerLocationX = player.getPosition().x;
         progress.playerLocationY = player.getPosition().y;
         progress.playerVelocityX = player.getBody().getLinearVelocity().x;
-        progress.playerVelocityY = player.getBody().getLinearVelocity().y;
+        progress.playerVelocityY = player.getBody().getLinearVelocity().y;*/
+        progress.checkpointX = activeCheckpoint.getBody().getPosition().x;
+        progress.checkpointY = activeCheckpoint.getBody().getPosition().y;
         progress.act = act;
         progress.map = map;
         progress.dimension = draw.isDimension();
         progress.difficulty = difficulty;
-        //TODO: Save bosses location and speed
 
         if (SnowManArray != null)
             for (Boss boss : SnowManArray) {
-                BossData bossData = new BossData("3", boss.getSize(), boss.getPosition().x,
-                        boss.getPosition().y, boss.getVelocity().x, boss.getVelocity().y, true); //TODO: Wut is dis decider?
+                BossData bossData = new BossData("3", 1, boss.getPosition().x,
+                        boss.getPosition().y, true);
                 progress.bosses.add(bossData);
             }
 
         if (MagmaBossArray != null) {
             for (Array<Boss> bossArray : MagmaBossArray) {
-                for (Boss boss : bossArray) {
-                    BossData bossData = new BossData("1", boss.getSize(), boss.getPosition().x,
-                            boss.getPosition().y, boss.getVelocity().x, boss.getVelocity().y, true);
-                    progress.bosses.add(bossData);
-                }
+                Boss boss = bossArray.get(1);
+                BossData bossData = new BossData("1", bossArray.size, boss.getPosition().x,
+                        boss.getPosition().y, true);
+                progress.bosses.add(bossData);
             }
         }
 
         if (PlantBossArray != null) {
             for (Array<Boss> bossArray : PlantBossArray) {
-                for (Boss boss : bossArray) {
-                    BossData bossData = new BossData("2", boss.getSize(), boss.getPosition().x,
-                            boss.getPosition().y, boss.getVelocity().x, boss.getVelocity().y, true);
-                    progress.bosses.add(bossData);
-                }
+                Boss boss = bossArray.get(1);
+                BossData bossData = new BossData("2", getPlantBossSize(), boss.getPosition().x,
+                        boss.getPosition().y, true);
+                progress.bosses.add(bossData);
             }
         }
 

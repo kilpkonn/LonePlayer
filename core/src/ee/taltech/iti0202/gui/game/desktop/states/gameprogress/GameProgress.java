@@ -17,10 +17,12 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 
 
 public class GameProgress {
-    public float playerLocationX;
+    /*public float playerLocationX;
     public float playerLocationY;
     public float playerVelocityX;
-    public float playerVelocityY;
+    public float playerVelocityY;*/
+    public float checkpointX;
+    public float checkpointY;
     public List<BossData> bosses = new ArrayList<>();
     public boolean dimension;
     public B2DVars.gameDifficulty difficulty;
