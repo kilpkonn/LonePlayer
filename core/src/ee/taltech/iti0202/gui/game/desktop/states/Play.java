@@ -758,7 +758,7 @@ public class Play extends GameState {
         if (MagmaBossArray != null) {
             for (Array<Boss> bossArray : MagmaBossArray) {
                 Boss boss = bossArray.get(1);
-                BossData bossData = new BossData("1", bossArray.size, boss.getPosition().x,
+                BossData bossData = new BossData(act.equals("Snow") ? "1_snow" : "1", bossArray.size, boss.getPosition().x,
                         boss.getPosition().y, boss.isDecider());
                 progress.bosses.add(bossData);
             }
