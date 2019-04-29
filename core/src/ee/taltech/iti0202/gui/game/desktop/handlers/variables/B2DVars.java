@@ -53,7 +53,7 @@ public class B2DVars {
     public static final float DIMENSION_FADE_AMOUNT = 0.6f;
 
     public static final float MAX_LOAD_TIME = 10f;
-    public static final float MIN_FPS_EXPECTED = 1 / 15f;
+    public static final float MIN_FPS_EXPECTED = 15f;
 
     public static final boolean DEBUG = false;
     public static boolean UPDATE = true;

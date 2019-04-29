@@ -417,7 +417,7 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
-        if (loading && playTime < MAX_LOAD_TIME && dt > MIN_FPS_EXPECTED) {
+        if (loading && playTime < MAX_LOAD_TIME && dt > 1 / MIN_FPS_EXPECTED) {
             playTime += dt;
             return;
         } else if (loading) {
