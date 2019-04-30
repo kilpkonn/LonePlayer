@@ -83,7 +83,7 @@ public class LevelSelectionMenu extends Scene {
     @Override
     public void handleInput() {
         try {
-            if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+            if (MyInput.isMouseClicked(Game.settings.SHOOT) && currBlock != null) {
                 switch (currBlock) {
                     case MAP:
                         playSoundOnce("sounds/menu_click.wav", 0.5f);
