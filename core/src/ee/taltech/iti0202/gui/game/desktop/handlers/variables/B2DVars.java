@@ -55,7 +55,7 @@ public class B2DVars {
     public static final float MAX_LOAD_TIME = 10f;
     public static final float MIN_FPS_EXPECTED = 15f;
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     public static boolean UPDATE = true;
 
     public static String PATH = "";
