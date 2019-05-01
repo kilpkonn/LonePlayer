@@ -457,7 +457,6 @@ public class Play extends GameState {
             BulletLoader bulletLoader = new BulletLoader();
             Bullet bullet = bulletLoader.bulletLoader(this, sb, world, player.getPosition());
             bulletArray.add(bullet);
-            bullet.getBody().setLinearVelocity(1f, 1f);
         }
 
 
@@ -569,7 +568,7 @@ public class Play extends GameState {
         }
 
         // create a new checkpoint if needed
-        if (checkpointList.size != 0) {
+        if (checkpointList != null) {
             if (cl.isNewCheckpoint()) {
                 Checkpoint curTemp = checkpointList.get(0); // just in case
                 for (Checkpoint checkpoint : checkpointList) {
@@ -591,7 +590,8 @@ public class Play extends GameState {
         }
 
         //update bullets
-        if (bulletArray.size != 0) {
+        if (bulletArray != null) {
+            System.out.println(bulletArray.size);
             for (Bullet bullet : bulletArray) {
                 bullet.update(dt);
             }
@@ -750,6 +750,12 @@ public class Play extends GameState {
             for (Array<Boss> bossList : PlantBossArray) {
                 for (Boss boss : bossList) boss.render(sb);
                 bossList.get(0).render(sb);
+            }
+        }
+
+        if (bulletArray != null) {
+            for (Bullet bullet : bulletArray) {
+                bullet.render(sb);
             }
         }
 

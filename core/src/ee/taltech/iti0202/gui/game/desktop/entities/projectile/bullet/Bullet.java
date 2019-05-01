@@ -16,12 +16,13 @@ public class Bullet extends WeaponProjectile {
     private Body body;
     private SpriteBatch spriteBatch;
 
-    public Bullet(World world, Vector2 position, SpriteBatch sb, String path, Body body) {
+    public Bullet(World world, SpriteBatch sb, String path, Body body) {
         super(body, sb, path);
         this.world = world;
-        this.position = position;
         this.body = body;
         this.spriteBatch = sb;
+
+        body.setUserData("bullet");
     }
 
     @Override
