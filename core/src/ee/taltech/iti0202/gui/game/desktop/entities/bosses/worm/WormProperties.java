@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowworrm;
+package ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -10,8 +10,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
 
-public class SnowWormProperties extends Properties {
-    public SnowWormProperties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
+public class WormProperties extends Properties {
+    public WormProperties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
         super(bdef, fdef, position);
 
         bdef.type = BodyDef.BodyType.DynamicBody;

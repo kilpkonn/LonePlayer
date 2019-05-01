@@ -66,9 +66,7 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
-        PATH = "assets/";
-
-        //B2DVars.PATH = "assets/"; //TODO: this?
+        // B2DVars.PATH = "assets/"; //TODO: this?
 
         // aiServer = new Server();
         // aiServer.setPortAndIp(aiPort, aiIpAddress); // Listen to port 55433 and ip 127.0.0.1

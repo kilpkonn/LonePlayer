@@ -25,6 +25,8 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.PlayerLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.BulletLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
@@ -137,6 +139,9 @@ public class Play extends GameState {
     private float playTime = 0;
     private boolean loading = true;
 
+    //Bullets
+    private Array<Bullet> bulletArray;
+
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
     private Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
@@ -195,6 +200,9 @@ public class Play extends GameState {
         SnowManArray = new Array<>();
         MagmaBossArray = new Array<>();
         PlantBossArray = new Array<>();
+
+        // create place to hold bullets in
+        bulletArray = new Array<>();
 
         //set up cameras
         b2dcam = new OrthographicCamera();
@@ -443,6 +451,16 @@ public class Play extends GameState {
         draw.updateGameFade(dt);
         draw.updateDimensionFade(dt);
 
+
+        if (DEBUG) {
+            // test bullets
+            BulletLoader bulletLoader = new BulletLoader();
+            Bullet bullet = bulletLoader.bulletLoader(this, sb, world, player.getPosition());
+            bulletArray.add(bullet);
+            bullet.getBody().setLinearVelocity(1f, 1f);
+        }
+
+
         switch (playState) {
             case RUN:
                 updateProps(dt);
@@ -479,7 +497,6 @@ public class Play extends GameState {
     private void updateProps(float dt) {
         //update camera
         if (DEBUG) {
-
             b2dcam.position.set(
                     player.getPosition().x,
                     player.getPosition().y,
@@ -493,7 +510,6 @@ public class Play extends GameState {
             b2dcam.update();
 
             cl.setDoubleJump(true);
-
         } else {
             camSpeed = new Vector2((player.getPosition().x - cam.position.x / PPM) * 2 * PPM,
                     (player.getPosition().y - cam.position.y / PPM) * 2 * PPM);
@@ -572,6 +588,13 @@ public class Play extends GameState {
             }
             for (Checkpoint checkpoint : checkpointList)
                 checkpoint.update(dt);
+        }
+
+        //update bullets
+        if (bulletArray.size != 0) {
+            for (Bullet bullet : bulletArray) {
+                bullet.update(dt);
+            }
         }
 
         if (gracePeriod > 0)

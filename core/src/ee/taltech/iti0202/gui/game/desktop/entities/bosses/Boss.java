@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,15 +30,24 @@ public class Boss extends SpriteAnimation {
     private boolean decider = true;
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
-        super(body, sb, path, entity);
-        this.play = play;
-        this.body = body;
-        this.spriteBatch = sb;
-        this.path = path;
-        this.entity = entity;
-        this.yOffset = 0;
-        this.xOffset = 0;
+        this(body, sb, play, path, entity, 1, 0, 0);
 
+    }
+
+    public enum Part {
+        HEAD("magmawormhead"),
+        BODY("magmawormbody"),
+        TAIL("magmawormtail");
+
+        private final String name;
+
+        Part(String s) {
+            name = s;
+        }
+
+        public String toString() {
+            return this.name;
+        }
     }
 
     protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity, float size, float x, float y) {
