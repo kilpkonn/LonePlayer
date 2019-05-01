@@ -66,6 +66,8 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
+        PATH = "assets/";
+
         //B2DVars.PATH = "assets/"; //TODO: this?
 
         // aiServer = new Server();
