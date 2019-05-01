@@ -11,11 +11,13 @@ public abstract class WeaponProjectile extends SpriteAnimation {
         super(body, sb, path);
     }
 
+    @Override
     public void update(float dt) {
-
+        super.update(dt);
     }
 
+    @Override
     public void render(SpriteBatch spriteBatch) {
-
+        super.render(spriteBatch);
     }
 }
