@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
@@ -24,15 +25,17 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TER
 
 public class PlayerLoader {
 
+    private PlayerHandler playerHandler;
     private Play play;
     private SpriteBatch spriteBatch;
 
-    public PlayerLoader(Play play, SpriteBatch spriteBatch) {
+    public PlayerLoader(Play play, SpriteBatch spriteBatch, PlayerHandler playerHandler) {
         this.play = play;
         this.spriteBatch = spriteBatch;
+        this.playerHandler = playerHandler;
     }
 
-    private void buildPlayer(BodyDef bdef) {
+    private Player buildPlayer(BodyDef bdef) {
         short mask;
         if (play.getDraw().isDimension()) {
             mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
@@ -79,34 +82,36 @@ public class PlayerLoader {
         fdef.filter.maskBits = mask;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("foot");
-        play.setPlayer(new Player(body, spriteBatch));
+        return new Player(body, spriteBatch);
     }
 
-    public void initPlayer(GameProgress progress) {
-        if (play.getPlayer() != null) play.getWorld().destroyBody(play.getPlayer().getBody());
+    public Player initPlayer(GameProgress progress) {
+        if (playerHandler.getPlayer() != null)
+            play.getWorld().destroyBody(playerHandler.getPlayer().getBody());
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(progress.checkpointX, progress.checkpointY);
         //bdef.linearVelocity.set(progress.playerVelocityX, progress.playerLocationY);
 
-        buildPlayer(bdef);
+        return buildPlayer(bdef);
     }
 
-    public void initPlayer() {
-        if (play.getPlayer() != null) play.getWorld().destroyBody(play.getPlayer().getBody());
+    public Player initPlayer() {
+        if (playerHandler.getPlayer() != null)
+            play.getWorld().destroyBody(playerHandler.getPlayer().getBody());
         BodyDef bdef = new BodyDef();
 
-        if (play.getActiveCheckpoint() == null) {
-            if (play.getInitPlayerLocation() == null) {
+        if (playerHandler.getActiveCheckpoint() == null) {
+            if (playerHandler.getInitPlayerLocation() == null) {
                 bdef.position.set(0, 0); // hopefully never get here
             } else {
-                bdef.position.set(play.getInitPlayerLocation());
+                bdef.position.set(play.getPlayerHandler().getInitPlayerLocation());
             }
         } else if (play.getCl().isInitSpawn()) {
-            bdef.position.set(play.getInitPlayerLocation());
+            bdef.position.set(play.getPlayerHandler().getInitPlayerLocation());
         } else {
-            bdef.position.set(new Vector2(play.getActiveCheckpoint().getPosition()));
+            bdef.position.set(new Vector2(playerHandler.getActiveCheckpoint().getPosition()));
         }
-        buildPlayer(bdef);
+        return buildPlayer(bdef);
     }
 }

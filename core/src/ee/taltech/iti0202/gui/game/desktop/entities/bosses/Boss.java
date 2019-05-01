@@ -67,7 +67,7 @@ public class Boss extends SpriteAnimation {
         super.update(dt);
 
         // Get the positions of both Entities
-        Vector2 playerPos = play.getPlayer().getPosition();
+        Vector2 playerPos = play.getPlayerHandler().getPlayer().getPosition();
         Vector2 enemyPos = body.getPosition();
 
         float angle = body.getAngle();
@@ -88,7 +88,7 @@ public class Boss extends SpriteAnimation {
         super.update(dt);
         float x = 0.3f;
 
-        Vector2 player = play.getPlayer().getPosition();
+        Vector2 player = play.getPlayerHandler().getPlayer().getPosition();
         Vector2 boss = this.body.getPosition();
 
         float distance = (float) Math.sqrt(Math.pow(player.x - boss.x, 2) + Math.pow(player.y - boss.x, 2));
@@ -123,7 +123,7 @@ public class Boss extends SpriteAnimation {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        Player player = play.getPlayer();
+        Player player = play.getPlayerHandler().getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),
@@ -163,7 +163,7 @@ public class Boss extends SpriteAnimation {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        Player player = play.getPlayer();
+        Player player = play.getPlayerHandler().getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),

@@ -29,9 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.BossLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.bleeding.Bleeding;
@@ -40,6 +38,7 @@ import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
 import lombok.Data;
+import lombok.ToString;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
@@ -59,6 +58,7 @@ public class Draw {
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
+    @ToString.Exclude
     private Play play;
     private SpriteBatch spriteBatch;
     private BodyDef bdef;
@@ -113,7 +113,7 @@ public class Draw {
         }
     }
 
-    private void createEndPoint(Vector2 pos) {
+    private Checkpoint createEndPoint(Vector2 pos) {
         System.out.println("new endpoint");
         this.bdef = new BodyDef();
         this.bdef.position.set(pos);
@@ -126,8 +126,7 @@ public class Draw {
         this.fdef.filter.maskBits = B2DVars.BIT_ALL;
         this.fdef.isSensor = true;
         body.createFixture(this.fdef).setUserData("end");
-        Checkpoint checkpoint = new Checkpoint(body, spriteBatch);
-        play.getCheckpointList().add(checkpoint);
+        return new Checkpoint(body, spriteBatch);
     }
 
     public void drawLayers(boolean defaultSpawn, List<BossData> bosses) {
@@ -266,10 +265,12 @@ public class Draw {
                 switch (layer.getName()) {
                     case "checkpoints":
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
-                            createEndPoint(new Vector2(polygon[1].x + tileSize / PPM, polygon[0].y));
+                            Checkpoint checkpoint = createEndPoint(new Vector2(polygon[1].x + tileSize / PPM, polygon[0].y));
+                            play.getPlayerHandler().getCheckpointList().add(checkpoint);
                         } else {
                             if (B2DVars.CHECKPOINTS) {
-                                createCheckpoints(new Vector2(polygon[1].x + (polygon[3].x - polygon[1].x) / 2, polygon[0].y));
+                                Checkpoint checkpoint = createCheckpoints(new Vector2(polygon[1].x + (polygon[3].x - polygon[1].x) / 2, polygon[0].y));
+                                play.getPlayerHandler().getCheckpointList().add(checkpoint);
                             }
 
                         }
@@ -293,10 +294,8 @@ public class Draw {
                         break;
 
                     case "player":
-                        if (play.getInitPlayerLocation() == null) {
-                            play.setInitPlayerLocation(new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y));
-                            PlayerLoader playerLoader = new PlayerLoader(play, spriteBatch);
-                            playerLoader.initPlayer();
+                        if (play.getPlayerHandler().getInitPlayerLocation() == null) {
+                            play.getPlayerHandler().setInitPlayerLocation(new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y));
                         }
                         break;
 
@@ -308,7 +307,7 @@ public class Draw {
         }
     }
 
-    private void createCheckpoints(Vector2 pos) {
+    private Checkpoint createCheckpoints(Vector2 pos) {
         System.out.println("new checkpoint");
         this.bdef = new BodyDef();
         this.fdef = new FixtureDef();
@@ -322,8 +321,7 @@ public class Draw {
         this.fdef.filter.maskBits = B2DVars.BIT_ALL;
         this.fdef.isSensor = true;
         body.createFixture(this.fdef).setUserData("checkpoint");
-        Checkpoint checkpoint = new Checkpoint(body, spriteBatch);
-        play.getCheckpointList().add(checkpoint);
+        return new Checkpoint(body, spriteBatch);
     }
 
     public void render(OrthographicCamera cam) {

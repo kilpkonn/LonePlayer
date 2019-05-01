@@ -39,7 +39,7 @@ public class Hud {
     }
 
     public void update(float dt) {
-        int hp = play.getPlayer().getHealth();
+        int hp = play.getPlayerHandler().getPlayer().getHealth();
         health.setText(hp + "hp");
         health.setColor(new Color((100 - hp) / 70f, hp / 70f, 0, 1));
 

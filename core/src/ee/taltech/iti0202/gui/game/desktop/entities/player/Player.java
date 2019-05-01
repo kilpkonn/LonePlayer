@@ -24,6 +24,7 @@ public class Player extends SpriteAnimation {
 
     public Player(Body body, SpriteBatch sb) {
         super(body, sb, "images/player/rogue.scml");
+        System.out.println("new Player");
         setScale(0.08f);
         setAnimationSpeed(100);
         setHeightOffset(10);

@@ -61,6 +61,7 @@ public class BossLoader {
         //   TYPE 3: idk                                                       //
         //                                                                     //
         /////////////////////////////////////////////////////////////////////////
+
         boolean snowTheme = false;
         if (type.equals("1_snow")) {
             type = "1";
@@ -94,12 +95,12 @@ public class BossLoader {
 
                 }
                 BossHelper.filterTextures(tempArray);
-                play.getMagmaBossArray().add(tempArray);
+                play.getBossHander().getMagmaBossArray().add(tempArray);
                 break;
 
             case "2":
-                play.setTakingTurnsBase(10 - size);
-                play.setPlantBossSize(size);
+                play.getBossHander().setTakingTurnsBase(10 - size);
+                play.getBossHander().setPlantBossSize(size);
                 Array<Array<Boss>> tempArray2 = new Array<>();
                 for (int i = 0; i < size; i++) {
                     tempArray2.add(new Array<Boss>());
@@ -138,7 +139,7 @@ public class BossLoader {
                 }
 
                 for (Array<Boss> bosses : tempArray2)
-                    play.getPlantBossArray().add(bosses);
+                    play.getBossHander().getPlantBossArray().add(bosses);
                 break;
 
             case "3":
@@ -149,7 +150,7 @@ public class BossLoader {
                 Boss boss = SnowMan.builder().body(body).spriteBatch(spriteBatch).type(type).play(play).xOffset(0).yOffset(0).build();
                 boss.getBody().setUserData(BOSS);
                 for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
-                play.getSnowManArray().add(boss);
+                play.getBossHander().getSnowManArray().add(boss);
                 break;
         }
 
@@ -179,6 +180,6 @@ public class BossLoader {
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
         tempArray.add(boss);
-        play.getTempPlayerLocation().y -= 50 * size / PPM;
+        play.getPlayerHandler().getTempPlayerLocation().y -= 50 * size / PPM;
     }
 }

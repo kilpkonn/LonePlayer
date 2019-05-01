@@ -9,8 +9,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Filter;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -22,12 +20,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.handler.BossHander;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.PlayerLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
-import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.BulletLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
@@ -42,36 +38,25 @@ import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.sound.Sound.playSoundOnce;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND_SPEEDS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.CHECKPOINTS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DEBUG;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_LOAD_TIME;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MIN_FPS_EXPECTED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_SQUARES;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.gotHitBySnek;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -89,30 +74,23 @@ public class Play extends GameState {
     }
 
     // LibGdx variables
-    private World world;
+    private World world = new World(new Vector2(0, GRAVITY), true);
+    @ToString.Exclude
     private Draw draw;
-    private MyContactListener cl;
-    private Box2DDebugRenderer b2dr;
-    private OrthographicCamera b2dcam;
-    private OrthographicCamera hudCam;
+    private MyContactListener cl = new MyContactListener();
+    private Box2DDebugRenderer b2dr = new Box2DDebugRenderer();
+    private OrthographicCamera b2dcam = new OrthographicCamera();
+    private OrthographicCamera hudCam = new OrthographicCamera();
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
 
     // Entity based variables
     private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
-    private Array<Boss> SnowManArray;
-    private Array<Array<Boss>> MagmaBossArray;
-    private Array<Array<Boss>> PlantBossArray;
-    private Array<Checkpoint> checkpointList;
-    private Checkpoint activeCheckpoint;
 
     // Player based variables
-    private Player player;
-    private Vector2 tempPlayerLocation;
-    private Vector2 initPlayerLocation;
-    private Vector2 current_force = new Vector2(0, 0);
-    private boolean newPlayer;
-    private int gracePeriod = 60;
+    @ToString.Exclude
+    private PlayerHandler playerHandler;
+    private GameProgress progress;
 
     // States
     private PauseMenu pauseMenu;
@@ -120,7 +98,7 @@ public class Play extends GameState {
     private SettingsMenu settingsMenu;
     private EndMenu endMenu;
     private boolean executeEnd = true;
-    private Stage stage;
+    private Stage stage = new Stage(new ScreenViewport());
     private String act;
     private String map;
     private B2DVars.gameDifficulty difficulty;
@@ -131,17 +109,11 @@ public class Play extends GameState {
     private float backgroundSpeed;
 
     // Boss logic, helpful variables
-    private int takingTurnsBase = 10; // how long one boss attacks
-    private int currentlyActiveBoss = 0;
-    private int timeElapsed = 0;
+    @ToString.Exclude
+    private BossHander bossHander = new BossHander();
     private Vector2 camSpeed = new Vector2(0, 0);
-    private int PlantBossSize = 1;
     private float playTime = 0;
     private boolean loading = true;
-
-    //Bullets
-    private Array<Bullet> bulletArray;
-    private int bulletHeat = 10;
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
@@ -189,26 +161,12 @@ public class Play extends GameState {
                 game.getSound().setVolume(0.2f);
                 break;
         }
+
         // sey up world
-        world = new World(new Vector2(0, GRAVITY), true);
-        cl = new MyContactListener();
         world.setContactListener(cl);
-        if (DEBUG) b2dr = new Box2DDebugRenderer();
-        checkpointList = new Array<>();
-
-        // create array for bosses
-        tempPlayerLocation = new Vector2();
-        SnowManArray = new Array<>();
-        MagmaBossArray = new Array<>();
-        PlantBossArray = new Array<>();
-
-        // create place to hold bullets in
-        bulletArray = new Array<>();
 
         //set up cameras
-        b2dcam = new OrthographicCamera();
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
-        hudCam = new OrthographicCamera();
         hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
         // create pause state
@@ -247,12 +205,9 @@ public class Play extends GameState {
         });
         hud = new Hud(hudCam, this);
 
-        //ShapeRenderer shapeRenderer = new ShapeRenderer();
         playState = pauseState.RUN;
 
         // set up background
-        stage = new Stage(new ScreenViewport());
-
         String backgroundPath = MAIN_SCREENS[BACKGROUND_SCREENS.get(act)];
         backgroundTexture = new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer.png"));
 
@@ -263,33 +218,31 @@ public class Play extends GameState {
             textures.add(new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer" + i + ".png")));
             textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
-        stage = new Stage();
 
         parallaxBackground = new ParallaxBackground(textures);
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         parallaxBackground.setSpeed(0f);
         stage.addActor(parallaxBackground);
+
         ////////////////////////////////    Tiled stuff here    ///////////////////////
 
+        draw = new Draw(this, sb); // first create the "canvas" to draw onto
+        playerHandler = new PlayerHandler(this, sb, progress, cl); // then create a handler for player
+        PlayerLoader playerLoader = new PlayerLoader(this, sb, playerHandler); // and then load the player in
 
-        draw = new Draw(this, sb);
-
-        PlayerLoader playerLoader = new PlayerLoader(this, sb);
         if (progress != null) {
             draw.setDimension(progress.dimension);
             draw.drawLayers(false, progress.bosses);
-            playerLoader.initPlayer(progress);
+            playerHandler.setPlayer(playerLoader.initPlayer(progress));
         } else {
-            playerLoader.initPlayer();
             draw.drawLayers(true, null);
+            playerHandler.setPlayer(playerLoader.initPlayer());
         }
 
-
         cam.position.set(
-                player.getPosition().x * PPM,
-                player.getPosition().y * PPM,
+                playerHandler.getPlayer().getPosition().x * PPM,
+                playerHandler.getPlayer().getPosition().y * PPM,
                 0);
-        newPlayer = true;
         UPDATE = true;
         cam.zoom = 1;
     }
@@ -306,7 +259,7 @@ public class Play extends GameState {
 
     public void handleInput() {
 
-        current_force = player.getBody().getLinearVelocity();
+        playerHandler.handlePlayerInput(playState);
 
         //pause screen
         if (MyInput.isPressed(Game.settings.ESC)) {
@@ -323,119 +276,6 @@ public class Play extends GameState {
                 draw.setGameFadeDone(false);
             }
         }
-
-        if (playState == pauseState.RUN) {
-            //change dimension
-            if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
-                System.out.println("changed dimension");
-                draw.setDimensionFadeDone(false);
-                draw.setDimension(!draw.isDimension());
-
-                short mask;
-                if (draw.isDimension()) {
-                    mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
-                } else {
-                    mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
-                }
-
-                Filter filter = new Filter();
-                for (Fixture playerFixture : player.getBody().getFixtureList()) {
-                    filter.groupIndex = playerFixture.getFilterData().groupIndex;
-                    filter.categoryBits = playerFixture.getFilterData().categoryBits;
-                    filter.maskBits = mask;
-                    playerFixture.setFilterData(filter);
-                }
-
-            }
-
-            //player jump / double jump / dash
-            if (MyInput.isPressed(Game.settings.JUMP)) {
-                if (cl.isPlayerOnGround()) {
-                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
-                    player.setAnimation(Player.PlayerAnimation.JUMP);
-                } else if (cl.getWallJump() != 0) {
-                    System.out.println("Walljump");
-                    player.getBody().applyLinearImpulse(new Vector2(cl.getWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
-                    cl.setWallJump(0);
-                } else if (cl.isDoubleJump()) {
-                    System.out.println("Double jump");
-                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
-                    cl.setDoubleJump(false);
-                    player.setAnimation(Player.PlayerAnimation.ROLL, true);
-                }
-            }
-
-            //player move left
-            if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
-                if (current_force.x > -MAX_SPEED) {
-                    if (cl.isPlayerOnGround()) {
-                        player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
-                        player.setAnimation(Player.PlayerAnimation.RUN);
-                    } else {
-                        player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
-                    }
-
-                }
-                player.setFlipX(true);
-            }
-
-            //player dash left
-            if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
-                if (!cl.isPlayerOnGround() && cl.isDash()) {
-                    current_force = player.getBody().getLinearVelocity();
-                    if (current_force.x > 0) {
-                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
-                    } else {
-                        player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
-                    }
-                    cl.setDash(false);
-                    player.setAnimation(Player.PlayerAnimation.DASH);
-                }
-                player.setFlipX(true);
-            }
-
-            //player move right
-            if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
-                if (current_force.x < MAX_SPEED) {
-                    if (cl.isPlayerOnGround()) {
-                        player.setAnimation(Player.PlayerAnimation.RUN);
-                        player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
-                    } else {
-                        player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
-                    }
-                }
-                player.setFlipX(false);
-            }
-
-            //player dash right
-            if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
-                if (!cl.isPlayerOnGround() && cl.isDash()) {
-                    if (current_force.x < 0) {
-                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
-                    } else {
-                        player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
-                    }
-                    cl.setDash(false);
-                    player.setAnimation(Player.PlayerAnimation.DASH);
-                }
-                player.setFlipX(false);
-            }
-
-            if (MyInput.isMouseDown(Game.settings.SHOOT) && bulletHeat == 0) {
-                bulletHeat = 10;
-                BulletLoader bulletLoader = new BulletLoader();
-                Bullet bullet = bulletLoader.bulletLoader(this, sb, world, new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1), new Vector2(Gdx.input.getX(), V_HEIGHT - Gdx.input.getY()), player.getPosition());
-                bulletArray.add(bullet);
-            } else {
-                if (bulletHeat > 0) {
-                    bulletHeat--;
-                }
-            }
-
-            if (!MyInput.isDown(-1) && cl.isPlayerOnGround()) {
-                player.setAnimation(Player.PlayerAnimation.IDLE);
-            }
-        }
     }
 
     public void update(float dt) {
@@ -446,9 +286,9 @@ public class Play extends GameState {
             loading = false;
         }
 
-        if (newPlayer) {
-            if (Math.abs(player.getPosition().x - cam.position.x / PPM) < 1 && Math.abs(player.getPosition().y - cam.position.y / PPM) < 1)
-                newPlayer = false;
+        if (playerHandler.isNewPlayer()) {
+            if (Math.abs(playerHandler.getPlayer().getPosition().x - cam.position.x / PPM) < 1 && Math.abs(playerHandler.getPlayer().getPosition().y - cam.position.y / PPM) < 1)
+                playerHandler.setNewPlayer(false);
         } else handleInput();
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
@@ -497,24 +337,28 @@ public class Play extends GameState {
     }
 
     private void updateProps(float dt) {
+
+
         //update camera
         if (DEBUG) {
+
             b2dcam.position.set(
-                    player.getPosition().x,
-                    player.getPosition().y,
+                    playerHandler.getPlayer().getPosition().x,
+                    playerHandler.getPlayer().getPosition().y,
                     0);
 
             cam.position.set(
-                    player.getPosition().x * PPM,
-                    player.getPosition().y * PPM,
+                    playerHandler.getPlayer().getPosition().x * PPM,
+                    playerHandler.getPlayer().getPosition().y * PPM,
                     0);
 
             b2dcam.update();
-
             cl.setDoubleJump(true);
+
         } else {
-            camSpeed = new Vector2((player.getPosition().x - cam.position.x / PPM) * 2 * PPM,
-                    (player.getPosition().y - cam.position.y / PPM) * 4 * PPM);
+
+            camSpeed = new Vector2((playerHandler.getPlayer().getPosition().x - cam.position.x / PPM) * 2 * PPM,
+                    (playerHandler.getPlayer().getPosition().y - cam.position.y / PPM) * 4 * PPM);
 
             cam.position.x += camSpeed.x * dt;
             cam.position.y += camSpeed.y * dt;
@@ -529,132 +373,18 @@ public class Play extends GameState {
 
         cam.update();
 
-        //call update animation
-        if (player.getHealth() == 0) {
-            cl.setDeathState((short) 3);
-        }
-        if (cl.getDeathState() == 0) {
-            player.update(dt);
-        } else if (gracePeriod == 0) {
-            if (cl.getDeathState() == 2) {
-                player.setHealth(player.getHealth() - gotHitBySnek * 10);
-                playSoundOnce("sounds/sfx_deathscream_alien1.wav");
-            }
-            if (cl.getDeathState() == 3) {
-                if (!newPlayer)
-                    player.setHealth(0); //TODO: Fix instant death on load game
-            } else {
-                playSoundOnce("sounds/sfx_damage_hit2.wav", 0.1f);
-                player.setHealth(player.getHealth() - gotHitBySnek);
-            }
-            if (player.getHealth() <= 0) {
-                playSoundOnce("sounds/sfx_sound_shutdown1.wav");
-                PlayerLoader playerLoader = new PlayerLoader(this, sb);
-                playerLoader.initPlayer();
-            }
-            cl.setDeathState((short) 0);
-        }
-        player.update(dt);
+        playerHandler.updatePlayer(dt);
 
         //calculate falling dmg
-        player.onLanded(player.getBody().getLinearVelocity(), cl.isPlayerOnGround());
-
+        playerHandler.getPlayer().onLanded(playerHandler.getPlayer().getBody().getLinearVelocity(), cl.isPlayerOnGround());
 
         //update bosses
-        updateBosses(dt);
+        bossHander.updateBosses(dt);
 
         //draw tilemap animations
         if (animatedCells != null) {
             for (Animation animation : animatedCells.values()) {
                 animation.update(dt);
-            }
-        }
-
-        // create a new checkpoint if needed
-        if (checkpointList != null) {
-            if (cl.isNewCheckpoint()) {
-                Checkpoint curTemp = checkpointList.get(0); // just in case
-                for (Checkpoint checkpoint : checkpointList) {
-                    if (Math.pow(checkpoint.getPosition().x - player.getBody().getPosition().x, 2) + Math.pow(checkpoint.getPosition().y - player.getBody().getPosition().y, 2) <=
-                            Math.pow(curTemp.getPosition().x - player.getBody().getPosition().x, 2) + Math.pow(curTemp.getPosition().y - player.getBody().getPosition().y, 2)) {
-                        curTemp = checkpoint;
-                    }
-                }
-                cl.setCurCheckpoint(curTemp.getBody());
-                curTemp.onReached();
-                if (activeCheckpoint != null)
-                    activeCheckpoint.lostItsPurposeAsANewBetterCheckpointWasFoundAndTheOldOneWasTossedAwayLikeAnOldCondom();
-                activeCheckpoint = curTemp;
-
-                playSoundOnce("sounds/checkpoint.ogg");
-            }
-            for (Checkpoint checkpoint : checkpointList)
-                checkpoint.update(dt);
-        }
-
-        //update bullets
-        if (bulletArray != null) {
-            for (Bullet bullet : bulletArray) {
-                bullet.update(dt);
-            }
-        }
-
-        if (gracePeriod > 0)
-            gracePeriod -= 1;
-    }
-
-    private void updateBosses(float dt) {
-        if (SnowManArray.size != 0) {
-            for (Boss boss : SnowManArray) {
-                boss.update(dt);
-            }
-        }
-
-        if (MagmaBossArray.size != 0) {
-            for (Array<Boss> bossList : MagmaBossArray)
-                for (int i = 0; i < bossList.size; i++) {
-                    if (bossList.size >= 100) {
-                        if (i == bossList.size - 1) {
-                            bossList.get(i).updateHeadBig(dt);
-                        } else {
-                            bossList.get(i).update(dt);
-                        }
-                    } else {
-                        if (i == bossList.size - 1) {
-                            bossList.get(i).updateHeadSmall(dt);
-                        } else {
-                            bossList.get(i).update(dt);
-                        }
-                    }
-                }
-        }
-
-
-        if (PlantBossArray.size != 0) {
-            int takingTurns = takingTurnsBase * Gdx.graphics.getFramesPerSecond();
-            timeElapsed++;
-            if (timeElapsed > takingTurns) {
-                timeElapsed = 0;
-                currentlyActiveBoss = (currentlyActiveBoss + 1) % PlantBossSize;
-            }
-            int j = 0;
-            for (Array<Boss> bossList : PlantBossArray) {
-                for (int i = 0; i < bossList.size; i++) {
-                    if (i == 0) {
-                        if (j == currentlyActiveBoss) {
-                            bossList.get(i).updateHeadBig(dt);
-                        } else {
-                            bossList.get(i).updateCircularMotion(dt);
-                        }
-                        bossList.get(i).updateRotation(dt);
-                    } else if (i == bossList.size - 1) {
-                        bossList.get(i).updateRotation(dt);
-                    } else {
-                        bossList.get(i).update(dt);
-                    }
-
-                }
-                j++;
             }
         }
     }
@@ -711,11 +441,6 @@ public class Play extends GameState {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //set camera to follow player
-        /*if (current_force.x < -1) parallaxBackground.setSpeed(-60f);
-        else if (current_force.x > 1) parallaxBackground.setSpeed(60f);
-        else parallaxBackground.setSpeed(0);
-        System.out.println(current_force.x);*/
         sb.begin();
         sb.draw(backgroundTexture, 0, 0);
         sb.end();
@@ -730,36 +455,11 @@ public class Play extends GameState {
         //draw tilemap
         draw.render(cam);
 
-        // draw checkpoint
-        if (checkpointList.size != 0)
-            for (Checkpoint checkpoint : checkpointList) {
-                checkpoint.render(sb);
-            }
+        //draw bosses
+        bossHander.renderBosses(sb);
 
-        //draw player
-        if (player != null) player.render(sb);
-
-        if (SnowManArray != null)
-            for (Boss boss : SnowManArray)
-                boss.render(sb);
-
-        if (MagmaBossArray != null) {
-            for (Array<Boss> bossList : MagmaBossArray)
-                for (Boss boss : bossList) boss.render(sb);
-        }
-
-        if (PlantBossArray != null) {
-            for (Array<Boss> bossList : PlantBossArray) {
-                for (Boss boss : bossList) boss.render(sb);
-                bossList.get(0).render(sb);
-            }
-        }
-
-        if (bulletArray != null) {
-            for (Bullet bullet : bulletArray) {
-                bullet.render(sb);
-            }
-        }
+        //draw player and bullets
+        playerHandler.renderPlayer(sb);
 
         hud.render(sb);
 
@@ -772,22 +472,22 @@ public class Play extends GameState {
         progress.playerLocationY = player.getPosition().y;
         progress.playerVelocityX = player.getBody().getLinearVelocity().x;
         progress.playerVelocityY = player.getBody().getLinearVelocity().y;*/
-        progress.checkpointX = activeCheckpoint.getBody().getPosition().x;
-        progress.checkpointY = activeCheckpoint.getBody().getPosition().y;
+        progress.checkpointX = playerHandler.getActiveCheckpoint().getBody().getPosition().x;
+        progress.checkpointY = playerHandler.getActiveCheckpoint().getBody().getPosition().y;
         progress.act = act;
         progress.map = map;
         progress.dimension = draw.isDimension();
         progress.difficulty = difficulty;
 
-        if (SnowManArray != null)
-            for (Boss boss : SnowManArray) {
+        if (bossHander.getSnowManArray() != null)
+            for (Boss boss : bossHander.getSnowManArray()) {
                 BossData bossData = new BossData("3", 1, boss.getPosition().x,
                         boss.getPosition().y, boss.isDecider());
                 progress.bosses.add(bossData);
             }
 
-        if (MagmaBossArray != null) {
-            for (Array<Boss> bossArray : MagmaBossArray) {
+        if (bossHander.getMagmaBossArray() != null) {
+            for (Array<Boss> bossArray : bossHander.getMagmaBossArray()) {
                 Boss boss = bossArray.get(1);
                 BossData bossData = new BossData(act.equals("Snow") ? "1_snow" : "1", bossArray.size, boss.getPosition().x,
                         boss.getPosition().y, boss.isDecider());
@@ -795,15 +495,14 @@ public class Play extends GameState {
             }
         }
 
-        if (PlantBossArray != null) {
-            for (Array<Boss> bossArray : PlantBossArray) {
+        if (bossHander.getPlantBossArray() != null) {
+            for (Array<Boss> bossArray : bossHander.getPlantBossArray()) {
                 Boss boss = bossArray.get(1);
-                BossData bossData = new BossData("2", getPlantBossSize(), boss.getPosition().x,
+                BossData bossData = new BossData("2", bossHander.getPlantBossSize(), boss.getPosition().x,
                         boss.getPosition().y, boss.isDecider());
                 progress.bosses.add(bossData);
             }
         }
-
 
         progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }

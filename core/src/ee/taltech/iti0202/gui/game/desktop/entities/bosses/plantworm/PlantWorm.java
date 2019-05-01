@@ -87,7 +87,7 @@ public class PlantWorm extends Boss {
         super.update(dt);
         time += dt;
 
-        Vector2 playerLoc = play.getPlayer().getPosition();
+        Vector2 playerLoc = play.getPlayerHandler().getPlayer().getPosition();
         Vector2 bossLoc = this.body.getPosition();
         float distance = (float) Math.sqrt(Math.pow(playerLoc.x - bossLoc.x, 2) + Math.pow(playerLoc.y - bossLoc.x, 2));
 
@@ -99,7 +99,7 @@ public class PlantWorm extends Boss {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        Player player = play.getPlayer();
+        Player player = play.getPlayerHandler().getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),
