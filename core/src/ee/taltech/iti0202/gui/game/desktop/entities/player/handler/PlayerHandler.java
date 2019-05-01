@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.animations.handler;
+package ee.taltech.iti0202.gui.game.desktop.entities.player.handler;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;

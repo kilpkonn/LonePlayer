@@ -20,10 +20,10 @@ import java.util.Locale;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.entities.animations.handler.BossHander;
-import ee.taltech.iti0202.gui.game.desktop.entities.animations.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.PlayerLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;

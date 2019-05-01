@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.animations.handler.PlayerHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
