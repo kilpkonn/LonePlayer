@@ -16,12 +16,14 @@ public class Bullet extends WeaponProjectile {
     private Body body;
     private SpriteBatch spriteBatch;
 
-    public Bullet(World world, SpriteBatch sb, String path, Body body) {
-        super(body, sb, path);
+    public Bullet(World world, SpriteBatch sb, Body body) {
+        super(body, sb, "images/bullets/bullet_default/bullet.scml");
         this.world = world;
         this.body = body;
         this.spriteBatch = sb;
-
+        setAnimation("fly", false);
+        setScale(0.3f);
+        setAnimationSpeed(50);
         body.setUserData("bullet");
     }
 
