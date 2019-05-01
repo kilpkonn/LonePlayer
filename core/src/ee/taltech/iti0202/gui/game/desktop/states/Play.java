@@ -141,6 +141,7 @@ public class Play extends GameState {
 
     //Bullets
     private Array<Bullet> bulletArray;
+    private int bulletHeat = 10;
 
     ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
@@ -420,6 +421,17 @@ public class Play extends GameState {
                 player.setFlipX(false);
             }
 
+            if (MyInput.isMouseDown(Game.settings.SHOOT) && bulletHeat == 0) {
+                bulletHeat = 10;
+                BulletLoader bulletLoader = new BulletLoader();
+                Bullet bullet = bulletLoader.bulletLoader(this, sb, world, new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1), new Vector2(Gdx.input.getX(), V_HEIGHT - Gdx.input.getY()), player.getPosition());
+                bulletArray.add(bullet);
+            } else {
+                if (bulletHeat > 0) {
+                    bulletHeat--;
+                }
+            }
+
             if (!MyInput.isDown(-1) && cl.isPlayerOnGround()) {
                 player.setAnimation(Player.PlayerAnimation.IDLE);
             }
@@ -450,15 +462,6 @@ public class Play extends GameState {
 
         draw.updateGameFade(dt);
         draw.updateDimensionFade(dt);
-
-
-        if (DEBUG) {
-            // test bullets
-            BulletLoader bulletLoader = new BulletLoader();
-            Bullet bullet = bulletLoader.bulletLoader(this, sb, world, player.getPosition());
-            bulletArray.add(bullet);
-        }
-
 
         switch (playState) {
             case RUN:
@@ -511,7 +514,7 @@ public class Play extends GameState {
             cl.setDoubleJump(true);
         } else {
             camSpeed = new Vector2((player.getPosition().x - cam.position.x / PPM) * 2 * PPM,
-                    (player.getPosition().y - cam.position.y / PPM) * 2 * PPM);
+                    (player.getPosition().y - cam.position.y / PPM) * 4 * PPM);
 
             cam.position.x += camSpeed.x * dt;
             cam.position.y += camSpeed.y * dt;
@@ -591,7 +594,6 @@ public class Play extends GameState {
 
         //update bullets
         if (bulletArray != null) {
-            System.out.println(bulletArray.size);
             for (Bullet bullet : bulletArray) {
                 bullet.update(dt);
             }

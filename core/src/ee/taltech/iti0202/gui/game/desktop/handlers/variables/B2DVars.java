@@ -55,7 +55,7 @@ public class B2DVars {
     public static final float MAX_LOAD_TIME = 10f;
     public static final float MIN_FPS_EXPECTED = 15f;
 
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
     public static boolean UPDATE = true;
 
     public static String PATH = "";
@@ -69,7 +69,7 @@ public class B2DVars {
 
     // category bits
     public static final short NONE = 0;
-    public static final short BIT_ALL = 255;
+    public static final short BIT_ALL = 511;
     public static final short DIMENTSION_1 = 1;
     public static final short DIMENTSION_2 = 2;
     public static final short TERRA_SQUARES = 4;
@@ -78,6 +78,7 @@ public class B2DVars {
     public static final short BACKGROUND = 32;
     public static final short TERRA_DIMENTSION_1 = 64;
     public static final short TERRA_DIMENTSION_2 = 128;
+    public static final short BIT_BULLET = 256;
 
     // corner coords
     public static final int[] SQUARE_CORNERS = {-1, -1, -1, 1, 1, 1, 1, -1};

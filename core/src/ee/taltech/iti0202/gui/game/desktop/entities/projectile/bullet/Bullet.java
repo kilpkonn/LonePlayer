@@ -22,7 +22,7 @@ public class Bullet extends WeaponProjectile {
         this.body = body;
         this.spriteBatch = sb;
         setAnimation("fly", false);
-        setScale(0.3f);
+        setScale(0.1f);
         setAnimationSpeed(50);
         body.setUserData("bullet");
     }

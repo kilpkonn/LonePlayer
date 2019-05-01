@@ -11,7 +11,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import lombok.Data;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_ALL;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BULLET;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 
 @Data
@@ -21,17 +23,15 @@ public class BulletLoader {
     private FixtureDef fdef;
     private BodyDef bdef;
     private World world;
-    private Vector2 position;
     private Body body;
 
-    public Bullet bulletLoader(Play play, SpriteBatch spriteBatch, World world, Vector2 position) {
+    public Bullet bulletLoader(Play play, SpriteBatch spriteBatch, World world, Vector2 positionRelativeToScreen, Vector2 destination, Vector2 positionRelativeToGame) {
 
         this.play = play;
         this.spriteBatch = spriteBatch;
         this.fdef = new FixtureDef();
         this.bdef = new BodyDef();
         this.world = world;
-        this.position = position;
 
         CircleShape circle = new CircleShape();
         circle.setRadius(9 / PPM);
@@ -39,21 +39,24 @@ public class BulletLoader {
         fdef.shape = circle;
         fdef.friction = 1f;
         fdef.restitution = 0f;
-        fdef.density = 0f;
-        fdef.filter.categoryBits = BIT_ALL;
-        fdef.filter.maskBits = BIT_ALL;
+        fdef.density = 10f;
+        fdef.filter.categoryBits = BIT_BULLET;
+        fdef.filter.maskBits = BIT_BOSSES | BIT_WORM;
 
         bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;
-        bdef.allowSleep = false;
+        bdef.allowSleep = true;
         bdef.bullet = true;
         bdef.fixedRotation = true;
         Body body = world.createBody(bdef);
         body.createFixture(fdef).setUserData("bullet");
-        body.setTransform(new Vector2(position.x, position.y + 1), body.getAngle());
-        body.applyLinearImpulse(new Vector2(10, 10), position, true);
+        body.setTransform(new Vector2(positionRelativeToGame.x, positionRelativeToGame.y), body.getAngle());
+        System.out.println(destination);
+        System.out.println(positionRelativeToScreen);
+        System.out.println(positionRelativeToGame);
+        body.applyLinearImpulse(new Vector2((destination.x - positionRelativeToScreen.x), (destination.y - positionRelativeToScreen.y)), positionRelativeToScreen, true);
         this.body = body;
 
-        return new Bullet(world, spriteBatch, "images/bosses/plantworm/plantworm.scml", body); //todo add animation for bullet, cannon blast and red line ?
+        return new Bullet(world, spriteBatch, body); //todo add animation for bullet, cannon blast and red line ?
     }
 }

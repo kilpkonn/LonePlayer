@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Properties;
 
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BULLET;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
@@ -22,6 +23,6 @@ public class PlantWormProperties extends Properties {
         fdef.restitution = 0f;
         fdef.density = 10f;
         fdef.filter.categoryBits = BIT_WORM;
-        fdef.filter.maskBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.maskBits = DIMENTSION_1 | DIMENTSION_2 | BIT_BULLET;
     }
 }
