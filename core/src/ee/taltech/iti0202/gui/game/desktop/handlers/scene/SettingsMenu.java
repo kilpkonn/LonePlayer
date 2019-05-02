@@ -148,7 +148,7 @@ public class SettingsMenu extends Scene {
     public void handleInput() {
         handleKey(MyInput.getKeyDown());
 
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && currBlock != null) {
             switch (currBlock) {
                 case EXIT:
                     playSoundOnce("sounds/negative_2.wav", 0.5f);

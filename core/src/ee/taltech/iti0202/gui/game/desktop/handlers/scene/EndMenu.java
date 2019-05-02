@@ -65,7 +65,7 @@ public class EndMenu extends Scene{
 
     @Override
     public void handleInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && currBlock != null) {
             switch (currBlock) {
                 case NEXT:
                     System.out.println(act);

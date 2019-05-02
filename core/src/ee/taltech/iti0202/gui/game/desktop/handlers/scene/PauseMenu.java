@@ -69,7 +69,7 @@ public class PauseMenu extends Scene {
 
     @Override
     public void handleInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && currBlock != null) {
             switch (currBlock) {
                 case RESUME:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);
