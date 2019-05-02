@@ -64,6 +64,10 @@ public class SpriteAnimation {
         playerTweener.setAngle((float) Math.toDegrees(body.getAngle()));
     }
 
+    protected void rotateBone(String name, float angle) {
+        playerTweener.setBone(name, angle);
+    }
+
     public void render(SpriteBatch sb) {
         sb.setColor(1, 1, 1, opacity);
         sb.begin();

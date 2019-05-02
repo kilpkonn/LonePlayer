@@ -7,7 +7,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import java.util.ArrayList;
 import java.util.List;
 
+import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -49,6 +51,15 @@ public class Player extends SpriteAnimation {
 
         public String toString() {
             return this.name;
+        }
+    }
+
+    @Override
+    public void update(float dt) {
+        super.update(dt);
+
+        if(MyInput.isMouseDown(Game.settings.SHOOT)) {
+            rotateBone("right_hand", 90);
         }
     }
 
