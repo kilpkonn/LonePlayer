@@ -59,7 +59,7 @@ public class Player extends SpriteAnimation {
         super.update(dt);
 
         if(MyInput.isMouseDown(Game.settings.SHOOT)) {
-            rotateBone("right_hand", 90);
+            rotateBone("right_shoulder", 90);
         }
     }
 
