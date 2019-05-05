@@ -5,14 +5,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.utils.Array;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
-import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.BulletLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.layers.Draw;
@@ -39,30 +38,22 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_W
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.gotHitBySnek;
 
 @Data
-public class PlayerHandler {
+public class PlayerHandler implements Handler {
 
+    @ToString.Exclude
+    private Play play;
     private Player player;
     private GameProgress progress;
     private SpriteBatch spriteBatch;
-
     private Vector2 tempPlayerLocation = new Vector2();
     private Vector2 initPlayerLocation;
     private Vector2 current_force = new Vector2(0, 0);
     private boolean newPlayer = true;
     private int gracePeriod = 60;
     private GameProgress gameProgress;
-    @ToString.Exclude
-    private Play play;
     private Draw draw;
     private MyContactListener cl;
-
-    //Checkpoints
-    private Array<Checkpoint> checkpointList = new Array<>();
-    private Checkpoint activeCheckpoint;
-
-    //Bullets
-    private Array<Bullet> bulletArray = new Array<>();
-    private int bulletHeat = 10;
+    private int bulletHeat = 0;
 
     public PlayerHandler(Play play, SpriteBatch sb, GameProgress gameProgress, MyContactListener cl, Draw draw) {
         this.play = play;
@@ -173,25 +164,22 @@ public class PlayerHandler {
                     filter.maskBits = mask;
                     playerFixture.setFilterData(filter);
                 }
-
             }
 
-
-            if (MyInput.isMouseDown(Game.settings.SHOOT) && bulletHeat == 0) {
-                bulletHeat = 10;
-                BulletLoader bulletLoader = new BulletLoader();
-                Bullet bullet = bulletLoader.bulletLoader(play, spriteBatch, play.getWorld(), new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1), new Vector2(Gdx.input.getX(), V_HEIGHT - Gdx.input.getY()), player.getPosition());
-                bulletArray.add(bullet);
+            if (MyInput.isMouseDown(Game.settings.SHOOT) && bulletHeat == 0 && player.getWeapon() != null) {
+                bulletHeat = player.getWeapon().getBulletHeat();
+                Bullet bullet = BulletLoader.bulletLoader(spriteBatch, play.getWorld(), new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1), new Vector2(Gdx.input.getX(), V_HEIGHT - Gdx.input.getY()), player.getPosition());
+                draw.getBulletHandler().getBulletArray().add(bullet);
             } else {
                 if (bulletHeat > 0) {
                     bulletHeat--;
                 }
             }
-
         }
     }
 
-    public void updatePlayer(float dt) {
+    @Override
+    public void update(float dt) {
 
         //call update animation
         if (player.getHealth() == 0) {
@@ -222,56 +210,16 @@ public class PlayerHandler {
         }
         player.update(dt);
 
-        //update bullets
-        if (bulletArray != null) {
-            for (Bullet bullet : bulletArray) {
-                bullet.update(dt);
-            }
-        }
-
         if (gracePeriod > 0)
             gracePeriod -= 1;
 
-        // create a new checkpoint if needed
-        if (checkpointList != null) {
-            if (cl.isNewCheckpoint()) {
-                Checkpoint curTemp = checkpointList.get(0); // just in case
-                for (Checkpoint checkpoint : checkpointList) {
-                    if (Math.pow(checkpoint.getPosition().x - player.getBody().getPosition().x, 2) + Math.pow(checkpoint.getPosition().y - player.getBody().getPosition().y, 2) <=
-                            Math.pow(curTemp.getPosition().x - player.getBody().getPosition().x, 2) + Math.pow(curTemp.getPosition().y - player.getBody().getPosition().y, 2)) {
-                        curTemp = checkpoint;
-                    }
-                }
-                cl.setCurCheckpoint(curTemp.getBody());
-                curTemp.onReached();
-                if (activeCheckpoint != null)
-                    activeCheckpoint.lostItsPurposeAsANewBetterCheckpointWasFoundAndTheOldOneWasTossedAwayLikeAnOldCondom();
-                activeCheckpoint = curTemp;
-
-                playSoundOnce("sounds/checkpoint.ogg");
-            }
-            for (Checkpoint checkpoint : checkpointList)
-                checkpoint.update(dt);
-        }
     }
 
-    public void renderPlayer(SpriteBatch sb) {
-
-        // draw checkpoint
-        if (checkpointList.size != 0)
-            for (Checkpoint checkpoint : checkpointList) {
-                checkpoint.render(sb);
-            }
+    @Override
+    public void render(SpriteBatch sb) {
 
         // draw player
         if (player != null) player.render(sb);
 
-
-        // draw bullets
-        if (bulletArray != null) {
-            for (Bullet bullet : bulletArray) {
-                bullet.render(sb);
-            }
-        }
     }
 }

@@ -19,9 +19,11 @@ import java.util.Locale;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
+import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.handler.CheckpointHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.handler.WeaponHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.handler.BulletHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
@@ -81,16 +83,20 @@ public class Play extends GameState {
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
 
-    // Player based variables
+    // handlers
     @ToString.Exclude
     private PlayerHandler playerHandler;
     @ToString.Exclude
     private BossHander bossHander;
     @ToString.Exclude
     private WeaponHandler weaponHandler;
-    private GameProgress progress;
+    @ToString.Exclude
+    private CheckpointHandler checkpointHandler;
+    @ToString.Exclude
+    private BulletHandler bulletHandler;
 
     // States
+    private GameProgress progress;
     private PauseMenu pauseMenu;
     private pauseState playState = pauseState.DEFAULT;
     private SettingsMenu settingsMenu;
@@ -223,12 +229,18 @@ public class Play extends GameState {
         ////////////////////////////////    Tiled stuff here    ///////////////////////
 
         draw = new Draw(this, sb, world); // first create the "canvas" to draw onto
-        playerHandler = new PlayerHandler(this, sb, progress, cl, draw); // then create a handler for player
+        playerHandler = new PlayerHandler(this, sb, progress, cl, draw);
+        checkpointHandler = new CheckpointHandler();
         bossHander = new BossHander();
+        bulletHandler = new BulletHandler();
+        weaponHandler = new WeaponHandler(world);
         draw.setPlayerHandler(playerHandler);
         draw.setBossHander(bossHander);
-        // and then load the player in
+        draw.setCheckpointHandler(checkpointHandler);
+        draw.setBulletHandler(bulletHandler);
+        draw.setWeaponHandler(weaponHandler);
 
+        // and then load the player in
         if (progress != null) {
             draw.setDimension(progress.dimension);
             draw.drawLayers(false, progress.bosses);
@@ -238,15 +250,14 @@ public class Play extends GameState {
             playerHandler.setPlayer(PlayerLoader.initPlayer(sb, playerHandler, draw, world, cl));
         }
 
-        weaponHandler = new WeaponHandler(world);
-        weaponHandler.initWeapon("Deagle", sb, playerHandler.getPlayer());
-
         cam.position.set(
                 playerHandler.getPlayer().getPosition().x * PPM,
                 playerHandler.getPlayer().getPosition().y * PPM,
                 0);
         UPDATE = true;
         cam.zoom = 1;
+
+        weaponHandler.initWeapon("Deagle", sb, playerHandler.getPlayer());
     }
 
     public Play(String act, String map, B2DVars.gameDifficulty difficulty) {
@@ -377,19 +388,14 @@ public class Play extends GameState {
 
         cam.update();
 
-        playerHandler.updatePlayer(dt);
-
-        //update weapons
-        weaponHandler.update(dt);
+        //update animated cells
+        draw.update(dt);
 
         //calculate falling dmg
         playerHandler.getPlayer().onLanded(playerHandler.getPlayer().getBody().getLinearVelocity(), cl.isPlayerOnGround());
 
-        //update bosses
-        bossHander.updateBosses(dt);
-
-        //update animated cells
-        draw.update(dt);
+        //set new checkpoint
+        checkpointHandler.setPlayerNewCheckpoint(cl, playerHandler);
     }
 
     public void render() {
@@ -453,15 +459,7 @@ public class Play extends GameState {
 
         //draw tilemap
         draw.render(cam);
-
-        //draw bosses
-        bossHander.renderBosses(sb);
-
-        //draw weapon
-        weaponHandler.render(sb);
-
-        //draw player and bullets
-        playerHandler.renderPlayer(sb);
+        draw.render(sb);
 
         hud.render(sb);
 
@@ -474,8 +472,8 @@ public class Play extends GameState {
         progress.playerLocationY = player.getPosition().y;
         progress.playerVelocityX = player.getBody().getLinearVelocity().x;
         progress.playerVelocityY = player.getBody().getLinearVelocity().y;*/
-        progress.checkpointX = playerHandler.getActiveCheckpoint().getBody().getPosition().x;
-        progress.checkpointY = playerHandler.getActiveCheckpoint().getBody().getPosition().y;
+        progress.checkpointX = playerHandler.getPlayer().getCheckpoint().getBody().getPosition().x;
+        progress.checkpointY = playerHandler.getPlayer().getCheckpoint().getBody().getPosition().y;
         progress.act = act;
         progress.map = map;
         progress.dimension = draw.isDimension();

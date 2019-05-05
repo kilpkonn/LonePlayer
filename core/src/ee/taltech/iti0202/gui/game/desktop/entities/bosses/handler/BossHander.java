@@ -4,11 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import lombok.Data;
 
 @Data
-public class BossHander {
+public class BossHander implements Handler {
 
     private Array<Boss> SnowManArray;
     private Array<Array<Boss>> MagmaBossArray;
@@ -27,7 +28,8 @@ public class BossHander {
 
     }
 
-    public void updateBosses(float dt) {
+    @Override
+    public void update(float dt) {
         if (SnowManArray.size != 0) {
             for (Boss boss : SnowManArray) {
                 boss.update(dt);
@@ -83,7 +85,8 @@ public class BossHander {
         }
     }
 
-    public void renderBosses(SpriteBatch sb) {
+    @Override
+    public void render(SpriteBatch sb) {
         if (SnowManArray != null)
             for (Boss boss : SnowManArray)
                 boss.render(sb);

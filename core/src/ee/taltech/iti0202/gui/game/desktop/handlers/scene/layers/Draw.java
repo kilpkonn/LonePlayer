@@ -19,7 +19,6 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
@@ -34,8 +33,12 @@ import java.util.Map;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.BossLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
+import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.handler.CheckpointHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.loader.CheckpointLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
-import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.handler.BulletHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.bleeding.Bleeding;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
@@ -67,6 +70,9 @@ public class Draw {
     private Play play;
     private PlayerHandler playerHandler;
     private BossHander bossHander;
+    private CheckpointHandler checkpointHandler;
+    private BulletHandler bulletHandler;
+    private WeaponHandler weaponHandler;
     private World world;
     private SpriteBatch spriteBatch;
     private BodyDef bdef;
@@ -125,22 +131,6 @@ public class Draw {
             this.fdef.shape = shape;
             world.createBody(this.bdef).createFixture(this.fdef).setUserData(layer.getName());
         }
-    }
-
-    private Checkpoint createEndPoint(Vector2 pos) {
-        System.out.println("new endpoint");
-        this.bdef = new BodyDef();
-        this.bdef.position.set(pos);
-        this.bdef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(this.bdef);
-        PolygonShape polyShape = new PolygonShape();
-        polyShape.setAsBox(64 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
-        this.fdef.shape = polyShape;
-        this.fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-        this.fdef.filter.maskBits = B2DVars.BIT_ALL;
-        this.fdef.isSensor = true;
-        body.createFixture(this.fdef).setUserData("end");
-        return new Checkpoint(body, spriteBatch);
     }
 
     public void drawLayers(boolean defaultSpawn, List<BossData> bosses) {
@@ -277,14 +267,13 @@ public class Draw {
                 switch (layer.getName()) {
                     case "checkpoints":
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
-                            Checkpoint checkpoint = createEndPoint(new Vector2(polygon[1].x + tileSize / PPM, polygon[0].y));
-                            playerHandler.getCheckpointList().add(checkpoint);
+                            Checkpoint checkpoint = CheckpointLoader.createEndPoint(new Vector2(polygon[1].x + tileSize / PPM, polygon[0].y), world, spriteBatch);
+                            checkpointHandler.getCheckpointList().add(checkpoint);
                         } else {
                             if (B2DVars.CHECKPOINTS) {
-                                Checkpoint checkpoint = createCheckpoints(new Vector2(polygon[1].x + (polygon[3].x - polygon[1].x) / 2, polygon[0].y));
-                                playerHandler.getCheckpointList().add(checkpoint);
+                                Checkpoint checkpoint = CheckpointLoader.createCheckpoints(new Vector2(polygon[1].x + (polygon[3].x - polygon[1].x) / 2, polygon[0].y), world, spriteBatch);
+                                checkpointHandler.getCheckpointList().add(checkpoint);
                             }
-
                         }
                         break;
 
@@ -319,23 +308,6 @@ public class Draw {
         }
     }
 
-    private Checkpoint createCheckpoints(Vector2 pos) {
-        System.out.println("new checkpoint");
-        this.bdef = new BodyDef();
-        this.fdef = new FixtureDef();
-        this.bdef.position.set(pos);
-        this.bdef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(this.bdef);
-        PolygonShape polyShape = new PolygonShape();
-        polyShape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
-        this.fdef.shape = polyShape;
-        this.fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
-        this.fdef.filter.maskBits = B2DVars.BIT_ALL;
-        this.fdef.isSensor = true;
-        body.createFixture(this.fdef).setUserData("checkpoint");
-        return new Checkpoint(body, spriteBatch);
-    }
-
     public void update(float dt) {
         //draw tilemap animations
         if (animatedCells != null) {
@@ -343,6 +315,20 @@ public class Draw {
                 animation.update(dt);
             }
         }
+        //update player
+        playerHandler.update(dt);
+
+        //update weapons
+        weaponHandler.update(dt);
+
+        //update checkpoints
+        checkpointHandler.update(dt);
+
+        //update bosses
+        bossHander.update(dt);
+
+        //update bullets
+        bulletHandler.update(dt);
     }
 
     public void render(OrthographicCamera cam) {
@@ -363,6 +349,23 @@ public class Draw {
         if (DEBUG) play.getB2dr().render(world, play.getB2dcam().combined);
 
         spriteBatch.setProjectionMatrix(cam.combined);
+    }
+
+    public void render(SpriteBatch sb) {
+        //draw bosses
+        bossHander.render(sb);
+
+        //draw player and bullets
+        playerHandler.render(sb);
+
+        //draw weapon
+        weaponHandler.render(sb);
+
+        //draw bullets
+        bulletHandler.render(sb);
+
+        //draw checkpoints
+        checkpointHandler.render(sb);
     }
 
     public void updateDimensionFade(float dt) {

@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.staticobjects;
+package ee.taltech.iti0202.gui.game.desktop.entities.checkpoints;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -39,7 +39,7 @@ public class Checkpoint extends SpriteAnimation {
         setAnimation(CheckpointAnimation.COLLECTED);
     }
 
-    public void lostItsPurposeAsANewBetterCheckpointWasFoundAndTheOldOneWasTossedAwayLikeAnOldCondom() {
+    public void dispose() {
         setAnimation(CheckpointAnimation.DEFAULT);
     }
 }

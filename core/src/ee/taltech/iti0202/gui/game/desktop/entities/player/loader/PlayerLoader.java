@@ -94,7 +94,7 @@ public class PlayerLoader {
             world.destroyBody(playerHandler.getPlayer().getBody());
         BodyDef bdef = new BodyDef();
 
-        if (playerHandler.getActiveCheckpoint() == null) {
+        if (playerHandler.getPlayer() != null && playerHandler.getPlayer().getCheckpoint() == null) {
             if (playerHandler.getInitPlayerLocation() == null) {
                 bdef.position.set(0, 0); // hopefully never get here
             } else {
@@ -103,7 +103,7 @@ public class PlayerLoader {
         } else if (cl.isInitSpawn()) {
             bdef.position.set(playerHandler.getInitPlayerLocation());
         } else {
-            bdef.position.set(new Vector2(playerHandler.getActiveCheckpoint().getPosition()));
+            bdef.position.set(new Vector2(playerHandler.getPlayer().getCheckpoint().getPosition()));
         }
         return buildPlayer(bdef, spriteBatch, draw, world);
     }

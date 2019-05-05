@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.loader;
+package ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -6,9 +6,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.Deagle;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.Weapon;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.handler.WeaponHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Deagle;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WEAPON;

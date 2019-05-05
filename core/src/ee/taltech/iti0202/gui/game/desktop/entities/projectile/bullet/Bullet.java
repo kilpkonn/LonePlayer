@@ -17,6 +17,7 @@ public class Bullet extends WeaponProjectile {
     private Vector2 position;
     private Body body;
     private SpriteBatch spriteBatch;
+    private int bulletHeat = 100;
 
     public Bullet(World world, SpriteBatch sb, Body body) {
         super(body, sb, "images/bullets/bullet_default/bullet.scml");

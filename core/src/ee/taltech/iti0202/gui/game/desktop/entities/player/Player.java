@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -25,6 +26,7 @@ public class Player extends SpriteAnimation {
     private int health;
     private List<Vector2> doneDmg = new ArrayList<>();
     private Weapon weapon;
+    private Checkpoint checkpoint;
 
     public Player(Body body, SpriteBatch sb) {
         super(body, sb, "images/player/rogue.scml");
