@@ -284,6 +284,7 @@ public class Play extends GameState {
             return;
         } else if (loading) {
             loading = false;
+            playTime = 0; // Start counting
         }
 
         if (playerHandler.isNewPlayer()) {
@@ -297,6 +298,7 @@ public class Play extends GameState {
             UPDATE = false;
             draw.setGameFadeOut(true);
             draw.setGameFadeDone(false);
+            endMenu.setTime(playTime);
             playState = pauseState.END;
         }
 
@@ -337,7 +339,7 @@ public class Play extends GameState {
     }
 
     private void updateProps(float dt) {
-
+        playTime += dt;
 
         //update camera
         if (DEBUG) {
