@@ -19,8 +19,8 @@ import java.util.Locale;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
@@ -224,17 +224,19 @@ public class Play extends GameState {
         bossHander = new BossHander();
         draw.setPlayerHandler(playerHandler);
         draw.setBossHander(bossHander);
-        PlayerLoader playerLoader = new PlayerLoader(this, sb, playerHandler); // and then load the player in
+        // and then load the player in
 
         if (progress != null) {
             draw.setDimension(progress.dimension);
             draw.drawLayers(false, progress.bosses);
-            playerHandler.setPlayer(playerLoader.initPlayer(progress));
+            playerHandler.setPlayer(PlayerLoader.initPlayer(progress, sb, playerHandler, draw, world));
         } else {
-
             draw.drawLayers(true, null);
-            playerHandler.setPlayer(playerLoader.initPlayer());
+            playerHandler.setPlayer(PlayerLoader.initPlayer(sb, playerHandler, draw, world, cl));
         }
+
+        playerHandler.initWeaponHandling();
+//        playerHandler.initWeapon("Deagle"); // TODO: create weapon (Deagle)
 
         cam.position.set(
                 playerHandler.getPlayer().getPosition().x * PPM,

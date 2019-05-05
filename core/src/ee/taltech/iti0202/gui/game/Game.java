@@ -164,7 +164,6 @@ public class Game extends ApplicationAdapter {
             sb.setProjectionMatrix(cam.combined);
             System.out.println("resized");
         }
-
     }
 
     public void pause() {

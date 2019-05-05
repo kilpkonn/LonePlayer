@@ -9,8 +9,7 @@ import java.util.List;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.wapons.Deagle;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.wapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,7 +33,6 @@ public class Player extends SpriteAnimation {
         setAnimationSpeed(100);
         setHeightOffset(10);
         health = 100;
-        //weapon = new Deagle() // TODO: create weapon (Deagle)
     }
 
     public enum PlayerAnimation {
@@ -63,7 +61,7 @@ public class Player extends SpriteAnimation {
         super.update(dt);
 
         if(MyInput.isMouseDown(Game.settings.SHOOT)) {
-            rotateBone("right_shoulder", 90);
+            rotateBone("right_hand", 90);
         }
     }
 

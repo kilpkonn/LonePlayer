@@ -143,7 +143,7 @@ public class Draw {
         return new Checkpoint(body, spriteBatch);
     }
 
-    public BossLoader drawLayers(boolean defaultSpawn, List<BossData> bosses) {
+    public void drawLayers(boolean defaultSpawn, List<BossData> bosses) {
         for (MapLayer layer : tiledMap.getLayers()) {
             switch (layer.getName()) {
                 case "barrier":
@@ -170,12 +170,9 @@ public class Draw {
                     readVertices((TiledMapTileLayer) layer, defaultSpawn);
             }
         }
-        BossLoader bossLoader = null;
         if (!defaultSpawn) {
-            bossLoader = new BossLoader(play, spriteBatch, fdef, bdef, this.bossHander);
-            bossLoader.createAllBosses(bosses);
+            new BossLoader(play, spriteBatch, fdef, bdef, bossHander).createAllBosses(bosses);
         }
-        return bossLoader;
     }
 
     private void readVertices(TiledMapTileLayer layer, boolean defaultSpawn) {

@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.player.wapons;
+package ee.taltech.iti0202.gui.game.desktop.entities.player.weapons;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;

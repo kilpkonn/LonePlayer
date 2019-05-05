@@ -47,11 +47,10 @@ public class BossLoader {
         this.bossHander = bossHander;
     }
 
-    public BossHander createAllBosses(List<BossData> bosses) {
+    public void createAllBosses(List<BossData> bosses) {
         for (BossData boss : bosses) {
             createBosses(new Vector2(boss.locationX, boss.locationY), boss.type, boss.decider, boss.size, true);
         }
-        return bossHander;
     }
 
     public void createBosses(Vector2 position, String type, boolean decider, int size) {
