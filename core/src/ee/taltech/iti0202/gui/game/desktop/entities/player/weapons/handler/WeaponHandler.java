@@ -17,10 +17,10 @@ public class WeaponHandler {
     }
 
     public void update(float dt) {
-
+        weapon.update(dt);
     }
 
     public void render(SpriteBatch spriteBatch) {
-
+        weapon.render(spriteBatch);
     }
 }
