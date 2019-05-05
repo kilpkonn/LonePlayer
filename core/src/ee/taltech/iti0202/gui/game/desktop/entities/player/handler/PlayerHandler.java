@@ -199,6 +199,9 @@ public class PlayerHandler {
 
     public void updatePlayer(float dt) {
         //update weapon
+        if (weaponHandling != null) {
+            weaponHandling.update(dt, player);
+        }
         /*if (weaponHandling != null) {
             weaponHandling.update(dt);
         }*/

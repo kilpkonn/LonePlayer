@@ -5,7 +5,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
+import lombok.Data;
 
+@Data
 public abstract class Weapon extends SpriteAnimation {
 
     protected World world;
