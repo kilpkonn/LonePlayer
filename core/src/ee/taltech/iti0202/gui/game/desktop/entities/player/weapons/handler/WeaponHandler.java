@@ -15,7 +15,6 @@ import lombok.Data;
 public class WeaponHandler {
 
     private final World world;
-    private Weapon weapon;
     private List<Weapon> weaponList = new ArrayList<>();
 
     public WeaponHandler(World world) {
@@ -24,9 +23,7 @@ public class WeaponHandler {
 
     public void update(float dt) {
         for (Weapon weapon : weaponList) {
-            if (weapon != this.weapon) {
-                weapon.update(dt);
-            }
+            weapon.update(dt);
         }
     }
 

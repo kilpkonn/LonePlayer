@@ -180,7 +180,10 @@ public class PlayerHandler {
             if (MyInput.isMouseDown(Game.settings.SHOOT) && bulletHeat == 0) {
                 bulletHeat = 10;
                 BulletLoader bulletLoader = new BulletLoader();
-                Bullet bullet = bulletLoader.bulletLoader(play, spriteBatch, play.getWorld(), new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1), new Vector2(Gdx.input.getX(), V_HEIGHT - Gdx.input.getY()), player.getPosition());
+                Vector2 loc = MyInput.getMouseLocation();
+
+                player.attack();
+                Bullet bullet = bulletLoader.bulletLoader(play, spriteBatch, play.getWorld(), new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1), new Vector2(loc.x, V_HEIGHT - loc.y), player.getPosition());
                 bulletArray.add(bullet);
             } else {
                 if (bulletHeat > 0) {

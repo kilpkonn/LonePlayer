@@ -56,6 +56,7 @@ public class SpriteAnimation {
         toPlayOnce.add("roll");
         toPlayOnce.add("attack");
         toPlayOnce.add("faceplant");
+        toPlayOnce.add("fire");
         playerTweener.setAnimToPlayOnce(toPlayOnce);
     }
 

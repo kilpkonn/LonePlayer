@@ -5,26 +5,30 @@ import com.badlogic.gdx.InputAdapter;
 
 public class MyInputProcessor extends InputAdapter {
 
+    @Override
     public boolean keyDown(int k) {
         MyInput.setKeyDown(k, true);
         return true;
     }
 
+    @Override
     public boolean keyUp(int k) {
         MyInput.setKeyDown(k, false);
         return true;
     }
 
-
+    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 
         if (button == Input.Buttons.LEFT) {
             MyInput.setMouseDown(true);
+            MyInput.setMouseLoc(screenX, screenY);
         }
 
         return true;
     }
 
+    @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 
         if (button == Input.Buttons.LEFT) {
@@ -33,4 +37,15 @@ public class MyInputProcessor extends InputAdapter {
         return true;
     }
 
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        MyInput.setMouseLoc(screenX, screenY);
+        return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        //MyInput.setMouseLoc(screenX, screenY);
+        return true;
+    }
 }

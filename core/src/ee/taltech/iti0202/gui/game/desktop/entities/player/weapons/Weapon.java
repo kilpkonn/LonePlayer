@@ -18,7 +18,6 @@ public abstract class Weapon extends SpriteAnimation {
         this.world = world;
         this.body = body;
         setAnimation(Animation.DEFAULT.name, false);
-        setScale(0.5f);
         setAnimationSpeed(50);
     }
 
@@ -30,6 +29,10 @@ public abstract class Weapon extends SpriteAnimation {
     @Override
     public void render(SpriteBatch spriteBatch) {
         super.render(spriteBatch);
+    }
+
+    public void fire() {
+        setAnimation(Animation.FIRE.name, true);
     }
 
     public enum Animation {

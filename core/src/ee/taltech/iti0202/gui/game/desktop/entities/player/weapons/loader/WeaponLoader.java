@@ -43,7 +43,6 @@ public class WeaponLoader {
                 weapon = new Deagle(weaponHandler.getWorld(), spriteBatch, body);
                 break;
         }
-        weaponHandler.setWeapon(weapon);
 
         return weapon;
     }

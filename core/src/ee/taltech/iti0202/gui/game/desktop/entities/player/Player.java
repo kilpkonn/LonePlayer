@@ -8,8 +8,10 @@ import com.brashmonkey.spriter.Timeline;
 import java.util.ArrayList;
 import java.util.List;
 
+import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -59,17 +61,25 @@ public class Player extends SpriteAnimation {
     @Override
     public void render(SpriteBatch sb) {
         super.render(sb);
+
+        if (weapon != null) {
+            weapon.render(sb); // double render
+        }
     }
 
     @Override
     public void update(float dt) {
         super.update(dt);
 
+        /*if (MyInput.isMouseDown(Game.settings.SHOOT)) {
+            Vector2 loc = MyInput.getMouseLocation();
+            float angle = 0; //TODO: Calc angle;
+            rotateBone("right_shoulder", angle);
+        }*/
+
         if (weapon != null) {
             Timeline.Key.Bone hand = getBone("right_hand");
-            System.out.println(hand.angle);
             weapon.getBody().setTransform(new Vector2(hand.position.x / PPM, hand.position.y / PPM), (float) Math.toRadians(hand.angle));
-            weapon.update(dt);
         }
     }
 
@@ -78,6 +88,12 @@ public class Player extends SpriteAnimation {
         super.setFlipX(flipX);
         if (weapon != null) {
             weapon.setFlipX(flipX);
+        }
+    }
+
+    public void attack() {
+        if (weapon != null) {
+            weapon.fire();
         }
     }
 

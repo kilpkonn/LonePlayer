@@ -11,6 +11,6 @@ public class Deagle extends Weapon {
     public Deagle(World world, SpriteBatch sb, Body body) {
         super(world, sb, body, "images/bullets/deagle/deagle.scml");
         setScale(0.1f);
-        setAnimationSpeed(30);
+        setAnimationSpeed(200);
     }
 }
