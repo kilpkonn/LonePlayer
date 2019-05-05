@@ -20,12 +20,11 @@ public class WeaponHandler {
         this.world = world;
     }
 
-    public void update(float dt, Player player) {
-        weapon.update(dt);
-        weapon.getBody().setTransform(player.getPosition(), player.getBody().getAngle());
+    public void update(float dt) {
+        //weapon.update(dt);
     }
 
     public void render(SpriteBatch spriteBatch) {
-        weapon.render(spriteBatch);
+        //weapon.render(spriteBatch);
     }
 }

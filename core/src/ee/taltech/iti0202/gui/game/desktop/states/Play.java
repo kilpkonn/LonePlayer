@@ -236,7 +236,7 @@ public class Play extends GameState {
         }
 
         playerHandler.initWeaponHandling();
-        playerHandler.initWeapon("Deagle"); // TODO: create weapon (Deagle)
+        playerHandler.initWeapon("Deagle");
 
         cam.position.set(
                 playerHandler.getPlayer().getPosition().x * PPM,

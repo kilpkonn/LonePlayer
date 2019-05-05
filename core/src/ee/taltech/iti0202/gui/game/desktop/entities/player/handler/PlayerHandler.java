@@ -199,9 +199,9 @@ public class PlayerHandler {
 
     public void updatePlayer(float dt) {
         //update weapon
-        if (weaponHandling != null) {
+        /*if (weaponHandling != null) {
             weaponHandling.update(dt);
-        }
+        }*/
 
         //call update animation
         if (player.getHealth() == 0) {
@@ -290,7 +290,9 @@ public class PlayerHandler {
     }
 
     public Weapon initWeapon(String type) {
-        return WeaponLoader.buildWeapon(type, spriteBatch, weaponHandling);
+        Weapon weapon = WeaponLoader.buildWeapon(type, spriteBatch, weaponHandling);
+        player.setWeapon(weapon); //TODO: Not auto add to player
+        return weapon;
     }
 
     public void initWeaponHandling() {

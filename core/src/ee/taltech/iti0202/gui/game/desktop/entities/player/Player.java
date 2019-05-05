@@ -3,6 +3,7 @@ package ee.taltech.iti0202.gui.game.desktop.entities.player;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.brashmonkey.spriter.Timeline;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import lombok.EqualsAndHashCode;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
 
 @EqualsAndHashCode(callSuper = true)
@@ -59,11 +61,23 @@ public class Player extends SpriteAnimation {
     }
 
     @Override
+    public void render(SpriteBatch sb) {
+        super.render(sb);
+        // Render weapon first?
+        if (weapon != null) {
+            weapon.render(sb);
+        }
+    }
+
+    @Override
     public void update(float dt) {
         super.update(dt);
 
-        if(MyInput.isMouseDown(Game.settings.SHOOT)) {
-            rotateBone("right_hand", 90);
+        if (weapon != null) {
+            Timeline.Key.Bone hand = getBone("right_hand");
+            System.out.println(hand.angle);
+            weapon.getBody().setTransform(new Vector2(hand.position.x / PPM, hand.position.y / PPM), (float) Math.toRadians(hand.angle));
+            weapon.update(dt);
         }
     }
 

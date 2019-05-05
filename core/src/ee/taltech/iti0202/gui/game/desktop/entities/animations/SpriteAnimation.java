@@ -7,10 +7,12 @@ import com.brashmonkey.spriter.Animation;
 import com.brashmonkey.spriter.Data;
 import com.brashmonkey.spriter.LibGdx.LibGdxDrawer;
 import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
+import com.brashmonkey.spriter.Timeline;
 
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import lombok.AllArgsConstructor;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
@@ -66,6 +68,10 @@ public class SpriteAnimation {
 
     protected void rotateBone(String name, float angle) {
         playerTweener.setBone(name, angle);
+    }
+
+    protected Timeline.Key.Bone getBone(String name) {
+        return playerTweener.getBone(name);
     }
 
     public void render(SpriteBatch sb) {
