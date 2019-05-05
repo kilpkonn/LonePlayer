@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.List;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.joints.BossHelper;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormProperties;
@@ -21,31 +22,36 @@ import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.SnowWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.WormProperties;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
+import lombok.Data;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 
+@Data
 public class BossLoader {
 
     private Play play;
     private SpriteBatch spriteBatch;
     private Vector2 tempPosition;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
+    private BossHander bossHander;
     private FixtureDef fdef;
     private BodyDef bdef;
 
-    public BossLoader(Play play, SpriteBatch spriteBatch, FixtureDef fdef, BodyDef bdef) {
+    public BossLoader(Play play, SpriteBatch spriteBatch, FixtureDef fdef, BodyDef bdef, BossHander bossHander) {
         this.play = play;
         this.spriteBatch = spriteBatch;
         this.fdef = fdef;
         this.bdef = bdef;
+        this.bossHander = bossHander;
     }
 
-    public void createAllBosses(List<BossData> bosses) {
+    public BossHander createAllBosses(List<BossData> bosses) {
         for (BossData boss : bosses) {
             createBosses(new Vector2(boss.locationX, boss.locationY), boss.type, boss.decider, boss.size, true);
         }
+        return bossHander;
     }
 
     public void createBosses(Vector2 position, String type, boolean decider, int size) {
@@ -61,7 +67,6 @@ public class BossLoader {
         //   TYPE 3: idk                                                       //
         //                                                                     //
         /////////////////////////////////////////////////////////////////////////
-
         boolean snowTheme = false;
         if (type.equals("1_snow")) {
             type = "1";
@@ -95,12 +100,12 @@ public class BossLoader {
 
                 }
                 BossHelper.filterTextures(tempArray);
-                play.getBossHander().getMagmaBossArray().add(tempArray);
+                bossHander.getMagmaBossArray().add(tempArray);
                 break;
 
             case "2":
-                play.getBossHander().setTakingTurnsBase(10 - size);
-                play.getBossHander().setPlantBossSize(size);
+                bossHander.setTakingTurnsBase(10 - size);
+                bossHander.setPlantBossSize(size);
                 Array<Array<Boss>> tempArray2 = new Array<>();
                 for (int i = 0; i < size; i++) {
                     tempArray2.add(new Array<Boss>());
@@ -139,7 +144,7 @@ public class BossLoader {
                 }
 
                 for (Array<Boss> bosses : tempArray2)
-                    play.getBossHander().getPlantBossArray().add(bosses);
+                    bossHander.getPlantBossArray().add(bosses);
                 break;
 
             case "3":
@@ -150,7 +155,7 @@ public class BossLoader {
                 Boss boss = SnowMan.builder().body(body).spriteBatch(spriteBatch).type(type).play(play).xOffset(0).yOffset(0).build();
                 boss.getBody().setUserData(BOSS);
                 for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
-                play.getBossHander().getSnowManArray().add(boss);
+                bossHander.getSnowManArray().add(boss);
                 break;
         }
 

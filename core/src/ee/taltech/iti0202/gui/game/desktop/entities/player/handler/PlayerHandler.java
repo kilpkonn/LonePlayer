@@ -64,12 +64,12 @@ public class PlayerHandler {
     private Array<Bullet> bulletArray = new Array<>();
     private int bulletHeat = 10;
 
-    public PlayerHandler(Play play, SpriteBatch sb, GameProgress gameProgress, MyContactListener cl) {
-        this.progress = gameProgress;
-        this.spriteBatch = sb;
+    public PlayerHandler(Play play, SpriteBatch sb, GameProgress gameProgress, MyContactListener cl, Draw draw) {
         this.play = play;
-        this.draw = play.getDraw();
+        this.spriteBatch = sb;
+        this.progress = gameProgress;
         this.cl = cl;
+        this.draw = draw;
     }
 
     public void handlePlayerInput(Play.pauseState playState) {

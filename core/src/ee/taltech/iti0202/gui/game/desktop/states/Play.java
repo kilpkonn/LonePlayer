@@ -4,9 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -17,7 +15,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
@@ -30,7 +27,6 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.EndMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.layers.Draw;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
@@ -84,12 +80,11 @@ public class Play extends GameState {
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
 
-    // Entity based variables
-    private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
-
     // Player based variables
     @ToString.Exclude
     private PlayerHandler playerHandler;
+    @ToString.Exclude
+    private BossHander bossHander;
     private GameProgress progress;
 
     // States
@@ -109,8 +104,6 @@ public class Play extends GameState {
     private float backgroundSpeed;
 
     // Boss logic, helpful variables
-    @ToString.Exclude
-    private BossHander bossHander = new BossHander();
     private Vector2 camSpeed = new Vector2(0, 0);
     private float playTime = 0;
     private boolean loading = true;
@@ -226,8 +219,11 @@ public class Play extends GameState {
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////
 
-        draw = new Draw(this, sb); // first create the "canvas" to draw onto
-        playerHandler = new PlayerHandler(this, sb, progress, cl); // then create a handler for player
+        draw = new Draw(this, sb, world); // first create the "canvas" to draw onto
+        playerHandler = new PlayerHandler(this, sb, progress, cl, draw); // then create a handler for player
+        bossHander = new BossHander();
+        draw.setPlayerHandler(playerHandler);
+        draw.setBossHander(bossHander);
         PlayerLoader playerLoader = new PlayerLoader(this, sb, playerHandler); // and then load the player in
 
         if (progress != null) {
@@ -235,6 +231,7 @@ public class Play extends GameState {
             draw.drawLayers(false, progress.bosses);
             playerHandler.setPlayer(playerLoader.initPlayer(progress));
         } else {
+
             draw.drawLayers(true, null);
             playerHandler.setPlayer(playerLoader.initPlayer());
         }
@@ -381,12 +378,8 @@ public class Play extends GameState {
         //update bosses
         bossHander.updateBosses(dt);
 
-        //draw tilemap animations
-        if (animatedCells != null) {
-            for (Animation animation : animatedCells.values()) {
-                animation.update(dt);
-            }
-        }
+        //update animated cells
+        draw.update(dt);
     }
 
     public void render() {
@@ -447,10 +440,6 @@ public class Play extends GameState {
         parallaxBackground.setSpeed(backgroundSpeed + camSpeed.x / 10);
         stage.act();
         stage.draw();
-
-        //render animations
-        if (animatedCells != null) for (TiledMapTileLayer.Cell cell : animatedCells.keySet())
-            cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
 
         //draw tilemap
         draw.render(cam);

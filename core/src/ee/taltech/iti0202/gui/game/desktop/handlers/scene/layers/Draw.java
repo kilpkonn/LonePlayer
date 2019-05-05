@@ -17,19 +17,24 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.World;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.BossLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.bleeding.Bleeding;
@@ -60,12 +65,15 @@ public class Draw {
 
     @ToString.Exclude
     private Play play;
+    private PlayerHandler playerHandler;
+    private BossHander bossHander;
+    private World world;
     private SpriteBatch spriteBatch;
     private BodyDef bdef;
     private FixtureDef fdef;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
-    private HashMap animatedCells;
+    private Map<TiledMapTileLayer.Cell, Animation> animatedCells;
     private TiledMapTileLayer background;
     private TiledMapTileLayer foreground;
     private TiledMapTileLayer dimension_2;
@@ -77,7 +85,12 @@ public class Draw {
     private boolean gameFadeOut;
     private float currentMenuFade;
 
-    public Draw(Play play, SpriteBatch sb) {
+    /**
+     * @param play
+     * @param sb
+     * @param world player handler must be set after initialising it
+     */
+    public Draw(Play play, SpriteBatch sb, World world) {
         this.play = play;
         this.spriteBatch = sb;
         this.bdef = new BodyDef();
@@ -85,6 +98,7 @@ public class Draw {
         this.dimension = true;
         this.gameFadeOut = false;
         this.gameFadeDone = false;
+        this.world = world;
         this.currentMenuFade = 1;
 
         // load tiled map
@@ -109,7 +123,7 @@ public class Draw {
             this.bdef.type = BodyDef.BodyType.StaticBody;
             this.fdef.isSensor = false;
             this.fdef.shape = shape;
-            play.getWorld().createBody(this.bdef).createFixture(this.fdef).setUserData(layer.getName());
+            world.createBody(this.bdef).createFixture(this.fdef).setUserData(layer.getName());
         }
     }
 
@@ -118,7 +132,7 @@ public class Draw {
         this.bdef = new BodyDef();
         this.bdef.position.set(pos);
         this.bdef.type = BodyDef.BodyType.StaticBody;
-        Body body = play.getWorld().createBody(this.bdef);
+        Body body = world.createBody(this.bdef);
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(64 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
         this.fdef.shape = polyShape;
@@ -129,7 +143,7 @@ public class Draw {
         return new Checkpoint(body, spriteBatch);
     }
 
-    public void drawLayers(boolean defaultSpawn, List<BossData> bosses) {
+    public BossLoader drawLayers(boolean defaultSpawn, List<BossData> bosses) {
         for (MapLayer layer : tiledMap.getLayers()) {
             switch (layer.getName()) {
                 case "barrier":
@@ -156,11 +170,12 @@ public class Draw {
                     readVertices((TiledMapTileLayer) layer, defaultSpawn);
             }
         }
-
+        BossLoader bossLoader = null;
         if (!defaultSpawn) {
-            BossLoader bossLoader = new BossLoader(play, spriteBatch, fdef, bdef);
+            bossLoader = new BossLoader(play, spriteBatch, fdef, bdef, this.bossHander);
             bossLoader.createAllBosses(bosses);
         }
+        return bossLoader;
     }
 
     private void readVertices(TiledMapTileLayer layer, boolean defaultSpawn) {
@@ -230,7 +245,7 @@ public class Draw {
                 if (cell.getTile().getProperties().containsKey("animation")) {
                     Texture tex = Game.res.getTexture("Player"); // TODO: <- Wut is dis? misleading names or obsolete?
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
-                    play.getAnimatedCells().put(cell, new Animation(sprites, 1 / 12f));
+                    animatedCells.put(cell, new Animation(sprites, 1 / 12f));
                 }
 
                 float corner = tileSize / 2 / PPM;
@@ -261,16 +276,16 @@ public class Draw {
                 this.fdef.filter.categoryBits = NONE;
                 this.fdef.filter.maskBits = NONE;
                 this.fdef.isSensor = isSensor;
-                BossLoader bossLoader = new BossLoader(play, spriteBatch, fdef, bdef);
+                BossLoader bossLoader = new BossLoader(play, spriteBatch, fdef, bdef, bossHander);
                 switch (layer.getName()) {
                     case "checkpoints":
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
                             Checkpoint checkpoint = createEndPoint(new Vector2(polygon[1].x + tileSize / PPM, polygon[0].y));
-                            play.getPlayerHandler().getCheckpointList().add(checkpoint);
+                            playerHandler.getCheckpointList().add(checkpoint);
                         } else {
                             if (B2DVars.CHECKPOINTS) {
                                 Checkpoint checkpoint = createCheckpoints(new Vector2(polygon[1].x + (polygon[3].x - polygon[1].x) / 2, polygon[0].y));
-                                play.getPlayerHandler().getCheckpointList().add(checkpoint);
+                                playerHandler.getCheckpointList().add(checkpoint);
                             }
 
                         }
@@ -294,13 +309,13 @@ public class Draw {
                         break;
 
                     case "player":
-                        if (play.getPlayerHandler().getInitPlayerLocation() == null) {
-                            play.getPlayerHandler().setInitPlayerLocation(new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y));
+                        if (playerHandler.getInitPlayerLocation() == null) {
+                            playerHandler.setInitPlayerLocation(new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y));
                         }
                         break;
 
                     default:
-                        play.getWorld().createBody(this.bdef).createFixture(this.fdef).setUserData(layer.getName());
+                        world.createBody(this.bdef).createFixture(this.fdef).setUserData(layer.getName());
                         break;
                 }
             }
@@ -313,7 +328,7 @@ public class Draw {
         this.fdef = new FixtureDef();
         this.bdef.position.set(pos);
         this.bdef.type = BodyDef.BodyType.StaticBody;
-        Body body = play.getWorld().createBody(this.bdef);
+        Body body = world.createBody(this.bdef);
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
         this.fdef.shape = polyShape;
@@ -324,7 +339,21 @@ public class Draw {
         return new Checkpoint(body, spriteBatch);
     }
 
+    public void update(float dt) {
+        //draw tilemap animations
+        if (animatedCells != null) {
+            for (Animation animation : animatedCells.values()) {
+                animation.update(dt);
+            }
+        }
+    }
+
     public void render(OrthographicCamera cam) {
+
+        //render animations
+        if (animatedCells != null) for (TiledMapTileLayer.Cell cell : animatedCells.keySet())
+            cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
+
         //draw tilemap
         renderer.setView(cam);
         renderer.getBatch().begin();
@@ -334,7 +363,7 @@ public class Draw {
         if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
         renderer.getBatch().end();
 
-        if (DEBUG) play.getB2dr().render(play.getWorld(), play.getB2dcam().combined);
+        if (DEBUG) play.getB2dr().render(world, play.getB2dcam().combined);
 
         spriteBatch.setProjectionMatrix(cam.combined);
     }
@@ -379,10 +408,6 @@ public class Draw {
                     gameFadeDone = true;
                 }
             }
-
-            /*parallaxBackground.setColor(1, 1, 1, 1 - currentMenuFade);
-            player.setOpacity(1 - currentMenuFade);
-            if (checkpoint != null) checkpoint.setOpacity(1 - currentMenuFade);*/
         }
     }
 
