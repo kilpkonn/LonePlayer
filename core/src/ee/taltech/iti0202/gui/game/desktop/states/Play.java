@@ -356,7 +356,6 @@ public class Play extends GameState {
 
         //update camera
         if (DEBUG) {
-
             b2dcam.position.set(
                     playerHandler.getPlayer().getPosition().x,
                     playerHandler.getPlayer().getPosition().y,
@@ -462,6 +461,8 @@ public class Play extends GameState {
         draw.render(sb);
 
         hud.render(sb);
+
+        if (DEBUG) getB2dr().render(world, getB2dcam().combined);
 
         draw.renderFade();
     }
