@@ -457,7 +457,7 @@ public class Play extends GameState {
         //draw bosses
         bossHander.renderBosses(sb);
 
-        // draw weapon
+        //draw weapon
         weaponHandler.render(sb);
 
         //draw player and bullets

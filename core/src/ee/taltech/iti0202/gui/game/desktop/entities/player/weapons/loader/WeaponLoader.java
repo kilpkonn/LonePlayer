@@ -12,7 +12,6 @@ import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.handler.Weapo
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WEAPON;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_2;
@@ -30,8 +29,7 @@ public class WeaponLoader {
         fdef.shape = circle;
         fdef.filter.categoryBits = BIT_WEAPON;
         fdef.filter.maskBits = TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1 | TERRA_DIMENTSION_2;
-        body.createFixture(fdef).setFriction(FRICTION);
-        body.setUserData("weapon");
+        body.createFixture(fdef).setUserData("weapon");
 
         Weapon weapon;
 
@@ -43,7 +41,6 @@ public class WeaponLoader {
                 weapon = new Deagle(weaponHandler.getWorld(), spriteBatch, body);
                 break;
         }
-        weaponHandler.setWeapon(weapon);
 
         return weapon;
     }
