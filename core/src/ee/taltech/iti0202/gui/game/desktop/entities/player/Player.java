@@ -81,6 +81,13 @@ public class Player extends SpriteAnimation {
         }
     }
 
+    @Override
+    public void setFlipX(boolean flipX) {
+        super.setFlipX(flipX);
+        if (weapon != null) {
+            weapon.setFlipX(flipX);
+        }
+    }
 
     public void onLanded(Vector2 velocity, Boolean grounded) {
         //System.out.println(Math.abs(velocity.x));

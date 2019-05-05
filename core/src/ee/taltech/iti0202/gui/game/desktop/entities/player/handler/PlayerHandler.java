@@ -200,7 +200,7 @@ public class PlayerHandler {
     public void updatePlayer(float dt) {
         //update weapon
         if (weaponHandling != null) {
-            weaponHandling.update(dt, player);
+            weaponHandling.update(dt);
         }
         /*if (weaponHandling != null) {
             weaponHandling.update(dt);
