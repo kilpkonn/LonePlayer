@@ -8,12 +8,8 @@ import com.brashmonkey.spriter.Timeline;
 import java.util.ArrayList;
 import java.util.List;
 
-import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.Weapon;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.loader.WeaponLoader;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -63,10 +59,6 @@ public class Player extends SpriteAnimation {
     @Override
     public void render(SpriteBatch sb) {
         super.render(sb);
-        // Render weapon first?
-        if (weapon != null) {
-            weapon.render(sb);
-        }
     }
 
     @Override

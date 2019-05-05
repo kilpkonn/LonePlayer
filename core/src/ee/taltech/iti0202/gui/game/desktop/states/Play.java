@@ -21,6 +21,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.handler.WeaponHandler;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.handlers.hud.Hud;
@@ -85,6 +86,8 @@ public class Play extends GameState {
     private PlayerHandler playerHandler;
     @ToString.Exclude
     private BossHander bossHander;
+    @ToString.Exclude
+    private WeaponHandler weaponHandler;
     private GameProgress progress;
 
     // States
@@ -235,8 +238,8 @@ public class Play extends GameState {
             playerHandler.setPlayer(PlayerLoader.initPlayer(sb, playerHandler, draw, world, cl));
         }
 
-        playerHandler.initWeaponHandling();
-        playerHandler.initWeapon("Deagle");
+        weaponHandler = new WeaponHandler(world);
+        weaponHandler.initWeapon("Deagle", sb, playerHandler.getPlayer());
 
         cam.position.set(
                 playerHandler.getPlayer().getPosition().x * PPM,
@@ -376,6 +379,9 @@ public class Play extends GameState {
 
         playerHandler.updatePlayer(dt);
 
+        //update weapons
+        weaponHandler.update(dt);
+
         //calculate falling dmg
         playerHandler.getPlayer().onLanded(playerHandler.getPlayer().getBody().getLinearVelocity(), cl.isPlayerOnGround());
 
@@ -450,6 +456,9 @@ public class Play extends GameState {
 
         //draw bosses
         bossHander.renderBosses(sb);
+
+        // draw weapon
+        weaponHandler.render(sb);
 
         //draw player and bullets
         playerHandler.renderPlayer(sb);

@@ -10,9 +10,6 @@ import com.badlogic.gdx.utils.Array;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.Weapon;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.handler.WeaponHandler;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.loader.WeaponLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.BulletLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.staticobjects.Checkpoint;
@@ -66,9 +63,6 @@ public class PlayerHandler {
     //Bullets
     private Array<Bullet> bulletArray = new Array<>();
     private int bulletHeat = 10;
-
-    //weapon
-    private WeaponHandler weaponHandling;
 
     public PlayerHandler(Play play, SpriteBatch sb, GameProgress gameProgress, MyContactListener cl, Draw draw) {
         this.play = play;
@@ -198,13 +192,6 @@ public class PlayerHandler {
     }
 
     public void updatePlayer(float dt) {
-        //update weapon
-        if (weaponHandling != null) {
-            weaponHandling.update(dt);
-        }
-        /*if (weaponHandling != null) {
-            weaponHandling.update(dt);
-        }*/
 
         //call update animation
         if (player.getHealth() == 0) {
@@ -269,10 +256,6 @@ public class PlayerHandler {
     }
 
     public void renderPlayer(SpriteBatch sb) {
-        // draw weapon
-        if (weaponHandling != null) {
-            weaponHandling.render(spriteBatch);
-        }
 
         // draw checkpoint
         if (checkpointList.size != 0)
@@ -290,15 +273,5 @@ public class PlayerHandler {
                 bullet.render(sb);
             }
         }
-    }
-
-    public Weapon initWeapon(String type) {
-        Weapon weapon = WeaponLoader.buildWeapon(type, spriteBatch, weaponHandling);
-        player.setWeapon(weapon); //TODO: Not auto add to player
-        return weapon;
-    }
-
-    public void initWeaponHandling() {
-        this.weaponHandling = new WeaponHandler(play.getWorld());
     }
 }

@@ -3,10 +3,12 @@ package ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.handler;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.weapons.loader.WeaponLoader;
 import lombok.Data;
 
 @Data
@@ -14,17 +16,36 @@ public class WeaponHandler {
 
     private final World world;
     private Weapon weapon;
-    private List<Weapon> weaponList; //todo
+    private List<Weapon> weaponList = new ArrayList<>();
 
     public WeaponHandler(World world) {
         this.world = world;
     }
 
     public void update(float dt) {
-        //weapon.update(dt);
+        for (Weapon weapon : weaponList) {
+            if (weapon != this.weapon) {
+                weapon.update(dt);
+            }
+        }
     }
 
     public void render(SpriteBatch spriteBatch) {
-        //weapon.render(spriteBatch);
+        for (Weapon weapon : weaponList) {
+            weapon.render(spriteBatch);
+        }
+    }
+
+    public void addWeapon(Weapon weapon) {
+        if (!weaponList.contains(weapon)) {
+            weaponList.add(weapon);
+        }
+    }
+
+    public Weapon initWeapon(String type, SpriteBatch spriteBatch, Player player) {
+        Weapon weapon = WeaponLoader.buildWeapon(type, spriteBatch, this);
+        addWeapon(weapon);
+        player.setWeapon(weapon);
+        return weapon;
     }
 }
