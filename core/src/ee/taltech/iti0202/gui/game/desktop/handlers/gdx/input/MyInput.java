@@ -1,6 +1,8 @@
 package ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input;
 
 
+import com.badlogic.gdx.math.Vector2;
+
 import java.util.HashSet;
 
 public class MyInput {
@@ -10,6 +12,7 @@ public class MyInput {
 
 
     private static boolean mouseDown;
+    private static Vector2 mouseLocation;
     private static boolean mouseDownPrev = true;
 
     public static void update() {
@@ -47,6 +50,14 @@ public class MyInput {
     public static void setMouseDown(boolean isdown) {
         mouseDownPrev = mouseDown;
         mouseDown = isdown;
+    }
+
+    public static void setMouseLoc(int x, int y) {
+        mouseLocation = new Vector2(x, y);
+    }
+
+    public static Vector2 getMouseLocation() {
+        return mouseLocation;
     }
 
     public static boolean isMouseDown(int key) {
