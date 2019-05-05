@@ -32,6 +32,7 @@ public class EndMenu extends Scene{
     private GameButton settingsButton;
     private GameButton nextButton;
     private GameButton playAgainButton;
+    private GameButton timeButton;
     private List<String> levels = Arrays.asList(
             "Desert@Big_leaps.tmx", "Desert@Desert_1.tmx", "Desert@Desert_2.tmx", "Desert@Parkour_madness.tmx", "Desert@Toggle_Drop.tmx",
             "Plains@Dimension_parkour.tmx", "Plains@Islands.tmx", "Plains@Plains_1.tmx", "Plains@Plains_2.tmx", "Plains@The_Drop.tmx",
@@ -49,14 +50,17 @@ public class EndMenu extends Scene{
         playAgainButton = new GameButton("Play again", V_WIDTH / 6f, V_HEIGHT / 1.5f - 80);
         settingsButton = new GameButton("Settings", V_WIDTH / 6f, V_HEIGHT / 1.5f - 120);
         exitButton = new GameButton("Exit", V_WIDTH / 6f, V_HEIGHT / 1.5f - 160);
+        timeButton = new GameButton("Time: 0s", V_WIDTH * 2 / 3f, V_HEIGHT / 1.5f - 40);
+        timeButton.setAcceptHover(false);
 
-        buttons = new HashSet<>(Arrays.asList(nextButton, playAgainButton, settingsButton, exitButton));
+        buttons = new HashSet<>(Arrays.asList(nextButton, playAgainButton, settingsButton, exitButton, timeButton));
 
         buttonType = new HashMap<GameButton, block>() {{
             put(nextButton, block.NEXT);
             put(playAgainButton, block.NEWGAME);
             put(settingsButton, block.SETTINGS);
             put(exitButton, block.EXIT);
+            put(timeButton, block.DEFAULT);
         }};
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
@@ -92,5 +96,9 @@ public class EndMenu extends Scene{
     @Override
     protected void updateCurrentBlock(GameButton button) {
         currBlock = buttonType.get(button);
+    }
+
+    public void setTime(float time) {
+        timeButton.setText("Time: " + Math.round(time * 100) / 100 + "s");
     }
 }
