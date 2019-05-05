@@ -12,7 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.layers.Draw;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.canvas.Draw;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;

@@ -31,7 +31,7 @@ import ee.taltech.iti0202.gui.game.desktop.handlers.scene.EndMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.PauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.ParallaxBackground;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.layers.Draw;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.canvas.Draw;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;

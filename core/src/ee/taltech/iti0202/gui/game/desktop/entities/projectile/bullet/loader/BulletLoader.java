@@ -37,11 +37,9 @@ public class BulletLoader {
         bdef.fixedRotation = true;
         Body body = world.createBody(bdef);
         body.createFixture(fdef).setUserData("bullet");
-        body.setTransform(new Vector2(positionRelativeToGame.x, positionRelativeToGame.y), body.getAngle());
-        System.out.println(destination);
-        System.out.println(positionRelativeToScreen);
-        System.out.println(positionRelativeToGame);
         body.applyLinearImpulse(new Vector2((destination.x - positionRelativeToScreen.x), (destination.y - positionRelativeToScreen.y)), positionRelativeToScreen, true);
+        float angle = (float) Math.atan2((double) body.getLinearVelocity().y, (double) body.getLinearVelocity().x);
+        body.setTransform(new Vector2(positionRelativeToGame.x, positionRelativeToGame.y), angle + (float) Math.PI + ((float) Math.PI) / 1.0f);
 
         return new Bullet(world, spriteBatch, body); //todo add animation for bullet, cannon blast and red line ?
     }

@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.handlers.scene.layers;
+package ee.taltech.iti0202.gui.game.desktop.handlers.scene.canvas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;

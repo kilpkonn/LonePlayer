@@ -14,7 +14,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.layers.Draw;
+import ee.taltech.iti0202.gui.game.desktop.handlers.scene.canvas.Draw;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 import lombok.Data;
@@ -168,6 +168,7 @@ public class PlayerHandler implements Handler {
 
             if (MyInput.isMouseDown(Game.settings.SHOOT) && bulletHeat == 0 && player.getWeapon() != null) {
                 bulletHeat = player.getWeapon().getBulletHeat();
+                player.getWeapon().fire();
                 Bullet bullet = BulletLoader.bulletLoader(spriteBatch, play.getWorld(), new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1), new Vector2(Gdx.input.getX(), V_HEIGHT - Gdx.input.getY()), player.getPosition());
                 draw.getBulletHandler().getBulletArray().add(bullet);
             } else {

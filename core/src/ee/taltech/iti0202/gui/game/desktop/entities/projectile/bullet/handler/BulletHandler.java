@@ -12,7 +12,6 @@ public class BulletHandler implements Handler {
     private Array<Bullet> bulletArray = new Array<>();
 
     public BulletHandler() {
-
     }
 
     @Override
