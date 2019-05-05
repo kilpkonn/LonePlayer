@@ -228,7 +228,7 @@ public class Play extends GameState {
 
         ////////////////////////////////    Tiled stuff here    ///////////////////////
 
-        draw = new Draw(this, sb, world); // first create the "canvas" to draw onto
+        draw = new Draw(sb, world, act, map); // first create the "canvas" to draw onto
         playerHandler = new PlayerHandler(this, sb, progress, cl, draw);
         checkpointHandler = new CheckpointHandler();
         bossHander = new BossHander();

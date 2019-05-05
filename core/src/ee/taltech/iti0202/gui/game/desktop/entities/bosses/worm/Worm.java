@@ -4,16 +4,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
-import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 
 abstract class Worm extends Boss {
 
-    public Worm(Body body, SpriteBatch sb, String type, Play play, Part part, float size, String path) {
-        this(body, sb, type, play, part, size, 0, 0, path);
+    public Worm(Body body, SpriteBatch sb, String type, PlayerHandler playerHandler, Part part, float size, String path) {
+        this(body, sb, type, playerHandler, part, size, 0, 0, path);
     }
 
-    public Worm(Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y, String path) {
-        super(body, sb, play, path, part.toString(), size, x, y);
+    public Worm(Body body, SpriteBatch sb, String type, PlayerHandler playerHandler, Part part, float size, float x, float y, String path) {
+        super(playerHandler, body, sb, path, part.toString(), size, x, y);
         body.setUserData(type + type);
         setAnimation(Worm.WormAnimation.DEFAULT.name, false);
         setAnimationSpeed(50);

@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
-import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -15,11 +15,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class Boss extends SpriteAnimation {
 
-    public Play getPlay() {
-        return play;
-    }
-
-    protected Play play;
+    protected PlayerHandler playerHandler;
     protected SpriteBatch spriteBatch;
     protected String path;
     protected String entity;
@@ -29,8 +25,8 @@ public class Boss extends SpriteAnimation {
     private float time = 0;
     private boolean decider = true;
 
-    protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity) {
-        this(body, sb, play, path, entity, 1, 0, 0);
+    protected Boss(PlayerHandler playerHandler, Body body, SpriteBatch sb, String path, String entity) {
+        this(playerHandler, body, sb, path, entity, 1, 0, 0);
 
     }
 
@@ -50,9 +46,9 @@ public class Boss extends SpriteAnimation {
         }
     }
 
-    protected Boss(Body body, SpriteBatch sb, Play play, String path, String entity, float size, float x, float y) {
+    protected Boss(PlayerHandler playerHandler, Body body, SpriteBatch sb, String path, String entity, float size, float x, float y) {
         super(body, sb, path, entity, x, y);
-        this.play = play;
+        this.playerHandler = playerHandler;
         this.body = body;
         this.spriteBatch = sb;
         this.path = path;
@@ -67,7 +63,7 @@ public class Boss extends SpriteAnimation {
         super.update(dt);
 
         // Get the positions of both Entities
-        Vector2 playerPos = play.getPlayerHandler().getPlayer().getPosition();
+        Vector2 playerPos = playerHandler.getPlayer().getPosition();
         Vector2 enemyPos = body.getPosition();
 
         float angle = body.getAngle();
@@ -88,7 +84,7 @@ public class Boss extends SpriteAnimation {
         super.update(dt);
         float x = 0.3f;
 
-        Vector2 player = play.getPlayerHandler().getPlayer().getPosition();
+        Vector2 player = playerHandler.getPlayer().getPosition();
         Vector2 boss = this.body.getPosition();
 
         float distance = (float) Math.sqrt(Math.pow(player.x - boss.x, 2) + Math.pow(player.y - boss.x, 2));
@@ -123,7 +119,7 @@ public class Boss extends SpriteAnimation {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        Player player = play.getPlayerHandler().getPlayer();
+        Player player = playerHandler.getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),
@@ -163,7 +159,7 @@ public class Boss extends SpriteAnimation {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        Player player = play.getPlayerHandler().getPlayer();
+        Player player = playerHandler.getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),

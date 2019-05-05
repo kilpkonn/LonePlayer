@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
-import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,26 +18,26 @@ import lombok.EqualsAndHashCode;
 public class PlantWorm extends Boss {
 
     private final float max_speed = 3;
+    private PlayerHandler playerHandler;
     private float time;
     private Body body;
     private SpriteBatch spriteBatch;
     private String type;
-    private Play play;
     private PlantWorm.Part part;
     private float size;
     private float xOffset;
     private float yOffset;
 
-    public PlantWorm(Body body, SpriteBatch sb, String type, Play play, PlantWorm.Part part, float size) {
-        this(0, body, sb, type, play, part, size, 0, 0);
+    public PlantWorm(PlayerHandler playerHandler, Body body, SpriteBatch sb, String type, PlantWorm.Part part, float size) {
+        this(playerHandler, 0, body, sb, type, part, size, 0, 0);
     }
 
-    public PlantWorm(float time, Body body, SpriteBatch sb, String type, Play play, Part part, float size, float x, float y) {
-        super(body, sb, play, "images/bosses/plantworm/plantworm.scml", part.name, size, x, y);
+    public PlantWorm(PlayerHandler playerHandler, float time, Body body, SpriteBatch sb, String type, Part part, float size, float x, float y) {
+        super(playerHandler, body, sb, "images/bosses/plantworm/plantworm.scml", part.name, size, x, y);
         this.body = body;
         this.spriteBatch = sb;
         this.type = type;
-        this.play = play;
+        this.playerHandler = playerHandler;
         this.part = part;
         this.size = size;
         this.xOffset = x;
@@ -87,7 +87,7 @@ public class PlantWorm extends Boss {
         super.update(dt);
         time += dt;
 
-        Vector2 playerLoc = play.getPlayerHandler().getPlayer().getPosition();
+        Vector2 playerLoc = playerHandler.getPlayer().getPosition();
         Vector2 bossLoc = this.body.getPosition();
         float distance = (float) Math.sqrt(Math.pow(playerLoc.x - bossLoc.x, 2) + Math.pow(playerLoc.y - bossLoc.x, 2));
 
@@ -99,7 +99,7 @@ public class PlantWorm extends Boss {
         float velX = MathUtils.cos(angle) * velocity; // X-component.
         float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-        Player player = play.getPlayerHandler().getPlayer();
+        Player player = playerHandler.getPlayer();
 
         body.setLinearVelocity(
                 velX + (player.getPosition().x - body.getPosition().x),

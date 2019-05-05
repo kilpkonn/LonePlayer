@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.List;
@@ -20,7 +21,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManProper
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.SnowWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.WormProperties;
-import ee.taltech.iti0202.gui.game.desktop.states.Play;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import lombok.Data;
 
@@ -31,20 +32,22 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM
 @Data
 public class BossLoader {
 
-    private Play play;
     private SpriteBatch spriteBatch;
     private Vector2 tempPosition;
     private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
+    private World world;
     private BossHander bossHander;
+    private PlayerHandler playerHandler;
     private FixtureDef fdef;
     private BodyDef bdef;
 
-    public BossLoader(Play play, SpriteBatch spriteBatch, FixtureDef fdef, BodyDef bdef, BossHander bossHander) {
-        this.play = play;
+    public BossLoader(World world, SpriteBatch spriteBatch, FixtureDef fdef, BodyDef bdef, BossHander bossHander, PlayerHandler playerHandler) {
+        this.world = world;
         this.spriteBatch = spriteBatch;
         this.fdef = fdef;
         this.bdef = bdef;
         this.bossHander = bossHander;
+        this.playerHandler = playerHandler;
     }
 
     public void createAllBosses(List<BossData> bosses) {
@@ -92,9 +95,9 @@ public class BossLoader {
                         initSnakePart(Boss.Part.BODY, scale, tempArray, decider, snowTheme);
                     }
                     //createRopeJointBetweenLinks(tempArray, -1f);
-                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.40f, scale, play.getWorld());
-                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.50f, scale, play.getWorld());
-                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.60f, scale, play.getWorld());
+                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.40f, scale, world);
+                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.50f, scale, world);
+                    BossHelper.createDistanceJointBetweenLinks(tempArray, 0.60f, scale, world);
                     //createRopeJointGEOCordBetweenLinksPlantWorm(tempArray, 0.50f);
 
                 }
@@ -127,11 +130,11 @@ public class BossLoader {
                             initPlantPart(tempArray2, PlantWorm.Part.BODY, j, 50, 50);
                         }
                         if (i == 0 || i == vine - 1) {
-                            BossHelper.createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j), i, play.getWorld());
+                            BossHelper.createRopeJointGEOCordBetweenLinksPlantWorm(tempArray2.get(j), i, world);
                         } else {
-                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f, scale, play.getWorld());
-                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f, scale, play.getWorld());
-                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f, scale, play.getWorld());
+                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.4f, scale, world);
+                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.5f, scale, world);
+                            BossHelper.createDistanceJointBetweenLinks(tempArray2.get(j), 0.6f, scale, world);
                         }
                     }
                     tempPosition.y -= 10 / PPM;
@@ -148,10 +151,10 @@ public class BossLoader {
 
             case "3":
                 SnowManProperties alias = new SnowManProperties(this.bdef, this.fdef, tempPosition);
-                Body body = play.getWorld().createBody(alias.getBdef());
+                Body body = world.createBody(alias.getBdef());
                 body.createFixture(alias.getFdef());
                 bossLoader.attachFixture(body, "snowman", alias.getFdef(), 1f * size);
-                Boss boss = SnowMan.builder().body(body).spriteBatch(spriteBatch).type(type).play(play).xOffset(0).yOffset(0).build();
+                Boss boss = SnowMan.builder().playerHandler(playerHandler).body(body).spriteBatch(spriteBatch).type(type).xOffset(0).yOffset(0).build();
                 boss.getBody().setUserData(BOSS);
                 for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
                 bossHander.getSnowManArray().add(boss);
@@ -162,10 +165,10 @@ public class BossLoader {
 
     private void initPlantPart(Array<Array<Boss>> tempArray2, PlantWorm.Part part, int size, float x, float y) {
         PlantWormProperties alias = new PlantWormProperties(this.bdef, this.fdef, tempPosition);
-        Body body = play.getWorld().createBody(alias.getBdef());
+        Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
-        Boss boss = PlantWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).xOffset(x).yOffset(y).time(0).build();
+        Boss boss = PlantWorm.builder().playerHandler(playerHandler).body(body).spriteBatch(spriteBatch).type(BOSS).part(part).xOffset(x).yOffset(y).time(0).build();
         for (Fixture fixture : boss.getBody().getFixtureList())
             fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
         boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
@@ -174,16 +177,16 @@ public class BossLoader {
 
     private void initSnakePart(Boss.Part part, float size, Array<Boss> tempArray, boolean decider, boolean snowTheme) {
         WormProperties alias = new WormProperties(this.bdef, this.fdef, tempPosition);
-        Body body = play.getWorld().createBody(alias.getBdef());
+        Body body = world.createBody(alias.getBdef());
         body.createFixture(alias.getFdef());
         bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), size);
         Boss boss = snowTheme ?
-                SnowWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build() :
-                MagmaWorm.builder().body(body).spriteBatch(spriteBatch).type(BOSS).play(play).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build();
+                SnowWorm.builder().playerHandler(playerHandler).body(body).spriteBatch(spriteBatch).type(BOSS).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build() :
+                MagmaWorm.builder().playerHandler(playerHandler).body(body).spriteBatch(spriteBatch).type(BOSS).part(part).size(size).xOffset(50 * size).yOffset(50 * size).build();
         boss.setDecider(decider);
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
         tempArray.add(boss);
-        play.getPlayerHandler().getTempPlayerLocation().y -= 50 * size / PPM;
+        playerHandler.getTempPlayerLocation().y -= 50 * size / PPM;
     }
 }

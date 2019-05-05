@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.BossLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
@@ -42,15 +43,12 @@ import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandle
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.handlers.scene.bleeding.Bleeding;
 import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
-import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
 import lombok.Data;
-import lombok.ToString;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DEBUG;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
@@ -62,12 +60,12 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TER
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_SQUARES;
 
 @Data
-public class Draw {
+public class Draw implements Handler {
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map   ////////////////////////////////////////////////////////////////////
 
-    @ToString.Exclude
-    private Play play;
+    //@ToString.Exclude
+    //private Play play;
     private PlayerHandler playerHandler;
     private BossHander bossHander;
     private CheckpointHandler checkpointHandler;
@@ -91,13 +89,8 @@ public class Draw {
     private boolean gameFadeOut;
     private float currentMenuFade;
 
-    /**
-     * @param play
-     * @param sb
-     * @param world player handler must be set after initialising it
-     */
-    public Draw(Play play, SpriteBatch sb, World world) {
-        this.play = play;
+    public Draw(SpriteBatch sb, World world, String act, String map) {
+        //this.play = play;
         this.spriteBatch = sb;
         this.bdef = new BodyDef();
         this.fdef = new FixtureDef();
@@ -108,7 +101,7 @@ public class Draw {
         this.currentMenuFade = 1;
 
         // load tiled map
-        String path = PATH + "maps/levels/" + play.getAct() + "/" + play.getMap();
+        String path = PATH + "maps/levels/" + act + "/" + map;
         tiledMap = new TmxMapLoader().load(path);
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         animatedCells = new HashMap<>();
@@ -161,7 +154,7 @@ public class Draw {
             }
         }
         if (!defaultSpawn) {
-            new BossLoader(play, spriteBatch, fdef, bdef, bossHander).createAllBosses(bosses);
+            new BossLoader(world, spriteBatch, fdef, bdef, bossHander, playerHandler).createAllBosses(bosses);
         }
     }
 
@@ -263,7 +256,7 @@ public class Draw {
                 this.fdef.filter.categoryBits = NONE;
                 this.fdef.filter.maskBits = NONE;
                 this.fdef.isSensor = isSensor;
-                BossLoader bossLoader = new BossLoader(play, spriteBatch, fdef, bdef, bossHander);
+                BossLoader bossLoader = new BossLoader(world, spriteBatch, fdef, bdef, bossHander, playerHandler);
                 switch (layer.getName()) {
                     case "checkpoints":
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
@@ -346,7 +339,7 @@ public class Draw {
         if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
         renderer.getBatch().end();
 
-        if (DEBUG) play.getB2dr().render(world, play.getB2dcam().combined);
+        //if (DEBUG) play.getB2dr().render(world, play.getB2dcam().combined);
 
         spriteBatch.setProjectionMatrix(cam.combined);
     }
