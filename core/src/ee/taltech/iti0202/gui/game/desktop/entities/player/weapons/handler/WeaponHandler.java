@@ -20,7 +20,7 @@ public class WeaponHandler {
         this.world = world;
     }
 
-    public void update(float dt, Player player) {
+    public void update(float dt, Player player) { //todo fix this
         weapon.update(dt);
         weapon.getBody().setTransform(player.getPosition(), player.getBody().getAngle());
     }

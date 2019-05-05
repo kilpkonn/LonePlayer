@@ -200,7 +200,7 @@ public class PlayerHandler {
     public void updatePlayer(float dt) {
         //update weapon
         if (weaponHandling != null) {
-            weaponHandling.update(dt);
+            weaponHandling.update(dt, player);
         }
 
         //call update animation
