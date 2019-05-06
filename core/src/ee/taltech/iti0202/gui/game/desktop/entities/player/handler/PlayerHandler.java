@@ -53,7 +53,6 @@ public class PlayerHandler implements Handler {
     private GameProgress gameProgress;
     private Draw draw;
     private MyContactListener cl;
-    private int bulletHeat = 0;
 
     public PlayerHandler(Play play, SpriteBatch sb, GameProgress gameProgress, MyContactListener cl, Draw draw) {
         this.play = play;
@@ -166,8 +165,7 @@ public class PlayerHandler implements Handler {
                 }
             }
 
-            if (MyInput.isMouseDown(Game.settings.SHOOT) && bulletHeat == 0 && player.getWeapon() != null) {
-                bulletHeat = player.getWeapon().getBulletHeat();
+            if (MyInput.isMouseDown(Game.settings.SHOOT) && player.getWeapon() != null && player.getWeapon().canFire()) {
                 player.getWeapon().fire();
                 Bullet bullet = BulletLoader.bulletLoader(spriteBatch,
                         play.getWorld(),
@@ -175,10 +173,6 @@ public class PlayerHandler implements Handler {
                         new Vector2(MyInput.getMouseLocation().x, V_HEIGHT - MyInput.getMouseLocation().y),
                         player.getPosition());
                 draw.getBulletHandler().getBulletArray().add(bullet);
-            } else {
-                if (bulletHeat > 0) {
-                    bulletHeat--;
-                }
             }
         }
     }

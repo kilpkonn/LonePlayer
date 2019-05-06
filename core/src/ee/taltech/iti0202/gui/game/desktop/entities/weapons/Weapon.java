@@ -14,7 +14,8 @@ public abstract class Weapon extends SpriteAnimation {
 
     protected World world;
     protected Body body;
-    protected int bulletHeat;
+    protected float coolDown;
+    protected float bulletHeat;
 
     public Weapon(World world, SpriteBatch sb, Body body, String path) {
         super(body, sb, path);
@@ -26,6 +27,11 @@ public abstract class Weapon extends SpriteAnimation {
 
     @Override
     public void update(float dt) {
+        if (bulletHeat > 0) {
+            bulletHeat -= dt;
+        } else {
+            setAnimation(Animation.DEFAULT.name, false);
+        }
         super.update(dt);
     }
 
@@ -35,7 +41,12 @@ public abstract class Weapon extends SpriteAnimation {
     }
 
     public void fire() {
+        bulletHeat = coolDown;
         setAnimation(Animation.FIRE.name, true);
+    }
+
+    public boolean canFire() {
+        return bulletHeat <= 0;
     }
 
     public enum Animation {
