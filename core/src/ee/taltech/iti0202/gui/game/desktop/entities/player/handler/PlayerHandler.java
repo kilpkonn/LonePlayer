@@ -169,7 +169,11 @@ public class PlayerHandler implements Handler {
             if (MyInput.isMouseDown(Game.settings.SHOOT) && bulletHeat == 0 && player.getWeapon() != null) {
                 bulletHeat = player.getWeapon().getBulletHeat();
                 player.getWeapon().fire();
-                Bullet bullet = BulletLoader.bulletLoader(spriteBatch, play.getWorld(), new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1), new Vector2(Gdx.input.getX(), V_HEIGHT - Gdx.input.getY()), player.getPosition());
+                Bullet bullet = BulletLoader.bulletLoader(spriteBatch,
+                        play.getWorld(),
+                        new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1),
+                        new Vector2(MyInput.getMouseLocation().x, V_HEIGHT - MyInput.getMouseLocation().y),
+                        player.getPosition());
                 draw.getBulletHandler().getBulletArray().add(bullet);
             } else {
                 if (bulletHeat > 0) {

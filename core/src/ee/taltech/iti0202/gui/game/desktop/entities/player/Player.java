@@ -8,9 +8,11 @@ import com.brashmonkey.spriter.Timeline;
 import java.util.ArrayList;
 import java.util.List;
 
+import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -18,6 +20,8 @@ import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -67,12 +71,21 @@ public class Player extends SpriteAnimation {
     public void update(float dt) {
         super.update(dt);
 
+        if (MyInput.isMouseDown(Game.settings.SHOOT)) {
+            float angle = (float) Math.atan2(MyInput.getMouseLocation().y - (V_HEIGHT >> 2), MyInput.getMouseLocation().x - (V_WIDTH >> 2));
+            aim(angle);  //TODO: This angle is broken?
+        }
+
         if (weapon != null) {
             Timeline.Key.Bone hand = getBone("right_hand");
             System.out.println(hand.angle);
             weapon.getBody().setTransform(new Vector2(hand.position.x / PPM, hand.position.y / PPM), (float) Math.toRadians(hand.angle));
             weapon.update(dt);
         }
+    }
+
+    public void aim(float angle) {
+        rotateBone("right_shoulder", (float) Math.toRadians(angle));
     }
 
     @Override
