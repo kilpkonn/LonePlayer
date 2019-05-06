@@ -100,6 +100,10 @@ public class SpriteAnimation {
             playerTweener.flipX();
     }
 
+    public boolean isFlippedX() {
+        return playerTweener.flippedX() == -1;
+    }
+
     public void setScale(float scale) {
         playerTweener.setScale(scale);
     }

@@ -73,19 +73,18 @@ public class Player extends SpriteAnimation {
 
         if (MyInput.isMouseDown(Game.settings.SHOOT)) {
             float angle = (float) Math.atan2(MyInput.getMouseLocation().y - (V_HEIGHT >> 2), MyInput.getMouseLocation().x - (V_WIDTH >> 2));
-            aim(angle);  //TODO: This angle is broken?
+            aim(angle);
         }
 
         if (weapon != null) {
             Timeline.Key.Bone hand = getBone("right_hand");
-            System.out.println(hand.angle);
             weapon.getBody().setTransform(new Vector2(hand.position.x / PPM, hand.position.y / PPM), (float) Math.toRadians(hand.angle));
             weapon.update(dt);
         }
     }
 
     public void aim(float angle) {
-        rotateBone("right_shoulder", (float) Math.toRadians(angle));
+        rotateBone("right_shoulder", (360 - (float) Math.toDegrees(angle)) + (isFlippedX() ? 180 : 0)); // TODO: Fix offset
     }
 
     @Override
