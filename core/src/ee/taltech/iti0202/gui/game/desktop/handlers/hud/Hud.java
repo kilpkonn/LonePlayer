@@ -18,6 +18,7 @@ public class Hud {
     protected Stage stage;
     protected GameButton health;
     protected GameButton fps;
+    protected GameButton time;
     protected Play play;
 
     public Hud(OrthographicCamera cam, Play play) {
@@ -33,9 +34,13 @@ public class Hud {
 
         health = new GameButton("100hp", B2DVars.V_WIDTH - 250, B2DVars.V_HEIGHT - 50);
         fps = new GameButton("0", 100, B2DVars.V_HEIGHT - 50);
+        time = new GameButton("0s", B2DVars.V_WIDTH / 2f - 50,B2DVars.V_HEIGHT - 50 );
 
         health.setFontParameters(fontParameter);
         fps.setFontParameters(fontParameter);
+
+        fontParameter.color = Color.CYAN;
+        time.setFontParameters(fontParameter);
     }
 
     public void update(float dt) {
@@ -47,6 +52,8 @@ public class Hud {
         fps.setText(Integer.toString(currentFPS));
         int prefFPS = (int)(Game.settings.MAX_FPS * 0.8);
         fps.setColor(new Color((float)(prefFPS - currentFPS) / prefFPS, (float)currentFPS / prefFPS, 0, 1));
+
+        time.setText(Math.round(play.getPlayTime() * 100) / 100f + "s");
     }
 
     public void render(SpriteBatch sb){
@@ -57,5 +64,6 @@ public class Hud {
 
         health.render(sb);
         if (Game.settings.SHOW_FPS) fps.render(sb);
+        time.render(sb);
     }
 }
