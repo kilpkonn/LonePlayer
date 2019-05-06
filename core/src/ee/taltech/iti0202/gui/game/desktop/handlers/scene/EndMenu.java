@@ -99,6 +99,6 @@ public class EndMenu extends Scene{
     }
 
     public void setTime(float time) {
-        timeButton.setText("Time: " + Math.round(time * 100) / 100 + "s");
+        timeButton.setText("Time: " + Math.round(time * 100) / 100f + "s");
     }
 }

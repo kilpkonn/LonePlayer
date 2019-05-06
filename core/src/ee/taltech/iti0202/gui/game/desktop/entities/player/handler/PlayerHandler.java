@@ -66,6 +66,10 @@ public class PlayerHandler implements Handler {
     public void handlePlayerInput(Play.pauseState playState) {
         current_force = player.getBody().getLinearVelocity();
 
+        if (!MyInput.isDown(-1) && cl.isPlayerOnGround()) {
+            player.setAnimation(Player.PlayerAnimation.IDLE);
+        }
+
         //player jump / double jump / dash
         if (MyInput.isPressed(Game.settings.JUMP)) {
             if (cl.isPlayerOnGround()) {
@@ -137,10 +141,6 @@ public class PlayerHandler implements Handler {
                 player.setAnimation(Player.PlayerAnimation.DASH);
             }
             player.setFlipX(false);
-        }
-
-        if (!MyInput.isDown(-1) && cl.isPlayerOnGround()) {
-            player.setAnimation(Player.PlayerAnimation.IDLE);
         }
 
         if (playState == Play.pauseState.RUN) {

@@ -49,7 +49,7 @@ public class Player extends SpriteAnimation {
         ROLL2("roll2"),
         FACEPLANT("faceplant"),
         DASH("dash"),
-        Wave("wave");
+        WAVE("wave");
 
         private final String name;
 
