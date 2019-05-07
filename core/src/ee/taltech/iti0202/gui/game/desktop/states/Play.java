@@ -297,7 +297,7 @@ public class Play extends GameState {
             return;
         } else if (loading) {
             loading = false;
-            playTime = 0; // Start counting
+            playTime = (progress != null) ? progress.time : 0; // Start counting
         }
 
         if (playerHandler.isNewPlayer()) {
@@ -477,6 +477,7 @@ public class Play extends GameState {
         progress.checkpointY = playerHandler.getPlayer().getCheckpoint().getBody().getPosition().y;
         progress.act = act;
         progress.map = map;
+        progress.time = playTime;
         progress.dimension = draw.isDimension();
         progress.difficulty = difficulty;
 

@@ -23,6 +23,7 @@ public class GameProgress {
     public float playerVelocityY;*/
     public float checkpointX;
     public float checkpointY;
+    public float time;
     public List<BossData> bosses = new ArrayList<>();
     public boolean dimension;
     public B2DVars.gameDifficulty difficulty;
