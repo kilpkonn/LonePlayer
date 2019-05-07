@@ -17,7 +17,7 @@ abstract class Worm extends Boss {
         body.setUserData(type + type);
         setAnimation(Worm.WormAnimation.DEFAULT.name, false);
         setAnimationSpeed(50);
-        setScale(size); //TODO: Bend animation / smoother bodies
+        setScale(size);
     }
 
     public enum WormAnimation {

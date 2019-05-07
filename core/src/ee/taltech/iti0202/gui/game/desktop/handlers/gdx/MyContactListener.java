@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import java.util.HashMap;
+
 import lombok.Data;
 
 import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
@@ -23,6 +25,7 @@ public class MyContactListener implements ContactListener {
     private short deathState = 0;
     private boolean initSpawn = true;
     private boolean end = false;
+    private HashMap<Body, String> collidedBullets = new HashMap<>();
 
     // called when 2 fixtures start to collide
     @Override
@@ -31,6 +34,9 @@ public class MyContactListener implements ContactListener {
         Fixture fb = c.getFixtureB();
 
         if (fa.getUserData() != null && fb.getUserData() != null) {
+
+            // detect bullet collision
+            bulletDetection(fa, fb);
 
             // set up a new checkpoint and double jump
             checkpointDetection(fa, fb);
@@ -42,6 +48,14 @@ public class MyContactListener implements ContactListener {
             dmgDetection(fa, fb);
         }
 
+    }
+
+    private void bulletDetection(Fixture fa, Fixture fb) {
+        if (fa.getUserData().toString().endsWith("bullet")) {
+            collidedBullets.put(fa.getBody(), fb.getUserData().toString());
+        } else if (fb.getUserData().toString().endsWith("bullet")) {
+            collidedBullets.put(fb.getBody(), fa.getUserData().toString());
+        }
     }
 
     private void dmgDetection(Fixture fa, Fixture fb) {

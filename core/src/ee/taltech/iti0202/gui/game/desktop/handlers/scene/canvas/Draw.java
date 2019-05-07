@@ -223,7 +223,7 @@ public class Draw implements Handler {
                 Bleeding.fixBleeding(cell.getTile().getTextureRegion()); // fix bleeding hopefully
 
                 if (cell.getTile().getProperties().containsKey("animation")) {
-                    Texture tex = Game.res.getTexture("Player"); // TODO: <- Wut is dis? misleading names or obsolete?
+                    Texture tex = Game.res.getTexture("Player"); // TODO: <- Wut is dis? misleading names or obsolete? // this is to make animated cells, like grass in the wind or so on
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
                     animatedCells.put(cell, new Animation(sprites, 1 / 12f));
                 }

@@ -41,6 +41,6 @@ public class BulletLoader {
         float angle = (float) Math.atan2((double) body.getLinearVelocity().y, (double) body.getLinearVelocity().x);
         body.setTransform(new Vector2(positionRelativeToGame.x, positionRelativeToGame.y), angle + (float) Math.PI + ((float) Math.PI) / 1.0f);
 
-        return new Bullet(world, spriteBatch, body); //todo add animation for bullet, cannon blast and red line ?
+        return new Bullet(world, spriteBatch, body);
     }
 }

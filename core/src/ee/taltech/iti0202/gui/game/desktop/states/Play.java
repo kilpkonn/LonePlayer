@@ -232,7 +232,7 @@ public class Play extends GameState {
         playerHandler = new PlayerHandler(this, sb, progress, cl, draw);
         checkpointHandler = new CheckpointHandler();
         bossHander = new BossHander();
-        bulletHandler = new BulletHandler();
+        bulletHandler = new BulletHandler(cl);
         weaponHandler = new WeaponHandler(world);
         draw.setPlayerHandler(playerHandler);
         draw.setBossHander(bossHander);
