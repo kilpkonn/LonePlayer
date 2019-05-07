@@ -16,9 +16,15 @@ public class BulletHandler implements Handler {
 
     @Override
     public void update(float dt) {
+        Array<Bullet> toBeRemoved = new Array<>();
         for (Bullet bullet : bulletArray) {
+            if (bullet.toBeRemoved()) {
+                toBeRemoved.add(bullet);
+            }
             bullet.update(dt);
         }
+
+        bulletArray.removeAll(toBeRemoved, true);  //What is identity?
     }
 
     @Override

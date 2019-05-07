@@ -12,6 +12,7 @@ public class MyPlayerTweener extends PlayerTweener {
     private float influence;
     private float changeSpeed;
     private boolean playingOnce;
+    private boolean animOver = false;
     private Animation prevAnimation;
     private HashSet<String> animToPlayOnce = new HashSet<>();
 
@@ -21,6 +22,7 @@ public class MyPlayerTweener extends PlayerTweener {
             @Override
             public void run() {
                 if (playingOnce) {
+                    animOver = true;
                     playingOnce = false;
                     if (prevAnimation != null) {
                         setAnimation(prevAnimation.name, false);
@@ -41,10 +43,15 @@ public class MyPlayerTweener extends PlayerTweener {
     }
 
     public void setAnimation(String anim, boolean playOnce) {
+        if (playOnce) {
+            animOver = false;
+        }
+
         if (playingOnce && !animToPlayOnce.contains(anim)) {
             prevAnimation = getEntity().getAnimation(anim); //Life hack
             return;
         }
+
         if (!anim.equals(getSecondPlayer().getAnimation().name)) {
             if (animToPlayOnce.contains(anim)) {
                 changeSpeed = 2f;
@@ -72,5 +79,9 @@ public class MyPlayerTweener extends PlayerTweener {
 
     public void setAnimToPlayOnce(HashSet<String> animations) {
         this.animToPlayOnce = animations;
+    }
+
+    public boolean isAnimationOver() {
+        return animOver;
     }
 }

@@ -41,7 +41,6 @@ public class SpriteAnimation {
     public SpriteAnimation(Body body, SpriteBatch sb, String path, String entity, float x, float y) {
         System.out.println("New body: " + body.toString());
         this.body = body;
-        //animation = new Animation();
         data = AnimationLoader.getData(path);
         loader = AnimationLoader.getLoader(path);
 
@@ -133,5 +132,9 @@ public class SpriteAnimation {
     }
 
     public Vector2 getVelocity() {return body.getLinearVelocity(); }
+
+    public boolean isAnimationOver() {
+        return playerTweener.isAnimationOver();
+    }
 
 }
