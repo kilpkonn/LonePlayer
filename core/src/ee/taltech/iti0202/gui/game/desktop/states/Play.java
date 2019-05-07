@@ -257,7 +257,7 @@ public class Play extends GameState {
         UPDATE = true;
         cam.zoom = 1;
 
-        weaponHandler.initWeapon("Deagle", sb, playerHandler.getPlayer());
+        weaponHandler.initWeapon("M4", sb, playerHandler.getPlayer());
     }
 
     public Play(String act, String map, B2DVars.gameDifficulty difficulty) {

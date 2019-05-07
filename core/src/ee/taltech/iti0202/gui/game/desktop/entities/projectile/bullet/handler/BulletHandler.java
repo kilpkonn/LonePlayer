@@ -18,7 +18,7 @@ public class BulletHandler implements Handler {
     public void update(float dt) {
         Array<Bullet> toBeRemoved = new Array<>();
         for (Bullet bullet : bulletArray) {
-            //if (bullet.getBody().getLinearVelocity().x < 5) bullet.onHit();
+            if (bullet.getBody().getLinearVelocity().x < 5 && !bullet.isHit()) bullet.onHit();  //TODO: make actual hit detection
 
             if (bullet.toBeRemoved()) {
                 toBeRemoved.add(bullet);

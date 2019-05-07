@@ -75,6 +75,14 @@ public class MyPlayerTweener extends PlayerTweener {
         }
     }
 
+    public void hardSetAnimation(String anim, boolean playOnce) {
+        animOver = false;
+        getFirstPlayer().setAnimation(anim);
+        getSecondPlayer().setAnimation(anim);
+        influence = 1;
+        playingOnce = playOnce;
+    }
+
     @Override
     public void setEntity(Entity entity) {
         super.setEntity(entity);

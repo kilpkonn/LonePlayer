@@ -91,6 +91,10 @@ public class SpriteAnimation {
         playerTweener.setAnimation(animation, playOnce);
     }
 
+    protected void hardSetAnimation(String animation, boolean playOnce) {
+        playerTweener.hardSetAnimation(animation, playOnce);
+    }
+
     protected void setStopOnAnimationOver(boolean stop) {
         playerTweener.setStopOnAnimOver(stop);
     }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Deagle;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.M4;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
 
@@ -36,6 +37,9 @@ public class WeaponLoader {
         switch (type) {
             case "Deagle":
                 weapon = new Deagle(weaponHandler.getWorld(), spriteBatch, body);
+                break;
+            case "M4":
+                weapon = new M4(weaponHandler.getWorld(), spriteBatch, body);
                 break;
             default:
                 weapon = new Deagle(weaponHandler.getWorld(), spriteBatch, body);

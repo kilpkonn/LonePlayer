@@ -42,12 +42,12 @@ public class Bullet extends WeaponProjectile {
     }
 
     public void onHit() {
-        setAnimation(Animation.HIT.name, true);
+        hardSetAnimation(Animation.HIT.name, true);
         setStopOnAnimationOver(true);
-        setScale(1f);  // Change?
-        setAnimationSpeed(10);  //Happens 2 soon -_-
+        setScale(1f);
+        setAnimationSpeed(10);
         hit = true;
-        super.update(0.01f);
+        super.update(0);
     }
 
     public boolean toBeRemoved() {
