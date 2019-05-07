@@ -57,6 +57,7 @@ public class SpriteAnimation {
         toPlayOnce.add("attack");
         toPlayOnce.add("faceplant");
         toPlayOnce.add("fire");
+        toPlayOnce.add("hit");
         playerTweener.setAnimToPlayOnce(toPlayOnce);
     }
 
@@ -88,6 +89,10 @@ public class SpriteAnimation {
 
     protected void setAnimation(String animation, boolean playOnce) {
         playerTweener.setAnimation(animation, playOnce);
+    }
+
+    protected void setStopOnAnimationOver(boolean stop) {
+        playerTweener.setStopOnAnimOver(stop);
     }
 
     protected Animation getCurrentAnimation() {

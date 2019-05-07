@@ -43,7 +43,11 @@ public class Bullet extends WeaponProjectile {
 
     public void onHit() {
         setAnimation(Animation.HIT.name, true);
+        setStopOnAnimationOver(true);
+        setScale(1f);  // Change?
+        setAnimationSpeed(10);  //Happens 2 soon -_-
         hit = true;
+        super.update(0.01f);
     }
 
     public boolean toBeRemoved() {
