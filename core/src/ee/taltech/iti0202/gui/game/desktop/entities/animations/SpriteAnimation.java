@@ -98,8 +98,8 @@ public class SpriteAnimation {
         playerTweener.setStopOnAnimOver(stop);
     }
 
-    protected Animation getCurrentAnimation() { //TODO: returns `__interpolatedAnimation__`
-        return playerTweener.getAnimation();
+    protected Animation getCurrentAnimation() {
+        return playerTweener.getSecondPlayer().getAnimation();
     }
 
     public void setFlipX(boolean flipX) {

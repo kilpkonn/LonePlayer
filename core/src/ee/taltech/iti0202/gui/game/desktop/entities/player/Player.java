@@ -83,8 +83,19 @@ public class Player extends SpriteAnimation {
     }
 
     public void aim() {
-        System.out.println(getCurrentAnimation());
-        float offset = weapon.getOffset().containsKey(getCurrentAnimation().name) ? weapon.getOffset().get(getCurrentAnimation().name) : 0;
+        if (weapon == null) return;
+        //float offset = weapon.getOffset().containsKey(getCurrentAnimation().name) ? weapon.getOffset().get(getCurrentAnimation().name) : 0;
+        System.out.println(weapon.getOffset().keySet());
+        System.out.println(getCurrentAnimation().name);
+        System.out.println(weapon.getOffset().containsKey(getCurrentAnimation().name));
+        //System.out.println(offset);
+        //System.out.println(Math.toDegrees(body.getAngle()) + " - " + getBone("body").angle);
+        float offset = (float) (body.getAngle()
+                + Math.toRadians((getBone("right_hand").angle)
+                - (getBone("right_arm").angle))
+                //- Math.toRadians(getBone("body").angle)
+                + Math.PI / 3); //TODO: SumTingWong fix offset, body -> right_shoulder -> right_arm -> right_hand
+        System.out.println(Math.toDegrees(offset));
         float flipped = isFlippedX() ? (float) Math.PI : 0;
         float angle = (float) Math.atan2(MyInput.getMouseLocation().y - (double) V_HEIGHT / 2, MyInput.getMouseLocation().x - (double) V_WIDTH / 2) + offset + flipped;
         rotateBone("right_shoulder", ((360 - (float) Math.toDegrees(angle)))); // TODO: Fix offset

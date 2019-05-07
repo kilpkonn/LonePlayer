@@ -12,8 +12,12 @@ public class M4 extends Weapon {
         super(world, sb, body, "images/bullets/m4/m4.scml");
         setScale(0.1f);
         setAnimationSpeed(50);
-        coolDown = 0.1f;
-        offset.put(Player.PlayerAnimation.IDLE.name(), (float) (Math.PI / 8));
-        offset.put(Player.PlayerAnimation.RUN.name(), (float) (Math.PI / 2));
+        coolDown = 0.2f;
+        offset.put(Player.PlayerAnimation.IDLE.toString(), (float) (Math.PI / 4));
+        offset.put(Player.PlayerAnimation.RUN.toString(), (float) (Math.PI));
+        offset.put(Player.PlayerAnimation.JUMP.toString(), (float) (Math.PI / 4));
+        offset.put(Player.PlayerAnimation.DASH.toString(), (float) (Math.PI / 4));
+        offset.put(Player.PlayerAnimation.ROLL.toString(), (float) (Math.PI / 4));
+        offset.put(Player.PlayerAnimation.ROLL2.toString(), (float) (Math.PI / 4));
     }
 }

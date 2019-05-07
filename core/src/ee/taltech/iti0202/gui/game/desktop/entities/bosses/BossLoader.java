@@ -22,6 +22,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.MagmaWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.SnowWorm;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.WormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.BodyEditorLoader;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import lombok.Data;
 
@@ -34,7 +35,7 @@ public class BossLoader {
 
     private SpriteBatch spriteBatch;
     private Vector2 tempPosition;
-    private aurelienribon.bodyeditor.BodyEditorLoader bossLoader;
+    private BodyEditorLoader bossLoader;
     private World world;
     private BossHander bossHander;
     private PlayerHandler playerHandler;
@@ -77,7 +78,7 @@ public class BossLoader {
 
         float scale = decider ? 1f : 0.5f;
         tempPosition = position;
-        bossLoader = new aurelienribon.bodyeditor.BodyEditorLoader(Gdx.files.internal(PATH + "bosses" + type + ".json"));
+        bossLoader = new BodyEditorLoader(Gdx.files.internal(PATH + "bosses" + type + ".json"));
 
         switch (type) {
             case "1":
