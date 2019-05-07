@@ -98,7 +98,7 @@ public class SpriteAnimation {
         playerTweener.setStopOnAnimOver(stop);
     }
 
-    protected Animation getCurrentAnimation() {
+    protected Animation getCurrentAnimation() { //TODO: returns `__interpolatedAnimation__`
         return playerTweener.getAnimation();
     }
 

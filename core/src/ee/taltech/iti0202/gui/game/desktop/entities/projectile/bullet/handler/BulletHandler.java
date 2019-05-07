@@ -26,8 +26,6 @@ public class BulletHandler implements Handler {
                 System.out.println(cl.getCollidedBullets().get(bullet.getBody()));
                 cl.getCollidedBullets().remove(bullet.getBody());
             }
-            //if (bullet.getBody().getLinearVelocity().x < 5 && !bullet.isHit()) bullet.onHit();  //TODO: make actual hit detection
-
             if (bullet.toBeRemoved()) {
                 toBeRemoved.add(bullet);
             }

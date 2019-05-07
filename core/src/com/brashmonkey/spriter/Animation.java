@@ -8,6 +8,8 @@ import com.brashmonkey.spriter.Timeline.Key.Object;
 
 import java.util.HashMap;
 
+import lombok.Data;
+
 /**
  * Represents an animation of a Spriter SCML file.
  * An animation holds {@link Timeline}s and a {@link Mainline} to animate objects.
@@ -15,6 +17,7 @@ import java.util.HashMap;
  *
  * @author Trixt0r
  */
+@Data
 public class Animation {
 
     public final Mainline mainline;
@@ -120,12 +123,12 @@ public class Animation {
             else nextTime = length;
         }
         //Normalize the time
-        float t = (float) (time - currentTime) / (float) (nextTime - currentTime);
+        float t = (time - currentTime) / (float) (nextTime - currentTime);
         if (Float.isNaN(t) || Float.isInfinite(t)) t = 1f;
         if (currentKey.time > currentTime) {
             float tMid = (float) (currentKey.time - currentTime) / (float) (nextTime - currentTime);
             if (Float.isNaN(tMid) || Float.isInfinite(tMid)) tMid = 0f;
-            t = (float) (time - currentKey.time) / (float) (nextTime - currentKey.time);
+            t = (time - currentKey.time) / (float) (nextTime - currentKey.time);
             if (Float.isNaN(t) || Float.isInfinite(t)) t = 1f;
             t = currentKey.curve.tween(tMid, 1f, t);
         } else

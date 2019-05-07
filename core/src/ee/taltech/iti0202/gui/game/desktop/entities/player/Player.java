@@ -72,8 +72,7 @@ public class Player extends SpriteAnimation {
         super.update(dt);
 
         if (MyInput.isMouseDown(Game.settings.SHOOT)) {
-            float angle = (float) Math.atan2(MyInput.getMouseLocation().y - (V_HEIGHT >> 2), MyInput.getMouseLocation().x - (V_WIDTH >> 2));
-            aim(angle);
+            aim();
         }
 
         if (weapon != null) {
@@ -83,8 +82,12 @@ public class Player extends SpriteAnimation {
         }
     }
 
-    public void aim(float angle) {
-        rotateBone("right_shoulder", (360 - (float) Math.toDegrees(angle)) + (isFlippedX() ? 180 : 0)); // TODO: Fix offset
+    public void aim() {
+        System.out.println(getCurrentAnimation());
+        float offset = weapon.getOffset().containsKey(getCurrentAnimation().name) ? weapon.getOffset().get(getCurrentAnimation().name) : 0;
+        float flipped = isFlippedX() ? (float) Math.PI : 0;
+        float angle = (float) Math.atan2(MyInput.getMouseLocation().y - (double) V_HEIGHT / 2, MyInput.getMouseLocation().x - (double) V_WIDTH / 2) + offset + flipped;
+        rotateBone("right_shoulder", ((360 - (float) Math.toDegrees(angle)))); // TODO: Fix offset
     }
 
     @Override
