@@ -41,7 +41,7 @@ public class Bullet extends WeaponProjectile {
         super.render(spriteBatch);
     }
 
-    public void onHit() {
+    public void onHit() { //TODO: Call this on bullet hit, make bullets sticky
         hardSetAnimation(Animation.HIT.name, true);
         setStopOnAnimationOver(true);
         setScale(1f);
