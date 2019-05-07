@@ -6,8 +6,8 @@ import com.badlogic.gdx.utils.Array;
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
-import ee.taltech.iti0202.gui.game.desktop.handlers.sound.Sound;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
 import lombok.Data;
 
 @Data

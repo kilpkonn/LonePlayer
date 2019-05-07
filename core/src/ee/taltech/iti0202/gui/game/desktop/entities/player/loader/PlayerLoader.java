@@ -11,20 +11,20 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.canvas.Draw;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.FRICTION;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_SQUARES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.FRICTION;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENTSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENTSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
 
 public class PlayerLoader {
 

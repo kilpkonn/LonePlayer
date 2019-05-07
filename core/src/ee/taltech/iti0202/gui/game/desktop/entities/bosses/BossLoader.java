@@ -25,9 +25,9 @@ import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import lombok.Data;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 @Data
 public class BossLoader {

@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class ShapesGreator {
 

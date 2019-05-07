@@ -8,7 +8,7 @@ import com.brashmonkey.spriter.SCMLReader;
 
 import java.util.HashMap;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
 
 public class AnimationLoader {
     private static HashMap<String, LibGdxLoader> loaders = new HashMap<>();

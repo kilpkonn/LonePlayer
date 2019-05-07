@@ -6,7 +6,7 @@ import com.brashmonkey.spriter.PlayerTweener;
 
 import java.util.HashSet;
 
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
 public class MyPlayerTweener extends PlayerTweener {
     private float influence;

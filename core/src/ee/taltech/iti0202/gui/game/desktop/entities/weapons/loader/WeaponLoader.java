@@ -11,12 +11,12 @@ import ee.taltech.iti0202.gui.game.desktop.entities.weapons.M4;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WEAPON;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_SQUARES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WEAPON;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENTSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENTSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
 
 public class WeaponLoader {
 

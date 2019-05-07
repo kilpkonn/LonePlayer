@@ -5,7 +5,7 @@ import com.badlogic.gdx.utils.Array;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import lombok.Data;
 
 @Data

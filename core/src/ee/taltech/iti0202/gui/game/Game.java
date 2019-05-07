@@ -7,16 +7,16 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.Content;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.GameStateManager;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInputProcessor;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.Content;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInputProcessor;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
 
 public class Game extends ApplicationAdapter {

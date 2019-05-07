@@ -10,10 +10,11 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BULLET;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class BulletLoader {
 
@@ -28,7 +29,7 @@ public class BulletLoader {
         fdef.restitution = 0f;
         fdef.density = 10f;
         fdef.filter.categoryBits = BIT_BULLET;
-        fdef.filter.maskBits = BIT_BOSSES | BIT_WORM;
+        fdef.filter.maskBits = BIT_BOSSES | BIT_WORM | BACKGROUND;
 
         BodyDef bdef = new BodyDef();
         bdef.type = BodyDef.BodyType.DynamicBody;

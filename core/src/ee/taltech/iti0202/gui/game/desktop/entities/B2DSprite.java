@@ -5,9 +5,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.animations.Animation;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class B2DSprite {
 

@@ -8,9 +8,9 @@ import com.badlogic.gdx.utils.Array;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BOSS;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.NONE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.NONE;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class BossHelper {
 

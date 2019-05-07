@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop.entities.player.handler;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Filter;
@@ -12,30 +11,30 @@ import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.MyContactListener;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.handlers.scene.canvas.Draw;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 import lombok.Data;
 import lombok.ToString;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.sound.Sound.playSoundOnce;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BACKGROUND;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_BOSSES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.MAX_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PLAYER_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.TERRA_SQUARES;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.gotHitBySnek;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound.playSoundOnce;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAX_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENTSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENTSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.gotHitBySnek;
 
 @Data
 public class PlayerHandler implements Handler {

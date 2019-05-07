@@ -9,11 +9,11 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
-import ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class CheckpointLoader {
 

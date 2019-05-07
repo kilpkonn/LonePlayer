@@ -12,16 +12,16 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
-import ee.taltech.iti0202.gui.game.desktop.handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_MULTIPLIER;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.DMG_ON_LANDING;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.PPM;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.handlers.variables.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_MULTIPLIER;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.ROLL_ON_LANDING_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
