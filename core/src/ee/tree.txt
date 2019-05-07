@@ -1,0 +1,157 @@
+Folder PATH listing
+Volume serial number is C882-991A
+C:.
+³   tree.txt
+³   
+taltech
+    iti0202
+        gui
+            game
+                ³   Game.java
+                ³   
+                desktop
+                ³   entities
+                ³   ³   ³   B2DSprite.java
+                ³   ³   ³   EndPoint.java
+                ³   ³   ³   Handler.java
+                ³   ³   ³   
+                ³   ³   animations
+                ³   ³   ³   ³   MyAttachment.java
+                ³   ³   ³   ³   MyPlayerListener.java
+                ³   ³   ³   ³   MyPlayerTweener.java
+                ³   ³   ³   ³   SpriteAnimation.java
+                ³   ³   ³   ³   
+                ³   ³   ³   loader
+                ³   ³   ³           AnimationLoader.java
+                ³   ³   ³           
+                ³   ³   bosses
+                ³   ³   ³   ³   Boss.java
+                ³   ³   ³   ³   BossLoader.java
+                ³   ³   ³   ³   Properties.java
+                ³   ³   ³   ³   
+                ³   ³   ³   handler
+                ³   ³   ³   ³       BossHander.java
+                ³   ³   ³   ³       
+                ³   ³   ³   joints
+                ³   ³   ³   ³       BossHelper.java
+                ³   ³   ³   ³       
+                ³   ³   ³   plantworm
+                ³   ³   ³   ³       PlantWorm.java
+                ³   ³   ³   ³       PlantWormProperties.java
+                ³   ³   ³   ³       
+                ³   ³   ³   snowman
+                ³   ³   ³   ³       SnowMan.java
+                ³   ³   ³   ³       SnowManProperties.java
+                ³   ³   ³   ³       
+                ³   ³   ³   worm
+                ³   ³   ³           MagmaWorm.java
+                ³   ³   ³           SnowWorm.java
+                ³   ³   ³           Worm.java
+                ³   ³   ³           WormProperties.java
+                ³   ³   ³           
+                ³   ³   checkpoints
+                ³   ³   ³   ³   Checkpoint.java
+                ³   ³   ³   ³   
+                ³   ³   ³   handler
+                ³   ³   ³   ³       CheckpointHandler.java
+                ³   ³   ³   ³       
+                ³   ³   ³   loader
+                ³   ³   ³           CheckpointLoader.java
+                ³   ³   ³           
+                ³   ³   player
+                ³   ³   ³   ³   Player.java
+                ³   ³   ³   ³   
+                ³   ³   ³   handler
+                ³   ³   ³   ³       PlayerHandler.java
+                ³   ³   ³   ³       
+                ³   ³   ³   loader
+                ³   ³   ³           PlayerLoader.java
+                ³   ³   ³           
+                ³   ³   projectile
+                ³   ³   ³   ³   WeaponProjectile.java
+                ³   ³   ³   ³   
+                ³   ³   ³   bullet
+                ³   ³   ³       ³   Bullet.java
+                ³   ³   ³       ³   
+                ³   ³   ³       handler
+                ³   ³   ³       ³       BulletHandler.java
+                ³   ³   ³       ³       
+                ³   ³   ³       loader
+                ³   ³   ³               BulletLoader.java
+                ³   ³   ³               
+                ³   ³   weapons
+                ³   ³       ³   Deagle.java
+                ³   ³       ³   Weapon.java
+                ³   ³       ³   
+                ³   ³       handler
+                ³   ³       ³       WeaponHandler.java
+                ³   ³       ³       
+                ³   ³       loader
+                ³   ³               WeaponLoader.java
+                ³   ³               
+                ³   handlers
+                ³   ³   gdx
+                ³   ³   ³   ³   BodyEditorLoader.java
+                ³   ³   ³   ³   Content.java
+                ³   ³   ³   ³   GameStateManager.java
+                ³   ³   ³   ³   MyContactListener.java
+                ³   ³   ³   ³   
+                ³   ³   ³   input
+                ³   ³   ³           MyInput.java
+                ³   ³   ³           MyInputProcessor.java
+                ³   ³   ³           
+                ³   ³   hud
+                ³   ³   ³       Hud.java
+                ³   ³   ³       
+                ³   ³   scene
+                ³   ³   ³   ³   EndMenu.java
+                ³   ³   ³   ³   LevelSelectionMenu.java
+                ³   ³   ³   ³   LoadGameMenu.java
+                ³   ³   ³   ³   MainMenu.java
+                ³   ³   ³   ³   PauseMenu.java
+                ³   ³   ³   ³   Scene.java
+                ³   ³   ³   ³   SettingsMenu.java
+                ³   ³   ³   ³   
+                ³   ³   ³   animations
+                ³   ³   ³   ³       Animation.java
+                ³   ³   ³   ³       Background.java
+                ³   ³   ³   ³       ParallaxBackground.java
+                ³   ³   ³   ³       
+                ³   ³   ³   bleeding
+                ³   ³   ³   ³       Bleeding.java
+                ³   ³   ³   ³       
+                ³   ³   ³   canvas
+                ³   ³   ³   ³       Draw.java
+                ³   ³   ³   ³       
+                ³   ³   ³   components
+                ³   ³   ³           GameButton.java
+                ³   ³   ³           
+                ³   ³   sound
+                ³   ³   ³       Sound.java
+                ³   ³   ³       
+                ³   ³   variables
+                ³   ³           B2DVars.java
+                ³   ³           
+                ³   settings
+                ³   ³       Settings.java
+                ³   ³       SettingsSerializer.java
+                ³   ³       
+                ³   states
+                ³       ³   GameState.java
+                ³       ³   Menu.java
+                ³       ³   Play.java
+                ³       ³   
+                ³       gameprogress
+                ³       ³       BossData.java
+                ³       ³       GameProgress.java
+                ³       ³       GameProgressSerializer.java
+                ³       ³       
+                ³       shapes
+                ³               ShapesGreator.java
+                ³               
+                networking
+                        AiServerListener.java
+                        ClientListener.java
+                        PeerToPeerClientListener.java
+                        ServerListener.java
+                        
