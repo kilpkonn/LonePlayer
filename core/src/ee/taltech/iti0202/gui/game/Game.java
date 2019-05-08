@@ -66,7 +66,7 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
-        // B2DVars.PATH = "assets/"; //TODO: this?
+        // B2DVars.PATH = "assets/";
 
         // aiServer = new Server();
         // aiServer.setPortAndIp(aiPort, aiIpAddress); // Listen to port 55433 and ip 127.0.0.1
@@ -90,22 +90,6 @@ public class Game extends ApplicationAdapter {
         // load textures
         res = new Content();
         res.loadTexture(PATH + "images/BackgroundStars/Stars-Big_1_2_PC.png", "starBackground");
-
-        /*res.loadTexture(PATH + "images/bosses/magmawormbody0.5.png", "magmawormbody0.5");
-        res.loadTexture(PATH + "images/bosses/magmawormhead0.5.png", "magmawormhead0.5");
-        res.loadTexture(PATH + "images/bosses/magmawormtail0.5.png", "magmawormtail0.5");
-        res.loadTexture(PATH + "images/bosses/magmawormbody1.0.png", "magmawormbody1.0");
-        res.loadTexture(PATH + "images/bosses/magmawormhead1.0.png", "magmawormhead1.0");
-        res.loadTexture(PATH + "images/bosses/magmawormtail1.0.png", "magmawormtail1.0");*/
-
-        /*res.loadTexture(PATH + "images/bosses/plantworm/head1.png", "head1");
-        res.loadTexture(PATH + "images/bosses/plantworm/head2.png", "head2");
-        res.loadTexture(PATH + "images/bosses/plantworm/claw.png", "claw");
-        res.loadTexture(PATH + "images/bosses/plantworm/hook.png", "hook");
-        res.loadTexture(PATH + "images/bosses/plantworm/base1.png", "base1");
-        res.loadTexture(PATH + "images/bosses/plantworm/base2.png", "base2");*/
-
-        //res.loadTexture(PATH + "images/player/Llama.png", "Llama");
         res.loadTexture(PATH + "maps/tilesets/images/Flag.png", "Checkpoint");
         res.loadTexture(PATH + "maps/background/rock.png", "rock");
         res.loadTexture(PATH + "maps/background/snow.png", "snow");

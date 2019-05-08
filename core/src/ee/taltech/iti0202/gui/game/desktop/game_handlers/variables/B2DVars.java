@@ -58,7 +58,7 @@ public class B2DVars {
     public static final boolean DEBUG = true;
     public static boolean UPDATE = true;
 
-    public static String PATH = "";
+    public static String PATH = "android/assets/";
     public static int V_WIDTH = 1920;
     public static int V_HEIGHT = 1080;
     public static int SCALE = 1;
@@ -88,7 +88,7 @@ public class B2DVars {
     public static final Map<String, Integer> BACKGROUND_SCREENS = new HashMap<String, Integer>() {{
         put("Desert", 5);
         put("Plains", 6);
-        put("Snow", 2); //TODO: Something else here
+        put("Snow", 2);
     }};
 
     public static final String[] MAIN_SCREENS = {

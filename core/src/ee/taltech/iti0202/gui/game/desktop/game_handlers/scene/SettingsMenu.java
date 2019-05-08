@@ -222,7 +222,7 @@ public class SettingsMenu extends Scene {
         switch (settingsButtons.get(btn)) {
             case ENABLE_VSYNC:
                 Game.settings.ENABLE_VSYNC = !Game.settings.ENABLE_VSYNC;
-                Gdx.graphics.setVSync(Game.settings.ENABLE_VSYNC); //TODO: Produces error while in-game, works in menu
+                Gdx.graphics.setVSync(Game.settings.ENABLE_VSYNC);
                 break;
             case SHOW_FPS:
                 Game.settings.SHOW_FPS = !Game.settings.SHOW_FPS;
