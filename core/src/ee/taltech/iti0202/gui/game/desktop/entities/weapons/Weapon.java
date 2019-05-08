@@ -4,9 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +16,7 @@ public abstract class Weapon extends SpriteAnimation {
     protected Body body;
     protected float coolDown = 0;
     protected float bulletHeat = 0;
-    protected Map<String, Float> offset = new HashMap();
+    protected double offRadius = 0;
 
     public Weapon(World world, SpriteBatch sb, Body body, String path) {
         super(body, sb, path);

@@ -170,7 +170,7 @@ public class PlayerHandler implements Handler {
                         play.getWorld(),
                         new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1),
                         new Vector2(MyInput.getMouseLocation().x, V_HEIGHT - MyInput.getMouseLocation().y),
-                        player.getPosition());
+                        player.getPosition(), player.getWeapon().getOffRadius());
                 draw.getBulletHandler().getBulletArray().add(bullet);
             }
         }

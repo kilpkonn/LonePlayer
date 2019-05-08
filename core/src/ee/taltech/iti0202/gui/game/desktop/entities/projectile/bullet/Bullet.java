@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.WeaponProjectile;
-import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

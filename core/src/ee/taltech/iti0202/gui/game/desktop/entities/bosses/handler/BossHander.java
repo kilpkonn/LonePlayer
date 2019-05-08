@@ -25,7 +25,6 @@ public class BossHander implements Handler {
         SnowManArray = new Array<>();
         MagmaBossArray = new Array<>();
         PlantBossArray = new Array<>();
-
     }
 
     @Override

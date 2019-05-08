@@ -85,20 +85,18 @@ public class Player extends SpriteAnimation {
     public void aim() {
         if (weapon == null) return;
         //float offset = weapon.getOffset().containsKey(getCurrentAnimation().name) ? weapon.getOffset().get(getCurrentAnimation().name) : 0;
-        System.out.println(weapon.getOffset().keySet());
-        System.out.println(getCurrentAnimation().name);
-        System.out.println(weapon.getOffset().containsKey(getCurrentAnimation().name));
         //System.out.println(offset);
         //System.out.println(Math.toDegrees(body.getAngle()) + " - " + getBone("body").angle);
-        float offset = (float) (body.getAngle()
+        /*float offset = (float) (body.getAngle()
                 + Math.toRadians((getBone("right_hand").angle)
                 - (getBone("right_arm").angle))
                 //- Math.toRadians(getBone("body").angle)
-                + Math.PI / 3); //TODO: SumTingWong fix offset, body -> right_shoulder -> right_arm -> right_hand
-        System.out.println(Math.toDegrees(offset));
-        float flipped = isFlippedX() ? (float) Math.PI : 0;
-        float angle = (float) Math.atan2(MyInput.getMouseLocation().y - (double) V_HEIGHT / 2, MyInput.getMouseLocation().x - (double) V_WIDTH / 2) + offset + flipped;
-        rotateBone("right_shoulder", ((360 - (float) Math.toDegrees(angle)))); // TODO: Fix offset
+                + Math.PI / 3);*/
+        float offset = getCurrentAnimation().name.equals("run") ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4)) : (getCurrentAnimation().name.equals("dash") ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4)) : (float) (Math.PI / 8));
+        float flipped = isFlippedX() ? -(float) Math.PI / 4 + (float) Math.PI : 0;
+        float angle = (float) Math.atan2(MyInput.getMouseLocation().y - (double) V_HEIGHT / 2, MyInput.getMouseLocation().x - (double) V_WIDTH / 2) + flipped + offset;
+
+        rotateBone("right_shoulder", (((float) -Math.toDegrees(angle))));
     }
 
     @Override

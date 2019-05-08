@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import java.util.Random;
+
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
@@ -18,7 +20,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class BulletLoader {
 
-    public static Bullet bulletLoader(SpriteBatch spriteBatch, World world, Vector2 positionRelativeToScreen, Vector2 destination, Vector2 positionRelativeToGame) {
+    public static Bullet bulletLoader(SpriteBatch spriteBatch, World world, Vector2 positionRelativeToScreen, Vector2 destination, Vector2 positionRelativeToGame, double delta) {
 
         CircleShape circle = new CircleShape();
         circle.setRadius(9 / PPM);
@@ -38,9 +40,12 @@ public class BulletLoader {
         bdef.fixedRotation = true;
         Body body = world.createBody(bdef);
         body.createFixture(fdef).setUserData("bullet");
-        body.applyLinearImpulse(new Vector2((destination.x - positionRelativeToScreen.x), (destination.y - positionRelativeToScreen.y)), positionRelativeToScreen, true);
+        Random r = new Random();
+        double randomValue1 = -delta + (delta - -delta) * r.nextDouble();
+        double randomValue2 = -delta + (delta - -delta) * r.nextDouble();
+        body.applyLinearImpulse(new Vector2((float) (destination.x - positionRelativeToScreen.x + randomValue1), (float) (destination.y - positionRelativeToScreen.y + randomValue2)), positionRelativeToScreen, true);
         float angle = (float) Math.atan2((double) body.getLinearVelocity().y, (double) body.getLinearVelocity().x);
-        body.setTransform(new Vector2(positionRelativeToGame.x, positionRelativeToGame.y), angle + (float) Math.PI + ((float) Math.PI) / 1.0f);
+        body.setTransform(new Vector2(positionRelativeToGame.x, positionRelativeToGame.y), (angle + (float) Math.PI + ((float) Math.PI) / 1.0f));
 
         return new Bullet(world, spriteBatch, body);
     }
