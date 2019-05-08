@@ -15,27 +15,42 @@ public class WormLogic extends BossLogic {
         this.bossArray = bossArray;
         this.cl = cl;
         health *= bossArray.size;
+        health *= bossArray.size > 100 ? 2 : 0.5;
+        totalHealth = health;
+        speed = 3;
+        System.out.println(totalHealth);
         logic = "worm";
     }
 
     @Override
     public void update(float dt) {
         super.updateHP(dt);
-        for (int i = 0; i < bossArray.size; i++) {
-            if (bossArray.size >= 100) {
-                if (i == bossArray.size - 1) {
-                    bossArray.get(i).updateHeadBig(dt, speed);
-                } else {
-                    bossArray.get(i).update(dt);
-                }
+        if (health / totalHealth <= 0.50) {
+            if (health / totalHealth > 0.10) {
+                setSpeed(4);
+            } else if (health / totalHealth > 0) {
+                setSpeed(5);
             } else {
-                if (i == bossArray.size - 1) {
-                    bossArray.get(i).updateHeadSmall(dt, speed);
-                } else {
-                    bossArray.get(i).update(dt);
-                }
+                updateDeath(dt);
             }
+        }
+        if (update) {
+            for (int i = 0; i < bossArray.size; i++) {
+                if (bossArray.size >= 100) {
+                    if (i == bossArray.size - 1) {
+                        bossArray.get(i).updateHeadBig(dt, speed);
+                    } else {
+                        bossArray.get(i).update(dt);
+                    }
+                } else {
+                    if (i == bossArray.size - 1) {
+                        bossArray.get(i).updateHeadSmall(dt, speed);
+                    } else {
+                        bossArray.get(i).update(dt);
+                    }
+                }
 
+            }
         }
     }
 }

@@ -37,18 +37,7 @@ public class BossHander implements Handler {
     @Override
     public void update(float dt) {
         for (BossLogic logic : LogicHandlers) {
-            System.out.println(logic.getHealth());
-            if (logic.getHealth() > 50) {
-                logic.update(dt);
-            } else if (logic.getHealth() > 10) {
-                logic.setSpeed(4);
-                logic.update(dt);
-            } else if (logic.getHealth() > 0) {
-                logic.setSpeed(5);
-                logic.update(dt);
-            } else {
-                logic.updateDeath(dt);
-            }
+            logic.update(dt);
         }
     }
 

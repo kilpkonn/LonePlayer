@@ -14,14 +14,17 @@ public abstract class BossLogic {
     protected Array<Array<Boss>> BossBossArray = new Array<>();
     protected Array<Boss> bossArray = new Array<>();
     protected String logic;
-    protected int health = 100;
+    protected double health = 250;
+    protected double totalHealth = 1;
     protected float speed = 3f;
     protected MyContactListener cl;
     protected boolean update = true;
 
     public void update(float dt) {
-        for (Boss boss : bossArray) {
-            boss.update(dt);
+        if (update) {
+            for (Boss boss : bossArray) {
+                boss.update(dt);
+            }
         }
     }
 
@@ -51,7 +54,7 @@ public abstract class BossLogic {
         if (update) {
             update = false;
             if (bossArray.size > 0) {
-                bossArray.get(0).getBody().getFixtureList().get(0).setDensity(1000000);
+                bossArray.get(0).getBody().getFixtureList().get(0).setDensity(1);
                 for (Boss boss : bossArray) {
                     boss.getBody().setGravityScale(1);
                     boss.getBody().setSleepingAllowed(true);
@@ -66,7 +69,7 @@ public abstract class BossLogic {
             }
 
             if (BossBossArray.size > 0) {
-                BossBossArray.get(0).get(0).getBody().getFixtureList().get(0).setDensity(1000000);
+                BossBossArray.get(0).get(0).getBody().getFixtureList().get(0).setDensity(1);
                 for (Array<Boss> bossArray : BossBossArray) {
                     for (Boss boss : bossArray) {
                         boss.getBody().setSleepingAllowed(true);

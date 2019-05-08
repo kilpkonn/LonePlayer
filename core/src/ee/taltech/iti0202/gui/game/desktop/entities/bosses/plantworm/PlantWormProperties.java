@@ -21,7 +21,7 @@ public class PlantWormProperties extends Properties {
         bdef.gravityScale = 0f;
         fdef.friction = 1f;
         fdef.restitution = 0f;
-        fdef.density = 10f;
+        fdef.density = 1000f;
         fdef.filter.categoryBits = BIT_WORM;
         fdef.filter.maskBits = DIMENTSION_1 | DIMENTSION_2 | BIT_BULLET;
     }

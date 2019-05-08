@@ -22,6 +22,9 @@ public class HydraLogic extends BossLogic {
         this.cl = cl;
         logic = "hydra";
         health *= Math.pow(bossArray.size, 2);
+        totalHealth = health;
+        speed = 2;
+        System.out.println(totalHealth);
         setPlantBossSize(bossArray.size);
     }
 
@@ -35,7 +38,20 @@ public class HydraLogic extends BossLogic {
 
     @Override
     public void update(float dt) {
-        if (BossBossArray.size != 0) {
+
+        if (health / totalHealth <= 0.50) {
+            if (health / totalHealth > 0.10) {
+                setSpeed(3);
+            } else if (health / totalHealth > 0) {
+                setSpeed(4);
+            } else {
+                updateDeath(dt);
+            }
+        }
+
+        dt *= speed / 2;
+
+        if (BossBossArray.size != 0 && update) {
             super.updateHP(dt);
             int takingTurns = takingTurnsBase * Gdx.graphics.getFramesPerSecond();
             timeElapsed++;
