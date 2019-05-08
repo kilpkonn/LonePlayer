@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
+import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
@@ -46,6 +47,7 @@ public class PlayerHandler implements Handler {
     private SpriteBatch spriteBatch;
     private Vector2 tempPlayerLocation = new Vector2();
     private Vector2 initPlayerLocation;
+    private Checkpoint checkpoint;
     private Vector2 current_force = new Vector2(0, 0);
     private boolean newPlayer = true;
     private int gracePeriod = 60;

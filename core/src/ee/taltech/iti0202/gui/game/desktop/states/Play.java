@@ -474,8 +474,8 @@ public class Play extends GameState {
         progress.playerLocationY = player.getPosition().y;
         progress.playerVelocityX = player.getBody().getLinearVelocity().x;
         progress.playerVelocityY = player.getBody().getLinearVelocity().y;*/
-        progress.checkpointX = playerHandler.getPlayer().getCheckpoint().getBody().getPosition().x;
-        progress.checkpointY = playerHandler.getPlayer().getCheckpoint().getBody().getPosition().y;
+        progress.checkpointX = playerHandler.getCheckpoint().getBody().getPosition().x;
+        progress.checkpointY = playerHandler.getCheckpoint().getBody().getPosition().y;
         progress.act = act;
         progress.map = map;
         progress.time = playTime;
