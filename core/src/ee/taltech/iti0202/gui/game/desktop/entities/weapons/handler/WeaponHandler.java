@@ -25,7 +25,7 @@ public class WeaponHandler implements Handler {
     @Override
     public void update(float dt) {
         for (Weapon weapon : weaponList) {
-            weapon.update(dt);  //TODO: Make weapons not fall trough terrain
+            weapon.update(dt);  //TODO: Make it possible to pick up weapons
         }
     }
 
