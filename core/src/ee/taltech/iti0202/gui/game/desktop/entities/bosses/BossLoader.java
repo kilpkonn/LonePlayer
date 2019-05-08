@@ -103,12 +103,10 @@ public class BossLoader {
 
                 }
                 BossHelper.filterTextures(tempArray);
-                bossHander.getMagmaBossArray().add(tempArray);
+                bossHander.addWorm(tempArray);
                 break;
 
             case "2":
-                bossHander.setTakingTurnsBase(10 - size);
-                bossHander.setPlantBossSize(size);
                 Array<Array<Boss>> tempArray2 = new Array<>();
                 for (int i = 0; i < size; i++) {
                     tempArray2.add(new Array<Boss>());
@@ -145,9 +143,7 @@ public class BossLoader {
                 for (int i = 1; i < size; i++) {
                     tempArray2.get(i).reverse();
                 }
-
-                for (Array<Boss> bosses : tempArray2)
-                    bossHander.getPlantBossArray().add(bosses);
+                bossHander.addHydra(tempArray2);
                 break;
 
             case "3":
@@ -158,7 +154,7 @@ public class BossLoader {
                 Boss boss = SnowMan.builder().playerHandler(playerHandler).body(body).spriteBatch(spriteBatch).type(type).xOffset(0).yOffset(0).build();
                 boss.getBody().setUserData(BOSS);
                 for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
-                bossHander.getSnowManArray().add(boss);
+                bossHander.addSnowMan(boss);
                 break;
         }
 

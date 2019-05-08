@@ -19,6 +19,7 @@ import java.util.Locale;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossLogic;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.handler.CheckpointHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
@@ -481,30 +482,31 @@ public class Play extends GameState {
         progress.dimension = draw.isDimension();
         progress.difficulty = difficulty;
 
-        if (bossHander.getSnowManArray() != null)
-            for (Boss boss : bossHander.getSnowManArray()) {
-                BossData bossData = new BossData("3", 1, boss.getPosition().x,
-                        boss.getPosition().y, boss.isDecider());
-                progress.bosses.add(bossData);
-            }
+        for (BossLogic bossLogic : bossHander.getLogicHandlers()) {
+            switch (bossLogic.getLogic()) {
+                case "worm":
+                    Boss worm = bossLogic.getBossArray().get(1);
+                    BossData wormData = new BossData(act.equals("Snow") ? "1_snow" : "1", bossLogic.getBossArray().size, worm.getPosition().x,
+                            worm.getPosition().y, worm.isDecider());
+                    progress.bosses.add(wormData);
 
-        if (bossHander.getMagmaBossArray() != null) {
-            for (Array<Boss> bossArray : bossHander.getMagmaBossArray()) {
-                Boss boss = bossArray.get(1);
-                BossData bossData = new BossData(act.equals("Snow") ? "1_snow" : "1", bossArray.size, boss.getPosition().x,
-                        boss.getPosition().y, boss.isDecider());
-                progress.bosses.add(bossData);
+                    break;
+                case "hydra":
+                    Boss hydra = bossLogic.getBossArray().get(1);
+                    BossData hydraData = new BossData("2", bossLogic.getBossArray().size, hydra.getPosition().x,
+                            hydra.getPosition().y, hydra.isDecider());
+                    progress.bosses.add(hydraData);
+                    break;
+                case "snowman":
+                    for (Boss boss : bossLogic.getBossArray()) {
+                        BossData bossData = new BossData("3", 1, boss.getPosition().x,
+                                boss.getPosition().y, boss.isDecider());
+                        progress.bosses.add(bossData);
+                    }
+                    break;
             }
         }
 
-        if (bossHander.getPlantBossArray() != null) {
-            for (Array<Boss> bossArray : bossHander.getPlantBossArray()) {
-                Boss boss = bossArray.get(1);
-                BossData bossData = new BossData("2", bossHander.getPlantBossSize(), boss.getPosition().x,
-                        boss.getPosition().y, boss.isDecider());
-                progress.bosses.add(bossData);
-            }
-        }
 
         progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
     }
