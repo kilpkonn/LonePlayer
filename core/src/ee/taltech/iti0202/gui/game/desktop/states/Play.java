@@ -19,7 +19,7 @@ import java.util.Locale;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
-import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossLogic;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic.BossLogic;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.handler.CheckpointHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
@@ -232,7 +232,7 @@ public class Play extends GameState {
         draw = new Draw(sb, world, act, map); // first create the "canvas" to draw onto
         playerHandler = new PlayerHandler(this, sb, progress, cl, draw);
         checkpointHandler = new CheckpointHandler();
-        bossHander = new BossHander();
+        bossHander = new BossHander(cl);
         bulletHandler = new BulletHandler(cl);
         weaponHandler = new WeaponHandler(world);
         draw.setPlayerHandler(playerHandler);

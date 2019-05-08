@@ -25,7 +25,7 @@ public class MyContactListener implements ContactListener {
     private short deathState = 0;
     private boolean initSpawn = true;
     private boolean end = false;
-    private HashMap<Body, String> collidedBullets = new HashMap<>();
+    private HashMap<Body, Body> collidedBullets = new HashMap<>();
 
     // called when 2 fixtures start to collide
     @Override
@@ -52,9 +52,9 @@ public class MyContactListener implements ContactListener {
 
     private void bulletDetection(Fixture fa, Fixture fb) {
         if (fa.getUserData().toString().endsWith("bullet")) {
-            collidedBullets.put(fa.getBody(), fb.getUserData().toString());
+            collidedBullets.put(fa.getBody(), fb.getBody());
         } else if (fb.getUserData().toString().endsWith("bullet")) {
-            collidedBullets.put(fb.getBody(), fa.getUserData().toString());
+            collidedBullets.put(fb.getBody(), fa.getBody());
         }
     }
 

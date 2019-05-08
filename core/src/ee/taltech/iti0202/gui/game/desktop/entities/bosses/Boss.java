@@ -106,10 +106,9 @@ public class Boss extends SpriteAnimation {
 
     }
 
-    public void updateHeadBig(float dt) {
+    public void updateHeadBig(float dt, float max_speed) {
         super.update(dt);
         time += dt;
-        float max_speed = 3;
 
         float sinOffset = (float) Math.sin(time) * 10;
 
@@ -146,10 +145,9 @@ public class Boss extends SpriteAnimation {
         //         ));
     }
 
-    public void updateHeadSmall(float dt) {
+    public void updateHeadSmall(float dt, float max_speed) {
         super.update(dt);
         time += dt;
-        float max_speed = 3f;
 
         float sinOffset = (float) Math.sin(time) * 2;
 

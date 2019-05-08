@@ -83,7 +83,7 @@ public class PlantWorm extends Boss {
     }
 
     @Override
-    public void updateHeadBig(float dt) {
+    public void updateHeadBig(float dt, float max_speed) {
         super.update(dt);
         time += dt;
 
@@ -113,7 +113,7 @@ public class PlantWorm extends Boss {
         );
 
         //System.out.println("Distance: " + distance);
-        if (distance < 2) {
+        if (distance < max_speed) {
             setAnimation(PlantWormAnimation.ATTACK.name, true);
         }
     }

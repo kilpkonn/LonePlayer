@@ -1,10 +1,11 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler;
+package ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -16,9 +17,11 @@ public class HydraLogic extends BossLogic {
     private int timeElapsed = 0;
     private int PlantBossSize = 1;
 
-    public HydraLogic(Array<Array<Boss>> bossArray) {
+    public HydraLogic(Array<Array<Boss>> bossArray, MyContactListener cl) {
         this.BossBossArray = bossArray;
+        this.cl = cl;
         logic = "hydra";
+        health *= Math.pow(bossArray.size, 2);
         setPlantBossSize(bossArray.size);
     }
 
@@ -33,6 +36,7 @@ public class HydraLogic extends BossLogic {
     @Override
     public void update(float dt) {
         if (BossBossArray.size != 0) {
+            super.updateHP(dt);
             int takingTurns = takingTurnsBase * Gdx.graphics.getFramesPerSecond();
             timeElapsed++;
             if (timeElapsed > takingTurns) {
@@ -44,7 +48,7 @@ public class HydraLogic extends BossLogic {
                 for (int i = 0; i < bossList.size; i++) {
                     if (i == 0) {
                         if (j == currentlyActiveBoss) {
-                            bossList.get(i).updateHeadBig(dt);
+                            bossList.get(i).updateHeadBig(dt, speed);
                         } else {
                             bossList.get(i).updateCircularMotion(dt);
                         }

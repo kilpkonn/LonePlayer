@@ -31,7 +31,7 @@ public class Bullet extends WeaponProjectile {
     }
 
     @Override
-    public void update(float dt) { //initial velocity must be set after constructing the bullet
+    public void update(float dt) {
         super.update(dt);
     }
 
@@ -40,7 +40,7 @@ public class Bullet extends WeaponProjectile {
         super.render(spriteBatch);
     }
 
-    public void onHit() { //TODO: Call this on bullet hit, make bullets sticky
+    public void onHit() {
         hardSetAnimation(Animation.HIT.name, true);
         setStopOnAnimationOver(true);
         setScale(1f);

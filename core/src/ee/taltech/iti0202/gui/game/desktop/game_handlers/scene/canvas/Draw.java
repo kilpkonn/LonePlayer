@@ -38,6 +38,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.handler.CheckpointHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.loader.CheckpointLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.handler.BulletHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
@@ -324,6 +325,17 @@ public class Draw implements Handler {
 
         //update bullets
         bulletHandler.update(dt);
+
+        dispose();
+    }
+
+    private void dispose() {
+        for (Bullet bullet : bulletHandler.getBulletArray()) {
+            if (bullet.toBeRemoved()) {
+                bossHander.getCl().getCollidedBullets().remove(bullet);
+                world.destroyBody(bullet.getBody());
+            }
+        }
     }
 
     public void render(OrthographicCamera cam) {
