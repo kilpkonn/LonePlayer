@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
@@ -31,6 +32,7 @@ public class DesktopLauncher {
         config.height = V_HEIGHT * SCALE;
         //config.foregroundFPS = 300; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized
+        config.addIcon("android/assets/images/logos/logo-32.png", Files.FileType.Local);
 
     }
 }
