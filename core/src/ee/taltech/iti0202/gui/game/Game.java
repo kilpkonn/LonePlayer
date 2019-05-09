@@ -21,7 +21,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class Game extends ApplicationAdapter {
 
-    public static final String TITLE = "Alone at Night";
+    public static final String TITLE = "Lone Player";
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;

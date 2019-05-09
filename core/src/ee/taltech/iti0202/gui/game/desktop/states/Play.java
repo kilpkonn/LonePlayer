@@ -400,7 +400,7 @@ public class Play extends GameState {
 
     public void render() {
         if (loading) {
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); //TODO: some loading screen?
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             return;
         }
 
@@ -447,7 +447,7 @@ public class Play extends GameState {
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         sb.begin();
