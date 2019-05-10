@@ -5,6 +5,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.Content;
@@ -107,6 +108,11 @@ public class Game extends ApplicationAdapter {
         gsm = new GameStateManager(this);
 
         Gdx.graphics.setVSync(settings.ENABLE_VSYNC);
+
+        Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/arrow.png"));
+        Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+        pm.dispose();
+
         setForegroundFPS(settings.MAX_FPS);
     }
 

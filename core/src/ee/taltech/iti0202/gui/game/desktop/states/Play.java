@@ -1,8 +1,11 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -259,6 +262,7 @@ public class Play extends GameState {
         cam.zoom = 1;
 
         weaponHandler.initWeapon("M4", sb, playerHandler.getPlayer());
+        setCursor(true);
     }
 
     public Play(String act, String map, B2DVars.gameDifficulty difficulty) {
@@ -283,11 +287,13 @@ public class Play extends GameState {
                 playState = pauseState.PAUSE;
                 draw.setGameFadeOut(true);
                 draw.setGameFadeDone(false);
+                setCursor(false);
             } else {
                 UPDATE = true;
                 playState = pauseState.RUN;
                 draw.setGameFadeOut(false);
                 draw.setGameFadeDone(false);
+                setCursor(true);
             }
         }
     }
@@ -314,6 +320,7 @@ public class Play extends GameState {
             draw.setGameFadeDone(false);
             endMenu.setTime(playTime);
             playState = pauseState.END;
+            setCursor(false);
         }
 
         draw.updateGameFade(dt);
@@ -509,6 +516,18 @@ public class Play extends GameState {
 
 
         progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
+    }
+
+    private void setCursor(boolean crosshair) {
+        if (crosshair) {
+            Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/white_cross.png"));
+            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, pm.getWidth() / 2, pm.getHeight() / 2));
+            pm.dispose();
+        } else {
+            Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/arrow.png"));
+            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+            pm.dispose();
+        }
     }
 
     public void dispose() {
