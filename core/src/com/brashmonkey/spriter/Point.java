@@ -9,14 +9,12 @@ package com.brashmonkey.spriter;
  */
 public class Point {
 
-	/**
-	 * The x coordinates of this point.
-	 */
+    /** The x coordinates of this point. */
     public float x;
-	/** The y coordinates of this point. */
+    /** The y coordinates of this point. */
     public float y;
 
-	/** Creates a point at (0,0). */
+    /** Creates a point at (0,0). */
     public Point() {
         this(0, 0);
     }

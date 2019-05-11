@@ -26,22 +26,22 @@ public class PauseMenu extends Scene {
     private GameButton saveButton;
     private GameButton saveAndExitButton;
 
-	public PauseMenu(
-			String act,
-			String map,
-			OrthographicCamera cam,
-			Runnable resumeFunc,
-			Runnable saveFunc,
-			Runnable openSettingsFunc) {
+    public PauseMenu(
+            String act,
+            String map,
+            OrthographicCamera cam,
+            Runnable resumeFunc,
+            Runnable saveFunc,
+            Runnable openSettingsFunc) {
         super(act, map, cam);
-		// this.pauseState = B2DVars.pauseState.RUN;
+        // this.pauseState = B2DVars.pauseState.RUN;
         this.resumeFunc = resumeFunc;
         this.saveFunc = saveFunc;
         this.openSettingsFunc = openSettingsFunc;
 
         hudCam.update();
 
-		// Texture backLayer = Game.res.getTexture("backLayer");
+        // Texture backLayer = Game.res.getTexture("backLayer");
 
         resumeButton = new GameButton("Resume", V_WIDTH / 5f, V_HEIGHT / 1.5f + 40);
         saveButton = new GameButton("Save", V_WIDTH / 5f, V_HEIGHT / 1.5f);
@@ -49,25 +49,25 @@ public class PauseMenu extends Scene {
         settingsButton = new GameButton("Settings", V_WIDTH / 5f, V_HEIGHT / 1.5f - 80);
         exitButton = new GameButton("Exit", V_WIDTH / 5f, V_HEIGHT / 1.5f - 120);
 
-		buttons =
-				new HashSet<>(
-						Arrays.asList(
-								resumeButton,
-								saveButton,
-								saveAndExitButton,
-								settingsButton,
-								exitButton));
+        buttons =
+                new HashSet<>(
+                        Arrays.asList(
+                                resumeButton,
+                                saveButton,
+                                saveAndExitButton,
+                                settingsButton,
+                                exitButton));
 
-		buttonType =
-				new HashMap<GameButton, block>() {
-					{
-						put(resumeButton, block.RESUME);
-						put(saveButton, block.SAVE);
-						put(saveAndExitButton, block.SAVEANDEXIT);
-						put(settingsButton, block.SETTINGS);
-						put(exitButton, block.EXIT);
-					}
-				};
+        buttonType =
+                new HashMap<GameButton, block>() {
+                    {
+                        put(resumeButton, block.RESUME);
+                        put(saveButton, block.SAVE);
+                        put(saveAndExitButton, block.SAVEANDEXIT);
+                        put(settingsButton, block.SETTINGS);
+                        put(exitButton, block.EXIT);
+                    }
+                };
 
         for (GameButton button : buttons) played.put(button, false);
 
@@ -108,12 +108,12 @@ public class PauseMenu extends Scene {
         currBlock = buttonType.get(button);
     }
 
-	private enum block {
-		SAVE,
-		RESUME,
-		EXIT,
-		SETTINGS,
-		SAVEANDEXIT,
-		DEFAULT
-	}
+    private enum block {
+        SAVE,
+        RESUME,
+        EXIT,
+        SETTINGS,
+        SAVEANDEXIT,
+        DEFAULT
+    }
 }

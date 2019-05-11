@@ -31,14 +31,14 @@ public class File {
     }
 
     public String toString() {
-		return getClass().getSimpleName()
-				+ "|[id: "
-				+ id
-				+ ", name: "
-				+ name
-				+ ", size: "
-				+ size
-				+ ", pivot: "
-				+ pivot;
+        return getClass().getSimpleName()
+                + "|[id: "
+                + id
+                + ", name: "
+                + name
+                + ", size: "
+                + size
+                + ", pivot: "
+                + pivot;
     }
 }

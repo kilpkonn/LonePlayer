@@ -48,8 +48,8 @@ public class GameStateManager {
         return null;
     }
 
-	private static GameState getState(
-			State state, String act, String map, B2DVars.gameDifficulty difficulty) {
+    private static GameState getState(
+            State state, String act, String map, B2DVars.gameDifficulty difficulty) {
         if (state == State.PLAY) {
             return new Play(act, map, difficulty);
         }
@@ -71,8 +71,8 @@ public class GameStateManager {
         gameStates.push(getState(state, progress));
     }
 
-	public static void pushState(
-			State state, String act, String map, B2DVars.gameDifficulty difficulty) {
+    public static void pushState(
+            State state, String act, String map, B2DVars.gameDifficulty difficulty) {
         gameStates.push(getState(state, act, map, difficulty));
     }
 
@@ -81,8 +81,8 @@ public class GameStateManager {
         g.dispose();
     }
 
-	public enum State {
-		PLAY,
-		MENU
-	}
+    public enum State {
+        PLAY,
+        MENU
+    }
 }

@@ -23,10 +23,10 @@ public class Settings {
     public boolean ENABLE_VSYNC = true;
 
     public void save(String path) {
-		Gson gson =
-				new GsonBuilder()
-						.registerTypeAdapter(Settings.class, new SettingsSerializer())
-						.create();
+        Gson gson =
+                new GsonBuilder()
+                        .registerTypeAdapter(Settings.class, new SettingsSerializer())
+                        .create();
         String jsonString = gson.toJson(this);
         try {
             File f = new File(path);
@@ -52,10 +52,10 @@ public class Settings {
     public Settings load(String path) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-			Gson gson =
-					new GsonBuilder()
-							.registerTypeAdapter(Settings.class, new SettingsSerializer())
-							.create();
+            Gson gson =
+                    new GsonBuilder()
+                            .registerTypeAdapter(Settings.class, new SettingsSerializer())
+                            .create();
             Settings s = gson.fromJson(br, Settings.class);
             System.out.println("Done loading settings!");
             return s;

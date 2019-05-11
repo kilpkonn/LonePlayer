@@ -25,9 +25,7 @@ import java.util.Iterator;
  */
 public abstract class Drawer<R> {
 
-	/**
-	 * The radius of a point for debug drawing purposes.
-	 */
+    /** The radius of a point for debug drawing purposes. */
     public float pointRadius = 5f;
 
     protected Loader<R> loader;
@@ -67,7 +65,7 @@ public abstract class Drawer<R> {
             ObjectInfo info = player.getObjectInfoFor(bone);
             Dimension size = info.size;
             drawBone(bone, size);
-		}
+        }
         /*for(Mainline.Key.BoneRef ref: player.getCurrentKey().boneRefs){
         	Timeline.Key key = player.unmappedTweenedKeys[ref.timeline];
         	Timeline.Key.Bone bone = key.object();
@@ -92,17 +90,17 @@ public abstract class Drawer<R> {
         float x2 = (float) Math.cos(Math.toRadians(bone.angle + 90)) * halfHeight * bone.scale.y;
         float y2 = (float) Math.sin(Math.toRadians(bone.angle + 90)) * halfHeight * bone.scale.y;
 
-		float
-				targetX =
-				bone.position.x
-						+ (float) Math.cos(Math.toRadians(bone.angle))
-						* size.width
-						* bone.scale.x,
-				targetY =
-						bone.position.y
-								+ (float) Math.sin(Math.toRadians(bone.angle))
-								* size.width
-								* bone.scale.x;
+        float
+                targetX =
+                        bone.position.x
+                                + (float) Math.cos(Math.toRadians(bone.angle))
+                                        * size.width
+                                        * bone.scale.x,
+                targetY =
+                        bone.position.y
+                                + (float) Math.sin(Math.toRadians(bone.angle))
+                                        * size.width
+                                        * bone.scale.x;
         float upperPointX = xx + x2, upperPointY = yy + y2;
         this.line(bone.position.x, bone.position.y, upperPointX, upperPointY);
         this.line(upperPointX, upperPointY, targetX, targetY);
@@ -138,7 +136,7 @@ public abstract class Drawer<R> {
      * Draws the boxes of all bones of the given player based on the given iterator.
      *
      * @param player the player to draw the bone boxes of
-	 * @param it the iterator iterating over the bones to draw
+     * @param it the iterator iterating over the bones to draw
      */
     public void drawBoneBoxes(Player player, Iterator<Bone> it) {
         while (it.hasNext()) {
@@ -160,7 +158,7 @@ public abstract class Drawer<R> {
      * Draws the boxes of sprites and boxes of the given player based on the given iterator.
      *
      * @param player player the player to draw the object boxes of
-	 * @param it the iterator iterating over the object to draw
+     * @param it the iterator iterating over the object to draw
      */
     public void drawObjectBoxes(Player player, Iterator<Object> it) {
         while (it.hasNext()) {
@@ -182,18 +180,18 @@ public abstract class Drawer<R> {
      * Draws the points of the given player based on the given iterator.
      *
      * @param player player the player to draw the points of
-	 * @param it the iterator iterating over the points to draw
+     * @param it the iterator iterating over the points to draw
      */
     public void drawPoints(Player player, Iterator<Object> it) {
         while (it.hasNext()) {
             Object point = it.next();
             if (player.getObjectInfoFor(point).type == ObjectType.Point) {
-				float x =
-						point.position.x
-								+ (float) (Math.cos(Math.toRadians(point.angle)) * pointRadius);
-				float y =
-						point.position.y
-								+ (float) (Math.sin(Math.toRadians(point.angle)) * pointRadius);
+                float x =
+                        point.position.x
+                                + (float) (Math.cos(Math.toRadians(point.angle)) * pointRadius);
+                float y =
+                        point.position.y
+                                + (float) (Math.sin(Math.toRadians(point.angle)) * pointRadius);
                 circle(point.position.x, point.position.y, pointRadius);
                 line(point.position.x, point.position.y, x, y);
             }
@@ -211,8 +209,8 @@ public abstract class Drawer<R> {
 
     /**
      * Draws the given player with the given character map.
-	 *
-	 * @param player the player to draw param map the character map to draw
+     *
+     * @param player the player to draw param map the character map to draw
      */
     public void draw(Player player, CharacterMap[] maps) {
         this.draw(player.objectIterator(), maps);
@@ -220,8 +218,8 @@ public abstract class Drawer<R> {
 
     /**
      * Draws the objects the given iterator is providing with the given character map.
-	 *
-	 * @param it the iterator iterating over the objects to draw param map the character map to draw
+     *
+     * @param it the iterator iterating over the objects to draw param map the character map to draw
      */
     public void draw(Iterator<Timeline.Key.Object> it, CharacterMap[] maps) {
         while (it.hasNext()) {
@@ -229,7 +227,7 @@ public abstract class Drawer<R> {
             if (object.ref.hasFile()) {
                 if (maps != null) {
                     for (CharacterMap map : maps)
-						if (map != null) object.ref.set(map.get(object.ref));
+                        if (map != null) object.ref.set(map.get(object.ref));
                 }
                 this.draw(object);
             }
@@ -274,19 +272,19 @@ public abstract class Drawer<R> {
 
     /**
      * Draws a rectangle with origin at (x, y) and the given size.
-	 *
-	 * @param x the x coordinate
-	 * @param y the y coordinate
-	 * @param width the width of the size
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param width the width of the size
      * @param height the height of the size
      */
     public abstract void rectangle(float x, float y, float width, float height);
 
     /**
      * Draws a circle at (x, y) with the given radius.
-	 *
-	 * @param x the x coordinate
-	 * @param y the y coordinate
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
      * @param radius the radius of the circle
      */
     public abstract void circle(float x, float y, float radius);

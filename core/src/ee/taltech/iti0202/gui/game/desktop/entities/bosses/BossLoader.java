@@ -209,25 +209,25 @@ public class BossLoader {
         Boss boss =
                 snowTheme
                         ? SnowWorm.builder()
-                        .playerHandler(playerHandler)
-                        .body(body)
-                        .spriteBatch(spriteBatch)
-                        .type(BOSS)
-                        .part(part)
-                        .size(size)
-                        .xOffset(50 * size)
-                        .yOffset(50 * size)
-                        .build()
+                                .playerHandler(playerHandler)
+                                .body(body)
+                                .spriteBatch(spriteBatch)
+                                .type(BOSS)
+                                .part(part)
+                                .size(size)
+                                .xOffset(50 * size)
+                                .yOffset(50 * size)
+                                .build()
                         : MagmaWorm.builder()
-                        .playerHandler(playerHandler)
-                        .body(body)
-                        .spriteBatch(spriteBatch)
-                        .type(BOSS)
-                        .part(part)
-                        .size(size)
-                        .xOffset(50 * size)
-                        .yOffset(50 * size)
-                        .build();
+                                .playerHandler(playerHandler)
+                                .body(body)
+                                .spriteBatch(spriteBatch)
+                                .type(BOSS)
+                                .part(part)
+                                .size(size)
+                                .xOffset(50 * size)
+                                .yOffset(50 * size)
+                                .build();
         boss.setDecider(decider);
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);

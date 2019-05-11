@@ -9,19 +9,17 @@ package com.brashmonkey.spriter;
  */
 public class Rectangle {
 
-	/**
-	 * The size of this rectangle.
-	 */
+    /** The size of this rectangle. */
     public final Dimension size;
-	/** Belongs to the bounds of this rectangle. */
+    /** Belongs to the bounds of this rectangle. */
     public float left, top, right, bottom;
 
     /**
      * Creates a rectangle with the given bounds.
-	 *
-	 * @param left left bounding
-	 * @param top top bounding
-	 * @param right right bounding
+     *
+     * @param left left bounding
+     * @param top top bounding
+     * @param right right bounding
      * @param bottom bottom bounding
      */
     public Rectangle(float left, float top, float right, float bottom) {
@@ -47,17 +45,17 @@ public class Rectangle {
      * @return <code>true</code> if the rectangles are intersecting
      */
     public static boolean areIntersecting(Rectangle rect1, Rectangle rect2) {
-		return rect1.isInside(rect2.left, rect2.top)
-				|| rect1.isInside(rect2.right, rect2.top)
-				|| rect1.isInside(rect2.left, rect2.bottom)
-				|| rect1.isInside(rect2.right, rect2.bottom);
+        return rect1.isInside(rect2.left, rect2.top)
+                || rect1.isInside(rect2.right, rect2.top)
+                || rect1.isInside(rect2.left, rect2.bottom)
+                || rect1.isInside(rect2.right, rect2.bottom);
     }
 
     /**
      * Creates a bigger rectangle of the given two and saves it in the target.
-	 *
-	 * @param rect1 the first rectangle
-	 * @param rect2 the second rectangle
+     *
+     * @param rect1 the first rectangle
+     * @param rect2 the second rectangle
      * @param target the target to save the new bounds.
      */
     public static void setBiggerRectangle(Rectangle rect1, Rectangle rect2, Rectangle target) {
@@ -86,9 +84,9 @@ public class Rectangle {
      */
     public boolean isInside(Point point) {
         return isInside(point.x, point.y);
-	}
+    }
 
-	/** Calculates the size of this rectangle. */
+    /** Calculates the size of this rectangle. */
     public void calculateSize() {
         this.size.set(right - left, top - bottom);
     }
@@ -109,10 +107,10 @@ public class Rectangle {
 
     /**
      * Sets the bounds of this rectangle to the given bounds.
-	 *
-	 * @param left left bounding
-	 * @param top top bounding
-	 * @param right right bounding
+     *
+     * @param left left bounding
+     * @param top top bounding
+     * @param right right bounding
      * @param bottom bottom bounding
      */
     public void set(float left, float top, float right, float bottom) {

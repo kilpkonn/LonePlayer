@@ -9,14 +9,11 @@ import java.util.UUID;
 public class ClientListener implements DataReceivedListener {
 
     @Override
-	public void connected(Connection connection) {
-	}
+    public void connected(Connection connection) {}
 
     @Override
-	public void receivedMessage(Message message) {
-	}
+    public void receivedMessage(Message message) {}
 
     @Override
-	public void disconnected(UUID connectionId) {
-	}
+    public void disconnected(UUID connectionId) {}
 }

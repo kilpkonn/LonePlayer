@@ -43,55 +43,55 @@ public class Menu extends GameState {
 
         mouseInWorld2D = new Vector2();
 
-		levelSelectionMenu =
-				new LevelSelectionMenu(
-						cam,
-						new Runnable() {
-							@Override
-							public void run() {
-								menuState = state.MAIN;
-							}
-						});
-		settingsMenu =
-				new SettingsMenu(
-						cam,
-						game,
-						new Runnable() {
-							@Override
-							public void run() {
-								menuState = state.MAIN;
-							}
-						});
-		loadGameMenu =
-				new LoadGameMenu(
-						cam,
-						new Runnable() {
-							@Override
-							public void run() {
-								menuState = state.MAIN;
-							}
-						});
-		mainMenuScene =
-				new MainMenu(
-						cam,
-						new Runnable() {
-							@Override
-							public void run() {
-								menuState = state.LEVELS;
-							}
-						},
-						new Runnable() {
-							@Override
-							public void run() {
-								menuState = state.RESUME;
-							}
-						},
-						new Runnable() {
-							@Override
-							public void run() {
-								menuState = state.SETTINGS;
-							}
-						});
+        levelSelectionMenu =
+                new LevelSelectionMenu(
+                        cam,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                menuState = state.MAIN;
+                            }
+                        });
+        settingsMenu =
+                new SettingsMenu(
+                        cam,
+                        game,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                menuState = state.MAIN;
+                            }
+                        });
+        loadGameMenu =
+                new LoadGameMenu(
+                        cam,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                menuState = state.MAIN;
+                            }
+                        });
+        mainMenuScene =
+                new MainMenu(
+                        cam,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                menuState = state.LEVELS;
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                menuState = state.RESUME;
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                menuState = state.SETTINGS;
+                            }
+                        });
 
         // play button
 
@@ -108,11 +108,11 @@ public class Menu extends GameState {
         Array<Texture> textures = new Array<>();
         int layersCount = Gdx.files.internal(PATH + path).list().length;
         for (int i = 1; i < layersCount; i++) {
-			textures.add(
-					new Texture(Gdx.files.internal(PATH + path + "backgroundLayer" + i + ".png")));
-			textures.get(textures.size - 1)
-					.setWrap(
-							Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+            textures.add(
+                    new Texture(Gdx.files.internal(PATH + path + "backgroundLayer" + i + ".png")));
+            textures.get(textures.size - 1)
+                    .setWrap(
+                            Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures);
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -135,8 +135,8 @@ public class Menu extends GameState {
             case SETTINGS:
                 settingsMenu.handleInput();
                 break;
-			default:
-				System.out.println("Error with menuState!!!");
+            default:
+                System.out.println("Error with menuState!!!");
         }
     }
 
@@ -148,7 +148,7 @@ public class Menu extends GameState {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();
 
-		// animation.update(dt);
+        // animation.update(dt);
 
         switch (menuState) {
             case MAIN:
@@ -163,8 +163,8 @@ public class Menu extends GameState {
             case SETTINGS:
                 settingsMenu.update(dt);
                 break;
-			default:
-				System.out.println("Error with menuState!");
+            default:
+                System.out.println("Error with menuState!");
         }
     }
 
@@ -196,8 +196,8 @@ public class Menu extends GameState {
             case SETTINGS:
                 settingsMenu.render(sb);
                 break;
-			default:
-				System.out.println("Error with menuState!");
+            default:
+                System.out.println("Error with menuState!");
         }
 
         // draw player
@@ -212,11 +212,11 @@ public class Menu extends GameState {
         System.gc();
     }
 
-	private enum state {
-		MAIN,
-		SETTINGS,
-		LEVELS,
-		RESUME,
-		DEFAULT
-	}
+    private enum state {
+        MAIN,
+        SETTINGS,
+        LEVELS,
+        RESUME,
+        DEFAULT
+    }
 }

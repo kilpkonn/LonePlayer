@@ -13,27 +13,27 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class PlayerLoader {
 
-	private static Player buildPlayer(
-			BodyDef bdef, SpriteBatch spriteBatch, Draw draw, World world) {
+    private static Player buildPlayer(
+            BodyDef bdef, SpriteBatch spriteBatch, Draw draw, World world) {
         short mask;
         if (draw.isDimension()) {
-			mask =
-					BIT_BOSSES
-							| BIT_WORM
-							| DIMENTSION_1
-							| DIMENTSION_2
-							| TERRA_SQUARES
-							| BACKGROUND
-							| TERRA_DIMENTSION_1;
+            mask =
+                    BIT_BOSSES
+                            | BIT_WORM
+                            | DIMENTSION_1
+                            | DIMENTSION_2
+                            | TERRA_SQUARES
+                            | BACKGROUND
+                            | TERRA_DIMENTSION_1;
         } else {
-			mask =
-					BIT_BOSSES
-							| BIT_WORM
-							| DIMENTSION_1
-							| DIMENTSION_2
-							| TERRA_SQUARES
-							| BACKGROUND
-							| TERRA_DIMENTSION_2;
+            mask =
+                    BIT_BOSSES
+                            | BIT_WORM
+                            | DIMENTSION_1
+                            | DIMENTSION_2
+                            | TERRA_SQUARES
+                            | BACKGROUND
+                            | TERRA_DIMENTSION_2;
         }
         bdef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bdef);
@@ -78,28 +78,28 @@ public class PlayerLoader {
         return new Player(body, spriteBatch);
     }
 
-	public static Player initPlayer(
-			GameProgress progress,
-			SpriteBatch spriteBatch,
-			PlayerHandler playerHandler,
-			Draw draw,
-			World world) {
+    public static Player initPlayer(
+            GameProgress progress,
+            SpriteBatch spriteBatch,
+            PlayerHandler playerHandler,
+            Draw draw,
+            World world) {
         if (playerHandler.getPlayer() != null)
             world.destroyBody(playerHandler.getPlayer().getBody());
 
         BodyDef bdef = new BodyDef();
         bdef.position.set(progress.checkpointX, progress.checkpointY);
-		// bdef.linearVelocity.set(progress.playerVelocityX, progress.playerLocationY);
+        // bdef.linearVelocity.set(progress.playerVelocityX, progress.playerLocationY);
 
         return buildPlayer(bdef, spriteBatch, draw, world);
     }
 
-	public static Player initPlayer(
-			SpriteBatch spriteBatch,
-			PlayerHandler playerHandler,
-			Draw draw,
-			World world,
-			MyContactListener cl) {
+    public static Player initPlayer(
+            SpriteBatch spriteBatch,
+            PlayerHandler playerHandler,
+            Draw draw,
+            World world,
+            MyContactListener cl) {
         if (playerHandler.getPlayer() != null)
             world.destroyBody(playerHandler.getPlayer().getBody());
         BodyDef bdef = new BodyDef();

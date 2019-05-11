@@ -31,12 +31,12 @@ public class LoadGameMenu extends Scene {
 
         buttons = new HashSet<>(Arrays.asList(backButton));
 
-		buttonType =
-				new HashMap<GameButton, block>() {
-					{
-						put(backButton, block.EXIT);
-					}
-				};
+        buttonType =
+                new HashMap<GameButton, block>() {
+                    {
+                        put(backButton, block.EXIT);
+                    }
+                };
 
         showSaves();
 
@@ -50,10 +50,10 @@ public class LoadGameMenu extends Scene {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();
 
-		for (GameButton button : buttons) {
+        for (GameButton button : buttons) {
             button.update(mouseInWorld2D);
-			if (button.hoverOver() && buttonType.get(button) == block.LOAD)
-				selectedMap = savesButtons.get(button);
+            if (button.hoverOver() && buttonType.get(button) == block.LOAD)
+                selectedMap = savesButtons.get(button);
         }
     }
 
@@ -79,14 +79,14 @@ public class LoadGameMenu extends Scene {
         savesButtons.clear();
         List<String> saves = loadSaves();
         Collections.sort(saves);
-		float y = V_HEIGHT / 2f + 40 * (int) Math.floor(saves.size() / 2f);
+        float y = V_HEIGHT / 2f + 40 * (int) Math.floor(saves.size() / 2f);
 
         for (int i = 0; i < saves.size(); i++) {
-			GameButton btn =
-					new GameButton(
-							saves.get(i).replace(".json", "").replace("_", " "),
-							V_WIDTH * 3 / 5f,
-							y - i * 40);
+            GameButton btn =
+                    new GameButton(
+                            saves.get(i).replace(".json", "").replace("_", " "),
+                            V_WIDTH * 3 / 5f,
+                            y - i * 40);
             savesButtons.put(btn, saves.get(i));
             buttonType.put(btn, block.LOAD);
         }
@@ -94,15 +94,15 @@ public class LoadGameMenu extends Scene {
     }
 
     private List<String> loadSaves() {
-		String[] maps =
-				new File(PATH + "saves/")
-						.list(
-								new FilenameFilter() {
-									@Override
-									public boolean accept(File file, String s) {
-										return !new File(file, s).isDirectory();
-									}
-								});
+        String[] maps =
+                new File(PATH + "saves/")
+                        .list(
+                                new FilenameFilter() {
+                                    @Override
+                                    public boolean accept(File file, String s) {
+                                        return !new File(file, s).isDirectory();
+                                    }
+                                });
         if (maps != null) {
             return Arrays.asList(maps);
         }
@@ -114,9 +114,9 @@ public class LoadGameMenu extends Scene {
         currBlock = buttonType.get(button);
     }
 
-	private enum block {
-		NEWGAME,
-		LOAD,
-		EXIT
-	}
+    private enum block {
+        NEWGAME,
+        LOAD,
+        EXIT
+    }
 }

@@ -22,36 +22,36 @@ public class GameProgress {
     public String act;
     public String map;
 
-	public static GameProgress load(String path) {
-		Gson gson =
-				new GsonBuilder()
-						.registerTypeAdapter(GameProgress.class, new GameProgressSerializer())
-						.create();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-			GameProgress p = gson.fromJson(br, GameProgress.class);
-			System.out.println("Done loading game!");
-			return p;
-		} catch (FileNotFoundException e) {
-			System.out.println("Error loading game!");
-			System.out.println(e.getMessage());
-		}
-		return new GameProgress();
-	}
+    public static GameProgress load(String path) {
+        Gson gson =
+                new GsonBuilder()
+                        .registerTypeAdapter(GameProgress.class, new GameProgressSerializer())
+                        .create();
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(new File(path)));
+            GameProgress p = gson.fromJson(br, GameProgress.class);
+            System.out.println("Done loading game!");
+            return p;
+        } catch (FileNotFoundException e) {
+            System.out.println("Error loading game!");
+            System.out.println(e.getMessage());
+        }
+        return new GameProgress();
+    }
 
     public void save(String path) {
-		Gson gson =
-				new GsonBuilder()
-						.registerTypeAdapter(GameProgress.class, new GameProgressSerializer())
-						.create();
+        Gson gson =
+                new GsonBuilder()
+                        .registerTypeAdapter(GameProgress.class, new GameProgressSerializer())
+                        .create();
         String jsonString = gson.toJson(this);
         try {
             File f = new File(path);
             if (!f.exists()) {
                 boolean newFile = f.getParentFile().mkdirs();
-				newFile = newFile || f.createNewFile();
-				System.out.println(
-						newFile ? "Created new game progress file!" : "Failed to create file.");
+                newFile = newFile || f.createNewFile();
+                System.out.println(
+                        newFile ? "Created new game progress file!" : "Failed to create file.");
             }
             FileWriter writer = new FileWriter(f, false);
             System.out.println(jsonString);

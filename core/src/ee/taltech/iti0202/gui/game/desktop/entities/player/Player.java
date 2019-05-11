@@ -49,39 +49,39 @@ public class Player extends SpriteAnimation {
 
         if (weapon != null) {
             Timeline.Key.Bone hand = getBone("right_hand");
-			weapon.getBody()
-					.setTransform(
-							new Vector2(hand.position.x / PPM, hand.position.y / PPM),
-							(float) Math.toRadians(hand.angle));
+            weapon.getBody()
+                    .setTransform(
+                            new Vector2(hand.position.x / PPM, hand.position.y / PPM),
+                            (float) Math.toRadians(hand.angle));
             weapon.update(dt);
         }
     }
 
     public void aim() {
         if (weapon == null) return;
-		// float offset = weapon.getOffset().containsKey(getCurrentAnimation().name) ?
-		// weapon.getOffset().get(getCurrentAnimation().name) : 0;
-		// System.out.println(offset);
-		// System.out.println(Math.toDegrees(body.getAngle()) + " - " + getBone("body").angle);
+        // float offset = weapon.getOffset().containsKey(getCurrentAnimation().name) ?
+        // weapon.getOffset().get(getCurrentAnimation().name) : 0;
+        // System.out.println(offset);
+        // System.out.println(Math.toDegrees(body.getAngle()) + " - " + getBone("body").angle);
         /*float offset = (float) (body.getAngle()
         + Math.toRadians((getBone("right_hand").angle)
         - (getBone("right_arm").angle))
         //- Math.toRadians(getBone("body").angle)
         + Math.PI / 3);*/
-		float offset =
-				getCurrentAnimation().name.equals("run")
-						? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
-						: (getCurrentAnimation().name.equals("dash")
-						? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
-						: (float) (Math.PI / 8));
+        float offset =
+                getCurrentAnimation().name.equals("run")
+                        ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
+                        : (getCurrentAnimation().name.equals("dash")
+                                ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
+                                : (float) (Math.PI / 8));
         float flipped = isFlippedX() ? -(float) Math.PI / 4 + (float) Math.PI : 0;
-		float angle =
-				(float)
-						Math.atan2(
-								MyInput.getMouseLocation().y - (double) V_HEIGHT / 2,
-								MyInput.getMouseLocation().x - (double) V_WIDTH / 2)
-						+ flipped
-						+ offset;
+        float angle =
+                (float)
+                                Math.atan2(
+                                        MyInput.getMouseLocation().y - (double) V_HEIGHT / 2,
+                                        MyInput.getMouseLocation().x - (double) V_WIDTH / 2)
+                        + flipped
+                        + offset;
 
         rotateBone("right_shoulder", (((float) -Math.toDegrees(angle))));
     }
@@ -95,7 +95,7 @@ public class Player extends SpriteAnimation {
     }
 
     public void onLanded(Vector2 velocity, Boolean grounded) {
-		// System.out.println(Math.abs(velocity.x));
+        // System.out.println(Math.abs(velocity.x));
         if (doneDmg.size() < 10) {
             doneDmg.add(new Vector2(velocity.x, velocity.y));
         } else {
@@ -113,20 +113,20 @@ public class Player extends SpriteAnimation {
             doneDmg = new ArrayList<>();
             if (Math.abs(velocity.y) > DMG_ON_LANDING) {
                 if (Math.abs(velocity.x) < ROLL_ON_LANDING_SPEED) {
-					health -=
-							Math.abs(
-									velocity.y
-											* Math.abs(velocity.y)
-											/ DMG_ON_LANDING
-											* DMG_MULTIPLIER);
+                    health -=
+                            Math.abs(
+                                    velocity.y
+                                            * Math.abs(velocity.y)
+                                            / DMG_ON_LANDING
+                                            * DMG_MULTIPLIER);
                 }
                 health -= Math.abs(velocity.y / 2);
                 health = Math.max(0, health);
             }
             if (Math.abs(velocity.x) > ROLL_ON_LANDING_SPEED) {
-				// body.applyForceToCenter(new Vector2(PLAYER_SPEED * velocity.x /
-				// Math.abs(velocity.x), 0),
-				// true); // Change to impulse?
+                // body.applyForceToCenter(new Vector2(PLAYER_SPEED * velocity.x /
+                // Math.abs(velocity.x), 0),
+                // true); // Change to impulse?
                 setAnimation(PlayerAnimation.ROLL2, true);
                 if (Math.abs(velocity.y) < ROLL_ON_LANDING_SPEED) {
                     health -= Math.abs(velocity.y / 2);
@@ -156,24 +156,24 @@ public class Player extends SpriteAnimation {
         }
     }
 
-	public enum PlayerAnimation {
-		RUN("run"),
-		JUMP("jump"),
-		IDLE("idle"),
-		ROLL("roll"),
-		ROLL2("roll2"),
-		FACEPLANT("faceplant"),
-		DASH("dash"),
-		WAVE("wave");
+    public enum PlayerAnimation {
+        RUN("run"),
+        JUMP("jump"),
+        IDLE("idle"),
+        ROLL("roll"),
+        ROLL2("roll2"),
+        FACEPLANT("faceplant"),
+        DASH("dash"),
+        WAVE("wave");
 
-		private final String name;
+        private final String name;
 
-		PlayerAnimation(String s) {
-			name = s;
-		}
+        PlayerAnimation(String s) {
+            name = s;
+        }
 
-		public String toString() {
-			return this.name;
-		}
-	}
+        public String toString() {
+            return this.name;
+        }
+    }
 }

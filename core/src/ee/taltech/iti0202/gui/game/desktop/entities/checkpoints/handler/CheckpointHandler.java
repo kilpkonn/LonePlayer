@@ -13,8 +13,7 @@ import lombok.Data;
 public class CheckpointHandler implements Handler {
     private Array<Checkpoint> checkpointList = new Array<>();
 
-	public CheckpointHandler() {
-	}
+    public CheckpointHandler() {}
 
     @Override
     public void update(float dt) {
@@ -27,44 +26,44 @@ public class CheckpointHandler implements Handler {
         if (cl.isNewCheckpoint()) {
             Checkpoint curTemp = checkpointList.get(0); // just in case
             for (Checkpoint checkpoint : checkpointList) {
-				if (Math.pow(
-						checkpoint.getPosition().x
-								- playerHandler
-								.getPlayer()
-								.getBody()
-								.getPosition()
-								.x,
-						2)
-						+ Math.pow(
-						checkpoint.getPosition().y
-								- playerHandler
-								.getPlayer()
-								.getBody()
-								.getPosition()
-								.y,
-						2)
-						<= Math.pow(
-						curTemp.getPosition().x
-								- playerHandler
-								.getPlayer()
-								.getBody()
-								.getPosition()
-								.x,
-						2)
-						+ Math.pow(
-						curTemp.getPosition().y
-								- playerHandler
-								.getPlayer()
-								.getBody()
-								.getPosition()
-								.y,
-						2)) {
+                if (Math.pow(
+                                        checkpoint.getPosition().x
+                                                - playerHandler
+                                                        .getPlayer()
+                                                        .getBody()
+                                                        .getPosition()
+                                                        .x,
+                                        2)
+                                + Math.pow(
+                                        checkpoint.getPosition().y
+                                                - playerHandler
+                                                        .getPlayer()
+                                                        .getBody()
+                                                        .getPosition()
+                                                        .y,
+                                        2)
+                        <= Math.pow(
+                                        curTemp.getPosition().x
+                                                - playerHandler
+                                                        .getPlayer()
+                                                        .getBody()
+                                                        .getPosition()
+                                                        .x,
+                                        2)
+                                + Math.pow(
+                                        curTemp.getPosition().y
+                                                - playerHandler
+                                                        .getPlayer()
+                                                        .getBody()
+                                                        .getPosition()
+                                                        .y,
+                                        2)) {
                     curTemp = checkpoint;
                 }
             }
             cl.setCurCheckpoint(curTemp.getBody());
             curTemp.onReached();
-			if (playerHandler.getCheckpoint() != null) playerHandler.getCheckpoint().dispose();
+            if (playerHandler.getCheckpoint() != null) playerHandler.getCheckpoint().dispose();
             playerHandler.setCheckpoint(curTemp);
 
             Sound.playSoundOnce("sounds/checkpoint.ogg");

@@ -18,9 +18,7 @@ public abstract class IKResolver {
     protected float tolerance;
     protected Player player;
 
-	/**
-	 * Creates a resolver with a default tolerance of 5f.
-	 */
+    /** Creates a resolver with a default tolerance of 5f. */
     public IKResolver(Player player) {
         this.tolerance = 5f;
         this.ikMap = new HashMap<IKObject, BoneRef>();
@@ -29,11 +27,11 @@ public abstract class IKResolver {
 
     /**
      * Resolves the inverse kinematics constraint with a specific algtorithm
-	 *
-	 * @param x the target x value
-	 * @param y the target y value
+     *
+     * @param x the target x value
+     * @param y the target y value
      * @param chainLength number of parents which are affected
-	 * @param effector the actual effector where the resolved information has to be stored in.
+     * @param effector the actual effector where the resolved information has to be stored in.
      */
     protected abstract void resolve(float x, float y, int chainLength, BoneRef effector);
 
@@ -55,42 +53,42 @@ public abstract class IKResolver {
     public void setPlayer(Player player) {
         if (player == null) throw new SpriterException("player cannot be null!");
         this.player = player;
-	}
+    }
 
-	/**
-	 * Resolves the inverse kinematics constraints with the implemented algorithm in {link
-	 * #resolve(float, float, int, SpriterAbstractObject, SpriterAbstractPlayer)}.
-	 *
-	 * <p>param player player to apply the resolving.
+    /**
+     * Resolves the inverse kinematics constraints with the implemented algorithm in {link
+     * #resolve(float, float, int, SpriterAbstractObject, SpriterAbstractPlayer)}.
+     *
+     * <p>param player player to apply the resolving.
      */
     public void resolve() {
         for (Entry<IKObject, BoneRef> entry : this.ikMap.entrySet()) {
             for (int j = 0; j < entry.getKey().iterations; j++)
-				this.resolve(
-						entry.getKey().x,
-						entry.getKey().y,
-						entry.getKey().chainLength,
-						entry.getValue());
+                this.resolve(
+                        entry.getKey().x,
+                        entry.getKey().y,
+                        entry.getKey().chainLength,
+                        entry.getValue());
         }
-	}
+    }
 
-	/**
-	 * Adds the given object to the internal IKObject - Bone map. This means, the values of the
-	 * given ik object affect the mapped bone.
+    /**
+     * Adds the given object to the internal IKObject - Bone map. This means, the values of the
+     * given ik object affect the mapped bone.
      *
      * @param ikObject the ik object
-	 * @param boneRef the bone reference which gets affected
+     * @param boneRef the bone reference which gets affected
      */
     public void mapIKObject(IKObject ikObject, BoneRef boneRef) {
         this.ikMap.put(ikObject, boneRef);
-	}
+    }
 
-	/**
-	 * Adds the given object to the internal IKObject - Bone map. This means, the values of the
-	 * given ik object affect the mapped bone.
+    /**
+     * Adds the given object to the internal IKObject - Bone map. This means, the values of the
+     * given ik object affect the mapped bone.
      *
      * @param ikObject the ik object
-	 * @param bone the bone which gets affected
+     * @param bone the bone which gets affected
      */
     public void mapIKObject(IKObject ikObject, Bone bone) {
         this.ikMap.put(ikObject, player.getBoneRef(bone));
@@ -112,11 +110,11 @@ public abstract class IKResolver {
      */
     public float getTolerance() {
         return tolerance;
-	}
+    }
 
-	/**
-	 * Sets the tolerance distance of this resolver. The resolver should stop the algorithm if the
-	 * distance to the set ik object is less than the tolerance.
+    /**
+     * Sets the tolerance distance of this resolver. The resolver should stop the algorithm if the
+     * distance to the set ik object is less than the tolerance.
      *
      * @param tolerance the tolerance
      */

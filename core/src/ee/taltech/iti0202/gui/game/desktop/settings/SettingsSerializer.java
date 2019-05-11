@@ -5,8 +5,8 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 public class SettingsSerializer implements JsonSerializer<Settings> {
-	public JsonElement serialize(
-			final Settings settings, final Type type, final JsonSerializationContext context) {
+    public JsonElement serialize(
+            final Settings settings, final Type type, final JsonSerializationContext context) {
         JsonObject result = new JsonObject();
         result.add("MOVE_LEFT", new JsonPrimitive(settings.MOVE_LEFT));
         result.add("MOVE_RIGHT", new JsonPrimitive(settings.MOVE_RIGHT));

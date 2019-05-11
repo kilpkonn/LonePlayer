@@ -13,15 +13,13 @@ public class Box {
     public final Point[] points;
     private Rectangle rect;
 
-	/**
-	 * Creates a new box with no witdh and height.
-	 */
+    /** Creates a new box with no witdh and height. */
     public Box() {
         this.points = new Point[4];
-		// this.temp = new Point[4];
+        // this.temp = new Point[4];
         for (int i = 0; i < 4; i++) {
             this.points[i] = new Point(0, 0);
-			// this.temp[i] = new Point(0,0);
+            // this.temp[i] = new Point(0,0);
         }
         this.rect = new Rectangle(0, 0, 0, 0);
     }
@@ -30,7 +28,7 @@ public class Box {
      * Calculates its four points for the given bone or object with the given info.
      *
      * @param boneOrObject the bone or object
-	 * @param info the info
+     * @param info the info
      * @throws NullPointerException if info or boneOrObject is <code>null</code>
      */
     public void calcFor(Timeline.Key.Bone boneOrObject, ObjectInfo info) {
@@ -45,17 +43,17 @@ public class Box {
         this.points[2].set(-pivotX, height - pivotY);
         this.points[3].set(width - pivotX, height - pivotY);
 
-		for (int i = 0; i < 4; i++) this.points[i].rotate(boneOrObject.angle);
-		for (int i = 0; i < 4; i++) this.points[i].translate(boneOrObject.position);
+        for (int i = 0; i < 4; i++) this.points[i].rotate(boneOrObject.angle);
+        for (int i = 0; i < 4; i++) this.points[i].translate(boneOrObject.position);
     }
 
     /**
      * Returns whether the given coordinates lie inside the box of the given bone or object.
      *
      * @param boneOrObject the bone or object
-	 * @param info the object info of the given bone or object
-	 * @param x the x coordinate
-	 * @param y the y coordinate
+     * @param info the object info of the given bone or object
+     * @param x the x coordinate
+     * @param y the y coordinate
      * @return <code>true</code> if the given point lies in the box
      * @throws NullPointerException if info or boneOrObject is <code>null</code>
      */
@@ -69,10 +67,10 @@ public class Box {
         Point point = new Point(x - boneOrObject.position.x, y - boneOrObject.position.y);
         point.rotate(-boneOrObject.angle);
 
-		return point.x >= -pivotX
-				&& point.x <= width - pivotX
-				&& point.y >= -pivotY
-				&& point.y <= height - pivotY;
+        return point.x >= -pivotX
+                && point.x <= width - pivotX
+                && point.y >= -pivotY
+                && point.y <= height - pivotY;
     }
 
     /**
@@ -83,7 +81,7 @@ public class Box {
      */
     public boolean isInside(Rectangle rect) {
         boolean inside = false;
-		for (Point p : points) inside |= rect.isInside(p);
+        for (Point p : points) inside |= rect.isInside(p);
         return inside;
     }
 
@@ -94,30 +92,30 @@ public class Box {
      */
     public Rectangle getBoundingRect() {
         this.rect.set(points[0].x, points[0].y, points[0].x, points[0].y);
-		this.rect.left =
-				Math.min(
-						Math.min(
-								Math.min(Math.min(points[0].x, points[1].x), points[2].x),
-								points[3].x),
-						this.rect.left);
-		this.rect.right =
-				Math.max(
-						Math.max(
-								Math.max(Math.max(points[0].x, points[1].x), points[2].x),
-								points[3].x),
-						this.rect.right);
-		this.rect.top =
-				Math.max(
-						Math.max(
-								Math.max(Math.max(points[0].y, points[1].y), points[2].y),
-								points[3].y),
-						this.rect.top);
-		this.rect.bottom =
-				Math.min(
-						Math.min(
-								Math.min(Math.min(points[0].y, points[1].y), points[2].y),
-								points[3].y),
-						this.rect.bottom);
+        this.rect.left =
+                Math.min(
+                        Math.min(
+                                Math.min(Math.min(points[0].x, points[1].x), points[2].x),
+                                points[3].x),
+                        this.rect.left);
+        this.rect.right =
+                Math.max(
+                        Math.max(
+                                Math.max(Math.max(points[0].x, points[1].x), points[2].x),
+                                points[3].x),
+                        this.rect.right);
+        this.rect.top =
+                Math.max(
+                        Math.max(
+                                Math.max(Math.max(points[0].y, points[1].y), points[2].y),
+                                points[3].y),
+                        this.rect.top);
+        this.rect.bottom =
+                Math.min(
+                        Math.min(
+                                Math.min(Math.min(points[0].y, points[1].y), points[2].y),
+                                points[3].y),
+                        this.rect.bottom);
         return this.rect;
     }
 }

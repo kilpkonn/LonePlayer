@@ -11,8 +11,7 @@ import java.io.*;
  */
 public class JsonReader {
 
-	private JsonReader() {
-	}
+    private JsonReader() {}
 
     public static JSONObject parse(String json) {
         return new JSONObject(json);

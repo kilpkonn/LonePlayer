@@ -25,11 +25,11 @@ public class MainMenu extends Scene {
     private GameButton exitButton;
     private HashMap<GameButton, MainMenu.block> buttonType;
 
-	public MainMenu(
-			OrthographicCamera cam,
-			Runnable newGameFunc,
-			Runnable resumeGameFunc,
-			Runnable settingsFunc) {
+    public MainMenu(
+            OrthographicCamera cam,
+            Runnable newGameFunc,
+            Runnable resumeGameFunc,
+            Runnable settingsFunc) {
         super(cam);
         this.newGameFunc = newGameFunc;
         this.resumeGameFunc = resumeGameFunc;
@@ -40,19 +40,19 @@ public class MainMenu extends Scene {
         settingsButton = new GameButton("Settings", V_WIDTH / 5f, V_HEIGHT / 1.5f - 80);
         exitButton = new GameButton("Exit", V_WIDTH / 5f, V_HEIGHT / 1.5f - 120);
 
-		buttons =
-				new HashSet<>(
-						Arrays.asList(newGameButton, loadGameButton, settingsButton, exitButton));
+        buttons =
+                new HashSet<>(
+                        Arrays.asList(newGameButton, loadGameButton, settingsButton, exitButton));
 
-		buttonType =
-				new HashMap<GameButton, block>() {
-					{
-						put(newGameButton, block.NEWGAME);
-						put(loadGameButton, block.RESUME);
-						put(settingsButton, block.SETTINGS);
-						put(exitButton, block.EXIT);
-					}
-				};
+        buttonType =
+                new HashMap<GameButton, block>() {
+                    {
+                        put(newGameButton, block.NEWGAME);
+                        put(loadGameButton, block.RESUME);
+                        put(settingsButton, block.SETTINGS);
+                        put(exitButton, block.EXIT);
+                    }
+                };
 
         for (GameButton button : buttons) played.put(button, false);
 
@@ -88,11 +88,11 @@ public class MainMenu extends Scene {
         currBlock = buttonType.get(button);
     }
 
-	private enum block {
-		NEWGAME,
-		RESUME,
-		EXIT,
-		SETTINGS,
-		DEFAULT
-	}
+    private enum block {
+        NEWGAME,
+        RESUME,
+        EXIT,
+        SETTINGS,
+        DEFAULT
+    }
 }

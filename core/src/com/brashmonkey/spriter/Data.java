@@ -16,13 +16,13 @@ public class Data {
     final Entity[] entities;
     private int folderPointer = 0, entityPointer = 0;
 
-	Data(
-			String scmlVersion,
-			String generator,
-			String generatorVersion,
-			PixelMode pixelMode,
-			int folders,
-			int entities) {
+    Data(
+            String scmlVersion,
+            String generator,
+            String generatorVersion,
+            PixelMode pixelMode,
+            int folders,
+            int entities) {
         this.scmlVersion = scmlVersion;
         this.generator = generator;
         this.generatorVersion = generatorVersion;
@@ -65,11 +65,11 @@ public class Data {
      * Returns a folder index with the given name.
      *
      * @param name name of the folder
-	 * @return the folder index of the Folder with the given name or -1 if no folder with the given
-	 *     name exists
+     * @return the folder index of the Folder with the given name or -1 if no folder with the given
+     *     name exists
      */
     int getFolderIndex(String name) {
-		for (Folder folder : this.folders) if (folder.name.equals(name)) return folder.id;
+        for (Folder folder : this.folders) if (folder.name.equals(name)) return folder.id;
         return -1;
     }
 
@@ -110,11 +110,11 @@ public class Data {
      * Returns an entity index with the given name.
      *
      * @param name name of the entity
-	 * @return the entity index of the entity with the given name or -1 if no entity with the given
-	 *     name exists
+     * @return the entity index of the entity with the given name or -1 if no entity with the given
+     *     name exists
      */
     int getEntityIndex(String name) {
-		for (Entity entity : this.entities) if (entity.name.equals(name)) return entity.id;
+        for (Entity entity : this.entities) if (entity.name.equals(name)) return entity.id;
         return -1;
     }
 
@@ -122,7 +122,7 @@ public class Data {
      * Returns a {@link File} instance in the given {@link Folder} instance at the given file index.
      *
      * @param folder {@link Folder} instance to search in.
-	 * @param file index of the file
+     * @param file index of the file
      * @return the {@link File} instance in the given folder at the given file index
      */
     public File getFile(Folder folder, int file) {
@@ -133,7 +133,7 @@ public class Data {
      * Returns a {@link File} instance in the given folder at the given file index.
      *
      * @param folder index of the folder
-	 * @param file index of the file
+     * @param file index of the file
      * @return the {@link File} instance in the given folder at the given file index
      * @throws {@link IndexOutOfBoundsException} if the folder or file index are out of range
      */
@@ -151,29 +151,27 @@ public class Data {
         return this.getFile(ref.folder, ref.file);
     }
 
-	/**
-	 * @return The string representation of this spriter data
-	 */
+    /** @return The string representation of this spriter data */
     public String toString() {
-		String toReturn =
-				getClass().getSimpleName()
-						+ "|[Version: "
-						+ scmlVersion
-						+ ", Generator: "
-						+ generator
-						+ " ("
-						+ generatorVersion
-						+ ")]";
-		for (Folder folder : folders) toReturn += "\n" + folder;
-		for (Entity entity : entities) toReturn += "\n" + entity;
+        String toReturn =
+                getClass().getSimpleName()
+                        + "|[Version: "
+                        + scmlVersion
+                        + ", Generator: "
+                        + generator
+                        + " ("
+                        + generatorVersion
+                        + ")]";
+        for (Folder folder : folders) toReturn += "\n" + folder;
+        for (Entity entity : entities) toReturn += "\n" + entity;
         toReturn += "]";
         return toReturn;
-	}
+    }
 
-	/** Represents the rendering mode stored in the spriter data root. */
+    /** Represents the rendering mode stored in the spriter data root. */
     public enum PixelMode {
-		NONE,
-		PIXEL_ART;
+        NONE,
+        PIXEL_ART;
 
         /**
          * @param mode

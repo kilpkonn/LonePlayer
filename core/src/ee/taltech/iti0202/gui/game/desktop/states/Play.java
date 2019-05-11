@@ -52,8 +52,7 @@ public class Play extends GameState {
 
     // LibGdx variables
     private World world = new World(new Vector2(0, GRAVITY), true);
-    @ToString.Exclude
-    private Draw draw;
+    @ToString.Exclude private Draw draw;
     private MyContactListener cl = new MyContactListener();
     private Box2DDebugRenderer b2dr = new Box2DDebugRenderer();
     private OrthographicCamera b2dcam = new OrthographicCamera();
@@ -61,16 +60,11 @@ public class Play extends GameState {
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
     // handlers
-    @ToString.Exclude
-    private PlayerHandler playerHandler;
-    @ToString.Exclude
-    private BossHander bossHander;
-    @ToString.Exclude
-    private WeaponHandler weaponHandler;
-    @ToString.Exclude
-    private CheckpointHandler checkpointHandler;
-    @ToString.Exclude
-    private BulletHandler bulletHandler;
+    @ToString.Exclude private PlayerHandler playerHandler;
+    @ToString.Exclude private BossHander bossHander;
+    @ToString.Exclude private WeaponHandler weaponHandler;
+    @ToString.Exclude private CheckpointHandler checkpointHandler;
+    @ToString.Exclude private BulletHandler bulletHandler;
     // States
     private GameProgress progress;
     private PauseMenu pauseMenu;
@@ -307,7 +301,7 @@ public class Play extends GameState {
         if (playerHandler.isNewPlayer()) {
             if (Math.abs(playerHandler.getPlayer().getPosition().x - cam.position.x / PPM) < 1
                     && Math.abs(playerHandler.getPlayer().getPosition().y - cam.position.y / PPM)
-                    < 1) playerHandler.setNewPlayer(false);
+                            < 1) playerHandler.setNewPlayer(false);
         } else handleInput();
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
@@ -538,7 +532,7 @@ public class Play extends GameState {
                 B2DVars.PATH
                         + "saves/"
                         + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH)
-                        .format(new Date())
+                                .format(new Date())
                         + ".json");
     }
 

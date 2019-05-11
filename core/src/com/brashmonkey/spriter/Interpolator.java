@@ -43,8 +43,8 @@ public class Interpolator {
         return linear(quartic(a, b, c, d, e, t), quartic(b, c, d, e, f, t), t);
     }
 
-	public static float quinticAngle(
-			float a, float b, float c, float d, float e, float f, float t) {
+    public static float quinticAngle(
+            float a, float b, float c, float d, float e, float f, float t) {
         return linearAngle(quarticAngle(a, b, c, d, e, t), quarticAngle(b, c, d, e, f, t), t);
     }
 

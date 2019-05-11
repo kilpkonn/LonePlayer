@@ -48,11 +48,11 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 @Data
 public class Draw implements Handler {
 
-	////////////////////////////////////////////////////////////////////    Read and draw the map
-	// ////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////    Read and draw the map
+    // ////////////////////////////////////////////////////////////////////
 
-	// @ToString.Exclude
-	// private Play play;
+    // @ToString.Exclude
+    // private Play play;
     private PlayerHandler playerHandler;
     private BossHander bossHander;
     private CheckpointHandler checkpointHandler;
@@ -77,7 +77,7 @@ public class Draw implements Handler {
     private float currentMenuFade;
 
     public Draw(SpriteBatch sb, World world, String act, String map) {
-		// this.play = play;
+        // this.play = play;
         this.spriteBatch = sb;
         this.bdef = new BodyDef();
         this.fdef = new FixtureDef();
@@ -118,8 +118,8 @@ public class Draw implements Handler {
             switch (layer.getName()) {
                 case "barrier":
                     this.fdef.filter.categoryBits = BACKGROUND;
-					this.fdef.filter.maskBits =
-							BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2 | BIT_WEAPON | BIT_BULLET;
+                    this.fdef.filter.maskBits =
+                            BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2 | BIT_WEAPON | BIT_BULLET;
                     determineMapObject(layer);
                     break;
                 case "hitboxes_1":
@@ -134,8 +134,8 @@ public class Draw implements Handler {
                     break;
                 case "hitboxes":
                     this.fdef.filter.categoryBits = TERRA_SQUARES;
-					this.fdef.filter.maskBits =
-							BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2 | BIT_WEAPON;
+                    this.fdef.filter.maskBits =
+                            BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2 | BIT_WEAPON;
                     determineMapObject(layer);
                     break;
                 default:
@@ -143,8 +143,8 @@ public class Draw implements Handler {
             }
         }
         if (!defaultSpawn) {
-			new BossLoader(world, spriteBatch, fdef, bdef, bossHander, playerHandler)
-					.createAllBosses(bosses);
+            new BossLoader(world, spriteBatch, fdef, bdef, bossHander, playerHandler)
+                    .createAllBosses(bosses);
         }
     }
 
@@ -212,11 +212,11 @@ public class Draw implements Handler {
                 Bleeding.fixBleeding(cell.getTile().getTextureRegion()); // fix bleeding hopefully
 
                 if (cell.getTile().getProperties().containsKey("animation")) {
-					Texture tex =
-							Game.res.getTexture(
-									"Player"); // TODO: <- Wut is dis? misleading names or obsolete?
-					// // this is to
-					// make animated cells, like grass in the wind or so on
+                    Texture tex =
+                            Game.res.getTexture(
+                                    "Player"); // TODO: <- Wut is dis? misleading names or obsolete?
+                    // // this is to
+                    // make animated cells, like grass in the wind or so on
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];
                     animatedCells.put(cell, new Animation(sprites, 1 / 12f));
                 }
@@ -228,32 +228,32 @@ public class Draw implements Handler {
                 // writing vertices for hit boxes
                 if (lastWasThere) {
 
-					v[2] =
-							new Vector2(
-									mapPosCol + corner_coords[4] * corner,
-									mapPosRow + corner_coords[5] * corner);
-					v[3] =
-							new Vector2(
-									mapPosCol + corner_coords[6] * corner,
-									mapPosRow + corner_coords[7] * corner);
+                    v[2] =
+                            new Vector2(
+                                    mapPosCol + corner_coords[4] * corner,
+                                    mapPosRow + corner_coords[5] * corner);
+                    v[3] =
+                            new Vector2(
+                                    mapPosCol + corner_coords[6] * corner,
+                                    mapPosRow + corner_coords[7] * corner);
 
                 } else {
-					v[0] =
-							new Vector2(
-									mapPosCol + corner_coords[0] * corner,
-									mapPosRow + corner_coords[1] * corner);
-					v[1] =
-							new Vector2(
-									mapPosCol + corner_coords[2] * corner,
-									mapPosRow + corner_coords[3] * corner);
-					v[2] =
-							new Vector2(
-									mapPosCol + corner_coords[4] * corner,
-									mapPosRow + corner_coords[5] * corner);
-					v[3] =
-							new Vector2(
-									mapPosCol + corner_coords[6] * corner,
-									mapPosRow + corner_coords[7] * corner);
+                    v[0] =
+                            new Vector2(
+                                    mapPosCol + corner_coords[0] * corner,
+                                    mapPosRow + corner_coords[1] * corner);
+                    v[1] =
+                            new Vector2(
+                                    mapPosCol + corner_coords[2] * corner,
+                                    mapPosRow + corner_coords[3] * corner);
+                    v[2] =
+                            new Vector2(
+                                    mapPosCol + corner_coords[4] * corner,
+                                    mapPosRow + corner_coords[5] * corner);
+                    v[3] =
+                            new Vector2(
+                                    mapPosCol + corner_coords[6] * corner,
+                                    mapPosRow + corner_coords[7] * corner);
                 }
                 lastWasThere = true;
             }
@@ -265,28 +265,28 @@ public class Draw implements Handler {
                 this.fdef.filter.categoryBits = NONE;
                 this.fdef.filter.maskBits = NONE;
                 this.fdef.isSensor = isSensor;
-				BossLoader bossLoader =
-						new BossLoader(world, spriteBatch, fdef, bdef, bossHander, playerHandler);
+                BossLoader bossLoader =
+                        new BossLoader(world, spriteBatch, fdef, bdef, bossHander, playerHandler);
                 switch (layer.getName()) {
                     case "checkpoints":
                         if ((polygon[0].x - polygon[3].x) / (polygon[0].y - polygon[1].y) > 1.8) {
-							Checkpoint checkpoint =
-									CheckpointLoader.createEndPoint(
-											new Vector2(
-													polygon[1].x + tileSize / PPM, polygon[0].y),
-											world,
-											spriteBatch);
+                            Checkpoint checkpoint =
+                                    CheckpointLoader.createEndPoint(
+                                            new Vector2(
+                                                    polygon[1].x + tileSize / PPM, polygon[0].y),
+                                            world,
+                                            spriteBatch);
                             checkpointHandler.getCheckpointList().add(checkpoint);
                         } else {
                             if (B2DVars.CHECKPOINTS) {
-								Checkpoint checkpoint =
-										CheckpointLoader.createCheckpoints(
-												new Vector2(
-														polygon[1].x
-																+ (polygon[3].x - polygon[1].x) / 2,
-														polygon[0].y),
-												world,
-												spriteBatch);
+                                Checkpoint checkpoint =
+                                        CheckpointLoader.createCheckpoints(
+                                                new Vector2(
+                                                        polygon[1].x
+                                                                + (polygon[3].x - polygon[1].x) / 2,
+                                                        polygon[0].y),
+                                                world,
+                                                spriteBatch);
                                 checkpointHandler.getCheckpointList().add(checkpoint);
                             }
                         }
@@ -294,44 +294,44 @@ public class Draw implements Handler {
 
                     case "bosses_small":
                         if (B2DVars.BOSSES && defaultSpawn) {
-							bossLoader.createBosses(
-									new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y),
-									layer.getProperties().get("type").toString(),
-									false,
-									(Integer) layer.getProperties().get("size"));
+                            bossLoader.createBosses(
+                                    new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y),
+                                    layer.getProperties().get("type").toString(),
+                                    false,
+                                    (Integer) layer.getProperties().get("size"));
                         }
                         break;
 
                     case "bosses_big":
                         if (B2DVars.BOSSES && defaultSpawn) {
-							bossLoader.createBosses(
-									new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y),
-									layer.getProperties().get("type").toString(),
-									true,
-									(Integer) layer.getProperties().get("size"));
+                            bossLoader.createBosses(
+                                    new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y),
+                                    layer.getProperties().get("type").toString(),
+                                    true,
+                                    (Integer) layer.getProperties().get("size"));
                         }
                         break;
                     case "bosses":
                         if (B2DVars.BOSSES && defaultSpawn) {
-							bossLoader.createBosses(
-									new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y),
-									layer.getProperties().get("type").toString(),
-									true,
-									(Integer) layer.getProperties().get("size"));
+                            bossLoader.createBosses(
+                                    new Vector2(polygon[2].x - (tileSize / 2) / PPM, polygon[2].y),
+                                    layer.getProperties().get("type").toString(),
+                                    true,
+                                    (Integer) layer.getProperties().get("size"));
                         }
                         break;
 
                     case "player":
                         if (playerHandler.getInitPlayerLocation() == null) {
-							playerHandler.setInitPlayerLocation(
-									new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y));
+                            playerHandler.setInitPlayerLocation(
+                                    new Vector2(polygon[2].x + (tileSize / 2) / PPM, polygon[2].y));
                         }
                         break;
 
                     default:
-						world.createBody(this.bdef)
-								.createFixture(this.fdef)
-								.setUserData(layer.getName());
+                        world.createBody(this.bdef)
+                                .createFixture(this.fdef)
+                                .setUserData(layer.getName());
                         break;
                 }
             }
@@ -339,25 +339,25 @@ public class Draw implements Handler {
     }
 
     public void update(float dt) {
-		// draw tilemap animations
+        // draw tilemap animations
         if (animatedCells != null) {
             for (Animation animation : animatedCells.values()) {
                 animation.update(dt);
             }
         }
-		// update player
+        // update player
         playerHandler.update(dt);
 
-		// update weapons
+        // update weapons
         weaponHandler.update(dt);
 
-		// update checkpoints
+        // update checkpoints
         checkpointHandler.update(dt);
 
-		// update bosses
+        // update bosses
         bossHander.update(dt);
 
-		// update bullets
+        // update bullets
         bulletHandler.update(dt);
 
         dispose();
@@ -374,12 +374,12 @@ public class Draw implements Handler {
 
     public void render(OrthographicCamera cam) {
 
-		// render animations
-		if (animatedCells != null)
-			for (TiledMapTileLayer.Cell cell : animatedCells.keySet())
-				cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
+        // render animations
+        if (animatedCells != null)
+            for (TiledMapTileLayer.Cell cell : animatedCells.keySet())
+                cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
 
-		// draw tilemap
+        // draw tilemap
         renderer.setView(cam);
         renderer.getBatch().begin();
         if (background != null) renderer.renderTileLayer(background);
@@ -388,25 +388,25 @@ public class Draw implements Handler {
         if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
         renderer.getBatch().end();
 
-		// if (DEBUG) play.getB2dr().render(world, play.getB2dcam().combined);
+        // if (DEBUG) play.getB2dr().render(world, play.getB2dcam().combined);
 
         spriteBatch.setProjectionMatrix(cam.combined);
     }
 
     public void render(SpriteBatch sb) {
-		// draw bosses
+        // draw bosses
         bossHander.render(sb);
 
-		// draw player and bullets
+        // draw player and bullets
         playerHandler.render(sb);
 
-		// draw weapon
+        // draw weapon
         weaponHandler.render(sb);
 
-		// draw bullets
+        // draw bullets
         bulletHandler.render(sb);
 
-		// draw checkpoints
+        // draw checkpoints
         checkpointHandler.render(sb);
     }
 
@@ -414,16 +414,16 @@ public class Draw implements Handler {
         if (!dimensionFadeDone) {
             if (dimension) {
                 if (currentDimensionFade > 0) {
-					currentDimensionFade -=
-							(B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
+                    currentDimensionFade -=
+                            (B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
                 } else {
                     currentDimensionFade = 0;
                     dimensionFadeDone = true;
                 }
             } else {
                 if (currentDimensionFade < B2DVars.DIMENSION_FADE_AMOUNT) {
-					currentDimensionFade +=
-							(B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
+                    currentDimensionFade +=
+                            (B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
                 } else {
                     currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
                     dimensionFadeDone = true;

@@ -12,7 +12,7 @@ public class Dimension {
     /**
      * Creates a new dimension with the given size.
      *
-	 * @param width the width of the dimension
+     * @param width the width of the dimension
      * @param height the height of the dimension
      */
     public Dimension(float width, float height) {
@@ -31,7 +31,7 @@ public class Dimension {
     /**
      * Sets the size of this dimension to the given size.
      *
-	 * @param width the width of the dimension
+     * @param width the width of the dimension
      * @param height the height of the dimension
      */
     public void set(float width, float height) {

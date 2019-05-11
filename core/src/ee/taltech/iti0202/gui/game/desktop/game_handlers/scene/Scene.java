@@ -41,7 +41,7 @@ public abstract class Scene {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();
 
-		for (GameButton button : buttons) button.update(mouseInWorld2D);
+        for (GameButton button : buttons) button.update(mouseInWorld2D);
     }
 
     public void render(SpriteBatch sb) {

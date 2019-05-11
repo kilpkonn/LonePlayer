@@ -49,13 +49,13 @@ public class B2DVars {
                 }
             };
     public static final String[] MAIN_SCREENS = {
-            "images/game_background_0/layers/",
-            "images/game_background_1/layers/",
-            "images/game_background_2/layers/",
-            "images/game_background_3/layers/",
-            "images/game_background_4/layers/",
-            "images/game_background_5/layers/",
-            "images/game_background_6/layers/"
+        "images/game_background_0/layers/",
+        "images/game_background_1/layers/",
+        "images/game_background_2/layers/",
+        "images/game_background_3/layers/",
+        "images/game_background_4/layers/",
+        "images/game_background_5/layers/",
+        "images/game_background_6/layers/"
     };
     public static final Map<String, Integer> MAP_TO_ACT =
             new HashMap<String, Integer>() {

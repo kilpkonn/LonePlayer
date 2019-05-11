@@ -18,26 +18,26 @@ public class MyPlayerTweener extends PlayerTweener {
 
     public MyPlayerTweener(Entity entity) {
         super(entity);
-		getSecondPlayer()
-				.addListener(
-						new MyPlayerListener(
-								new Runnable() {
-									@Override
-									public void run() {
-										if (playingOnce) {
-											playingOnce = false;
-											if (prevAnimation != null && !stopOnAnimOver) {
-												setAnimation(prevAnimation.name, false);
-											}
-											influence = 1;
-										}
+        getSecondPlayer()
+                .addListener(
+                        new MyPlayerListener(
+                                new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (playingOnce) {
+                                            playingOnce = false;
+                                            if (prevAnimation != null && !stopOnAnimOver) {
+                                                setAnimation(prevAnimation.name, false);
+                                            }
+                                            influence = 1;
+                                        }
 
-										if (stopOnAnimOver) {
-											speed = 0;
-											animOver = true;
-										}
-									}
-								}));
+                                        if (stopOnAnimOver) {
+                                            speed = 0;
+                                            animOver = true;
+                                        }
+                                    }
+                                }));
     }
 
     public void update(float dt) {
@@ -53,7 +53,7 @@ public class MyPlayerTweener extends PlayerTweener {
         animOver = false;
 
         if (playingOnce && !animToPlayOnce.contains(anim)) {
-			prevAnimation = getEntity().getAnimation(anim); // Life hack
+            prevAnimation = getEntity().getAnimation(anim); // Life hack
             return;
         }
 

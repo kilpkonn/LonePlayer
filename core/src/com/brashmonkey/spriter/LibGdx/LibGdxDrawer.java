@@ -12,7 +12,7 @@ public class LibGdxDrawer extends Drawer<Sprite> {
     SpriteBatch batch;
     ShapeRenderer renderer;
 
-	public LibGdxDrawer(Loader<Sprite> loader, SpriteBatch batch, ShapeRenderer renderer) {
+    public LibGdxDrawer(Loader<Sprite> loader, SpriteBatch batch, ShapeRenderer renderer) {
         super(loader);
         this.batch = batch;
         this.renderer = renderer;

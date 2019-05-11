@@ -27,35 +27,35 @@ public class PlantWorm extends Boss {
     private float xOffset;
     private float yOffset;
 
-	public PlantWorm(
-			PlayerHandler playerHandler,
-			Body body,
-			SpriteBatch sb,
-			String type,
-			PlantWorm.Part part,
-			float size) {
+    public PlantWorm(
+            PlayerHandler playerHandler,
+            Body body,
+            SpriteBatch sb,
+            String type,
+            PlantWorm.Part part,
+            float size) {
         this(playerHandler, 0, body, sb, type, part, size, 0, 0);
     }
 
-	public PlantWorm(
-			PlayerHandler playerHandler,
-			float time,
-			Body body,
-			SpriteBatch sb,
-			String type,
-			Part part,
-			float size,
-			float x,
-			float y) {
-		super(
-				playerHandler,
-				body,
-				sb,
-				"images/bosses/plantworm/plantworm.scml",
-				part.name,
-				size,
-				x,
-				y);
+    public PlantWorm(
+            PlayerHandler playerHandler,
+            float time,
+            Body body,
+            SpriteBatch sb,
+            String type,
+            Part part,
+            float size,
+            float x,
+            float y) {
+        super(
+                playerHandler,
+                body,
+                sb,
+                "images/bosses/plantworm/plantworm.scml",
+                part.name,
+                size,
+                x,
+                y);
         this.body = body;
         this.spriteBatch = sb;
         this.type = type;
@@ -72,49 +72,49 @@ public class PlantWorm extends Boss {
         setScale(2); // support for only big plants
     }
 
-	@Override
-	public void updateHeadBig(float dt, float max_speed) {
-		super.update(dt);
-		time += dt;
+    @Override
+    public void updateHeadBig(float dt, float max_speed) {
+        super.update(dt);
+        time += dt;
 
-		Vector2 playerLoc = playerHandler.getPlayer().getPosition();
-		Vector2 bossLoc = this.body.getPosition();
-		float distance =
-				(float)
-						Math.sqrt(
-								Math.pow(playerLoc.x - bossLoc.x, 2)
-										+ Math.pow(playerLoc.y - bossLoc.x, 2));
+        Vector2 playerLoc = playerHandler.getPlayer().getPosition();
+        Vector2 bossLoc = this.body.getPosition();
+        float distance =
+                (float)
+                        Math.sqrt(
+                                Math.pow(playerLoc.x - bossLoc.x, 2)
+                                        + Math.pow(playerLoc.y - bossLoc.x, 2));
 
-		float sinOffset = (float) Math.sin(time) * 10;
+        float sinOffset = (float) Math.sin(time) * 10;
 
-		float velocity =
-				(float)
-						Math.sqrt(
-								Math.pow(body.linVelLoc.x, 2)
-										+ Math.pow(body.linVelLoc.y, 2)); // Your desired velocity
-		float angle = body.getAngle(); // Body angle in radians.
+        float velocity =
+                (float)
+                        Math.sqrt(
+                                Math.pow(body.linVelLoc.x, 2)
+                                        + Math.pow(body.linVelLoc.y, 2)); // Your desired velocity
+        float angle = body.getAngle(); // Body angle in radians.
 
-		float velX = MathUtils.cos(angle) * velocity; // X-component.
-		float velY = MathUtils.sin(angle) * velocity; // Y-component.
+        float velX = MathUtils.cos(angle) * velocity; // X-component.
+        float velY = MathUtils.sin(angle) * velocity; // Y-component.
 
-		Player player = playerHandler.getPlayer();
+        Player player = playerHandler.getPlayer();
 
-		body.setLinearVelocity(
-				velX + (player.getPosition().x - body.getPosition().x),
-				velY + (player.getPosition().y - body.getPosition().y) + sinOffset);
+        body.setLinearVelocity(
+                velX + (player.getPosition().x - body.getPosition().x),
+                velY + (player.getPosition().y - body.getPosition().y) + sinOffset);
 
-		Vector2 cur_vel = body.getLinearVelocity();
-		body.setLinearVelocity(minmax(cur_vel.x, max_speed), minmax(cur_vel.y, max_speed));
+        Vector2 cur_vel = body.getLinearVelocity();
+        body.setLinearVelocity(minmax(cur_vel.x, max_speed), minmax(cur_vel.y, max_speed));
 
-		// System.out.println("Distance: " + distance);
-		if (distance < max_speed) {
-			setAnimation(PlantWormAnimation.ATTACK.name, true);
-		}
-	}
+        // System.out.println("Distance: " + distance);
+        if (distance < max_speed) {
+            setAnimation(PlantWormAnimation.ATTACK.name, true);
+        }
+    }
 
     public enum PlantWormAnimation {
-		IDLE("idle"),
-		ATTACK("attack");
+        IDLE("idle"),
+        ATTACK("attack");
 
         private final String name;
 
@@ -128,9 +128,9 @@ public class PlantWorm extends Boss {
     }
 
     public enum Part {
-		FLOWER_HEAD("plantwormflowerhead"),
-		CLAW_HEAD("plantwormclawhead"),
-		BODY("plantwormbody"),
+        FLOWER_HEAD("plantwormflowerhead"),
+        CLAW_HEAD("plantwormclawhead"),
+        BODY("plantwormbody"),
         TAIL("plantwormbody");
 
         private final String name;

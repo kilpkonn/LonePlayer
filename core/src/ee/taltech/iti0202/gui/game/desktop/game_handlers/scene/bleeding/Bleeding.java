@@ -12,16 +12,16 @@ public class Bleeding {
         float height = region.getRegionHeight();
         float invTexWidth = 1f / region.getTexture().getWidth();
         float invTexHeight = 1f / region.getTexture().getHeight();
-		region.setRegion(
-				(x + fix) * invTexWidth,
-				(y + fix) * invTexHeight,
-				(x + width - fix) * invTexWidth,
-				(y + height - fix) * invTexHeight); // Trims
+        region.setRegion(
+                (x + fix) * invTexWidth,
+                (y + fix) * invTexHeight,
+                (x + width - fix) * invTexWidth,
+                (y + height - fix) * invTexHeight); // Trims
 
-		/// region.getTexture().setFilter(Texture.TextureFilter.Linear,
-		// Texture.TextureFilter.Linear);
-		// //linear no good
-		// region.getTexture().getTextureData().useMipMaps();
+        /// region.getTexture().setFilter(Texture.TextureFilter.Linear,
+        // Texture.TextureFilter.Linear);
+        // //linear no good
+        // region.getTexture().getTextureData().useMipMaps();
     }
 
     public static void fixBleeding(TextureRegion[][] region) {

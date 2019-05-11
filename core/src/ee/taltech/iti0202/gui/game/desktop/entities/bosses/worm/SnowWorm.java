@@ -17,34 +17,34 @@ public class SnowWorm extends Worm {
     private float xOffset;
     private float yOffset;
 
-	public SnowWorm(
-			Body body,
-			SpriteBatch sb,
-			String type,
-			PlayerHandler playerHandler,
-			Part part,
-			float size) {
+    public SnowWorm(
+            Body body,
+            SpriteBatch sb,
+            String type,
+            PlayerHandler playerHandler,
+            Part part,
+            float size) {
         this(body, sb, type, playerHandler, part, size, 0, 0);
     }
 
-	public SnowWorm(
-			Body body,
-			SpriteBatch sb,
-			String type,
-			PlayerHandler playerHandler,
-			Part part,
-			float size,
-			float x,
-			float y) {
-		super(
-				body,
-				sb,
-				type,
-				playerHandler,
-				part,
-				size,
-				x,
-				y,
-				"images/bosses/snowworm/magmaworm.scml");
+    public SnowWorm(
+            Body body,
+            SpriteBatch sb,
+            String type,
+            PlayerHandler playerHandler,
+            Part part,
+            float size,
+            float x,
+            float y) {
+        super(
+                body,
+                sb,
+                type,
+                playerHandler,
+                part,
+                size,
+                x,
+                y,
+                "images/bosses/snowworm/magmaworm.scml");
     }
 }

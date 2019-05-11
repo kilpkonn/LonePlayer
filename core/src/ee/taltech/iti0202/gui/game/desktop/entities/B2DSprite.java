@@ -39,13 +39,13 @@ public class B2DSprite {
                 animation.getFrame(),
                 posX,
                 posY,
-				1,
-				1,
+                1,
+                1,
                 animation.getFrame().getRegionWidth(),
                 animation.getFrame().getRegionHeight(),
                 1,
                 1,
-				(float) rotation);
+                (float) rotation);
 
         sb.setColor(1, 1, 1, 1);
         sb.end();
@@ -55,7 +55,7 @@ public class B2DSprite {
         sb.setColor(1, 1, 1, opacity);
         sb.begin();
 
-		sb.draw(animation.getFrame(), body.getPosition().x * PPM, body.getPosition().y * PPM);
+        sb.draw(animation.getFrame(), body.getPosition().x * PPM, body.getPosition().y * PPM);
 
         sb.end();
         sb.setColor(1, 1, 1, 1);

@@ -17,14 +17,14 @@ public class SnowMan extends Boss {
     private float xOffset;
     private float yOffset;
 
-	public SnowMan(
-			Body body,
-			SpriteBatch sb,
-			String type,
-			PlayerHandler playerHandler,
-			float size,
-			float x,
-			float y) {
+    public SnowMan(
+            Body body,
+            SpriteBatch sb,
+            String type,
+            PlayerHandler playerHandler,
+            float size,
+            float x,
+            float y) {
         super(playerHandler, body, sb, "images/bosses/snowman/snowman.scml", "snowman", size, x, y);
         this.body = body;
         this.spriteBatch = sb;

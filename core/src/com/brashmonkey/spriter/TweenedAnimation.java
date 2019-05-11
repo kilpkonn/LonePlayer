@@ -18,18 +18,18 @@ import com.brashmonkey.spriter.Timeline.Key.Object;
 public class TweenedAnimation extends Animation {
 
     /**
-	 * The curve which will tween the animations. The default type of the curve is {@link
-	 * Curve.Type#Linear}.
+     * The curve which will tween the animations. The default type of the curve is {@link
+     * Curve.Type#Linear}.
      */
     public final Curve curve;
     /**
-	 * The entity the animations have be part of. Animations of two different entities can not be
-	 * tweened.
+     * The entity the animations have be part of. Animations of two different entities can not be
+     * tweened.
      */
     public final Entity entity;
     /**
-	 * The weight of the interpolation. 0.5f is the default value. Values closer to 0.0f mean the
-	 * first animation will have more influence.
+     * The weight of the interpolation. 0.5f is the default value. Values closer to 0.0f mean the
+     * first animation will have more influence.
      */
     public float weight = .5f;
     /**
@@ -37,14 +37,12 @@ public class TweenedAnimation extends Animation {
      * A value closer to 0.0f means that the sprites of the second animation will be drawn.
      */
     public float spriteThreshold = .5f;
-	/**
-	 * The base animation an object or bone will get if it will not be tweened.
-	 */
+    /** The base animation an object or bone will get if it will not be tweened. */
     public Animation baseAnimation;
-	/**
-	 * Indicates whether to tween sprites or not. Default value is <code>false</code>. Tweening
-	 * sprites should be only enabled if they have exactly the same structure. If all animations are
-	 * bone based and sprites only change their references it is not recommended to tween sprites.
+    /**
+     * Indicates whether to tween sprites or not. Default value is <code>false</code>. Tweening
+     * sprites should be only enabled if they have exactly the same structure. If all animations are
+     * bone based and sprites only change their references it is not recommended to tween sprites.
      */
     public boolean tweenSprites = false;
 
@@ -57,13 +55,13 @@ public class TweenedAnimation extends Animation {
      * @param entity the entity animations have to be part of
      */
     public TweenedAnimation(Entity entity) {
-		super(
-				new Mainline(0),
-				-1,
-				"__interpolatedAnimation__",
-				0,
-				true,
-				entity.getAnimationWithMostTimelines().timelines());
+        super(
+                new Mainline(0),
+                -1,
+                "__interpolatedAnimation__",
+                0,
+                true,
+                entity.getAnimationWithMostTimelines().timelines());
         this.entity = entity;
         this.curve = new Curve();
         this.setUpTimelines();
@@ -81,16 +79,15 @@ public class TweenedAnimation extends Animation {
     @Override
     public void update(float time, Bone root) {
         super.currentKey = onFirstMainLine() ? anim1.currentKey : anim2.currentKey;
-		for (Timeline.Key timelineKey : this.unmappedTweenedKeys) timelineKey.active = false;
-		if (base
-				!= null) { // TODO: Sprites not working properly because of different timeline
-			// naming
+        for (Timeline.Key timelineKey : this.unmappedTweenedKeys) timelineKey.active = false;
+        if (base != null) { // TODO: Sprites not working properly because of different timeline
+            // naming
             Animation currentAnim = onFirstMainLine() ? anim1 : anim2;
-			Animation baseAnim =
-					baseAnimation == null ? (onFirstMainLine() ? anim1 : anim2) : baseAnimation;
+            Animation baseAnim =
+                    baseAnimation == null ? (onFirstMainLine() ? anim1 : anim2) : baseAnimation;
             for (BoneRef ref : currentKey.boneRefs) {
-				Timeline timeline =
-						baseAnim.getSimilarTimeline(currentAnim.getTimeline(ref.timeline));
+                Timeline timeline =
+                        baseAnim.getSimilarTimeline(currentAnim.getTimeline(ref.timeline));
                 if (timeline == null) continue;
                 Timeline.Key key, mappedKey;
                 key = baseAnim.tweenedKeys[timeline.id];
@@ -98,13 +95,13 @@ public class TweenedAnimation extends Animation {
                 this.tweenedKeys[ref.timeline].active = key.active;
                 this.tweenedKeys[ref.timeline].object().set(key.object());
                 this.unmappedTweenedKeys[ref.timeline].active = mappedKey.active;
-				this.unmapTimelineObject(
-						ref.timeline,
-						false,
-						(ref.parent != null)
-								? this.unmappedTweenedKeys[ref.parent.timeline].object()
-								: root);
-			}
+                this.unmapTimelineObject(
+                        ref.timeline,
+                        false,
+                        (ref.parent != null)
+                                ? this.unmappedTweenedKeys[ref.parent.timeline].object()
+                                : root);
+            }
             /*for(ObjectRef ref: baseAnim.currentKey.objectRefs){
                 	Timeline timeline = baseAnim.getTimeline(ref.timeline);//getSimilarTimeline(ref, tempTimelines);
                 	if(timeline != null){
@@ -120,12 +117,12 @@ public class TweenedAnimation extends Animation {
             		this.mappedTweenedKeys[ref.parent.timeline].object(): root);
                 	}
             	}*/
-			// tempTimelines.clear();
+            // tempTimelines.clear();
         }
 
         this.tweenBoneRefs(base, root);
         for (ObjectRef ref : super.currentKey.objectRefs) {
-			// if(ref.parent == base)
+            // if(ref.parent == base)
             this.update(ref, root, 0);
         }
     }
@@ -143,14 +140,14 @@ public class TweenedAnimation extends Animation {
     @Override
     protected void update(BoneRef ref, Bone root, float time) {
         boolean isObject = ref instanceof ObjectRef;
-		// Tween bone/object
+        // Tween bone/object
         Bone bone1 = null, bone2 = null, tweenTarget = null;
-		Timeline t1 =
-				onFirstMainLine()
-						? anim1.getTimeline(ref.timeline)
-						: anim1.getSimilarTimeline(anim2.getTimeline(ref.timeline));
-		Timeline t2 =
-				onFirstMainLine() ? anim2.getSimilarTimeline(t1) : anim2.getTimeline(ref.timeline);
+        Timeline t1 =
+                onFirstMainLine()
+                        ? anim1.getTimeline(ref.timeline)
+                        : anim1.getSimilarTimeline(anim2.getTimeline(ref.timeline));
+        Timeline t2 =
+                onFirstMainLine() ? anim2.getSimilarTimeline(t1) : anim2.getTimeline(ref.timeline);
         Timeline targetTimeline = super.getTimeline(onFirstMainLine() ? t1.id : t2.id);
         if (t1 != null) bone1 = anim1.tweenedKeys[t1.id].object();
         if (t2 != null) bone2 = anim2.tweenedKeys[t2.id].object();
@@ -161,23 +158,23 @@ public class TweenedAnimation extends Animation {
         }
         if (bone2 != null && tweenTarget != null && bone1 != null) {
             if (isObject)
-				this.tweenObject(
-						(Object) bone1,
-						(Object) bone2,
-						(Object) tweenTarget,
-						this.weight,
-						this.curve);
+                this.tweenObject(
+                        (Object) bone1,
+                        (Object) bone2,
+                        (Object) tweenTarget,
+                        this.weight,
+                        this.curve);
             else this.tweenBone(bone1, bone2, tweenTarget, this.weight, this.curve);
             this.unmappedTweenedKeys[targetTimeline.id].active = true;
-		}
-		// Transform the bone relative to the parent bone or the root
+        }
+        // Transform the bone relative to the parent bone or the root
         if (this.unmappedTweenedKeys[ref.timeline].active) {
-			this.unmapTimelineObject(
-					targetTimeline.id,
-					isObject,
-					(ref.parent != null)
-							? this.unmappedTweenedKeys[ref.parent.timeline].object()
-							: root);
+            this.unmapTimelineObject(
+                    targetTimeline.id,
+                    isObject,
+                    (ref.parent != null)
+                            ? this.unmappedTweenedKeys[ref.parent.timeline].object()
+                            : root);
         }
     }
 
@@ -192,11 +189,11 @@ public class TweenedAnimation extends Animation {
         this.tweenBone(object1, object2, target, t, curve);
         target.alpha = curve.tweenAngle(object1.alpha, object2.alpha, t);
         target.ref.set(object1.ref);
-	}
+    }
 
-	/**
-	 * Returns whether the current mainline key is the one from the first animation or from the
-	 * second one.
+    /**
+     * Returns whether the current mainline key is the one from the first animation or from the
+     * second one.
      *
      * @return <code>true</code> if the mainline key is the one from the first animation
      */
@@ -208,9 +205,9 @@ public class TweenedAnimation extends Animation {
         Animation maxAnim = this.entity.getAnimationWithMostTimelines();
         int max = maxAnim.timelines();
         for (int i = 0; i < max; i++) {
-			Timeline t =
-					new Timeline(
-							i, maxAnim.getTimeline(i).name, maxAnim.getTimeline(i).objectInfo, 1);
+            Timeline t =
+                    new Timeline(
+                            i, maxAnim.getTimeline(i).name, maxAnim.getTimeline(i).objectInfo, 1);
             addTimeline(t);
         }
         prepare();
@@ -224,12 +221,12 @@ public class TweenedAnimation extends Animation {
      * @throws SpriterException if {@link #entity} does not contain one of the given animations.
      */
     public void setAnimations(Animation animation1, Animation animation2) {
-		boolean areInterpolated =
-				animation1 instanceof TweenedAnimation || animation2 instanceof TweenedAnimation;
+        boolean areInterpolated =
+                animation1 instanceof TweenedAnimation || animation2 instanceof TweenedAnimation;
         if (animation1 == anim1 && animation2 == anim2) return;
-		if ((!this.entity.containsAnimation(animation1)
-				|| !this.entity.containsAnimation(animation2))
-				&& !areInterpolated)
+        if ((!this.entity.containsAnimation(animation1)
+                        || !this.entity.containsAnimation(animation2))
+                && !areInterpolated)
             throw new SpriterException("Both animations have to be part of the same entity!");
         this.anim1 = animation1;
         this.anim2 = animation2;

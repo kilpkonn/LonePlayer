@@ -14,19 +14,17 @@ import static com.brashmonkey.spriter.Interpolator.*;
 public class Curve {
 
     /**
-	 * The constraints of a curve which will affect a curve of the types different from {@link
-	 * Type#Linear} and {@link Type#Instant}.
+     * The constraints of a curve which will affect a curve of the types different from {@link
+     * Type#Linear} and {@link Type#Instant}.
      */
     public final Constraints constraints = new Constraints(0, 0, 0, 0);
-	/**
-	 * The sub curve of this curve, which can be <code>null</code>.
-	 */
+    /** The sub curve of this curve, which can be <code>null</code>. */
     public Curve subCurve;
 
     private Type type;
     private float lastCubicSolution = 0f;
 
-	/** Creates a new linear curve. */
+    /** Creates a new linear curve. */
     public Curve() {
         this(Type.Linear);
     }
@@ -42,8 +40,8 @@ public class Curve {
 
     /**
      * Creates a new curve with the given type and sub cuve.
-	 *
-	 * @param type the curve type
+     *
+     * @param type the curve type
      * @param subCurve the sub curve. Can be <code>null</code>
      */
     public Curve(Type type, Curve subCurve) {
@@ -85,10 +83,10 @@ public class Curve {
     public void setType(Type type) {
         if (type == null) throw new SpriterException("The type of a curve cannot be null!");
         this.type = type;
-	}
+    }
 
-	/**
-	 * Returns a new value based on the given values. Tweens the weight with the set sub curve.
+    /**
+     * Returns a new value based on the given values. Tweens the weight with the set sub curve.
      *
      * @param a the start value
      * @param b the end value
@@ -107,44 +105,44 @@ public class Curve {
             case Cubic:
                 return cubic(a, linear(a, b, constraints.c1), linear(a, b, constraints.c2), b, t);
             case Quartic:
-				return quartic(
-						a,
-						linear(a, b, constraints.c1),
-						linear(a, b, constraints.c2),
-						linear(a, b, constraints.c3),
-						b,
-						t);
+                return quartic(
+                        a,
+                        linear(a, b, constraints.c1),
+                        linear(a, b, constraints.c2),
+                        linear(a, b, constraints.c3),
+                        b,
+                        t);
             case Quintic:
-				return quintic(
-						a,
-						linear(a, b, constraints.c1),
-						linear(a, b, constraints.c2),
-						linear(a, b, constraints.c3),
-						linear(a, b, constraints.c4),
-						b,
-						t);
+                return quintic(
+                        a,
+                        linear(a, b, constraints.c1),
+                        linear(a, b, constraints.c2),
+                        linear(a, b, constraints.c3),
+                        linear(a, b, constraints.c4),
+                        b,
+                        t);
             case Bezier:
-				float cubicSolution =
-						solveCubic(
-								3f * (constraints.c1 - constraints.c3) + 1f,
-								3f * (constraints.c3 - 2f * constraints.c1),
-								3f * constraints.c1,
-								-t);
+                float cubicSolution =
+                        solveCubic(
+                                3f * (constraints.c1 - constraints.c3) + 1f,
+                                3f * (constraints.c3 - 2f * constraints.c1),
+                                3f * constraints.c1,
+                                -t);
                 if (cubicSolution == NO_SOLUTION) cubicSolution = lastCubicSolution;
                 else lastCubicSolution = cubicSolution;
                 return linear(a, b, bezier(cubicSolution, 0f, constraints.c2, constraints.c4, 1f));
             default:
                 return linear(a, b, t);
         }
-	}
+    }
 
-	/**
-	 * Interpolates the given two points with the given weight and saves the result in the target
-	 * point.
-	 *
-	 * @param a the start point
-	 * @param b the end point
-	 * @param t the weight which lies between 0.0 and 1.0
+    /**
+     * Interpolates the given two points with the given weight and saves the result in the target
+     * point.
+     *
+     * @param a the start point
+     * @param b the end point
+     * @param t the weight which lies between 0.0 and 1.0
      * @param target the target point to save the result in
      */
     public void tweenPoint(Point a, Point b, float t, Point target) {
@@ -158,24 +156,24 @@ public class Curve {
 
     /**
      * Returns a tweened angle based on the given angles, weight and the spin.
-	 *
-	 * @param a the start angle
-	 * @param b the end angle
-	 * @param t the weight which lies between 0.0 and 1.0
+     *
+     * @param a the start angle
+     * @param b the end angle
+     * @param t the weight which lies between 0.0 and 1.0
      * @param spin the spin, which is either 0, 1 or -1
      * @return tweened angle
      */
     public float tweenAngle(float a, float b, float t, int spin) {
         if (spin > 0) {
-			if (b - a < 0) b += 360;
+            if (b - a < 0) b += 360;
         } else if (spin < 0) {
-			if (b - a > 0) b -= 360;
+            if (b - a > 0) b -= 360;
         } else return a;
 
         return tween(a, b, t);
-	}
+    }
 
-	/** @see {@link #tween(float, float, float)} */
+    /** @see {@link #tween(float, float, float)} */
     public float tweenAngle(float a, float b, float t) {
         t = tweenSub(0f, 1f, t);
         switch (type) {
@@ -185,55 +183,55 @@ public class Curve {
                 return linearAngle(a, b, t);
             case Quadratic:
                 return quadraticAngle(a, linearAngle(a, b, constraints.c1), b, t);
-			case Cubic:
-				return cubicAngle(
-						a,
-						linearAngle(a, b, constraints.c1),
-						linearAngle(a, b, constraints.c2),
-						b,
-						t);
+            case Cubic:
+                return cubicAngle(
+                        a,
+                        linearAngle(a, b, constraints.c1),
+                        linearAngle(a, b, constraints.c2),
+                        b,
+                        t);
             case Quartic:
-				return quarticAngle(
-						a,
-						linearAngle(a, b, constraints.c1),
-						linearAngle(a, b, constraints.c2),
-						linearAngle(a, b, constraints.c3),
-						b,
-						t);
+                return quarticAngle(
+                        a,
+                        linearAngle(a, b, constraints.c1),
+                        linearAngle(a, b, constraints.c2),
+                        linearAngle(a, b, constraints.c3),
+                        b,
+                        t);
             case Quintic:
-				return quinticAngle(
-						a,
-						linearAngle(a, b, constraints.c1),
-						linearAngle(a, b, constraints.c2),
-						linearAngle(a, b, constraints.c3),
-						linearAngle(a, b, constraints.c4),
-						b,
-						t);
+                return quinticAngle(
+                        a,
+                        linearAngle(a, b, constraints.c1),
+                        linearAngle(a, b, constraints.c2),
+                        linearAngle(a, b, constraints.c3),
+                        linearAngle(a, b, constraints.c4),
+                        b,
+                        t);
             case Bezier:
-				float cubicSolution =
-						solveCubic(
-								3f * (constraints.c1 - constraints.c3) + 1f,
-								3f * (constraints.c3 - 2f * constraints.c1),
-								3f * constraints.c1,
-								-t);
+                float cubicSolution =
+                        solveCubic(
+                                3f * (constraints.c1 - constraints.c3) + 1f,
+                                3f * (constraints.c3 - 2f * constraints.c1),
+                                3f * constraints.c1,
+                                -t);
                 if (cubicSolution == NO_SOLUTION) cubicSolution = lastCubicSolution;
                 else lastCubicSolution = cubicSolution;
-				return linearAngle(
-						a, b, bezier(cubicSolution, 0f, constraints.c2, constraints.c4, 1f));
+                return linearAngle(
+                        a, b, bezier(cubicSolution, 0f, constraints.c2, constraints.c4, 1f));
             default:
                 return linearAngle(a, b, t);
         }
     }
 
     public String toString() {
-		return getClass().getSimpleName()
-				+ "|["
-				+ type
-				+ ":"
-				+ constraints
-				+ ", subCurve: "
-				+ subCurve
-				+ "]";
+        return getClass().getSimpleName()
+                + "|["
+                + type
+                + ":"
+                + constraints
+                + ", subCurve: "
+                + subCurve
+                + "]";
     }
 
     /**
@@ -242,18 +240,18 @@ public class Curve {
      * @author Trixt0r
      */
     public enum Type {
-		Instant,
-		Linear,
-		Quadratic,
-		Cubic,
-		Quartic,
-		Quintic,
-		Bezier
-	}
+        Instant,
+        Linear,
+        Quadratic,
+        Cubic,
+        Quartic,
+        Quintic,
+        Bezier
+    }
 
-	/**
-	 * Represents constraints for a curve. Constraints are important for curves which have a order
-	 * higher than 1.
+    /**
+     * Represents constraints for a curve. Constraints are important for curves which have a order
+     * higher than 1.
      *
      * @author Trixt0r
      */
@@ -272,16 +270,16 @@ public class Curve {
         }
 
         public String toString() {
-			return getClass().getSimpleName()
-					+ "| [c1:"
-					+ c1
-					+ ", c2:"
-					+ c2
-					+ ", c3:"
-					+ c3
-					+ ", c4:"
-					+ c4
-					+ "]";
+            return getClass().getSimpleName()
+                    + "| [c1:"
+                    + c1
+                    + ", c2:"
+                    + c2
+                    + ", c3:"
+                    + c3
+                    + ", c4:"
+                    + c4
+                    + "]";
         }
     }
 }

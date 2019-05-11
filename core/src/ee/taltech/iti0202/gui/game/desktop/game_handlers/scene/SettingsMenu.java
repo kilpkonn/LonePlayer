@@ -47,7 +47,7 @@ public class SettingsMenu extends Scene {
 
         hudCam.update();
 
-		// Texture backLayer = Game.res.getTexture("backLayer");
+        // Texture backLayer = Game.res.getTexture("backLayer");
 
         restoreButton = new GameButton("Restore", V_WIDTH / 6f, V_HEIGHT / 2f - 40);
         saveButton = new GameButton("Save", V_WIDTH / 6f, V_HEIGHT / 2f - 80);
@@ -56,31 +56,31 @@ public class SettingsMenu extends Scene {
 
         buttons = new HashSet<>(Arrays.asList(restoreButton, saveButton, exitButton, loadButton));
 
-		buttonType =
-				new HashMap<GameButton, block>() {
-					{
-						put(restoreButton, block.NEXT);
-						put(saveButton, block.SAVE);
-						put(exitButton, block.EXIT);
-						put(loadButton, block.LOAD);
-					}
-				};
+        buttonType =
+                new HashMap<GameButton, block>() {
+                    {
+                        put(restoreButton, block.NEXT);
+                        put(saveButton, block.SAVE);
+                        put(exitButton, block.EXIT);
+                        put(loadButton, block.LOAD);
+                    }
+                };
 
-		GameButton enableVSyncButton =
-				new GameButton("Enable VSync", settingsXLocation, V_HEIGHT / 3f + 400);
-		GameButton showFpsButton =
-				new GameButton("Show FPS", settingsXLocation, V_HEIGHT / 3f + 360);
-		GameButton enableDevMapsButton =
-				new GameButton("Enable DEV maps", settingsXLocation, V_HEIGHT / 3f + 320);
+        GameButton enableVSyncButton =
+                new GameButton("Enable VSync", settingsXLocation, V_HEIGHT / 3f + 400);
+        GameButton showFpsButton =
+                new GameButton("Show FPS", settingsXLocation, V_HEIGHT / 3f + 360);
+        GameButton enableDevMapsButton =
+                new GameButton("Enable DEV maps", settingsXLocation, V_HEIGHT / 3f + 320);
 
-		GameButton moveLeftButton =
-				new GameButton("Move left", settingsXLocation, V_HEIGHT / 3f + 200);
-		GameButton moveRightButton =
-				new GameButton("Move right", settingsXLocation, V_HEIGHT / 3f + 160);
+        GameButton moveLeftButton =
+                new GameButton("Move left", settingsXLocation, V_HEIGHT / 3f + 200);
+        GameButton moveRightButton =
+                new GameButton("Move right", settingsXLocation, V_HEIGHT / 3f + 160);
         GameButton jumpButton = new GameButton("Jump", settingsXLocation, V_HEIGHT / 3f + 120);
         GameButton escButton = new GameButton("Pause", settingsXLocation, V_HEIGHT / 3f + 80);
-		GameButton changeDimensionButton =
-				new GameButton("Toggle dimension", settingsXLocation, V_HEIGHT / 3f + 40);
+        GameButton changeDimensionButton =
+                new GameButton("Toggle dimension", settingsXLocation, V_HEIGHT / 3f + 40);
 
         settingsButtons.put(enableVSyncButton, SettingBlock.ENABLE_VSYNC);
         settingsButtons.put(showFpsButton, SettingBlock.SHOW_FPS);
@@ -92,47 +92,47 @@ public class SettingsMenu extends Scene {
         settingsButtons.put(escButton, SettingBlock.ESC);
         settingsButtons.put(changeDimensionButton, SettingBlock.TOGGLE_DIMENSION);
 
-		enableVSyncDisplay =
-				new GameButton(
-						Game.settings.ENABLE_VSYNC ? "Yes" : "No",
-						displayXLocation,
-						V_HEIGHT / 3f + 400);
-		showFpsDisplay =
-				new GameButton(
-						Game.settings.SHOW_FPS ? "Yes" : "No",
-						displayXLocation,
-						V_HEIGHT / 3f + 360);
-		enableDevMapsDisplay =
-				new GameButton(
-						Game.settings.ENABLE_DEV_MAPS ? "Yes" : "No",
-						displayXLocation,
-						V_HEIGHT / 3f + 320);
+        enableVSyncDisplay =
+                new GameButton(
+                        Game.settings.ENABLE_VSYNC ? "Yes" : "No",
+                        displayXLocation,
+                        V_HEIGHT / 3f + 400);
+        showFpsDisplay =
+                new GameButton(
+                        Game.settings.SHOW_FPS ? "Yes" : "No",
+                        displayXLocation,
+                        V_HEIGHT / 3f + 360);
+        enableDevMapsDisplay =
+                new GameButton(
+                        Game.settings.ENABLE_DEV_MAPS ? "Yes" : "No",
+                        displayXLocation,
+                        V_HEIGHT / 3f + 320);
 
-		moveLeftDisplay =
-				new GameButton(
-						Input.Keys.toString(Game.settings.MOVE_LEFT),
-						displayXLocation,
-						V_HEIGHT / 3f + 200);
-		moveRightDisplay =
-				new GameButton(
-						Input.Keys.toString(Game.settings.MOVE_RIGHT),
-						displayXLocation,
-						V_HEIGHT / 3f + 160);
-		jumpDisplay =
-				new GameButton(
-						Input.Keys.toString(Game.settings.JUMP),
-						displayXLocation,
-						V_HEIGHT / 3f + 120);
-		escDisplay =
-				new GameButton(
-						Input.Keys.toString(Game.settings.ESC),
-						displayXLocation,
-						V_HEIGHT / 3f + 80);
-		changeDimensionDisplay =
-				new GameButton(
-						Input.Keys.toString(Game.settings.CHANGE_DIMENSION),
-						displayXLocation,
-						V_HEIGHT / 3f + 40);
+        moveLeftDisplay =
+                new GameButton(
+                        Input.Keys.toString(Game.settings.MOVE_LEFT),
+                        displayXLocation,
+                        V_HEIGHT / 3f + 200);
+        moveRightDisplay =
+                new GameButton(
+                        Input.Keys.toString(Game.settings.MOVE_RIGHT),
+                        displayXLocation,
+                        V_HEIGHT / 3f + 160);
+        jumpDisplay =
+                new GameButton(
+                        Input.Keys.toString(Game.settings.JUMP),
+                        displayXLocation,
+                        V_HEIGHT / 3f + 120);
+        escDisplay =
+                new GameButton(
+                        Input.Keys.toString(Game.settings.ESC),
+                        displayXLocation,
+                        V_HEIGHT / 3f + 80);
+        changeDimensionDisplay =
+                new GameButton(
+                        Input.Keys.toString(Game.settings.CHANGE_DIMENSION),
+                        displayXLocation,
+                        V_HEIGHT / 3f + 40);
 
         keyBindButtons.put(enableVSyncButton, enableVSyncDisplay);
         keyBindButtons.put(showFpsButton, showFpsDisplay);
@@ -191,9 +191,9 @@ public class SettingsMenu extends Scene {
     }
 
     public void handleSettingsButtonClick() {
-		for (Map.Entry<GameButton, GameButton> entry : keyBindButtons.entrySet()) {
-			if ((entry.getKey().hoverOver() || entry.getValue().hoverOver())
-					&& checkNonKeyBindButtons(entry.getKey())) {
+        for (Map.Entry<GameButton, GameButton> entry : keyBindButtons.entrySet()) {
+            if ((entry.getKey().hoverOver() || entry.getValue().hoverOver())
+                    && checkNonKeyBindButtons(entry.getKey())) {
                 btnWaitingInput = entry.getKey();
             }
         }
@@ -245,8 +245,8 @@ public class SettingsMenu extends Scene {
             case ENABLE_DEV_MAPS:
                 Game.settings.ENABLE_DEV_MAPS = !Game.settings.ENABLE_DEV_MAPS;
                 break;
-			default:
-				return true;
+            default:
+                return true;
         }
         updateAllBindsDisplayed();
         return false;
@@ -261,23 +261,23 @@ public class SettingsMenu extends Scene {
         currBlock = buttonType.get(button);
     }
 
-	public enum SettingBlock {
-		MOVE_LEFT,
-		MOVE_RIGHT,
-		JUMP,
-		ESC,
-		TOGGLE_DIMENSION,
-		ENABLE_VSYNC,
-		SHOW_FPS,
-		ENABLE_DEV_MAPS,
-		DEFAULT
-	}
+    public enum SettingBlock {
+        MOVE_LEFT,
+        MOVE_RIGHT,
+        JUMP,
+        ESC,
+        TOGGLE_DIMENSION,
+        ENABLE_VSYNC,
+        SHOW_FPS,
+        ENABLE_DEV_MAPS,
+        DEFAULT
+    }
 
-	private enum block {
-		NEXT,
-		SAVE,
-		EXIT,
-		LOAD,
-		SETTINGS
-	}
+    private enum block {
+        NEXT,
+        SAVE,
+        EXIT,
+        LOAD,
+        SETTINGS
+    }
 }

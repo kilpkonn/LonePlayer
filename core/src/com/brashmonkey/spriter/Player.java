@@ -64,8 +64,8 @@ public class Player {
     }
 
     /**
-	 * Updates this player. This means the current time gets increased by {@link #speed} and is
-	 * applied to the current animation.
+     * Updates this player. This means the current time gets increased by {@link #speed} and is
+     * applied to the current animation.
      */
     public void update(float dt) {
         for (int i = 0; i < listeners.size(); i++) {
@@ -160,7 +160,7 @@ public class Player {
      */
     public int getBoneIndex(String name) {
         for (BoneRef ref : getCurrentKey().boneRefs)
-			if (animation.getTimeline(ref.timeline).name.equals(name)) return ref.id;
+            if (animation.getTimeline(ref.timeline).name.equals(name)) return ref.id;
         return -1;
     }
 
@@ -170,7 +170,7 @@ public class Player {
      * @param name the name of the bone
      * @return the bone with the given name
      * @throws ArrayIndexOutOfBoundsException if no bone exists with the given name
-	 * @throws NullPointerException if no bone exists with the given name
+     * @throws NullPointerException if no bone exists with the given name
      */
     public Bone getBone(String name) {
         return this.unmappedTweenedKeys[animation.getTimeline(name).id].object();
@@ -195,7 +195,7 @@ public class Player {
      */
     public int getObjectIndex(String name) {
         for (ObjectRef ref : getCurrentKey().objectRefs)
-			if (animation.getTimeline(ref.timeline).name.equals(name)) return ref.id;
+            if (animation.getTimeline(ref.timeline).name.equals(name)) return ref.id;
         return -1;
     }
 
@@ -205,7 +205,7 @@ public class Player {
      * @param name the name of the object
      * @return the object with the given name
      * @throws ArrayIndexOutOfBoundsException if no object exists with the given name
-	 * @throws NullPointerException if no object exists with the given name
+     * @throws NullPointerException if no object exists with the given name
      */
     public Object getObject(String name) {
         return this.unmappedTweenedKeys[animation.getTimeline(name).id].object();
@@ -271,8 +271,8 @@ public class Player {
      * Returns whether the given point at x,y lies inside the box of the given bone or object.
      *
      * @param boneOrObject the bone or object
-	 * @param x the x value of the point
-	 * @param y the y value of the point
+     * @param x the x value of the point
+     * @param y the y value of the point
      * @return <code>true</code> if x,y lies inside the box of the given bone or object
      * @throws NullPointerException if no object info for the given bone or object exists
      */
@@ -284,8 +284,8 @@ public class Player {
 
     /**
      * Returns whether the given point lies inside the box of the given bone or object.
-	 *
-	 * <p>param bone the bone or object
+     *
+     * <p>param bone the bone or object
      *
      * @param point the point
      * @return <code>true</code> if the point lies inside the box of the given bone or object
@@ -299,7 +299,7 @@ public class Player {
      * Returns whether the given area collides with the box of the given bone or object.
      *
      * @param boneOrObject the bone or object
-	 * @param area the rectangular area
+     * @param area the rectangular area
      * @return <code>true</code> if the area collides with the bone or object
      */
     public boolean collidesFor(Bone boneOrObject, Rectangle area) {
@@ -311,10 +311,10 @@ public class Player {
     /**
      * Sets the given values of the bone with the given name.
      *
-	 * @param name the name of the bone
-	 * @param x the new x value of the bone
-	 * @param y the new y value of the bone
-	 * @param angle the new angle of the bone
+     * @param name the name of the bone
+     * @param x the new x value of the bone
+     * @param y the new y value of the bone
+     * @param angle the new angle of the bone
      * @param scaleX the new scale in x direction of the bone
      * @param scaleY the new scale in y direction of the bone
      * @throws SpriterException if no bone exists of the given name
@@ -331,10 +331,10 @@ public class Player {
     /**
      * Sets the given values of the bone with the given name.
      *
-	 * @param name the name of the bone
+     * @param name the name of the bone
      * @param position the new position of the bone
-	 * @param angle the new angle of the bone
-	 * @param scale the new scale of the bone
+     * @param angle the new angle of the bone
+     * @param scale the new scale of the bone
      * @throws SpriterException if no bone exists of the given name
      */
     public void setBone(String name, Point position, float angle, Point scale) {
@@ -344,9 +344,9 @@ public class Player {
     /**
      * Sets the given values of the bone with the given name.
      *
-	 * @param name the name of the bone
-	 * @param x the new x value of the bone
-	 * @param y the new y value of the bone
+     * @param name the name of the bone
+     * @param x the new x value of the bone
+     * @param y the new y value of the bone
      * @param angle the new angle of the bone
      * @throws SpriterException if no bone exists of the given name
      */
@@ -358,9 +358,9 @@ public class Player {
     /**
      * Sets the given values of the bone with the given name.
      *
-	 * @param name the name of the bone
+     * @param name the name of the bone
      * @param position the new position of the bone
-	 * @param angle the new angle of the bone
+     * @param angle the new angle of the bone
      * @throws SpriterException if no bone exists of the given name
      */
     public void setBone(String name, Point position, float angle) {
@@ -372,8 +372,8 @@ public class Player {
      * Sets the position of the bone with the given name.
      *
      * @param name the name of the bone
-	 * @param x the new x value of the bone
-	 * @param y the new y value of the bone
+     * @param x the new x value of the bone
+     * @param y the new y value of the bone
      * @throws SpriterException if no bone exists of the given name
      */
     public void setBone(String name, float x, float y) {
@@ -384,7 +384,7 @@ public class Player {
     /**
      * Sets the position of the bone with the given name.
      *
-	 * @param name the name of the bone
+     * @param name the name of the bone
      * @param position the new position of the bone
      * @throws SpriterException if no bone exists of the given name
      */
@@ -395,7 +395,7 @@ public class Player {
     /**
      * Sets the angle of the bone with the given name
      *
-	 * @param name the name of the bone
+     * @param name the name of the bone
      * @param angle the new angle of the bone
      * @throws SpriterException if no bone exists of the given name
      */
@@ -418,31 +418,31 @@ public class Player {
     /**
      * Sets the given values of the object with the given name.
      *
-	 * @param name the name of the object
-	 * @param x the new position in x direction of the object
-	 * @param y the new position in y direction of the object
-	 * @param angle the new angle of the object
+     * @param name the name of the object
+     * @param x the new position in x direction of the object
+     * @param y the new position in y direction of the object
+     * @param angle the new angle of the object
      * @param scaleX the new scale in x direction of the object
      * @param scaleY the new scale in y direction of the object
      * @param pivotX the new pivot in x direction of the object
      * @param pivotY the new pivot in y direction of the object
-	 * @param alpha the new alpha value of the object
+     * @param alpha the new alpha value of the object
      * @param folder the new folder index of the object
-	 * @param file the new file index of the object
+     * @param file the new file index of the object
      * @throws SpriterException if no object exists of the given name
      */
-	public void setObject(
-			String name,
-			float x,
-			float y,
-			float angle,
-			float scaleX,
-			float scaleY,
-			float pivotX,
-			float pivotY,
-			float alpha,
-			int folder,
-			int file) {
+    public void setObject(
+            String name,
+            float x,
+            float y,
+            float angle,
+            float scaleX,
+            float scaleY,
+            float pivotX,
+            float pivotY,
+            float alpha,
+            int folder,
+            int file) {
         int index = getObjectIndex(name);
         if (index == -1) throw new SpriterException("No object found for name \"" + name + "\"");
         ObjectRef ref = getCurrentKey().getObjectRef(index);
@@ -454,70 +454,70 @@ public class Player {
     /**
      * Sets the given values of the object with the given name.
      *
-	 * @param name the name of the object
+     * @param name the name of the object
      * @param position the new position of the object
-	 * @param angle the new angle of the object
-	 * @param scale the new scale of the object
-	 * @param pivot the new pivot of the object
-	 * @param alpha the new alpha value of the object
-	 * @param ref the new file reference of the object
+     * @param angle the new angle of the object
+     * @param scale the new scale of the object
+     * @param pivot the new pivot of the object
+     * @param alpha the new alpha value of the object
+     * @param ref the new file reference of the object
      * @throws SpriterException if no object exists of the given name
      */
-	public void setObject(
-			String name,
-			Point position,
-			float angle,
-			Point scale,
-			Point pivot,
-			float alpha,
-			FileReference ref) {
-		this.setObject(
-				name,
-				position.x,
-				position.y,
-				angle,
-				scale.x,
-				scale.y,
-				pivot.x,
-				pivot.y,
-				alpha,
-				ref.folder,
-				ref.file);
+    public void setObject(
+            String name,
+            Point position,
+            float angle,
+            Point scale,
+            Point pivot,
+            float alpha,
+            FileReference ref) {
+        this.setObject(
+                name,
+                position.x,
+                position.y,
+                angle,
+                scale.x,
+                scale.y,
+                pivot.x,
+                pivot.y,
+                alpha,
+                ref.folder,
+                ref.file);
     }
 
     /**
      * Sets the given values of the object with the given name.
      *
-	 * @param name the name of the object
-	 * @param x the new position in x direction of the object
-	 * @param y the new position in y direction of the object
-	 * @param angle the new angle of the object
+     * @param name the name of the object
+     * @param x the new position in x direction of the object
+     * @param y the new position in y direction of the object
+     * @param angle the new angle of the object
      * @param scaleX the new scale in x direction of the object
      * @param scaleY the new scale in y direction of the object
      * @throws SpriterException if no object exists of the given name
      */
     public void setObject(String name, float x, float y, float angle, float scaleX, float scaleY) {
         Object b = getObject(name);
-		setObject(
-				name,
-				x,
-				y,
-				angle,
-				scaleX,
-				scaleY,
-				b.pivot.x,
-				b.pivot.y,
-				b.alpha,
-				b.ref.folder,
-				b.ref.file);
+        setObject(
+                name,
+                x,
+                y,
+                angle,
+                scaleX,
+                scaleY,
+                b.pivot.x,
+                b.pivot.y,
+                b.alpha,
+                b.ref.folder,
+                b.ref.file);
     }
 
     /**
      * Sets the given values of the object with the given name.
      *
-	 * @param name the name of the object
-	 * @param x the new position in x direction of the object
-	 * @param y the new position in y direction of the object
+     * @param name the name of the object
+     * @param x the new position in x direction of the object
+     * @param y the new position in y direction of the object
      * @param angle the new angle of the object
      * @throws SpriterException if no object exists of the given name
      */
@@ -529,9 +529,9 @@ public class Player {
     /**
      * Sets the given values of the object with the given name.
      *
-	 * @param name the name of the object
+     * @param name the name of the object
      * @param position the new position of the object
-	 * @param angle the new angle of the object
+     * @param angle the new angle of the object
      * @throws SpriterException if no object exists of the given name
      */
     public void setObject(String name, Point position, float angle) {
@@ -543,8 +543,8 @@ public class Player {
      * Sets the position of the object with the given name.
      *
      * @param name the name of the object
-	 * @param x the new position in x direction of the object
-	 * @param y the new position in y direction of the object
+     * @param x the new position in x direction of the object
+     * @param y the new position in y direction of the object
      * @throws SpriterException if no object exists of the given name
      */
     public void setObject(String name, float x, float y) {
@@ -555,7 +555,7 @@ public class Player {
     /**
      * Sets the position of the object with the given name.
      *
-	 * @param name the name of the object
+     * @param name the name of the object
      * @param position the new position of the object
      * @throws SpriterException if no object exists of the given name
      */
@@ -566,7 +566,7 @@ public class Player {
     /**
      * Sets the position of the object with the given name.
      *
-	 * @param name the name of the object
+     * @param name the name of the object
      * @param angle the new angle of the object
      * @throws SpriterException if no object exists of the given name
      */
@@ -578,71 +578,71 @@ public class Player {
     /**
      * Sets the position of the object with the given name.
      *
-	 * @param name the name of the object
-	 * @param alpha the new alpha value of the object
+     * @param name the name of the object
+     * @param alpha the new alpha value of the object
      * @param folder the new folder index of the object
-	 * @param file the new file index of the object
+     * @param file the new file index of the object
      * @throws SpriterException if no object exists of the given name
      */
     public void setObject(String name, float alpha, int folder, int file) {
         Object b = getObject(name);
-		setObject(
-				name,
-				b.position.x,
-				b.position.y,
-				b.angle,
-				b.scale.x,
-				b.scale.y,
-				b.pivot.x,
-				b.pivot.y,
-				alpha,
-				folder,
-				file);
+        setObject(
+                name,
+                b.position.x,
+                b.position.y,
+                b.angle,
+                b.scale.x,
+                b.scale.y,
+                b.pivot.x,
+                b.pivot.y,
+                alpha,
+                folder,
+                file);
     }
 
     /**
      * Sets the values of the object with the given name to the values of the given object.
      *
-	 * @param name the name of the object
+     * @param name the name of the object
      * @param object the object with the new values
      * @throws SpriterException if no object exists of the given name
      */
     public void setObject(String name, Object object) {
-		setObject(
-				name,
-				object.position,
-				object.angle,
-				object.scale,
-				object.pivot,
-				object.alpha,
-				object.ref);
+        setObject(
+                name,
+                object.position,
+                object.angle,
+                object.scale,
+                object.pivot,
+                object.alpha,
+                object.ref);
     }
 
     /**
      * Maps all object from the parent's coordinate system to the global coordinate system.
      *
-	 * @param base the root bone to start at. Set it to <code>null</code> to traverse the whole bone
-	 *     hierarchy.
+     * @param base the root bone to start at. Set it to <code>null</code> to traverse the whole bone
+     *     hierarchy.
      */
     public void unmapObjects(BoneRef base) {
         int start = base == null ? -1 : base.id - 1;
         for (int i = start + 1; i < getCurrentKey().boneRefs.length; i++) {
             BoneRef ref = getCurrentKey().getBoneRef(i);
             if (ref.parent != base && base != null) continue;
-			Bone parent =
-					ref.parent == null
-							? this.root
-							: this.unmappedTweenedKeys[ref.parent.timeline].object();
+            Bone parent =
+                    ref.parent == null
+                            ? this.root
+                            : this.unmappedTweenedKeys[ref.parent.timeline].object();
             unmappedTweenedKeys[ref.timeline].object().set(tweenedKeys[ref.timeline].object());
             unmappedTweenedKeys[ref.timeline].object().unmap(parent);
             unmapObjects(ref);
         }
         for (ObjectRef ref : getCurrentKey().objectRefs) {
             if (ref.parent != base && base != null) continue;
-			Bone parent =
-					ref.parent == null
-							? this.root
-							: this.unmappedTweenedKeys[ref.parent.timeline].object();
+            Bone parent =
+                    ref.parent == null
+                            ? this.root
+                            : this.unmappedTweenedKeys[ref.parent.timeline].object();
             unmappedTweenedKeys[ref.timeline].object().set(tweenedKeys[ref.timeline].object());
             unmappedTweenedKeys[ref.timeline].object().unmap(parent);
         }
@@ -658,8 +658,8 @@ public class Player {
     }
 
     /**
-	 * Sets the entity for this player instance. The animation will be switched to the first one of
-	 * the new entity.
+     * Sets the entity for this player instance. The animation will be switched to the first one of
+     * the new entity.
      *
      * @param entity the new entity
      * @throws SpriterException if the entity is <code>null</code>
@@ -684,29 +684,29 @@ public class Player {
         this.setAnimation(entity.getAnimation(0));
     }
 
-	/**
-	 * Returns the current set animation.
-	 *
-	 * @return the current animation
-	 */
-	public Animation getAnimation() {
-		return this.animation;
-	}
+    /**
+     * Returns the current set animation.
+     *
+     * @return the current animation
+     */
+    public Animation getAnimation() {
+        return this.animation;
+    }
 
     /**
      * Sets the animation of this player.
      *
      * @param animation the new animation
-	 * @throws SpriterException if the animation is <code>null</code> or the current animation is
-	 *     not a member of the current set entity
+     * @throws SpriterException if the animation is <code>null</code> or the current animation is
+     *     not a member of the current set entity
      */
     public void setAnimation(Animation animation) {
         Animation prevAnim = this.animation;
         if (animation == this.animation) return;
         if (animation == null) throw new SpriterException("animation can not be null!");
         if (!this.entity.containsAnimation(animation) && animation.id != -1)
-			throw new SpriterException(
-					"animation has to be in the same entity as the current set one!");
+            throw new SpriterException(
+                    "animation has to be in the same entity as the current set one!");
         if (animation != this.animation) time = 0;
         this.animation = animation;
         float tempTime = this.time;
@@ -739,28 +739,28 @@ public class Player {
     }
 
     /**
-	 * Returns a bounding box for this player. The bounding box is calculated for all bones and
-	 * object starting from the given root.
+     * Returns a bounding box for this player. The bounding box is calculated for all bones and
+     * object starting from the given root.
      *
-	 * @param root the starting root. Set it to null to calculate the bounding box for the whole
-	 *     player
+     * @param root the starting root. Set it to null to calculate the bounding box for the whole
+     *     player
      * @return the bounding box
      */
     public Rectangle getBoundingRectangle(BoneRef root) {
         Bone boneRoot = root == null ? this.root : this.unmappedTweenedKeys[root.timeline].object();
-		this.rect.set(
-				boneRoot.position.x, boneRoot.position.y, boneRoot.position.x, boneRoot.position.y);
+        this.rect.set(
+                boneRoot.position.x, boneRoot.position.y, boneRoot.position.x, boneRoot.position.y);
         this.calcBoundingRectangle(root);
         this.rect.calculateSize();
         return this.rect;
     }
 
     /**
-	 * Returns a bounding box for this player. The bounding box is calculated for all bones and
-	 * object starting from the given root.
+     * Returns a bounding box for this player. The bounding box is calculated for all bones and
+     * object starting from the given root.
      *
-	 * @param root the starting root. Set it to null to calculate the bounding box for the whole
-	 *     player
+     * @param root the starting root. Set it to null to calculate the bounding box for the whole
+     *     player
      * @return the bounding box
      */
     public Rectangle getBoudingRectangle(Bone root) {
@@ -793,8 +793,8 @@ public class Player {
     }
 
     /**
-	 * Returns the current time. The player will make sure that the current time is always between 0
-	 * and {@link Animation#length}.
+     * Returns the current time. The player will make sure that the current time is always between 0
+     * and {@link Animation#length}.
      *
      * @return the current time
      */
@@ -803,8 +803,8 @@ public class Player {
     }
 
     /**
-	 * Sets the time for the current time. The player will make sure that the new time will not
-	 * exceed the time bounds of the current animation.
+     * Sets the time for the current time. The player will make sure that the new time will not
+     * exceed the time bounds of the current animation.
      *
      * @param time the new time
      * @return this player to enable chained operations
@@ -839,7 +839,7 @@ public class Player {
     }
 
     /**
-	 * Sets the scale of this player to the given one. Only uniform scaling is supported.
+     * Sets the scale of this player to the given one. Only uniform scaling is supported.
      *
      * @param scale the new scale. 1f means 100% scale.
      * @return this player to enable chained operations
@@ -994,8 +994,8 @@ public class Player {
     }
 
     /**
-	 * Sets the pivot, i.e. origin, of this player. A pivot at (0,0) means that the origin of the
-	 * played animation will have the same one as in Spriter.
+     * Sets the pivot, i.e. origin, of this player. A pivot at (0,0) means that the origin of the
+     * played animation will have the same one as in Spriter.
      *
      * @param x the new pivot in x direction
      * @param y the new pivot in y direction
@@ -1008,8 +1008,8 @@ public class Player {
     }
 
     /**
-	 * Sets the pivot, i.e. origin, of this player. A pivot at (0,0) means that the origin of the
-	 * played animation will have the same one as in Spriter.
+     * Sets the pivot, i.e. origin, of this player. A pivot at (0,0) means that the origin of the
+     * played animation will have the same one as in Spriter.
      *
      * @param pivot the new pivot
      * @return this player to enable chained operations
@@ -1067,7 +1067,7 @@ public class Player {
     }
 
     /**
-	 * Removes a listener from the listeners list of this player.
+     * Removes a listener from the listeners list of this player.
      *
      * @param listener the listener to remove
      */
@@ -1085,8 +1085,8 @@ public class Player {
     }
 
     /**
-	 * Returns an iterator to iterate over all time line bones in the current animation starting at
-	 * a given root.
+     * Returns an iterator to iterate over all time line bones in the current animation starting at
+     * a given root.
      *
      * @param start the bone reference to start at
      * @return the bone iterator
@@ -1106,8 +1106,8 @@ public class Player {
     }
 
     /**
-	 * Returns an iterator to iterate over all time line objects in the current animation starting
-	 * at a given root.
+     * Returns an iterator to iterate over all time line objects in the current animation starting
+     * at a given root.
      *
      * @param start the object reference to start at
      * @return the object iterator
@@ -1118,25 +1118,25 @@ public class Player {
     }
 
     /**
-	 * A listener to listen for specific events which can occur during the runtime of a {@link
-	 * Player} instance.
+     * A listener to listen for specific events which can occur during the runtime of a {@link
+     * Player} instance.
      *
      * @author Trixt0r
      */
     public interface PlayerListener {
 
         /**
-		 * Gets called if the current animation has reached it's end or it's beginning (depends on
-		 * the current set {@link Player#speed}).
+         * Gets called if the current animation has reached it's end or it's beginning (depends on
+         * the current set {@link Player#speed}).
          *
          * @param animation the animation which finished.
          */
         void animationFinished(Animation animation);
 
         /**
-		 * Gets called if the animation of the player gets changed. If {@link
-		 * Player#setAnimation(Animation)} gets called and the new animation is the same as the
-		 * previous one, this method will not be called.
+         * Gets called if the animation of the player gets changed. If {@link
+         * Player#setAnimation(Animation)} gets called and the new animation is the same as the
+         * previous one, this method will not be called.
          *
          * @param oldAnim the old animation
          * @param newAnim the new animation
@@ -1158,26 +1158,26 @@ public class Player {
         void postProcess(Player player);
 
         /**
-		 * Gets called if the mainline key gets changed. If {@link Player#speed} is big enough it
-		 * can happen that mainline keys between the previous and the new mainline key will be
-		 * ignored.
+         * Gets called if the mainline key gets changed. If {@link Player#speed} is big enough it
+         * can happen that mainline keys between the previous and the new mainline key will be
+         * ignored.
          *
          * @param prevKey the previous mainline key
-		 * @param newKey the new mainline key
+         * @param newKey the new mainline key
          */
         void mainlineKeyChanged(Mainline.Key prevKey, Mainline.Key newKey);
     }
 
     /**
-	 * An attachment is an abstract object which can be attached to a {@link Player} object. An
-	 * attachment extends a {@link Bone} which means that {@link Bone#position}, {@link Bone#scale}
-	 * and {@link Bone#angle} can be set to change the relative position to its {@link
-	 * Attachment#parent} The {@link Player} object will make sure that the attachment will be
-	 * transformed relative to its {@link Attachment#parent}.
+     * An attachment is an abstract object which can be attached to a {@link Player} object. An
+     * attachment extends a {@link Bone} which means that {@link Bone#position}, {@link Bone#scale}
+     * and {@link Bone#angle} can be set to change the relative position to its {@link
+     * Attachment#parent} The {@link Player} object will make sure that the attachment will be
+     * transformed relative to its {@link Attachment#parent}.
      *
      * @author Trixt0r
      */
-	public abstract static class Attachment extends Timeline.Key.Bone {
+    public abstract static class Attachment extends Timeline.Key.Bone {
 
         private final Point positionTemp, scaleTemp;
         private Bone parent;
@@ -1215,7 +1215,7 @@ public class Player {
         }
 
         final void update() {
-			// Save relative positions
+            // Save relative positions
             this.positionTemp.set(super.position);
             this.scaleTemp.set(super.scale);
             this.angleTemp = super.angle;
@@ -1225,7 +1225,7 @@ public class Player {
             this.setScale(super.scale.x, super.scale.y);
             this.setAngle(super.angle);
 
-			// Load realtive positions
+            // Load realtive positions
             super.position.set(this.positionTemp);
             super.scale.set(this.scaleTemp);
             super.angle = this.angleTemp;

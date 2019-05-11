@@ -6,39 +6,39 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 
 public class Checkpoint extends SpriteAnimation {
 
-	public Checkpoint(Body body, SpriteBatch sb) {
-		super(body, sb, "images/checkpoint/checkpoint.scml");
+    public Checkpoint(Body body, SpriteBatch sb) {
+        super(body, sb, "images/checkpoint/checkpoint.scml");
 
-		setScale(0.1f);
-		setAnimationSpeed(50);
-		setHeightOffset(50);
-		setAnimation(CheckpointAnimation.DEFAULT);
-	}
+        setScale(0.1f);
+        setAnimationSpeed(50);
+        setHeightOffset(50);
+        setAnimation(CheckpointAnimation.DEFAULT);
+    }
 
-	public void setAnimation(Checkpoint.CheckpointAnimation animation) {
-		setAnimation(animation.name, animation.name.equals("roll"));
-	}
+    public void setAnimation(Checkpoint.CheckpointAnimation animation) {
+        setAnimation(animation.name, animation.name.equals("roll"));
+    }
 
-	public void onReached() {
-		setAnimation(CheckpointAnimation.COLLECTED);
-	}
+    public void onReached() {
+        setAnimation(CheckpointAnimation.COLLECTED);
+    }
 
-	public void dispose() {
-		setAnimation(CheckpointAnimation.DEFAULT);
-	}
+    public void dispose() {
+        setAnimation(CheckpointAnimation.DEFAULT);
+    }
 
-	public enum CheckpointAnimation {
-		DEFAULT("default"),
-		COLLECTED("collected");
+    public enum CheckpointAnimation {
+        DEFAULT("default"),
+        COLLECTED("collected");
 
-		private final String name;
+        private final String name;
 
-		CheckpointAnimation(String s) {
-			name = s;
-		}
+        CheckpointAnimation(String s) {
+            name = s;
+        }
 
-		public String toString() {
-			return this.name;
-		}
-	}
+        public String toString() {
+            return this.name;
+        }
+    }
 }

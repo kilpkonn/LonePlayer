@@ -18,18 +18,14 @@ public class MyPlayerListener implements Player.PlayerListener {
     }
 
     @Override
-	public void animationChanged(Animation oldAnim, Animation newAnim) {
-	}
+    public void animationChanged(Animation oldAnim, Animation newAnim) {}
 
     @Override
-	public void preProcess(Player player) {
-	}
+    public void preProcess(Player player) {}
 
     @Override
-	public void postProcess(Player player) {
-	}
+    public void postProcess(Player player) {}
 
     @Override
-	public void mainlineKeyChanged(Mainline.Key prevKey, Mainline.Key newKey) {
-	}
+    public void mainlineKeyChanged(Mainline.Key prevKey, Mainline.Key newKey) {}
 }

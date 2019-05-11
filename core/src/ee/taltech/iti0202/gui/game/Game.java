@@ -19,15 +19,15 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class Game extends ApplicationAdapter {
 
     public static final String TITLE = "Lone Player";
-	public static Content res;
-	public static Settings settings;
+    public static Content res;
+    public static Settings settings;
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;
     private Music sound;
     private GameStateManager gsm;
     // private String readString;
-	//
+    //
     // private Server aiServer;
     // private int aiPort = 9967;
     // private String aiIpAddress = "localhost";
@@ -150,14 +150,11 @@ public class Game extends ApplicationAdapter {
         }
     }
 
-	public void pause() {
-	}
+    public void pause() {}
 
-	public void resume() {
-	}
+    public void resume() {}
 
-	public void setForegroundFPS(int value) {
-	}
+    public void setForegroundFPS(int value) {}
 
     public Music getSound() {
         return sound;

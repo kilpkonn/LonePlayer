@@ -41,12 +41,12 @@ public class Background {
 
     public void render(SpriteBatch sb) {
 
-		float x =
-				((this.x + gameCam.viewportWidth / 2 - gameCam.position.x) * scale)
-						% image.getRegionWidth();
-		float y =
-				((this.y + gameCam.viewportHeight / 2 - gameCam.position.y) * scale)
-						% image.getRegionHeight();
+        float x =
+                ((this.x + gameCam.viewportWidth / 2 - gameCam.position.x) * scale)
+                        % image.getRegionWidth();
+        float y =
+                ((this.y + gameCam.viewportHeight / 2 - gameCam.position.y) * scale)
+                        % image.getRegionHeight();
 
         sb.begin();
 
@@ -54,10 +54,10 @@ public class Background {
         int rowOffset = y > 0 ? -1 : 0;
         for (int row = 0; row < numDrawY; row++) {
             for (int col = 0; col < numDrawX; col++) {
-				sb.draw(
-						image,
-						x + (col + colOffset) * image.getRegionWidth(),
-						y + (rowOffset + row) * image.getRegionHeight());
+                sb.draw(
+                        image,
+                        x + (col + colOffset) * image.getRegionWidth(),
+                        y + (rowOffset + row) * image.getRegionHeight());
             }
         }
         sb.end();

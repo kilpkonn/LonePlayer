@@ -5,8 +5,8 @@ import com.google.gson.*;
 import java.lang.reflect.Type;
 
 public class GameProgressSerializer implements JsonSerializer<GameProgress> {
-	public JsonElement serialize(
-			final GameProgress progress, final Type type, final JsonSerializationContext context) {
+    public JsonElement serialize(
+            final GameProgress progress, final Type type, final JsonSerializationContext context) {
         JsonObject result = new JsonObject();
         /*result.add("playerLocationX", new JsonPrimitive(progress.playerLocationX));
         result.add("playerLocationY", new JsonPrimitive(progress.playerLocationY));*/
