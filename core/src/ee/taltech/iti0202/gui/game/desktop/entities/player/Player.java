@@ -28,6 +28,7 @@ public class Player extends SpriteAnimation {
 
     private int health;
     private List<Vector2> doneDmg = new ArrayList<>();
+    private List<Weapon> weapons = new ArrayList<>();
     private Weapon weapon;
 
     public Player(Body body, SpriteBatch sb) {
@@ -148,5 +149,16 @@ public class Player extends SpriteAnimation {
 
     public void setAnimation(PlayerAnimation animation, boolean playOnce) {
         setAnimation(animation.name, playOnce);
+    }
+
+    public void addWeapon(Weapon weapon) {
+        this.weapons.add(weapon);
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+        if (!weapons.contains(weapon)) {
+            weapons.add(weapon);
+        }
     }
 }

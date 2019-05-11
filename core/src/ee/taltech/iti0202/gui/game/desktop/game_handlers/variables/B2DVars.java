@@ -52,8 +52,8 @@ public class B2DVars {
     public static final float DIMENSION_FADE_TIME = 0.4f;
     public static final float DIMENSION_FADE_AMOUNT = 0.6f;
 
-    public static final float MAX_LOAD_TIME = 10f;
-    public static final float MIN_FPS_EXPECTED = 15f;
+    public static final float MAX_LOAD_TIME = 3f; // 3 seconds
+    public static final float MIN_FPS_EXPECTED = 60f; // or 60 fps
 
     public static final boolean DEBUG = false;
     public static boolean UPDATE = true;
@@ -66,6 +66,7 @@ public class B2DVars {
     // bosses
     public static final String BOSS = "1";
     public static final int gotHitBySnek = 1;
+    public static int BOSS_BASE_HP = 25;
 
     // category bits
     public static final short NONE = 0;

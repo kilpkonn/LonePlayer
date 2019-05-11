@@ -1,8 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -28,6 +26,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.handler.BulletHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader.WeaponLoader;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
@@ -47,6 +46,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound.play
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS_BASE_HP;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.CHECKPOINTS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DEBUG;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_MULTIPLIER;
@@ -54,7 +54,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAX_LOAD_TIME;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MIN_FPS_EXPECTED;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.UPDATE;
@@ -149,7 +148,8 @@ public class Play extends GameState {
             case BRUTAL:
                 DMG_MULTIPLIER = 2;
                 DMG_ON_LANDING = 8;
-                CHECKPOINTS = false;
+                CHECKPOINTS = true;
+                BOSS_BASE_HP *= 2;
                 BOSSES = true;
                 break;
         }
@@ -237,7 +237,7 @@ public class Play extends GameState {
         checkpointHandler = new CheckpointHandler();
         bossHander = new BossHander(cl);
         bulletHandler = new BulletHandler(cl);
-        weaponHandler = new WeaponHandler(world);
+        weaponHandler = new WeaponHandler(world, draw);
         draw.setPlayerHandler(playerHandler);
         draw.setBossHander(bossHander);
         draw.setCheckpointHandler(checkpointHandler);
@@ -252,6 +252,9 @@ public class Play extends GameState {
         } else {
             draw.drawLayers(true, null);
             playerHandler.setPlayer(PlayerLoader.initPlayer(sb, playerHandler, draw, world, cl));
+            playerHandler.getPlayer().addWeapon(WeaponLoader.buildWeapon("M4", sb, draw.getWeaponHandler()));
+            playerHandler.getPlayer().addWeapon(WeaponLoader.buildWeapon("Deagle", sb, draw.getWeaponHandler()));
+            playerHandler.getPlayer().setWeapon(playerHandler.getPlayer().getWeapons().get(0));
         }
 
         cam.position.set(
@@ -261,7 +264,6 @@ public class Play extends GameState {
         UPDATE = true;
         cam.zoom = 1;
 
-        weaponHandler.initWeapon("M4", sb, playerHandler.getPlayer());
         setCursor(true);
     }
 
@@ -299,7 +301,7 @@ public class Play extends GameState {
     }
 
     public void update(float dt) {
-        if (loading && playTime < MAX_LOAD_TIME && dt > 1 / MIN_FPS_EXPECTED) {
+        if (loading && playTime < MAX_LOAD_TIME) {
             playTime += dt;
             return;
         } else if (loading) {
@@ -406,10 +408,7 @@ public class Play extends GameState {
     }
 
     public void render() {
-        if (loading) {
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-            return;
-        }
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         switch (playState) {
             case RUN:

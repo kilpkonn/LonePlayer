@@ -36,7 +36,7 @@ public class WormLogic extends BossLogic {
         }
         if (update) {
             for (int i = 0; i < bossArray.size; i++) {
-                if (bossArray.size >= 100) {
+                if (bossArray.size >= 50) {
                     if (i == bossArray.size - 1) {
                         bossArray.get(i).updateHeadBig(dt, speed);
                     } else {

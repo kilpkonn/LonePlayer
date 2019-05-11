@@ -46,6 +46,8 @@ public class WeaponLoader {
                 break;
         }
 
+        weaponHandler.addWeapon(weapon);
+
         return weapon;
     }
 }

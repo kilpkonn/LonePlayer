@@ -29,7 +29,7 @@ public class BulletLoader {
         fdef.shape = circle;
         fdef.friction = 1f;
         fdef.restitution = 0f;
-        fdef.density = 10f;
+        fdef.density = 1f;
         fdef.filter.categoryBits = BIT_BULLET;
         fdef.filter.maskBits = BIT_BOSSES | BIT_WORM | BACKGROUND;
 

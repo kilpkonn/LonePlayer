@@ -19,6 +19,8 @@ public class Settings {
     public int MENU = Input.Keys.MENU;
     public int SHOOT = Input.Buttons.LEFT;
     public int ESC = Input.Keys.ESCAPE;
+    public int NEXT_WEAPON = Input.Keys.E;
+    public int PREVIOUS_WEAPON = Input.Keys.Q;
 
     public boolean ENABLE_DEV_MAPS = false;
     public boolean SHOW_FPS = false;

@@ -10,35 +10,52 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader.WeaponLoader;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 import lombok.Data;
 
 @Data
 public class WeaponHandler implements Handler {
 
     private final World world;
-    private List<Weapon> weaponList = new ArrayList<>();
+    private final Draw draw;
+    private List<Weapon> playersWeapons = new ArrayList<>();
+    private List<Weapon> weaponsOnMap = new ArrayList<>();
 
-    public WeaponHandler(World world) {
+    public WeaponHandler(World world, Draw draw) {
         this.world = world;
+        this.draw = draw;
+    }
+
+    public void deadPlayerWeaponTransfer(Player player) {
+        for (Weapon weapon : player.getWeapons()) {
+            playersWeapons.remove(weapon);
+            weaponsOnMap.add(weapon);
+        }
     }
 
     @Override
     public void update(float dt) {
-        for (Weapon weapon : weaponList) {
+        for (Weapon weapon : weaponsOnMap) {
             weapon.update(dt);  //TODO: Make it possible to pick up weapons
+        }
+
+        for (Weapon weapon : playersWeapons) {
+            weapon.update(dt);
         }
     }
 
     @Override
     public void render(SpriteBatch spriteBatch) {
-        for (Weapon weapon : weaponList) {
+        for (Weapon weapon : weaponsOnMap) {
             weapon.render(spriteBatch);
         }
+        draw.getPlayerHandler().getPlayer().getWeapon().render(spriteBatch);
+
     }
 
     public void addWeapon(Weapon weapon) {
-        if (!weaponList.contains(weapon)) {
-            weaponList.add(weapon);
+        if (!playersWeapons.contains(weapon)) {
+            playersWeapons.add(weapon);
         }
     }
 

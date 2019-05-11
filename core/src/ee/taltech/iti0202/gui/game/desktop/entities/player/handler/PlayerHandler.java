@@ -12,6 +12,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader.WeaponLoader;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
@@ -51,6 +52,7 @@ public class PlayerHandler implements Handler {
     private Vector2 current_force = new Vector2(0, 0);
     private boolean newPlayer = true;
     private int gracePeriod = 60;
+    private int selectedWeapon = 0;
     private GameProgress gameProgress;
     private Draw draw;
     private MyContactListener cl;
@@ -69,81 +71,81 @@ public class PlayerHandler implements Handler {
         if (!MyInput.isDown(-1) && cl.isPlayerOnGround()) {
             player.setAnimation(Player.PlayerAnimation.IDLE);
         }
-
-        //player jump / double jump / dash
-        if (MyInput.isPressed(Game.settings.JUMP)) {
-            if (cl.isPlayerOnGround()) {
-                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
-                player.setAnimation(Player.PlayerAnimation.JUMP);
-            } else if (cl.getWallJump() != 0) {
-                System.out.println("Walljump");
-                player.getBody().applyLinearImpulse(new Vector2(cl.getWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
-                cl.setWallJump(0);
-            } else if (cl.isDoubleJump()) {
-                System.out.println("Double jump");
-                player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
-                cl.setDoubleJump(false);
-                player.setAnimation(Player.PlayerAnimation.ROLL, true);
-            }
-        }
-
-        //player move left
-        if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
-            if (current_force.x > -MAX_SPEED) {
-                if (cl.isPlayerOnGround()) {
-                    player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
-                    player.setAnimation(Player.PlayerAnimation.RUN);
-                } else {
-                    player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
-                }
-
-            }
-            player.setFlipX(true);
-        }
-
-        //player dash left
-        if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
-            if (!cl.isPlayerOnGround() && cl.isDash()) {
-                current_force = player.getBody().getLinearVelocity();
-                if (current_force.x > 0) {
-                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
-                } else {
-                    player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
-                }
-                cl.setDash(false);
-                player.setAnimation(Player.PlayerAnimation.DASH);
-            }
-            player.setFlipX(true);
-        }
-
-        //player move right
-        if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
-            if (current_force.x < MAX_SPEED) {
-                if (cl.isPlayerOnGround()) {
-                    player.setAnimation(Player.PlayerAnimation.RUN);
-                    player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
-                } else {
-                    player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
-                }
-            }
-            player.setFlipX(false);
-        }
-
-        //player dash right
-        if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
-            if (!cl.isPlayerOnGround() && cl.isDash()) {
-                if (current_force.x < 0) {
-                    player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
-                } else {
-                    player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
-                }
-                cl.setDash(false);
-                player.setAnimation(Player.PlayerAnimation.DASH);
-            }
-            player.setFlipX(false);
-        }
-
         if (playState == Play.pauseState.RUN) {
+            //player jump / double jump / dash
+            if (MyInput.isPressed(Game.settings.JUMP)) {
+                if (cl.isPlayerOnGround()) {
+                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+                    player.setAnimation(Player.PlayerAnimation.JUMP);
+                } else if (cl.getWallJump() != 0) {
+                    System.out.println("Walljump");
+                    player.getBody().applyLinearImpulse(new Vector2(cl.getWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
+                    cl.setWallJump(0);
+                } else if (cl.isDoubleJump()) {
+                    System.out.println("Double jump");
+                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
+                    cl.setDoubleJump(false);
+                    player.setAnimation(Player.PlayerAnimation.ROLL, true);
+                }
+            }
+
+            //player move left
+            if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
+                if (current_force.x > -MAX_SPEED) {
+                    if (cl.isPlayerOnGround()) {
+                        player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
+                        player.setAnimation(Player.PlayerAnimation.RUN);
+                    } else {
+                        player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
+                    }
+
+                }
+                player.setFlipX(true);
+            }
+
+            //player dash left
+            if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
+                if (!cl.isPlayerOnGround() && cl.isDash()) {
+                    current_force = player.getBody().getLinearVelocity();
+                    if (current_force.x > 0) {
+                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
+                    } else {
+                        player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+                    }
+                    cl.setDash(false);
+                    player.setAnimation(Player.PlayerAnimation.DASH);
+                }
+                player.setFlipX(true);
+            }
+
+            //player move right
+            if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
+                if (current_force.x < MAX_SPEED) {
+                    if (cl.isPlayerOnGround()) {
+                        player.setAnimation(Player.PlayerAnimation.RUN);
+                        player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
+                    } else {
+                        player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
+                    }
+                }
+                player.setFlipX(false);
+            }
+
+            //player dash right
+            if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
+                if (!cl.isPlayerOnGround() && cl.isDash()) {
+                    if (current_force.x < 0) {
+                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
+                    } else {
+                        player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+                    }
+                    cl.setDash(false);
+                    player.setAnimation(Player.PlayerAnimation.DASH);
+                }
+                player.setFlipX(false);
+            }
+
+
             //change dimension
             if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
                 System.out.println("changed dimension");
@@ -165,6 +167,25 @@ public class PlayerHandler implements Handler {
                     playerFixture.setFilterData(filter);
                 }
             }
+
+            if (MyInput.isPressed(Game.settings.NEXT_WEAPON)) {
+                if (player.getWeapons().size() > 0) {
+                    selectedWeapon++;
+                    selectedWeapon %= player.getWeapons().size();
+                    player.setWeapon(player.getWeapons().get(selectedWeapon));
+                }
+            }
+
+            if (MyInput.isPressed(Game.settings.PREVIOUS_WEAPON)) {
+                if (player.getWeapons().size() > 0) {
+                    selectedWeapon--;
+                    if (selectedWeapon < 0) selectedWeapon += player.getWeapons().size();
+                    selectedWeapon %= player.getWeapons().size();
+                    player.setWeapon(player.getWeapons().get(selectedWeapon));
+                }
+            }
+
+            System.out.println(selectedWeapon);
 
             if (MyInput.isMouseDown(Game.settings.SHOOT) && player.getWeapon() != null && player.getWeapon().canFire()) {
                 player.getWeapon().fire();
@@ -204,7 +225,12 @@ public class PlayerHandler implements Handler {
             if (player.getHealth() <= 0) {
                 playSoundOnce("sounds/sfx_sound_shutdown1.wav");
 
+                draw.getWeaponHandler().deadPlayerWeaponTransfer(player);
                 this.player = PlayerLoader.initPlayer(spriteBatch, this, draw, play.getWorld(), cl);
+                this.player.addWeapon(WeaponLoader.buildWeapon("M4", spriteBatch, draw.getWeaponHandler())); // after death gets deagle and m4, why not
+                this.player.addWeapon(WeaponLoader.buildWeapon("Deagle", spriteBatch, draw.getWeaponHandler()));
+                this.player.setWeapon(player.getWeapons().get(0));
+
             }
             cl.setDeathState((short) 0);
         }

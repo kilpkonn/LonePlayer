@@ -21,7 +21,7 @@ public class HydraLogic extends BossLogic {
         this.BossBossArray = bossArray;
         this.cl = cl;
         logic = "hydra";
-        health *= Math.pow(bossArray.size, 2);
+        health *= 20 * bossArray.size;
         totalHealth = health;
         speed = 2;
         System.out.println(totalHealth);
@@ -30,15 +30,19 @@ public class HydraLogic extends BossLogic {
 
     @Override
     public void render(SpriteBatch sb) {
-        for (Array<Boss> bossList : BossBossArray) {
-            for (Boss boss : bossList) boss.render(sb);
-            bossList.get(0).render(sb);
+        if (update || timeOfDeath <= 600) {
+            if (!update) {
+                timeOfDeath++;
+            }
+            for (Array<Boss> bossList : BossBossArray) {
+                for (Boss boss : bossList) boss.render(sb);
+            }
         }
     }
 
     @Override
     public void update(float dt) {
-
+        super.updateHP(dt);
         if (health / totalHealth <= 0.50) {
             if (health / totalHealth > 0.10) {
                 setSpeed(3);
@@ -52,7 +56,6 @@ public class HydraLogic extends BossLogic {
         dt *= speed / 2;
 
         if (BossBossArray.size != 0 && update) {
-            super.updateHP(dt);
             int takingTurns = takingTurnsBase * Gdx.graphics.getFramesPerSecond();
             timeElapsed++;
             if (timeElapsed > takingTurns) {
