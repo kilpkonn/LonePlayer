@@ -1,15 +1,9 @@
 package ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx;
 
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.*;
+import lombok.Data;
 
 import java.util.HashMap;
-
-import lombok.Data;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS;
 
@@ -41,13 +35,12 @@ public class MyContactListener implements ContactListener {
             // set up a new checkpoint and double jump
             checkpointDetection(fa, fb);
 
-            //set wall jump
+			// set wall jump
             setWallJump(fa, fb, 1);
 
             // detection happens when player goes outside of initial game border
             dmgDetection(fa, fb);
         }
-
     }
 
     private void bulletDetection(Fixture fa, Fixture fb) {
@@ -59,7 +52,8 @@ public class MyContactListener implements ContactListener {
     }
 
     private void dmgDetection(Fixture fa, Fixture fb) {
-        if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot")) {
+		if (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody")
+				|| fa.getUserData().equals("foot")) {
             if (fb.getUserData().equals("barrier")) {
                 deathState = 3;
             }
@@ -70,7 +64,8 @@ public class MyContactListener implements ContactListener {
                 deathState = 2;
             }
         }
-        if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot")) {
+		if (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody")
+				|| fb.getUserData().equals("foot")) {
             if (fa.getUserData().equals("barrier")) {
                 deathState = 3;
             }
@@ -103,12 +98,16 @@ public class MyContactListener implements ContactListener {
         if (fa.getUserData().equals("foot")) {
             playerOnGround = true;
             if (fb.getUserData().equals("checkpoint")) {
-                if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
+				if (curCheckpoint == null
+						|| curCheckpoint.getPosition().x != fb.getBody().getPosition().x
+						|| curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
                     newCheckpoint = true;
                 }
             }
             if (fb.getUserData().equals("end")) {
-                if (curCheckpoint == null || curCheckpoint.getPosition().x != fb.getBody().getPosition().x || curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
+				if (curCheckpoint == null
+						|| curCheckpoint.getPosition().x != fb.getBody().getPosition().x
+						|| curCheckpoint.getPosition().y != fb.getBody().getPosition().y) {
                     end = true;
                 }
             }
@@ -117,19 +116,22 @@ public class MyContactListener implements ContactListener {
         if (fb.getUserData().equals("foot")) {
             playerOnGround = true;
             if (fa.getUserData().equals("checkpoint")) {
-                if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
+				if (curCheckpoint == null
+						|| curCheckpoint.getPosition().x != fa.getBody().getPosition().x
+						|| curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
                     newCheckpoint = true;
                 }
             }
 
             if (fa.getUserData().equals("end")) {
-                if (curCheckpoint == null || curCheckpoint.getPosition().x != fa.getBody().getPosition().x || curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
+				if (curCheckpoint == null
+						|| curCheckpoint.getPosition().x != fa.getBody().getPosition().x
+						|| curCheckpoint.getPosition().y != fa.getBody().getPosition().y) {
                     end = true;
                 }
             }
         }
     }
-
 
     // called when two fixtures no longer collide
     @Override
@@ -144,42 +146,42 @@ public class MyContactListener implements ContactListener {
                 if (fb.getUserData().equals("checkpoint")) return;
                 playerOnGround = false;
                 doubleJump = true;
-                //wallJump = 0;
+				// wallJump = 0;
                 dash = true;
             } else if (fb.getUserData().equals("foot")) {
                 if (fa.getUserData().equals("checkpoint")) return;
                 playerOnGround = false;
                 doubleJump = true;
-                //wallJump = 0;
+				// wallJump = 0;
                 dash = true;
             }
-
         }
     }
 
-    //presolve
+	// presolve
     @Override
     public void preSolve(Contact c, Manifold m) {
         // Fixture fa = c.getFixtureA();
         // Fixture fb = c.getFixtureB();
 
-        // if (fa.getUserData() != null && (fa.getBody().getUserData() != null && fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
+		// if (fa.getUserData() != null && (fa.getBody().getUserData() != null &&
+		// fa.getBody().getUserData().equals("playerBody") || fa.getUserData().equals("foot"))) {
         //     impact = fa.getBody().getLinearVelocity();
         // }
-        // if (fb.getUserData() != null && (fb.getBody().getUserData() != null && fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
+		// if (fb.getUserData() != null && (fb.getBody().getUserData() != null &&
+		// fb.getBody().getUserData().equals("playerBody") || fb.getUserData().equals("foot"))) {
         //     impact = fb.getBody().getLinearVelocity();
         // }
     }
 
     // handling
     @Override
-    public void postSolve(Contact c, ContactImpulse ci) {
-    }
+	public void postSolve(Contact c, ContactImpulse ci) {
+	}
 
     public void setCurCheckpoint(Body new_vec) {
         initSpawn = false;
         newCheckpoint = false;
         curCheckpoint = new_vec;
     }
-
 }

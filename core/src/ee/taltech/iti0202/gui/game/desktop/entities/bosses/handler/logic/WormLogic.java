@@ -1,7 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic;
 
 import com.badlogic.gdx.utils.Array;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import lombok.Data;
@@ -49,9 +48,7 @@ public class WormLogic extends BossLogic {
                         bossArray.get(i).update(dt);
                     }
                 }
-
             }
         }
     }
 }
-

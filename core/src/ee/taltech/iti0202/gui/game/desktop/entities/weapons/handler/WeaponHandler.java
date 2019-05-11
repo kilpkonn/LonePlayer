@@ -2,16 +2,15 @@ package ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader.WeaponLoader;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class WeaponHandler implements Handler {
@@ -36,7 +35,7 @@ public class WeaponHandler implements Handler {
     @Override
     public void update(float dt) {
         for (Weapon weapon : weaponsOnMap) {
-            weapon.update(dt);  //TODO: Make it possible to pick up weapons
+            weapon.update(dt); // TODO: Make it possible to pick up weapons
         }
 
         for (Weapon weapon : playersWeapons) {
@@ -50,7 +49,6 @@ public class WeaponHandler implements Handler {
             weapon.render(spriteBatch);
         }
         draw.getPlayerHandler().getPlayer().getWeapon().render(spriteBatch);
-
     }
 
     public void addWeapon(Weapon weapon) {

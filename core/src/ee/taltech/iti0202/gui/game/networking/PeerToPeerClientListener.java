@@ -9,17 +9,14 @@ import java.util.UUID;
 public class PeerToPeerClientListener implements PeerReceiverListener {
 
     @Override
-    public void connected(Connection connection) {
-
-    }
-
-    @Override
-    public void receivedMessage(Message message) {
-
-    }
+	public void connected(Connection connection) {
+	}
 
     @Override
-    public void disconnected(UUID connectionId) {
+	public void receivedMessage(Message message) {
+	}
 
-    }
+    @Override
+	public void disconnected(UUID connectionId) {
+	}
 }

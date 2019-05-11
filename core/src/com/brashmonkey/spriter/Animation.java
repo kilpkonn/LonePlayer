@@ -5,15 +5,14 @@ import com.brashmonkey.spriter.Mainline.Key.BoneRef;
 import com.brashmonkey.spriter.Mainline.Key.ObjectRef;
 import com.brashmonkey.spriter.Timeline.Key.Bone;
 import com.brashmonkey.spriter.Timeline.Key.Object;
+import lombok.Data;
 
 import java.util.HashMap;
 
-import lombok.Data;
-
 /**
- * Represents an animation of a Spriter SCML file.
- * An animation holds {@link Timeline}s and a {@link Mainline} to animate objects.
- * Furthermore it holds an {@link #id}, a {@link #length}, a {@link #name} and whether it is {@link #looping} or not.
+ * Represents an animation of a Spriter SCML file. An animation holds {@link Timeline}s and a {@link
+ * Mainline} to animate objects. Furthermore it holds an {@link #id}, a {@link #length}, a {@link
+ * #name} and whether it is {@link #looping} or not.
  *
  * @author Trixt0r
  */
@@ -31,7 +30,8 @@ public class Animation {
     private int timelinePointer = 0;
     private boolean prepared;
 
-    public Animation(Mainline mainline, int id, String name, int length, boolean looping, int timelines) {
+	public Animation(
+			Mainline mainline, int id, String name, int length, boolean looping, int timelines) {
         this.mainline = mainline;
         this.id = id;
         this.name = name;
@@ -40,7 +40,7 @@ public class Animation {
         this.timelines = new Timeline[timelines];
         this.prepared = false;
         this.nameToTimeline = new HashMap<String, Timeline>();
-        //this.currentKey = mainline.getKey(0);
+		// this.currentKey = mainline.getKey(0);
     }
 
     /**
@@ -79,12 +79,20 @@ public class Animation {
     }
 
     public String toString() {
-        String toReturn = getClass().getSimpleName() + "|[id: " + id + ", " + name + ", duration: " + length + ", is looping: " + looping;
+		String toReturn =
+				getClass().getSimpleName()
+						+ "|[id: "
+						+ id
+						+ ", "
+						+ name
+						+ ", duration: "
+						+ length
+						+ ", is looping: "
+						+ looping;
         toReturn += "Mainline:\n";
         toReturn += mainline;
         toReturn += "Timelines\n";
-        for (Timeline timeline : this.timelines)
-            toReturn += timeline;
+		for (Timeline timeline : this.timelines) toReturn += timeline;
         toReturn += "]";
         return toReturn;
     }
@@ -93,26 +101,26 @@ public class Animation {
      * Updates the bone and object structure with the given time to the given root bone.
      *
      * @param time The time which has to be between 0 and {@link #length} to work properly.
-     * @param root The root bone which is not allowed to be null. The whole animation runs relative to the root bone.
+	 * @param root The root bone which is not allowed to be null. The whole animation runs relative
+	 *     to the root bone.
      */
     public void update(float time, Bone root) {
         if (!this.prepared)
-            throw new SpriterException("This animation is not ready yet to animate itself. Please call prepare()!");
+			throw new SpriterException(
+					"This animation is not ready yet to animate itself. Please call prepare()!");
         if (root == null)
-            throw new SpriterException("The root can not be null! Set a root bone to apply this animation relative to the root bone.");
+			throw new SpriterException(
+					"The root can not be null! Set a root bone to apply this animation relative to the root bone.");
         this.currentKey = mainline.getKeyBeforeTime(time);
 
-        for (Timeline.Key timelineKey : this.unmappedTweenedKeys)
-            timelineKey.active = false;
-        for (BoneRef ref : currentKey.boneRefs)
-            this.update(ref, root, time);
-        for (ObjectRef ref : currentKey.objectRefs)
-            this.update(ref, root, time);
+		for (Timeline.Key timelineKey : this.unmappedTweenedKeys) timelineKey.active = false;
+		for (BoneRef ref : currentKey.boneRefs) this.update(ref, root, time);
+		for (ObjectRef ref : currentKey.objectRefs) this.update(ref, root, time);
     }
 
     protected void update(BoneRef ref, Bone root, float time) {
         boolean isObject = ref instanceof ObjectRef;
-        //Get the timelines, the refs pointing to
+		// Get the timelines, the refs pointing to
         Timeline timeline = getTimeline(ref.timeline);
         Timeline.Key key = timeline.getKey(ref.key);
         Timeline.Key nextKey = timeline.getKey((ref.key + 1) % timeline.keys.length);
@@ -122,7 +130,7 @@ public class Animation {
             if (!looping) nextKey = key;
             else nextTime = length;
         }
-        //Normalize the time
+		// Normalize the time
         float t = (time - currentTime) / (float) (nextTime - currentTime);
         if (Float.isNaN(t) || Float.isInfinite(t)) t = 1f;
         if (currentKey.time > currentTime) {
@@ -131,18 +139,22 @@ public class Animation {
             t = (time - currentKey.time) / (float) (nextTime - currentKey.time);
             if (Float.isNaN(t) || Float.isInfinite(t)) t = 1f;
             t = currentKey.curve.tween(tMid, 1f, t);
-        } else
-            t = currentKey.curve.tween(0f, 1f, t);
-        //Tween bone/object
+		} else t = currentKey.curve.tween(0f, 1f, t);
+		// Tween bone/object
         Bone bone1 = key.object();
         Bone bone2 = nextKey.object();
         Bone tweenTarget = this.tweenedKeys[ref.timeline].object();
         if (isObject)
-            this.tweenObject((Object) bone1, (Object) bone2, (Object) tweenTarget, t, key.curve, key.spin);
+			this.tweenObject(
+					(Object) bone1, (Object) bone2, (Object) tweenTarget, t, key.curve, key.spin);
         else this.tweenBone(bone1, bone2, tweenTarget, t, key.curve, key.spin);
         this.unmappedTweenedKeys[ref.timeline].active = true;
-        this.unmapTimelineObject(ref.timeline, isObject, (ref.parent != null) ?
-                this.unmappedTweenedKeys[ref.parent.timeline].object() : root);
+		this.unmapTimelineObject(
+				ref.timeline,
+				isObject,
+				(ref.parent != null)
+						? this.unmappedTweenedKeys[ref.parent.timeline].object()
+						: root);
     }
 
     void unmapTimelineObject(int timeline, boolean isObject, Bone root) {
@@ -160,7 +172,8 @@ public class Animation {
         curve.tweenPoint(bone1.pivot, bone2.pivot, t, target.pivot);
     }
 
-    protected void tweenObject(Object object1, Object object2, Object target, float t, Curve curve, int spin) {
+	protected void tweenObject(
+			Object object1, Object object2, Object target, float t, Curve curve, int spin) {
         this.tweenBone(object1, object2, target, t, curve, spin);
         target.alpha = curve.tweenAngle(object1.alpha, object2.alpha, t);
         target.ref.set(object1.ref);
@@ -171,30 +184,30 @@ public class Animation {
         if (found == null && t.id < this.timelines()) found = this.getTimeline(t.id);
         return found;
     }
-	
-	/*Timeline getSimilarTimeline(BoneRef ref, Collection<Timeline> coveredTimelines){
-		if(ref.parent == null) return null;
-    	for(BoneRef boneRef: this.currentKey.objectRefs){
-    		Timeline t = this.getTimeline(boneRef.timeline);
-    		if(boneRef.parent != null && boneRef.parent.id == ref.parent.id && !coveredTimelines.contains(t))
-    			return t;
-    	}
-    	return null;
-	}
-	
-	Timeline getSimilarTimeline(ObjectRef ref, Collection<Timeline> coveredTimelines){
-		if(ref.parent == null) return null;
-    	for(ObjectRef objRef: this.currentKey.objectRefs){
-    		Timeline t = this.getTimeline(objRef.timeline);
-    		if(objRef.parent != null && objRef.parent.id == ref.parent.id && !coveredTimelines.contains(t))
-    			return t;
-    	}
-    	return null;
-	}*/
+
+    /*Timeline getSimilarTimeline(BoneRef ref, Collection<Timeline> coveredTimelines){
+    	if(ref.parent == null) return null;
+       	for(BoneRef boneRef: this.currentKey.objectRefs){
+       		Timeline t = this.getTimeline(boneRef.timeline);
+       		if(boneRef.parent != null && boneRef.parent.id == ref.parent.id && !coveredTimelines.contains(t))
+       			return t;
+       	}
+       	return null;
+    }
+
+    Timeline getSimilarTimeline(ObjectRef ref, Collection<Timeline> coveredTimelines){
+    	if(ref.parent == null) return null;
+       	for(ObjectRef objRef: this.currentKey.objectRefs){
+       		Timeline t = this.getTimeline(objRef.timeline);
+       		if(objRef.parent != null && objRef.parent.id == ref.parent.id && !coveredTimelines.contains(t))
+       			return t;
+       	}
+       	return null;
+    }*/
 
     /**
-     * Prepares this animation to set this animation in any time state.
-     * This method has to be called before {@link #update(float, Bone)}.
+	 * Prepares this animation to set this animation in any time state. This method has to be called
+	 * before {@link #update(float, Bone)}.
      */
     public void prepare() {
         if (this.prepared) return;
@@ -210,5 +223,4 @@ public class Animation {
         if (mainline.keys.length > 0) currentKey = mainline.getKey(0);
         this.prepared = true;
     }
-
 }

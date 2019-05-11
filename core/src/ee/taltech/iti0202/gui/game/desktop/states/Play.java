@@ -12,11 +12,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
@@ -42,38 +37,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound.playSoundOnce;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SCREENS;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SPEEDS;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSSES;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS_BASE_HP;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.CHECKPOINTS;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DEBUG;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_MULTIPLIER;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.GRAVITY;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAX_LOAD_TIME;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.UPDATE;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class Play extends GameState {
 
     // Play is the root node for most of the action
-
-    public enum pauseState {
-        PAUSE,
-        RUN,
-        RESUME,
-        SETTINGS,
-        END,
-        DEFAULT,
-    }
 
     // LibGdx variables
     private World world = new World(new Vector2(0, GRAVITY), true);
@@ -85,7 +60,6 @@ public class Play extends GameState {
     private OrthographicCamera hudCam = new OrthographicCamera();
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
-
     // handlers
     @ToString.Exclude
     private PlayerHandler playerHandler;
@@ -97,7 +71,6 @@ public class Play extends GameState {
     private CheckpointHandler checkpointHandler;
     @ToString.Exclude
     private BulletHandler bulletHandler;
-
     // States
     private GameProgress progress;
     private PauseMenu pauseMenu;
@@ -109,18 +82,14 @@ public class Play extends GameState {
     private String act;
     private String map;
     private B2DVars.gameDifficulty difficulty;
-
     // Background based variables
     private Texture backgroundTexture;
     private ParallaxBackground parallaxBackground;
     private float backgroundSpeed;
-
     // Boss logic, helpful variables
     private Vector2 camSpeed = new Vector2(0, 0);
     private float playTime = 0;
     private boolean loading = true;
-
-    ////////////////////////////////////////////////////////////////////         Set up game        ////////////////////////////////////////////////////////////////////
 
     private Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
         this.act = act;
@@ -171,58 +140,81 @@ public class Play extends GameState {
         // sey up world
         world.setContactListener(cl);
 
-        //set up cameras
+        // set up cameras
         b2dcam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
         hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
         // create pause state
-        pauseMenu = new PauseMenu(act, map, hudCam, new Runnable() {
-            @Override
-            public void run() {
-                playState = pauseState.RUN;
-                draw.setGameFadeOut(false);
-                draw.setGameFadeDone(false);
-                UPDATE = true;
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                saveGame();
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                playState = pauseState.SETTINGS;
-            }
-        });
+        pauseMenu =
+                new PauseMenu(
+                        act,
+                        map,
+                        hudCam,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                playState = pauseState.RUN;
+                                draw.setGameFadeOut(false);
+                                draw.setGameFadeDone(false);
+                                UPDATE = true;
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                saveGame();
+                            }
+                        },
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                playState = pauseState.SETTINGS;
+                            }
+                        });
 
-        settingsMenu = new SettingsMenu(hudCam, game, new Runnable() {
-            @Override
-            public void run() {
-                playState = pauseState.PAUSE;
-            }
-        });
+        settingsMenu =
+                new SettingsMenu(
+                        hudCam,
+                        game,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                playState = pauseState.PAUSE;
+                            }
+                        });
 
-        endMenu = new EndMenu(act, map, hudCam, difficulty, new Runnable() {
-            @Override
-            public void run() {
-                playState = pauseState.SETTINGS;
-            }
-        });
+        endMenu =
+                new EndMenu(
+                        act,
+                        map,
+                        hudCam,
+                        difficulty,
+                        new Runnable() {
+                            @Override
+                            public void run() {
+                                playState = pauseState.SETTINGS;
+                            }
+                        });
         hud = new Hud(hudCam, this);
 
         playState = pauseState.RUN;
 
         // set up background
         String backgroundPath = MAIN_SCREENS[BACKGROUND_SCREENS.get(act)];
-        backgroundTexture = new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer.png"));
+        backgroundTexture =
+                new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer.png"));
 
         backgroundSpeed = BACKGROUND_SPEEDS.get(act);
         Array<Texture> textures = new Array<>();
         int layersCount = Gdx.files.internal(PATH + backgroundPath).list().length;
         for (int i = 1; i < layersCount; i++) {
-            textures.add(new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer" + i + ".png")));
-            textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+            textures.add(
+                    new Texture(
+                            Gdx.files.internal(
+                                    PATH + backgroundPath + "backgroundLayer" + i + ".png")));
+            textures.get(textures.size - 1)
+                    .setWrap(
+                            Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
 
         parallaxBackground = new ParallaxBackground(textures);
@@ -248,12 +240,17 @@ public class Play extends GameState {
         if (progress != null) {
             draw.setDimension(progress.dimension);
             draw.drawLayers(false, progress.bosses);
-            playerHandler.setPlayer(PlayerLoader.initPlayer(progress, sb, playerHandler, draw, world));
+            playerHandler.setPlayer(
+                    PlayerLoader.initPlayer(progress, sb, playerHandler, draw, world));
         } else {
             draw.drawLayers(true, null);
             playerHandler.setPlayer(PlayerLoader.initPlayer(sb, playerHandler, draw, world, cl));
-            playerHandler.getPlayer().addWeapon(WeaponLoader.buildWeapon("M4", sb, draw.getWeaponHandler()));
-            playerHandler.getPlayer().addWeapon(WeaponLoader.buildWeapon("Deagle", sb, draw.getWeaponHandler()));
+            playerHandler
+                    .getPlayer()
+                    .addWeapon(WeaponLoader.buildWeapon("M4", sb, draw.getWeaponHandler()));
+            playerHandler
+                    .getPlayer()
+                    .addWeapon(WeaponLoader.buildWeapon("Deagle", sb, draw.getWeaponHandler()));
             playerHandler.getPlayer().setWeapon(playerHandler.getPlayer().getWeapons().get(0));
         }
 
@@ -275,13 +272,11 @@ public class Play extends GameState {
         this(progress.act, progress.map, progress.difficulty, progress);
     }
 
-    ////////////////////////////////////////////////////////////////////      Handle I/O devices    ////////////////////////////////////////////////////////////////////
-
     public void handleInput() {
 
         playerHandler.handlePlayerInput(playState);
 
-        //pause screen
+        // pause screen
         if (MyInput.isPressed(Game.settings.ESC)) {
             if (playState == pauseState.RUN) {
                 UPDATE = false;
@@ -310,8 +305,9 @@ public class Play extends GameState {
         }
 
         if (playerHandler.isNewPlayer()) {
-            if (Math.abs(playerHandler.getPlayer().getPosition().x - cam.position.x / PPM) < 1 && Math.abs(playerHandler.getPlayer().getPosition().y - cam.position.y / PPM) < 1)
-                playerHandler.setNewPlayer(false);
+            if (Math.abs(playerHandler.getPlayer().getPosition().x - cam.position.x / PPM) < 1
+                    && Math.abs(playerHandler.getPlayer().getPosition().y - cam.position.y / PPM)
+                    < 1) playerHandler.setNewPlayer(false);
         } else handleInput();
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
@@ -350,9 +346,9 @@ public class Play extends GameState {
                 //     cam.zoom += 0.01; //TODO: Fix this
                 if (executeEnd) playSoundOnce("sounds/end.ogg");
                 executeEnd = false;
-                //gameFadeOut = true;
-                //gameFadeDone = false;
-                //drawAndSetCamera();
+                // gameFadeOut = true;
+                // gameFadeDone = false;
+                // drawAndSetCamera();
                 cam.update();
                 endMenu.update(dt);
 
@@ -364,7 +360,7 @@ public class Play extends GameState {
     private void updateProps(float dt) {
         playTime += dt;
 
-        //update camera
+        // update camera
         if (DEBUG) {
             b2dcam.position.set(
                     playerHandler.getPlayer().getPosition().x,
@@ -381,8 +377,14 @@ public class Play extends GameState {
 
         } else {
 
-            camSpeed = new Vector2((playerHandler.getPlayer().getPosition().x - cam.position.x / PPM) * 2 * PPM,
-                    (playerHandler.getPlayer().getPosition().y - cam.position.y / PPM) * 4 * PPM);
+            camSpeed =
+                    new Vector2(
+                            (playerHandler.getPlayer().getPosition().x - cam.position.x / PPM)
+                                    * 2
+                                    * PPM,
+                            (playerHandler.getPlayer().getPosition().y - cam.position.y / PPM)
+                                    * 4
+                                    * PPM);
 
             cam.position.x += camSpeed.x * dt;
             cam.position.y += camSpeed.y * dt;
@@ -397,13 +399,17 @@ public class Play extends GameState {
 
         cam.update();
 
-        //update animated cells
+        // update animated cells
         draw.update(dt);
 
-        //calculate falling dmg
-        playerHandler.getPlayer().onLanded(playerHandler.getPlayer().getBody().getLinearVelocity(), cl.isPlayerOnGround());
+        // calculate falling dmg
+        playerHandler
+                .getPlayer()
+                .onLanded(
+                        playerHandler.getPlayer().getBody().getLinearVelocity(),
+                        cl.isPlayerOnGround());
 
-        //set new checkpoint
+        // set new checkpoint
         checkpointHandler.setPlayerNewCheckpoint(cl, playerHandler);
     }
 
@@ -438,7 +444,7 @@ public class Play extends GameState {
     }
 
     private void drawPauseScreen() {
-        //render pauseMenu
+        // render pauseMenu
 
         drawAndSetCamera();
 
@@ -449,7 +455,7 @@ public class Play extends GameState {
 
     private void drawAndSetCamera() {
 
-        //clear screen
+        // clear screen
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -463,7 +469,7 @@ public class Play extends GameState {
         stage.act();
         stage.draw();
 
-        //draw tilemap
+        // draw tilemap
         draw.render(cam);
         draw.render(sb);
 
@@ -492,35 +498,55 @@ public class Play extends GameState {
             switch (bossLogic.getLogic()) {
                 case "worm":
                     Boss worm = bossLogic.getBossArray().get(1);
-                    BossData wormData = new BossData(act.equals("Snow") ? "1_snow" : "1", bossLogic.getBossArray().size, worm.getPosition().x,
-                            worm.getPosition().y, worm.isDecider());
+                    BossData wormData =
+                            new BossData(
+                                    act.equals("Snow") ? "1_snow" : "1",
+                                    bossLogic.getBossArray().size,
+                                    worm.getPosition().x,
+                                    worm.getPosition().y,
+                                    worm.isDecider());
                     progress.bosses.add(wormData);
 
                     break;
                 case "hydra":
                     Boss hydra = bossLogic.getBossArray().get(1);
-                    BossData hydraData = new BossData("2", bossLogic.getBossArray().size, hydra.getPosition().x,
-                            hydra.getPosition().y, hydra.isDecider());
+                    BossData hydraData =
+                            new BossData(
+                                    "2",
+                                    bossLogic.getBossArray().size,
+                                    hydra.getPosition().x,
+                                    hydra.getPosition().y,
+                                    hydra.isDecider());
                     progress.bosses.add(hydraData);
                     break;
                 case "snowman":
                     for (Boss boss : bossLogic.getBossArray()) {
-                        BossData bossData = new BossData("3", 1, boss.getPosition().x,
-                                boss.getPosition().y, boss.isDecider());
+                        BossData bossData =
+                                new BossData(
+                                        "3",
+                                        1,
+                                        boss.getPosition().x,
+                                        boss.getPosition().y,
+                                        boss.isDecider());
                         progress.bosses.add(bossData);
                     }
                     break;
             }
         }
 
-
-        progress.save(B2DVars.PATH + "saves/" + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH).format(new Date()) + ".json");
+        progress.save(
+                B2DVars.PATH
+                        + "saves/"
+                        + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH)
+                        .format(new Date())
+                        + ".json");
     }
 
     private void setCursor(boolean crosshair) {
         if (crosshair) {
             Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/white_cross.png"));
-            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, pm.getWidth() / 2, pm.getHeight() / 2));
+            Gdx.graphics.setCursor(
+                    Gdx.graphics.newCursor(pm, pm.getWidth() / 2, pm.getHeight() / 2));
             pm.dispose();
         } else {
             Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/arrow.png"));
@@ -532,5 +558,14 @@ public class Play extends GameState {
     public void dispose() {
         stage.dispose();
         System.gc();
+    }
+
+    public enum pauseState {
+        PAUSE,
+        RUN,
+        RESUME,
+        SETTINGS,
+        END,
+        DEFAULT,
     }
 }

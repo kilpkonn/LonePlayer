@@ -3,7 +3,6 @@ package ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import lombok.Data;
@@ -77,7 +76,6 @@ public class HydraLogic extends BossLogic {
                     } else {
                         bossList.get(i).update(dt);
                     }
-
                 }
                 j++;
             }

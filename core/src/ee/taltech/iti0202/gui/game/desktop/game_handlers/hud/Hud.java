@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
@@ -26,7 +25,8 @@ public class Hud {
         stage = new Stage(new ScreenViewport());
         this.play = play;
 
-        FreeTypeFontGenerator.FreeTypeFontParameter fontParameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		FreeTypeFontGenerator.FreeTypeFontParameter fontParameter =
+				new FreeTypeFontGenerator.FreeTypeFontParameter();
         fontParameter.size = 64;
         fontParameter.borderColor = Color.GRAY;
         fontParameter.renderCount = 3;
@@ -34,7 +34,7 @@ public class Hud {
 
         health = new GameButton("100hp", B2DVars.V_WIDTH - 250, B2DVars.V_HEIGHT - 50);
         fps = new GameButton("0", 100, B2DVars.V_HEIGHT - 50);
-        time = new GameButton("0s", B2DVars.V_WIDTH / 2f - 60,B2DVars.V_HEIGHT - 50 );
+		time = new GameButton("0s", B2DVars.V_WIDTH / 2f - 60, B2DVars.V_HEIGHT - 50);
 
         health.setFontParameters(fontParameter);
         fps.setFontParameters(fontParameter);
@@ -50,13 +50,18 @@ public class Hud {
 
         int currentFPS = Gdx.graphics.getFramesPerSecond();
         fps.setText(Integer.toString(currentFPS));
-        int prefFPS = (int)(Game.settings.MAX_FPS * 0.8);
-        fps.setColor(new Color((float)(prefFPS - currentFPS) / prefFPS, (float)currentFPS / prefFPS, 0, 1));
+		int prefFPS = (int) (Game.settings.MAX_FPS * 0.8);
+		fps.setColor(
+				new Color(
+						(float) (prefFPS - currentFPS) / prefFPS,
+						(float) currentFPS / prefFPS,
+						0,
+						1));
 
         time.setText(Math.round(play.getPlayTime() * 10) / 10f + "s");
     }
 
-    public void render(SpriteBatch sb){
+	public void render(SpriteBatch sb) {
         cam.update();
         sb.setProjectionMatrix(cam.combined);
         stage.act();

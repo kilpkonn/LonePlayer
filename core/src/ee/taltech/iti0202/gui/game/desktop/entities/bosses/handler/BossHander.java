@@ -2,7 +2,6 @@ package ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic.BossLogic;

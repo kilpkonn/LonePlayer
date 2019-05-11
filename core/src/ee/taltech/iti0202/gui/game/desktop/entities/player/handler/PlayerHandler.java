@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
-
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
@@ -22,27 +21,13 @@ import lombok.Data;
 import lombok.ToString;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound.playSoundOnce;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAX_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.gotHitBySnek;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 @Data
 public class PlayerHandler implements Handler {
 
-    @ToString.Exclude
-    private Play play;
+	@ToString.Exclude
+	private Play play;
     private Player player;
     private GameProgress progress;
     private SpriteBatch spriteBatch;
@@ -57,7 +42,8 @@ public class PlayerHandler implements Handler {
     private Draw draw;
     private MyContactListener cl;
 
-    public PlayerHandler(Play play, SpriteBatch sb, GameProgress gameProgress, MyContactListener cl, Draw draw) {
+	public PlayerHandler(
+			Play play, SpriteBatch sb, GameProgress gameProgress, MyContactListener cl, Draw draw) {
         this.play = play;
         this.spriteBatch = sb;
         this.progress = gameProgress;
@@ -72,24 +58,36 @@ public class PlayerHandler implements Handler {
             player.setAnimation(Player.PlayerAnimation.IDLE);
         }
         if (playState == Play.pauseState.RUN) {
-            //player jump / double jump / dash
+			// player jump / double jump / dash
             if (MyInput.isPressed(Game.settings.JUMP)) {
                 if (cl.isPlayerOnGround()) {
-                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);//.applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
+					player.getBody()
+							.applyLinearImpulse(
+									new Vector2(0, PLAYER_DASH_FORCE_UP),
+									tempPlayerLocation,
+									true); // .applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
                     player.setAnimation(Player.PlayerAnimation.JUMP);
                 } else if (cl.getWallJump() != 0) {
                     System.out.println("Walljump");
-                    player.getBody().applyLinearImpulse(new Vector2(cl.getWallJump() * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
+					player.getBody()
+							.applyLinearImpulse(
+									new Vector2(
+											cl.getWallJump() * PLAYER_DASH_FORCE_UP,
+											PLAYER_DASH_FORCE_UP),
+									tempPlayerLocation,
+									true);
                     cl.setWallJump(0);
                 } else if (cl.isDoubleJump()) {
                     System.out.println("Double jump");
-                    player.getBody().applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
+					player.getBody()
+							.applyLinearImpulse(
+									new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                     cl.setDoubleJump(false);
                     player.setAnimation(Player.PlayerAnimation.ROLL, true);
                 }
             }
 
-            //player move left
+			// player move left
             if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
                 if (current_force.x > -MAX_SPEED) {
                     if (cl.isPlayerOnGround()) {
@@ -98,19 +96,24 @@ public class PlayerHandler implements Handler {
                     } else {
                         player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
                     }
-
                 }
                 player.setFlipX(true);
             }
 
-            //player dash left
+			// player dash left
             if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
                 if (!cl.isPlayerOnGround() && cl.isDash()) {
                     current_force = player.getBody().getLinearVelocity();
                     if (current_force.x > 0) {
-                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
+						player.getBody()
+								.applyLinearImpulse(
+										new Vector2(-current_force.x, 0), tempPlayerLocation, true);
                     } else {
-                        player.getBody().applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+						player.getBody()
+								.applyLinearImpulse(
+										new Vector2(-PLAYER_DASH_FORCE_SIDE, 0),
+										tempPlayerLocation,
+										true);
                     }
                     cl.setDash(false);
                     player.setAnimation(Player.PlayerAnimation.DASH);
@@ -118,7 +121,7 @@ public class PlayerHandler implements Handler {
                 player.setFlipX(true);
             }
 
-            //player move right
+			// player move right
             if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
                 if (current_force.x < MAX_SPEED) {
                     if (cl.isPlayerOnGround()) {
@@ -131,13 +134,19 @@ public class PlayerHandler implements Handler {
                 player.setFlipX(false);
             }
 
-            //player dash right
+			// player dash right
             if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
                 if (!cl.isPlayerOnGround() && cl.isDash()) {
                     if (current_force.x < 0) {
-                        player.getBody().applyLinearImpulse(new Vector2(-current_force.x, 0), tempPlayerLocation, true);
+						player.getBody()
+								.applyLinearImpulse(
+										new Vector2(-current_force.x, 0), tempPlayerLocation, true);
                     } else {
-                        player.getBody().applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), tempPlayerLocation, true);
+						player.getBody()
+								.applyLinearImpulse(
+										new Vector2(PLAYER_DASH_FORCE_SIDE, 0),
+										tempPlayerLocation,
+										true);
                     }
                     cl.setDash(false);
                     player.setAnimation(Player.PlayerAnimation.DASH);
@@ -145,8 +154,7 @@ public class PlayerHandler implements Handler {
                 player.setFlipX(false);
             }
 
-
-            //change dimension
+			// change dimension
             if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
                 System.out.println("changed dimension");
                 draw.setDimensionFadeDone(false);
@@ -154,9 +162,23 @@ public class PlayerHandler implements Handler {
 
                 short mask;
                 if (draw.isDimension()) {
-                    mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1;
+					mask =
+							BIT_BOSSES
+									| BIT_WORM
+									| DIMENTSION_1
+									| DIMENTSION_2
+									| TERRA_SQUARES
+									| BACKGROUND
+									| TERRA_DIMENTSION_1;
                 } else {
-                    mask = BIT_BOSSES | BIT_WORM | DIMENTSION_1 | DIMENTSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_2;
+					mask =
+							BIT_BOSSES
+									| BIT_WORM
+									| DIMENTSION_1
+									| DIMENTSION_2
+									| TERRA_SQUARES
+									| BACKGROUND
+									| TERRA_DIMENTSION_2;
                 }
 
                 Filter filter = new Filter();
@@ -187,13 +209,20 @@ public class PlayerHandler implements Handler {
 
             System.out.println(selectedWeapon);
 
-            if (MyInput.isMouseDown(Game.settings.SHOOT) && player.getWeapon() != null && player.getWeapon().canFire()) {
+			if (MyInput.isMouseDown(Game.settings.SHOOT)
+					&& player.getWeapon() != null
+					&& player.getWeapon().canFire()) {
                 player.getWeapon().fire();
-                Bullet bullet = BulletLoader.bulletLoader(spriteBatch,
-                        play.getWorld(),
-                        new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1),
-                        new Vector2(MyInput.getMouseLocation().x, V_HEIGHT - MyInput.getMouseLocation().y),
-                        player.getPosition(), player.getWeapon().getOffRadius());
+				Bullet bullet =
+						BulletLoader.bulletLoader(
+								spriteBatch,
+								play.getWorld(),
+								new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1),
+								new Vector2(
+										MyInput.getMouseLocation().x,
+										V_HEIGHT - MyInput.getMouseLocation().y),
+								player.getPosition(),
+								player.getWeapon().getOffRadius());
                 draw.getBulletHandler().getBulletArray().add(bullet);
             }
         }
@@ -202,7 +231,7 @@ public class PlayerHandler implements Handler {
     @Override
     public void update(float dt) {
 
-        //call update animation
+		// call update animation
         if (player.getHealth() == 0) {
             cl.setDeathState((short) 3);
         }
@@ -216,8 +245,7 @@ public class PlayerHandler implements Handler {
                 playSoundOnce("sounds/sfx_deathscream_alien1.wav");
             }
             if (cl.getDeathState() == 3) {
-                if (!isNewPlayer())
-                    player.setHealth(0); //TODO: Fix instant death on load game
+				if (!isNewPlayer()) player.setHealth(0); // TODO: Fix instant death on load game
             } else {
                 playSoundOnce("sounds/sfx_damage_hit2.wav", 0.1f);
                 player.setHealth(player.getHealth() - gotHitBySnek);
@@ -227,18 +255,22 @@ public class PlayerHandler implements Handler {
 
                 draw.getWeaponHandler().deadPlayerWeaponTransfer(player);
                 this.player = PlayerLoader.initPlayer(spriteBatch, this, draw, play.getWorld(), cl);
-                this.player.addWeapon(WeaponLoader.buildWeapon("M4", spriteBatch, draw.getWeaponHandler())); // after death gets deagle and m4, why not
-                this.player.addWeapon(WeaponLoader.buildWeapon("Deagle", spriteBatch, draw.getWeaponHandler()));
+				this.player.addWeapon(
+						WeaponLoader.buildWeapon(
+								"M4",
+								spriteBatch,
+								draw
+										.getWeaponHandler())); // after death gets deagle and m4,
+				// why not
+				this.player.addWeapon(
+						WeaponLoader.buildWeapon("Deagle", spriteBatch, draw.getWeaponHandler()));
                 this.player.setWeapon(player.getWeapons().get(0));
-
             }
             cl.setDeathState((short) 0);
         }
         player.update(dt);
 
-        if (gracePeriod > 0)
-            gracePeriod -= 1;
-
+		if (gracePeriod > 0) gracePeriod -= 1;
     }
 
     @Override
@@ -246,6 +278,5 @@ public class PlayerHandler implements Handler {
 
         // draw player
         if (player != null) player.render(sb);
-
     }
 }

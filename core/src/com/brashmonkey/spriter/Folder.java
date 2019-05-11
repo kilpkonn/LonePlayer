@@ -1,10 +1,10 @@
 package com.brashmonkey.spriter;
 
 /**
- * Represents a folder in a Spriter SCML file.
- * A folder has at least an {@link #id}, {@link #name} and {@link #files} may be empty.
- * An instance of this class holds an array of {@link File} instances.
- * Specific {@link File} instances can be accessed via the corresponding methods, i.e getFile().
+ * Represents a folder in a Spriter SCML file. A folder has at least an {@link #id}, {@link #name}
+ * and {@link #files} may be empty. An instance of this class holds an array of {@link File}
+ * instances. Specific {@link File} instances can be accessed via the corresponding methods, i.e
+ * getFile().
  *
  * @author Trixt0r
  */
@@ -59,15 +59,13 @@ public class Folder {
      * @return the file index with the given name or -1 if no file with the given name exists
      */
     int getFileIndex(String name) {
-        for (File file : this.files)
-            if (file.name.equals(name)) return file.id;
+		for (File file : this.files) if (file.name.equals(name)) return file.id;
         return -1;
     }
 
     public String toString() {
         String toReturn = getClass().getSimpleName() + "|[id: " + id + ", name: " + name;
-        for (File file : files)
-            toReturn += "\n" + file;
+		for (File file : files) toReturn += "\n" + file;
         toReturn += "]";
         return toReturn;
     }

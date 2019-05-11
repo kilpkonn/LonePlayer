@@ -2,11 +2,7 @@ package com.brashmonkey.spriter;
 
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.*;
 
 /**
  * Lightweight JSON parser. Uses org.json library.
@@ -15,8 +11,8 @@ import java.io.Reader;
  */
 public class JsonReader {
 
-    private JsonReader() {
-    }
+	private JsonReader() {
+	}
 
     public static JSONObject parse(String json) {
         return new JSONObject(json);

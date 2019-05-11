@@ -14,60 +14,16 @@ public class B2DVars {
     public static final float MAX_SPEED = 2.5f;
     public static final float FRICTION = 0.6f;
     public static final float PLAYER_SPEED = 8;
-    public static float PLAYER_DASH_FORCE_UP = 250 * STEP;
-    public static float PLAYER_DASH_FORCE_SIDE = 150 * STEP;
-
-    // difficulty variables
-    public static float PLAYER_ANIMATION_CHANGE_SPEED = 0.5f;
-    public static float ROLL_ON_LANDING_SPEED = 3;
-    public static float DMG_MULTIPLIER = 3;
-    public static float DMG_ON_LANDING = 7;
-    public static boolean CHECKPOINTS = true;
-    public static boolean BOSSES = true;
-
-    public enum gameDifficulty {
-
-        @SerializedName("1")
-        EASY (1),
-
-        @SerializedName("2")
-        HARD (2),
-
-        @SerializedName("3")
-        BRUTAL (3);
-
-        private final int value;
-
-        public int getValue() {
-            return value;
-        }
-
-        gameDifficulty(int value) {
-            this.value = value;
-        }
-    }
-
     public static final float MENU_FADE_TIME = 1;
     public static final float MENU_FADE_AMOUNT = 0.7f;
     public static final float DIMENSION_FADE_TIME = 0.4f;
     public static final float DIMENSION_FADE_AMOUNT = 0.6f;
-
     public static final float MAX_LOAD_TIME = 3f; // 3 seconds
     public static final float MIN_FPS_EXPECTED = 60f; // or 60 fps
-
     public static final boolean DEBUG = false;
-    public static boolean UPDATE = true;
-
-    public static String PATH = "android/assets/";
-    public static int V_WIDTH = 1920;
-    public static int V_HEIGHT = 1080;
-    public static int SCALE = 1;
-
     // bosses
     public static final String BOSS = "1";
     public static final int gotHitBySnek = 1;
-    public static int BOSS_BASE_HP = 25;
-
     // category bits
     public static final short NONE = 0;
     public static final short BIT_ALL = 1023;
@@ -81,17 +37,17 @@ public class B2DVars {
     public static final short TERRA_DIMENTSION_2 = 128;
     public static final short BIT_BULLET = 256;
     public static final short BIT_WEAPON = 512;
-
     // corner coords
     public static final int[] SQUARE_CORNERS = {-1, -1, -1, 1, 1, 1, 1, -1};
-
     // main screen sections
-    public static final Map<String, Integer> BACKGROUND_SCREENS = new HashMap<String, Integer>() {{
-        put("Desert", 5);
-        put("Plains", 6);
-        put("Snow", 2);
-    }};
-
+    public static final Map<String, Integer> BACKGROUND_SCREENS =
+            new HashMap<String, Integer>() {
+                {
+                    put("Desert", 5);
+                    put("Plains", 6);
+                    put("Snow", 2);
+                }
+            };
     public static final String[] MAIN_SCREENS = {
             "images/game_background_0/layers/",
             "images/game_background_1/layers/",
@@ -101,18 +57,58 @@ public class B2DVars {
             "images/game_background_5/layers/",
             "images/game_background_6/layers/"
     };
+    public static final Map<String, Integer> MAP_TO_ACT =
+            new HashMap<String, Integer>() {
+                {
+                    put("Desert", 1);
+                    put("Plains", 2);
+                    put("Snow", 3);
+                }
+            };
+    public static final Map<String, Float> BACKGROUND_SPEEDS =
+            new HashMap<String, Float>() {
+                {
+                    put("Desert", 1f);
+                    put("Plains", 1f);
+                    put("Snow", 1f);
+                }
+            };
+    public static float PLAYER_DASH_FORCE_UP = 250 * STEP;
+    public static float PLAYER_DASH_FORCE_SIDE = 150 * STEP;
+    // difficulty variables
+    public static float PLAYER_ANIMATION_CHANGE_SPEED = 0.5f;
+    public static float ROLL_ON_LANDING_SPEED = 3;
+    public static float DMG_MULTIPLIER = 3;
+    public static float DMG_ON_LANDING = 7;
+    public static boolean CHECKPOINTS = true;
+    public static boolean BOSSES = true;
+    public static boolean UPDATE = true;
+    public static String PATH = "android/assets/";
+    public static int V_WIDTH = 1920;
+    public static int V_HEIGHT = 1080;
+    public static int SCALE = 1;
+    public static int BOSS_BASE_HP = 25;
 
-    public static final Map<String, Integer> MAP_TO_ACT = new HashMap<String, Integer>() {{
-        put("Desert", 1);
-        put("Plains", 2);
-        put("Snow", 3);
-    }};
+    public enum gameDifficulty {
+        @SerializedName("1")
+        EASY(1),
 
-    public static final Map<String, Float> BACKGROUND_SPEEDS = new HashMap<String, Float>() {{
-        put("Desert", 1f);
-        put("Plains", 1f);
-        put("Snow", 1f);
-    }};
+        @SerializedName("2")
+        HARD(2),
+
+        @SerializedName("3")
+        BRUTAL(3);
+
+        private final int value;
+
+        gameDifficulty(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
 
     // pause states
 

@@ -5,9 +5,7 @@ public class Meta {
     Var[] vars;
 
     public Var getVar(long time) {
-        for (Var var : this.vars)
-            if (var.get(time) != null)
-                return var;
+		for (Var var : this.vars) if (var.get(time) != null) return var;
         return null;
     }
 
@@ -18,9 +16,7 @@ public class Meta {
         Key[] keys;
 
         public Key get(long time) {
-            for (Key key : this.keys)
-                if (key.time == time)
-                    return key;
+			for (Key key : this.keys) if (key.time == time) return key;
             return null;
         }
 

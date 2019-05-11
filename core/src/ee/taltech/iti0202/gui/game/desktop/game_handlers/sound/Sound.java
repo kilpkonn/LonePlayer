@@ -12,7 +12,8 @@ public class Sound {
 
     public static void playSoundOnce(String source, float db) {
         try {
-            com.badlogic.gdx.audio.Sound sound = Gdx.audio.newSound(Gdx.files.internal(PATH + source));
+			com.badlogic.gdx.audio.Sound sound =
+					Gdx.audio.newSound(Gdx.files.internal(PATH + source));
             sound.play(db);
         } catch (Exception e) {
             System.out.println(e.getCause().getCause().toString());

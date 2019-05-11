@@ -1,1 +1,31 @@
-{"checkpointX":86.4,"checkpointY":19.2,"act":"Desert","map":"Desert_1.tmx","difficulty":2,"dimension":true,"bosses":[{"type":"1","size":151,"location_x":12.034468,"location_y":11.491727,"decider":true},{"type":"1","size":51,"location_x":55.79169,"location_y":16.172747,"decider":false},{"type":"1","size":51,"location_x":30.678545,"location_y":36.019672,"decider":false}]}
+{
+  "checkpointX": 86.4,
+  "checkpointY": 19.2,
+  "act": "Desert",
+  "map": "Desert_1.tmx",
+  "difficulty": 2,
+  "dimension": true,
+  "bosses": [
+    {
+      "type": "1",
+      "size": 151,
+      "location_x": 12.034468,
+      "location_y": 11.491727,
+      "decider": true
+    },
+    {
+      "type": "1",
+      "size": 51,
+      "location_x": 55.79169,
+      "location_y": 16.172747,
+      "decider": false
+    },
+    {
+      "type": "1",
+      "size": 51,
+      "location_x": 30.678545,
+      "location_y": 36.019672,
+      "decider": false
+    }
+  ]
+}

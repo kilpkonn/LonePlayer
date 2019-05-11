@@ -1,23 +1,23 @@
 package com.brashmonkey.spriter;
 
 /**
- * A player tweener is responsible for tweening to {@link Player} instances.
- * Such a
+ * A player tweener is responsible for tweening to {@link Player} instances. Such a
  *
  * @author Trixt0r
  */
 public class PlayerTweener extends Player {
 
     /**
-     * Indicates whether to update the {@link Player} instances this instance is holding.
-     * If this variable is set to <code>false</code>, you will have to call {@link Player#update(float)} on your own.
+	 * Indicates whether to update the {@link Player} instances this instance is holding. If this
+	 * variable is set to <code>false</code>, you will have to call {@link Player#update(float)} on
+	 * your own.
      */
     public boolean updatePlayers = true;
     /**
-     * The name of root bone to start the tweening at.
-     * Set it to null to tween the whole hierarchy.
+	 * The name of root bone to start the tweening at. Set it to null to tween the whole hierarchy.
      */
     public String baseBoneName = null;
+
     private TweenedAnimation anim;
     private Player player1, player2;
 
@@ -33,8 +33,8 @@ public class PlayerTweener extends Player {
     }
 
     /**
-     * Creates a player tweener based on the entity.
-     * The players to tween will be created by this instance.
+	 * Creates a player tweener based on the entity. The players to tween will be created by this
+	 * instance.
      *
      * @param entity the entity the players will animate
      */
@@ -43,8 +43,8 @@ public class PlayerTweener extends Player {
     }
 
     /**
-     * Tweens the current set players.
-     * This method will update the set players if {@link #updatePlayers} is <code>true</code>.
+	 * Tweens the current set players. This method will update the set players if {@link
+	 * #updatePlayers} is <code>true</code>.
      *
      * @throws SpriterException if no bone with {@link #baseBoneName} exists
      */
@@ -57,17 +57,20 @@ public class PlayerTweener extends Player {
         anim.setAnimations(player1.animation, player2.animation);
         super.update(dt);
         if (baseBoneName != null) {
-            int index = anim.onFirstMainLine() ? player1.getBoneIndex(baseBoneName) : player2.getBoneIndex(baseBoneName);
+			int index =
+					anim.onFirstMainLine()
+							? player1.getBoneIndex(baseBoneName)
+							: player2.getBoneIndex(baseBoneName);
             if (index == -1)
-                throw new SpriterException("A bone with name \"" + baseBoneName + "\" does no exist!");
+				throw new SpriterException(
+						"A bone with name \"" + baseBoneName + "\" does no exist!");
             anim.base = anim.getCurrentKey().getBoneRef(index);
             super.update(dt);
         }
     }
 
     /**
-     * Sets the players for this tweener.
-     * Both players have to hold the same {@link Entity}
+	 * Sets the players for this tweener. Both players have to hold the same {@link Entity}
      *
      * @param player1 the first player
      * @param player2 the second player
@@ -105,7 +108,7 @@ public class PlayerTweener extends Player {
     /**
      * Returns the interpolation weight.
      *
-     * @return the interpolation weight between 0.0f  and 1.0f
+	 * @return the interpolation weight between 0.0f and 1.0f
      */
     public float getWeight() {
         return this.anim.weight;
@@ -114,15 +117,24 @@ public class PlayerTweener extends Player {
     /**
      * Sets the interpolation weight of this tweener.
      *
-     * @param weight the interpolation weight between 0.0f  and 1.0f
+	 * @param weight the interpolation weight between 0.0f and 1.0f
      */
     public void setWeight(float weight) {
         this.anim.weight = weight;
     }
 
     /**
-     * Sets the base animation of this tweener.
-     * Has only an effect if {@link #baseBoneName} is not <code>null</code>.
+	 * Returns the base animation if this tweener.
+	 *
+	 * @return the base animation
+	 */
+	public Animation getBaseAnimation() {
+		return this.anim.baseAnimation;
+	}
+
+	/**
+	 * Sets the base animation of this tweener. Has only an effect if {@link #baseBoneName} is not
+	 * <code>null</code>.
      *
      * @param anim the base animation
      */
@@ -131,8 +143,8 @@ public class PlayerTweener extends Player {
     }
 
     /**
-     * Sets the base animation of this tweener by the given animation index.
-     * Has only an effect if {@link #baseBoneName} is not <code>null</code>.
+	 * Sets the base animation of this tweener by the given animation index. Has only an effect if
+	 * {@link #baseBoneName} is not <code>null</code>.
      *
      * @param index the index of the base animation
      */
@@ -141,17 +153,8 @@ public class PlayerTweener extends Player {
     }
 
     /**
-     * Returns the base animation if this tweener.
-     *
-     * @return the base animation
-     */
-    public Animation getBaseAnimation() {
-        return this.anim.baseAnimation;
-    }
-
-    /**
-     * Sets the base animation of this tweener by the given name.
-     * Has only an effect if {@link #baseBoneName} is not <code>null</code>.
+	 * Sets the base animation of this tweener by the given name. Has only an effect if {@link
+	 * #baseBoneName} is not <code>null</code>.
      *
      * @param name the name of the base animation
      */
@@ -159,17 +162,14 @@ public class PlayerTweener extends Player {
         this.setBaseAnimation(entity.getAnimation(name));
     }
 
-    /**
-     * Not supported by this class.
-     */
-    @Override
-    public void setAnimation(Animation anim) {
-    }
+	/**
+	 * Not supported by this class.
+	 */
+	@Override
+	public void setAnimation(Animation anim) {
+	}
 
-    /**
-     * Not supported by this class.
-     */
-    @Override
-    public void setEntity(Entity entity) {
-    }
+	/** Not supported by this class. */
+	@Override
+	public void setEntity(Entity entity) {}
 }

@@ -2,7 +2,6 @@ package ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import lombok.Builder;
@@ -18,7 +17,14 @@ public class SnowMan extends Boss {
     private float xOffset;
     private float yOffset;
 
-    public SnowMan(Body body, SpriteBatch sb, String type, PlayerHandler playerHandler, float size, float x, float y) {
+	public SnowMan(
+			Body body,
+			SpriteBatch sb,
+			String type,
+			PlayerHandler playerHandler,
+			float size,
+			float x,
+			float y) {
         super(playerHandler, body, sb, "images/bosses/snowman/snowman.scml", "snowman", size, x, y);
         this.body = body;
         this.spriteBatch = sb;

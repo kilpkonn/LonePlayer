@@ -12,5 +12,4 @@ public class SpriterException extends RuntimeException {
     public SpriterException(String message) {
         super(message);
     }
-
 }

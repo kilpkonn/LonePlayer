@@ -1,8 +1,7 @@
 package com.brashmonkey.spriter;
 
 /**
- * Represents a reference to a specific file.
- * A file reference consists of a folder and file index.
+ * Represents a reference to a specific file. A file reference consists of a folder and file index.
  *
  * @author Trixt0r
  */
@@ -16,13 +15,14 @@ public class FileReference {
 
     @Override
     public int hashCode() {
-        return folder * 10000 + file;//We can have 10000 files per folder
+		return folder * 10000 + file; // We can have 10000 files per folder
     }
 
     @Override
     public boolean equals(Object ref) {
         if (ref instanceof FileReference) {
-            return this.file == ((FileReference) ref).file && this.folder == ((FileReference) ref).folder;
+			return this.file == ((FileReference) ref).file
+					&& this.folder == ((FileReference) ref).folder;
         } else return false;
     }
 
@@ -46,5 +46,4 @@ public class FileReference {
     public String toString() {
         return "[folder: " + folder + ", file: " + file + "]";
     }
-
 }

@@ -8,35 +8,22 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-
-import java.util.List;
-
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.LevelSelectionMenu;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.LoadGameMenu;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MainMenu;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.Scene;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.SettingsMenu;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.*;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
+import java.util.List;
+
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class Menu extends GameState {
-
-    private enum state {
-        MAIN, SETTINGS, LEVELS, RESUME, DEFAULT
-    }
 
     private Stage stage;
     private LevelSelectionMenu levelSelectionMenu;
     private SettingsMenu settingsMenu;
     private LoadGameMenu loadGameMenu;
     private Scene mainMenuScene;
-
     private World world;
     private Texture player;
     private Texture logo;
@@ -56,40 +43,55 @@ public class Menu extends GameState {
 
         mouseInWorld2D = new Vector2();
 
-        levelSelectionMenu = new LevelSelectionMenu(cam, new Runnable() {
-            @Override
-            public void run() {
-                menuState = state.MAIN;
-            }
-        });
-        settingsMenu = new SettingsMenu(cam, game, new Runnable() {
-            @Override
-            public void run() {
-                menuState = state.MAIN;
-            }
-        });
-        loadGameMenu = new LoadGameMenu(cam, new Runnable() {
-            @Override
-            public void run() {
-                menuState = state.MAIN;
-            }
-        });
-        mainMenuScene = new MainMenu(cam, new Runnable() {
-            @Override
-            public void run() {
-                menuState = state.LEVELS;
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                menuState = state.RESUME;
-            }
-        }, new Runnable() {
-            @Override
-            public void run() {
-                menuState = state.SETTINGS;
-            }
-        });
+		levelSelectionMenu =
+				new LevelSelectionMenu(
+						cam,
+						new Runnable() {
+							@Override
+							public void run() {
+								menuState = state.MAIN;
+							}
+						});
+		settingsMenu =
+				new SettingsMenu(
+						cam,
+						game,
+						new Runnable() {
+							@Override
+							public void run() {
+								menuState = state.MAIN;
+							}
+						});
+		loadGameMenu =
+				new LoadGameMenu(
+						cam,
+						new Runnable() {
+							@Override
+							public void run() {
+								menuState = state.MAIN;
+							}
+						});
+		mainMenuScene =
+				new MainMenu(
+						cam,
+						new Runnable() {
+							@Override
+							public void run() {
+								menuState = state.LEVELS;
+							}
+						},
+						new Runnable() {
+							@Override
+							public void run() {
+								menuState = state.RESUME;
+							}
+						},
+						new Runnable() {
+							@Override
+							public void run() {
+								menuState = state.SETTINGS;
+							}
+						});
 
         // play button
 
@@ -106,8 +108,11 @@ public class Menu extends GameState {
         Array<Texture> textures = new Array<>();
         int layersCount = Gdx.files.internal(PATH + path).list().length;
         for (int i = 1; i < layersCount; i++) {
-            textures.add(new Texture(Gdx.files.internal(PATH + path + "backgroundLayer" + i + ".png")));
-            textures.get(textures.size - 1).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+			textures.add(
+					new Texture(Gdx.files.internal(PATH + path + "backgroundLayer" + i + ".png")));
+			textures.get(textures.size - 1)
+					.setWrap(
+							Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
         ParallaxBackground parallaxBackground = new ParallaxBackground(textures);
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -130,9 +135,8 @@ public class Menu extends GameState {
             case SETTINGS:
                 settingsMenu.handleInput();
                 break;
-                default:
-                    System.out.println("Error with menuState!!!");
-
+			default:
+				System.out.println("Error with menuState!!!");
         }
     }
 
@@ -144,7 +148,7 @@ public class Menu extends GameState {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();
 
-        //animation.update(dt);
+		// animation.update(dt);
 
         switch (menuState) {
             case MAIN:
@@ -159,8 +163,8 @@ public class Menu extends GameState {
             case SETTINGS:
                 settingsMenu.update(dt);
                 break;
-                default:
-                    System.out.println("Error with menuState!");
+			default:
+				System.out.println("Error with menuState!");
         }
     }
 
@@ -192,8 +196,8 @@ public class Menu extends GameState {
             case SETTINGS:
                 settingsMenu.render(sb);
                 break;
-                default:
-                    System.out.println("Error with menuState!");
+			default:
+				System.out.println("Error with menuState!");
         }
 
         // draw player
@@ -202,10 +206,17 @@ public class Menu extends GameState {
         sb.end();*/
     }
 
-
     @Override
     public void dispose() {
         stage.dispose();
         System.gc();
     }
+
+	private enum state {
+		MAIN,
+		SETTINGS,
+		LEVELS,
+		RESUME,
+		DEFAULT
+	}
 }

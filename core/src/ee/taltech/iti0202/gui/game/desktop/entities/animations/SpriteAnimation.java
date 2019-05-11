@@ -8,25 +8,23 @@ import com.brashmonkey.spriter.Data;
 import com.brashmonkey.spriter.LibGdx.LibGdxDrawer;
 import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
 import com.brashmonkey.spriter.Timeline;
-
-import java.util.HashSet;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
 import lombok.AllArgsConstructor;
+
+import java.util.HashSet;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 @AllArgsConstructor
 public class SpriteAnimation {
 
+    protected Body body;
     private MyPlayerTweener playerTweener;
     private Data data;
     private LibGdxLoader loader;
     private LibGdxDrawer drawer;
     private float heightOffset;
     private float widthOffset;
-
-    protected Body body;
     private float opacity = 1;
 
     public SpriteAnimation(Body body, SpriteBatch sb, String path) {
@@ -37,12 +35,12 @@ public class SpriteAnimation {
         this(body, sb, path, entity, 0, 0);
     }
 
-    public SpriteAnimation(Body body, SpriteBatch sb, String path, String entity, float x, float y) {
+    public SpriteAnimation(
+            Body body, SpriteBatch sb, String path, String entity, float x, float y) {
         System.out.println("New body: " + body.toString());
         this.body = body;
         data = AnimationLoader.getData(path);
         loader = AnimationLoader.getLoader(path);
-
 
         drawer = new LibGdxDrawer(loader, sb, null); // no shape rendering
         if (entity != null) {
@@ -61,9 +59,11 @@ public class SpriteAnimation {
     }
 
     public void update(float dt) {
-        //animation.update(dt);
+        // animation.update(dt);
         playerTweener.update(dt);
-        playerTweener.setPosition(body.getPosition().x * PPM + widthOffset, body.getPosition().y * PPM + heightOffset);
+        playerTweener.setPosition(
+                body.getPosition().x * PPM + widthOffset,
+                body.getPosition().y * PPM + heightOffset);
         playerTweener.setAngle((float) Math.toDegrees(body.getAngle()));
     }
 
@@ -103,8 +103,7 @@ public class SpriteAnimation {
     }
 
     public void setFlipX(boolean flipX) {
-        if ((playerTweener.flippedX() == -1) != flipX)
-            playerTweener.flipX();
+        if ((playerTweener.flippedX() == -1) != flipX) playerTweener.flipX();
     }
 
     public boolean isFlippedX() {
@@ -139,10 +138,11 @@ public class SpriteAnimation {
         return body.getPosition();
     }
 
-    public Vector2 getVelocity() {return body.getLinearVelocity(); }
+    public Vector2 getVelocity() {
+        return body.getLinearVelocity();
+    }
 
     public boolean isAnimationOver() {
         return playerTweener.isAnimationOver();
     }
-
 }

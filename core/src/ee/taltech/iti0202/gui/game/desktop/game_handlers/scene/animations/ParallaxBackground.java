@@ -21,7 +21,9 @@ public class ParallaxBackground extends Actor {
     public ParallaxBackground(Array<Texture> textures) {
         layers = textures;
         for (int i = 0; i < textures.size; i++) {
-            layers.get(i).setWrap(Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+			layers.get(i)
+					.setWrap(
+							Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
         }
         scroll = 0;
         speed = 0;
@@ -49,7 +51,23 @@ public class ParallaxBackground extends Actor {
         for (int i = 0; i < layers.size; i++) {
             float LAYER_SPEED_DIFFERENCE = 1f;
             int srcX = (int) (scroll + i * LAYER_SPEED_DIFFERENCE * scroll);
-            batch.draw(layers.get(i), x, y, originX, originY, width, height, scaleX, scaleY, rotation, srcX, srcY, layers.get(i).getWidth(), layers.get(i).getHeight(), flipX, flipY);
+			batch.draw(
+					layers.get(i),
+					x,
+					y,
+					originX,
+					originY,
+					width,
+					height,
+					scaleX,
+					scaleY,
+					rotation,
+					srcX,
+					srcY,
+					layers.get(i).getWidth(),
+					layers.get(i).getHeight(),
+					flipX,
+					flipY);
         }
     }
 }

@@ -2,37 +2,34 @@ package ee.taltech.iti0202.gui.game.desktop.game_handlers.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-
-import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
 public class MainMenu extends Scene {
 
-    private enum block {
-        NEWGAME, RESUME, EXIT, SETTINGS, DEFAULT
-    }
-
     private block currBlock = block.DEFAULT;
     private Runnable newGameFunc;
     private Runnable resumeGameFunc;
     private Runnable settingsFunc;
-
     private GameButton newGameButton;
     private GameButton loadGameButton;
     private GameButton settingsButton;
     private GameButton exitButton;
-
     private HashMap<GameButton, MainMenu.block> buttonType;
 
-    public MainMenu(OrthographicCamera cam, Runnable newGameFunc, Runnable resumeGameFunc, Runnable settingsFunc) {
+	public MainMenu(
+			OrthographicCamera cam,
+			Runnable newGameFunc,
+			Runnable resumeGameFunc,
+			Runnable settingsFunc) {
         super(cam);
         this.newGameFunc = newGameFunc;
         this.resumeGameFunc = resumeGameFunc;
@@ -43,14 +40,19 @@ public class MainMenu extends Scene {
         settingsButton = new GameButton("Settings", V_WIDTH / 5f, V_HEIGHT / 1.5f - 80);
         exitButton = new GameButton("Exit", V_WIDTH / 5f, V_HEIGHT / 1.5f - 120);
 
-        buttons = new HashSet<>(Arrays.asList(newGameButton, loadGameButton, settingsButton, exitButton));
+		buttons =
+				new HashSet<>(
+						Arrays.asList(newGameButton, loadGameButton, settingsButton, exitButton));
 
-        buttonType = new HashMap<GameButton, block>() {{
-            put(newGameButton, block.NEWGAME);
-            put(loadGameButton, block.RESUME);
-            put(settingsButton, block.SETTINGS);
-            put(exitButton, block.EXIT);
-        }};
+		buttonType =
+				new HashMap<GameButton, block>() {
+					{
+						put(newGameButton, block.NEWGAME);
+						put(loadGameButton, block.RESUME);
+						put(settingsButton, block.SETTINGS);
+						put(exitButton, block.EXIT);
+					}
+				};
 
         for (GameButton button : buttons) played.put(button, false);
 
@@ -85,4 +87,12 @@ public class MainMenu extends Scene {
     protected void updateCurrentBlock(GameButton button) {
         currBlock = buttonType.get(button);
     }
+
+	private enum block {
+		NEWGAME,
+		RESUME,
+		EXIT,
+		SETTINGS,
+		DEFAULT
+	}
 }

@@ -26,4 +26,3 @@ public class Content {
         if (tex != null) tex.dispose();
     }
 }
-

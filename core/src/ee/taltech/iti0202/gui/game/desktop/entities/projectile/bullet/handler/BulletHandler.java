@@ -2,7 +2,6 @@ package ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.handler;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
@@ -23,7 +22,6 @@ public class BulletHandler implements Handler {
         for (Bullet bullet : bulletArray) {
             if (cl.getCollidedBullets().containsKey(bullet.getBody())) {
                 bullet.onHit();
-                System.out.println(cl.getCollidedBullets().get(bullet.getBody()));
                 cl.getCollidedBullets().remove(bullet.getBody());
             }
             if (bullet.toBeRemoved()) {
@@ -32,7 +30,7 @@ public class BulletHandler implements Handler {
             bullet.update(dt);
         }
 
-        bulletArray.removeAll(toBeRemoved, true);  //What is identity?
+        bulletArray.removeAll(toBeRemoved, true); // What is identity?
     }
 
     @Override

@@ -10,8 +10,8 @@ public class Animation {
     private int currentFrame;
     private int timesPlayed;
 
-    public Animation() {
-    }
+	public Animation() {
+	}
 
     public Animation(TextureRegion[] frames) {
         this(frames, 1 / 12f);
@@ -52,5 +52,4 @@ public class Animation {
     public int getTimesPlayed() {
         return timesPlayed;
     }
-
 }

@@ -1,7 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import lombok.Data;

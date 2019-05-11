@@ -1,26 +1,22 @@
 package com.brashmonkey.spriter;
 
 /**
- * A utility class to keep the code short.
- * A point is essentially that what you would expect if you think about a point in a 2D space.
- * It holds an x and y value. You can {@link #translate(Point)}, {@link #scale(Point)}, {@link #rotate(float)} and {@link #set(Point)} a point.
+ * A utility class to keep the code short. A point is essentially that what you would expect if you
+ * think about a point in a 2D space. It holds an x and y value. You can {@link #translate(Point)},
+ * {@link #scale(Point)}, {@link #rotate(float)} and {@link #set(Point)} a point.
  *
  * @author Trixt0r
  */
 public class Point {
 
-    /**
-     * The x coordinates of this point.
-     */
+	/**
+	 * The x coordinates of this point.
+	 */
     public float x;
-    /**
-     * The y coordinates of this point.
-     */
+	/** The y coordinates of this point. */
     public float y;
 
-    /**
-     * Creates a point at (0,0).
-     */
+	/** Creates a point at (0,0). */
     public Point() {
         this(0, 0);
     }
@@ -141,5 +137,4 @@ public class Point {
     public String toString() {
         return "[" + x + "," + y + "]";
     }
-
 }

@@ -7,5 +7,4 @@ public interface Handler {
     void update(float dt);
 
     void render(SpriteBatch spriteBatch);
-
 }

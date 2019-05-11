@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input;
 
-
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.HashSet;
@@ -9,7 +8,6 @@ public class MyInput {
 
     private static HashSet<Integer> keysDown = new HashSet<>();
     private static HashSet<Integer> keysPressed = new HashSet<>();
-
 
     private static boolean mouseDown;
     private static Vector2 mouseLocation;
@@ -45,7 +43,6 @@ public class MyInput {
     public static boolean isPressed(Integer key) {
         return keysPressed.contains(key) && !keysDown.contains(key);
     }
-
 
     public static void setMouseDown(boolean isdown) {
         mouseDownPrev = mouseDown;

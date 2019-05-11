@@ -3,13 +3,9 @@ package ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Properties;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class SnowManProperties extends Properties {
     public SnowManProperties(BodyDef bdef, FixtureDef fdef, Vector2 position) {
@@ -24,6 +20,5 @@ public class SnowManProperties extends Properties {
         fdef.density = 10f;
         fdef.filter.categoryBits = BIT_WORM;
         fdef.filter.maskBits = DIMENTSION_1 | DIMENTSION_2 | BIT_BULLET;
-
     }
 }

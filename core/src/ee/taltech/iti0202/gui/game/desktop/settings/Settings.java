@@ -4,12 +4,7 @@ import com.badlogic.gdx.Input;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 public class Settings {
     public int MOVE_LEFT = Input.Keys.A;
@@ -28,7 +23,10 @@ public class Settings {
     public boolean ENABLE_VSYNC = true;
 
     public void save(String path) {
-        Gson gson = new GsonBuilder().registerTypeAdapter(Settings.class, new SettingsSerializer()).create();
+		Gson gson =
+				new GsonBuilder()
+						.registerTypeAdapter(Settings.class, new SettingsSerializer())
+						.create();
         String jsonString = gson.toJson(this);
         try {
             File f = new File(path);
@@ -54,7 +52,10 @@ public class Settings {
     public Settings load(String path) {
         try {
             BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-            Gson gson = new GsonBuilder().registerTypeAdapter(Settings.class, new SettingsSerializer()).create();
+			Gson gson =
+					new GsonBuilder()
+							.registerTypeAdapter(Settings.class, new SettingsSerializer())
+							.create();
             Settings s = gson.fromJson(br, Settings.class);
             System.out.println("Done loading settings!");
             return s;

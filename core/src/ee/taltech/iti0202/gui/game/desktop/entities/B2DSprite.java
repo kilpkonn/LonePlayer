@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
@@ -25,7 +24,6 @@ public class B2DSprite {
         animation.setFrames(reg, delay);
     }
 
-
     public void update(float dt) {
         animation.update(dt);
     }
@@ -41,14 +39,14 @@ public class B2DSprite {
                 animation.getFrame(),
                 posX,
                 posY,
-                1,1,
+				1,
+				1,
                 animation.getFrame().getRegionWidth(),
                 animation.getFrame().getRegionHeight(),
                 1,
                 1,
-                (float)rotation
+				(float) rotation);
 
-        );
         sb.setColor(1, 1, 1, 1);
         sb.end();
     }
@@ -57,11 +55,7 @@ public class B2DSprite {
         sb.setColor(1, 1, 1, opacity);
         sb.begin();
 
-        sb.draw(
-                animation.getFrame(),
-                body.getPosition().x * PPM,
-                body.getPosition().y * PPM
-        );
+		sb.draw(animation.getFrame(), body.getPosition().x * PPM, body.getPosition().y * PPM);
 
         sb.end();
         sb.setColor(1, 1, 1, 1);
@@ -78,5 +72,4 @@ public class B2DSprite {
     public Vector2 getPosition() {
         return body.getPosition();
     }
-
 }

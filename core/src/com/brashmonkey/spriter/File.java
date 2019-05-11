@@ -1,9 +1,9 @@
 package com.brashmonkey.spriter;
 
 /**
- * Represents a file in a Spriter SCML file.
- * A file has an {@link #id}, a {@link #name}.
- * A {@link #size} and a {@link #pivot} point, i.e. origin of an image do not have to be set since a file can be a sound file.
+ * Represents a file in a Spriter SCML file. A file has an {@link #id}, a {@link #name}. A {@link
+ * #size} and a {@link #pivot} point, i.e. origin of an image do not have to be set since a file can
+ * be a sound file.
  *
  * @author Trixt0r
  */
@@ -31,7 +31,14 @@ public class File {
     }
 
     public String toString() {
-        return getClass().getSimpleName() + "|[id: " + id + ", name: " + name + ", size: " + size + ", pivot: " + pivot;
+		return getClass().getSimpleName()
+				+ "|[id: "
+				+ id
+				+ ", name: "
+				+ name
+				+ ", size: "
+				+ size
+				+ ", pivot: "
+				+ pivot;
     }
-
 }

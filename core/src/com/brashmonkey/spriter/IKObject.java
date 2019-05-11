@@ -12,9 +12,9 @@ public class IKObject extends Point {
     /**
      * Creates a new IKObject with the given constraints.
      *
-     * @param x          x coordinate constraint
-     * @param y          y coordinate constraint
-     * @param length     the chain length constraint.
+	 * @param x x coordinate constraint
+	 * @param y y coordinate constraint
+	 * @param length the chain length constraint.
      * @param iterations the number of iterations.
      */
     public IKObject(float x, float y, int length, int iterations) {
@@ -24,8 +24,8 @@ public class IKObject extends Point {
     }
 
     /**
-     * Sets the chain length of this ik object.
-     * The chain length indicates how many parent bones should get affected, when a {@link IKResolver} resolves the constraints.
+	 * Sets the chain length of this ik object. The chain length indicates how many parent bones
+	 * should get affected, when a {@link IKResolver} resolves the constraints.
      *
      * @param chainLength the chain length
      * @return this ik object for chained operations
@@ -56,8 +56,8 @@ public class IKObject extends Point {
     }
 
     /**
-     * Sets the number of iterations.
-     * The more iterations a {@link IKResolver} is asked to do, the more precise the result will be.
+	 * Sets the number of iterations. The more iterations a {@link IKResolver} is asked to do, the
+	 * more precise the result will be.
      *
      * @param iterations number of iterations
      * @return this ik object for chained operations
@@ -69,5 +69,4 @@ public class IKObject extends Point {
         this.iterations = iterations;
         return this;
     }
-
 }

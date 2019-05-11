@@ -3,8 +3,8 @@ package com.brashmonkey.spriter;
 import com.brashmonkey.spriter.Entity.ObjectInfo;
 
 /**
- * Represents a time line in a Spriter SCML file.
- * A time line holds an {@link #id}, a {@link #name} and at least one {@link Key}.
+ * Represents a time line in a Spriter SCML file. A time line holds an {@link #id}, a {@link #name}
+ * and at least one {@link Key}.
  *
  * @author Trixt0r
  */
@@ -39,16 +39,22 @@ public class Timeline {
     }
 
     public String toString() {
-        String toReturn = getClass().getSimpleName() + "|[id:" + id + ", name: " + name + ", object_info: " + objectInfo;
-        for (Key key : keys)
-            toReturn += "\n" + key;
+		String toReturn =
+				getClass().getSimpleName()
+						+ "|[id:"
+						+ id
+						+ ", name: "
+						+ name
+						+ ", object_info: "
+						+ objectInfo;
+		for (Key key : keys) toReturn += "\n" + key;
         toReturn += "]";
         return toReturn;
     }
 
     /**
-     * Represents a time line key in a Spriter SCML file.
-     * A key holds an {@link #id}, a {@link #time}, a {@link #spin}, an {@link #object()} and a {@link #curve}.
+	 * Represents a time line key in a Spriter SCML file. A key holds an {@link #id}, a {@link
+	 * #time}, a {@link #spin}, an {@link #object()} and a {@link #curve}.
      *
      * @author Trixt0r
      */
@@ -89,13 +95,24 @@ public class Timeline {
         }
 
         public String toString() {
-            return getClass().getSimpleName() + "|[id: " + id + ", time: " + time + ", spin: " + spin + "\ncurve: " + curve + "\nobject:" + object + "]";
+			return getClass().getSimpleName()
+					+ "|[id: "
+					+ id
+					+ ", time: "
+					+ time
+					+ ", spin: "
+					+ spin
+					+ "\ncurve: "
+					+ curve
+					+ "\nobject:"
+					+ object
+					+ "]";
         }
 
         /**
-         * Represents a bone in a Spriter SCML file.
-         * A bone holds a {@link #position}, {@link #scale}, an {@link #angle} and a {@link #pivot}.
-         * Bones are the only objects which can be used as a parent for other tweenable objects.
+		 * Represents a bone in a Spriter SCML file. A bone holds a {@link #position}, {@link
+		 * #scale}, an {@link #angle} and a {@link #pivot}. Bones are the only objects which can be
+		 * used as a parent for other tweenable objects.
          *
          * @author Trixt0r
          */
@@ -143,15 +160,22 @@ public class Timeline {
             /**
              * Sets the given values for this bone.
              *
-             * @param x      the new position in x direction
-             * @param y      the new position in y direction
-             * @param angle  the new angle
+			 * @param x the new position in x direction
+			 * @param y the new position in y direction
+			 * @param angle the new angle
              * @param scaleX the new scale in x direction
              * @param scaleY the new scale in y direction
              * @param pivotX the new pivot in x direction
              * @param pivotY the new pivot in y direction
              */
-            public void set(float x, float y, float angle, float scaleX, float scaleY, float pivotX, float pivotY) {
+			public void set(
+					float x,
+					float y,
+					float angle,
+					float scaleX,
+					float scaleY,
+					float pivotX,
+					float pivotY) {
                 this.angle = angle;
                 this.position.set(x, y);
                 this.scale.set(scaleX, scaleY);
@@ -162,9 +186,9 @@ public class Timeline {
              * Sets the given values for this bone.
              *
              * @param position the new position
-             * @param angle    the new angle
-             * @param scale    the new scale
-             * @param pivot    the new pivot
+			 * @param angle the new angle
+			 * @param scale the new scale
+			 * @param pivot the new pivot
              */
             public void set(Point position, float angle, Point scale, Point pivot) {
                 this.set(position.x, position.y, angle, scale.x, scale.y, pivot.x, pivot.y);
@@ -199,14 +223,19 @@ public class Timeline {
             }
 
             public String toString() {
-                return getClass().getSimpleName() + "|position: " + position + ", scale: " + scale + ", angle: " + angle;
+				return getClass().getSimpleName()
+						+ "|position: "
+						+ position
+						+ ", scale: "
+						+ scale
+						+ ", angle: "
+						+ angle;
             }
         }
 
-
         /**
-         * Represents an object in a Spriter SCML file.
-         * A file has the same properties as a bone with an alpha and file extension.
+		 * Represents an object in a Spriter SCML file. A file has the same properties as a bone
+		 * with an alpha and file extension.
          *
          * @author Trixt0r
          */
@@ -215,18 +244,36 @@ public class Timeline {
             public final FileReference ref;
             public float alpha;
 
-            public Object(Point position, Point scale, Point pivot, float angle, float alpha, FileReference ref) {
+			public Object(
+					Point position,
+					Point scale,
+					Point pivot,
+					float angle,
+					float alpha,
+					FileReference ref) {
                 super(position, scale, pivot, angle);
                 this.alpha = alpha;
                 this.ref = ref;
             }
 
             public Object(Point position) {
-                this(position, new Point(1f, 1f), new Point(0f, 1f), 0f, 1f, new FileReference(-1, -1));
+				this(
+						position,
+						new Point(1f, 1f),
+						new Point(0f, 1f),
+						0f,
+						1f,
+						new FileReference(-1, -1));
             }
 
             public Object(Object object) {
-                this(object.position.copy(), object.scale.copy(), object.pivot.copy(), object.angle, object.alpha, object.ref);
+				this(
+						object.position.copy(),
+						object.scale.copy(),
+						object.pivot.copy(),
+						object.angle,
+						object.alpha,
+						object.ref);
             }
 
             public Object() {
@@ -239,24 +286,40 @@ public class Timeline {
              * @param object the object
              */
             public void set(Object object) {
-                this.set(object.position, object.angle, object.scale, object.pivot, object.alpha, object.ref);
+				this.set(
+						object.position,
+						object.angle,
+						object.scale,
+						object.pivot,
+						object.alpha,
+						object.ref);
             }
 
             /**
              * Sets the given values for this object.
              *
-             * @param x      the new position in x direction
-             * @param y      the new position in y direction
-             * @param angle  the new angle
+			 * @param x the new position in x direction
+			 * @param y the new position in y direction
+			 * @param angle the new angle
              * @param scaleX the new scale in x direction
              * @param scaleY the new scale in y direction
              * @param pivotX the new pivot in x direction
              * @param pivotY the new pivot in y direction
-             * @param alpha  the new alpha value
+			 * @param alpha the new alpha value
              * @param folder the new folder index
-             * @param file   the new file index
+			 * @param file the new file index
              */
-            public void set(float x, float y, float angle, float scaleX, float scaleY, float pivotX, float pivotY, float alpha, int folder, int file) {
+			public void set(
+					float x,
+					float y,
+					float angle,
+					float scaleX,
+					float scaleY,
+					float pivotX,
+					float pivotY,
+					float alpha,
+					int folder,
+					int file) {
                 super.set(x, y, angle, scaleX, scaleY, pivotX, pivotY);
                 this.alpha = alpha;
                 this.ref.folder = folder;
@@ -267,21 +330,41 @@ public class Timeline {
              * Sets the given values for this object.
              *
              * @param position the new position
-             * @param angle    the new angle
-             * @param scale    the new scale
-             * @param pivot    the new pivot
-             * @param alpha    the new alpha value
-             * @param fileRef  the new file reference
+			 * @param angle the new angle
+			 * @param scale the new scale
+			 * @param pivot the new pivot
+			 * @param alpha the new alpha value
+			 * @param fileRef the new file reference
              */
-            public void set(Point position, float angle, Point scale, Point pivot, float alpha, FileReference fileRef) {
-                this.set(position.x, position.y, angle, scale.x, scale.y, pivot.x, pivot.y, alpha, fileRef.folder, fileRef.file);
+			public void set(
+					Point position,
+					float angle,
+					Point scale,
+					Point pivot,
+					float alpha,
+					FileReference fileRef) {
+				this.set(
+						position.x,
+						position.y,
+						angle,
+						scale.x,
+						scale.y,
+						pivot.x,
+						pivot.y,
+						alpha,
+						fileRef.folder,
+						fileRef.file);
             }
 
             public String toString() {
-                return super.toString() + ", pivot: " + pivot + ", alpha: " + alpha + ", reference: " + ref;
+				return super.toString()
+						+ ", pivot: "
+						+ pivot
+						+ ", alpha: "
+						+ alpha
+						+ ", reference: "
+						+ ref;
             }
-
         }
     }
-
 }

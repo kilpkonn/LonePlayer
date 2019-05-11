@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.Content;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
@@ -15,23 +14,20 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInputProces
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
-
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class Game extends ApplicationAdapter {
 
     public static final String TITLE = "Lone Player";
+	public static Content res;
+	public static Settings settings;
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;
     private Music sound;
     private GameStateManager gsm;
-    public static Content res;
-    public static Settings settings;
     // private String readString;
-//
+	//
     // private Server aiServer;
     // private int aiPort = 9967;
     // private String aiIpAddress = "localhost";
@@ -74,7 +70,6 @@ public class Game extends ApplicationAdapter {
         // aiServer.setWaitingQue(true); // Use a listen queue
         // aiServer.startServer(); // Start the server
         // aiServer.registerServerListerner(new AiServerListener());
-
 
         // set up music player
         try {
@@ -134,7 +129,6 @@ public class Game extends ApplicationAdapter {
         GameStateManager.update(dt);
         GameStateManager.render();
         MyInput.update();
-
     }
 
     @Override
@@ -156,14 +150,14 @@ public class Game extends ApplicationAdapter {
         }
     }
 
-    public void pause() {
-    }
+	public void pause() {
+	}
 
-    public void resume() {
-    }
+	public void resume() {
+	}
 
-    public void setForegroundFPS(int value) {
-    }
+	public void setForegroundFPS(int value) {
+	}
 
     public Music getSound() {
         return sound;

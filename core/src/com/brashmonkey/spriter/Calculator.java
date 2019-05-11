@@ -1,38 +1,37 @@
 package com.brashmonkey.spriter;
 
-import static java.lang.Math.atan2;
-import static java.lang.Math.pow;
-import static java.lang.Math.toDegrees;
+import static java.lang.Math.*;
 
 /**
- * A utility class which provides methods to calculate Spriter specific issues,
- * like linear interpolation and rotation around a parent object.
- * Other interpolation types are coming with the next releases of Spriter.
+ * A utility class which provides methods to calculate Spriter specific issues, like linear
+ * interpolation and rotation around a parent object. Other interpolation types are coming with the
+ * next releases of Spriter.
  *
  * @author Trixt0r
  */
-
 public class Calculator {
 
-    public final static float PI = (float) Math.PI;
-    public final static float NO_SOLUTION = -1;
-    /**
-     * multiply by this to convert from radians to degrees
-     */
-    static public final float radiansToDegrees = 180f / PI;
-    static public final float radDeg = radiansToDegrees;
-    /**
-     * multiply by this to convert from degrees to radians
-     */
-    static public final float degreesToRadians = PI / 180;
-    static public final float degRad = degreesToRadians;
-    static private final int SIN_BITS = 14; // 16KB. Adjust for accuracy.
-    static private final int SIN_MASK = ~(-1 << SIN_BITS);
-    static private final int SIN_COUNT = SIN_MASK + 1;
-    static private final float radFull = PI * 2;
-    static private final float degFull = 360;
-    static private final float radToIndex = SIN_COUNT / radFull;
-    static private final float degToIndex = SIN_COUNT / degFull;
+	public static final float PI = (float) Math.PI;
+	public static final float NO_SOLUTION = -1;
+	/**
+	 * multiply by this to convert from radians to degrees
+	 */
+	public static final float radiansToDegrees = 180f / PI;
+
+	public static final float radDeg = radiansToDegrees;
+	/**
+	 * multiply by this to convert from degrees to radians
+	 */
+	public static final float degreesToRadians = PI / 180;
+
+	public static final float degRad = degreesToRadians;
+	private static final int SIN_BITS = 14; // 16KB. Adjust for accuracy.
+	private static final int SIN_MASK = ~(-1 << SIN_BITS);
+	private static final int SIN_COUNT = SIN_MASK + 1;
+	private static final float radFull = PI * 2;
+	private static final float degFull = 360;
+	private static final float radToIndex = SIN_COUNT / radFull;
+	private static final float degToIndex = SIN_COUNT / degFull;
 
     /**
      * Calculates the smallest difference between angle a and b.
@@ -75,8 +74,9 @@ public class Calculator {
      * @param a
      * @param b
      * @param c
-     * @param d
-     * @return the solution of the cubic function if it belongs [0, 1], {@link #NO_SOLUTION} otherwise.
+	 * @param d
+	 * @return the solution of the cubic function if it belongs [0, 1], {@link #NO_SOLUTION}
+     *     otherwise.
      */
     public static float solveCubic(float a, float b, float c, float d) {
         if (a == 0) return solveQuadratic(b, c, d);
@@ -132,8 +132,9 @@ public class Calculator {
      *
      * @param a
      * @param b
-     * @param c
-     * @return the solution for the quadratic function if it belongs [0, 1], {@link #NO_SOLUTION} otherwise.
+	 * @param c
+	 * @return the solution for the quadratic function if it belongs [0, 1], {@link #NO_SOLUTION}
+     *     otherwise.
      */
     public static float solveQuadratic(float a, float b, float c) {
         float squaredB = squared(b);
@@ -197,37 +198,35 @@ public class Calculator {
      */
     public static float acos(float x) {
         return (float) Math.acos(x);
-    }
+	}
 
-    /**
-     * Returns the sine in radians from a lookup table.
-     */
-    static public final float sin(float radians) {
+	/**
+	 * Returns the sine in radians from a lookup table.
+	 */
+	public static final float sin(float radians) {
         return Sin.table[(int) (radians * radToIndex) & SIN_MASK];
-    }
+	}
 
-    /**
-     * Returns the cosine in radians from a lookup table.
-     */
-    static public final float cos(float radians) {
+	/**
+	 * Returns the cosine in radians from a lookup table.
+	 */
+	public static final float cos(float radians) {
         return Sin.table[(int) ((radians + PI / 2) * radToIndex) & SIN_MASK];
-    }
+	}
 
-    /**
-     * Returns the sine in radians from a lookup table.
-     */
-    static public final float sinDeg(float degrees) {
+	/**
+	 * Returns the sine in radians from a lookup table.
+	 */
+	public static final float sinDeg(float degrees) {
         return Sin.table[(int) (degrees * degToIndex) & SIN_MASK];
-    }
+	}
 
-    /**
-     * Returns the cosine in radians from a lookup table.
-     */
-    static public final float cosDeg(float degrees) {
+	/** Returns the cosine in radians from a lookup table. */
+    public static final float cosDeg(float degrees) {
         return Sin.table[(int) ((degrees + 90) * degToIndex) & SIN_MASK];
     }
 
-    static private class Sin {
+    private static class Sin {
         static final float[] table = new float[SIN_COUNT];
 
         static {
@@ -237,5 +236,4 @@ public class Calculator {
                 table[(int) (i * degToIndex) & SIN_MASK] = (float) Math.sin(i * degreesToRadians);
         }
     }
-
 }

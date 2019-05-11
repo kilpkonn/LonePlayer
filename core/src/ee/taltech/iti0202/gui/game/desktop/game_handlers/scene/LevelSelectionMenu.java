@@ -2,68 +2,57 @@ package ee.taltech.iti0202.gui.game.desktop.game_handlers.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-
-import java.io.File;
-import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.*;
+
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class LevelSelectionMenu extends Scene {
 
-    private enum block {
-        MAP, ACT, EXIT, DIFFICULTY
-    }
     private Runnable backFunc;
-
     private LevelSelectionMenu.block currBlock;
-
     private GameButton backButton;
     private GameButton difficultyButton;
     private HashMap<GameButton, String> actButtons = new HashMap<>();
     private HashMap<GameButton, String> mapButtons = new HashMap<>();
     private HashMap<GameButton, LevelSelectionMenu.block> buttonType;
-
     private String selectedAct = "";
     private String selectedMap;
     private boolean showDevMaps = Game.settings.ENABLE_DEV_MAPS;
     private B2DVars.gameDifficulty difficulty = B2DVars.gameDifficulty.HARD;
-    //private
 
     public LevelSelectionMenu(OrthographicCamera cam, Runnable backFunc) {
         super(cam);
         this.backFunc = backFunc;
 
         backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.2f - 40);
-        difficultyButton = new GameButton(difficulty.toString(), V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f - 40);
+		difficultyButton =
+				new GameButton(difficulty.toString(), V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f - 40);
 
         buttons = new HashSet<>(Arrays.asList(backButton, difficultyButton));
 
-        buttonType = new HashMap<GameButton, block>() {{
-            put(backButton, block.EXIT);
-            put(difficultyButton, block.DIFFICULTY);
-        }};
+		buttonType =
+				new HashMap<GameButton, block>() {
+					{
+						put(backButton, block.EXIT);
+						put(difficultyButton, block.DIFFICULTY);
+					}
+				};
 
         updateActs();
 
         for (GameButton button : buttons) played.put(button, false);
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
-
     }
+	// private
 
     @Override
     public void update(float dt) {
@@ -71,10 +60,14 @@ public class LevelSelectionMenu extends Scene {
         mouseInWorld2D.y = Gdx.input.getY();
 
         String actChanged = "";
-        for (GameButton button : buttons){
+		for (GameButton button : buttons) {
             button.update(mouseInWorld2D);
-            if (button.hoverOver() && buttonType.get(button) == block.ACT && !selectedAct.equals(actButtons.get(button))) actChanged = actButtons.get(button);
-            if (button.hoverOver() && buttonType.get(button) == block.MAP) selectedMap = mapButtons.get(button);
+			if (button.hoverOver()
+					&& buttonType.get(button) == block.ACT
+					&& !selectedAct.equals(actButtons.get(button)))
+				actChanged = actButtons.get(button);
+			if (button.hoverOver() && buttonType.get(button) == block.MAP)
+				selectedMap = mapButtons.get(button);
         }
         if (showDevMaps != Game.settings.ENABLE_DEV_MAPS) updateActs();
         if (!actChanged.equals("")) setSelectedAct(actChanged);
@@ -87,7 +80,8 @@ public class LevelSelectionMenu extends Scene {
                 switch (currBlock) {
                     case MAP:
                         playSoundOnce("sounds/menu_click.wav", 0.5f);
-                        GameStateManager.pushState(GameStateManager.State.PLAY, selectedAct, selectedMap, difficulty);
+						GameStateManager.pushState(
+								GameStateManager.State.PLAY, selectedAct, selectedMap, difficulty);
                         break;
                     case DIFFICULTY:
                         playSoundOnce("sounds/menu_click.wav", 0.5f);
@@ -124,9 +118,11 @@ public class LevelSelectionMenu extends Scene {
         Collections.sort(maps);
 
         for (int i = 0; i < maps.size(); i++) {
-            GameButton btn = new GameButton(maps.get(i)
-                    .replace(".tmx", "")
-                    .replace("_", " "), V_WIDTH * 2 / 3f, V_HEIGHT / 2f - i * 40);
+			GameButton btn =
+					new GameButton(
+							maps.get(i).replace(".tmx", "").replace("_", " "),
+							V_WIDTH * 2 / 3f,
+							V_HEIGHT / 2f - i * 40);
             mapButtons.put(btn, maps.get(i));
             buttonType.put(btn, block.MAP);
         }
@@ -145,7 +141,9 @@ public class LevelSelectionMenu extends Scene {
         List<String> acts = loadActs();
         Collections.sort(acts);
         for (int i = 0; i < acts.size(); i++) {
-            GameButton btn = new GameButton(acts.get(i).replace("_", " "), V_WIDTH / 3f, V_HEIGHT / 2f - i * 40);
+			GameButton btn =
+					new GameButton(
+							acts.get(i).replace("_", " "), V_WIDTH / 3f, V_HEIGHT / 2f - i * 40);
             actButtons.put(btn, acts.get(i));
             buttonType.put(btn, block.ACT);
         }
@@ -153,12 +151,17 @@ public class LevelSelectionMenu extends Scene {
     }
 
     private List<String> loadMapNames(final String act) {
-        String[] maps = new File(PATH + "maps/levels/" + act).list(new FilenameFilter() {
-            @Override
-            public boolean accept(File file, String s) {
-                return !new File(file, s).isDirectory() && (!act.equals("DEV") || Game.settings.ENABLE_DEV_MAPS);
-            }
-        });
+		String[] maps =
+				new File(PATH + "maps/levels/" + act)
+						.list(
+								new FilenameFilter() {
+									@Override
+									public boolean accept(File file, String s) {
+										return !new File(file, s).isDirectory()
+												&& (!act.equals("DEV")
+												|| Game.settings.ENABLE_DEV_MAPS);
+									}
+								});
         if (maps != null) {
             return Arrays.asList(maps);
         }
@@ -166,12 +169,17 @@ public class LevelSelectionMenu extends Scene {
     }
 
     private List<String> loadActs() {
-        String[] acts = new File(PATH + "maps/levels/").list(new FilenameFilter() {
-            @Override
-            public boolean accept(File file, String s) {
-                return new File(file, s).isDirectory() && (!s.equals("DEV") || Game.settings.ENABLE_DEV_MAPS);
-            }
-        });
+		String[] acts =
+				new File(PATH + "maps/levels/")
+						.list(
+								new FilenameFilter() {
+									@Override
+									public boolean accept(File file, String s) {
+										return new File(file, s).isDirectory()
+												&& (!s.equals("DEV")
+												|| Game.settings.ENABLE_DEV_MAPS);
+									}
+								});
         if (acts != null) {
             return Arrays.asList(acts);
         }
@@ -189,4 +197,11 @@ public class LevelSelectionMenu extends Scene {
     protected void updateCurrentBlock(GameButton button) {
         currBlock = buttonType.get(button);
     }
+
+	private enum block {
+		MAP,
+		ACT,
+		EXIT,
+		DIFFICULTY
+	}
 }

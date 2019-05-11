@@ -5,9 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Represents an entity of a Spriter SCML file.
- * An entity holds {@link Animation}s, an {@link #id}, a {@link #name}.
- * {@link #characterMaps} and {@link #objectInfos} may be empty.
+ * Represents an entity of a Spriter SCML file. An entity holds {@link Animation}s, an {@link #id},
+ * a {@link #name}. {@link #characterMaps} and {@link #objectInfos} may be empty.
  *
  * @author Trixt0r
  */
@@ -74,8 +73,7 @@ public class Entity {
      * @return true if the given animation is in this entity, false otherwise.
      */
     public boolean containsAnimation(Animation anim) {
-        for (Animation a : this.animations)
-            if (a == anim) return true;
+		for (Animation a : this.animations) if (a == anim) return true;
         return false;
     }
 
@@ -99,8 +97,7 @@ public class Entity {
      * @return the character map or null if no character map exists with the given name
      */
     public CharacterMap getCharacterMap(String name) {
-        for (CharacterMap map : this.characterMaps)
-            if (map.name.equals(name)) return map;
+		for (CharacterMap map : this.characterMaps) if (map.name.equals(name)) return map;
         return null;
     }
 
@@ -130,8 +127,7 @@ public class Entity {
      * @return object info or null if no object info exists with the given name
      */
     public ObjectInfo getInfo(String name) {
-        for (ObjectInfo info : this.objectInfos)
-            if (info.name.equals(name)) return info;
+		for (ObjectInfo info : this.objectInfos) if (info.name.equals(name)) return info;
         return null;
     }
 
@@ -151,14 +147,11 @@ public class Entity {
     public String toString() {
         String toReturn = getClass().getSimpleName() + "|[id: " + id + ", name: " + name + "]";
         toReturn += "Object infos:\n";
-        for (ObjectInfo info : this.objectInfos)
-            toReturn += "\n" + info;
+		for (ObjectInfo info : this.objectInfos) toReturn += "\n" + info;
         toReturn += "Character maps:\n";
-        for (CharacterMap map : this.characterMaps)
-            toReturn += "\n" + map;
+		for (CharacterMap map : this.characterMaps) toReturn += "\n" + map;
         toReturn += "Animations:\n";
-        for (Animation animaton : this.animations)
-            toReturn += "\n" + animaton;
+		for (Animation animaton : this.animations) toReturn += "\n" + animaton;
         toReturn += "]";
         return toReturn;
     }
@@ -169,7 +162,11 @@ public class Entity {
      * @author Trixt0r
      */
     public enum ObjectType {
-        Sprite, Bone, Box, Point, Skin;
+		Sprite,
+		Bone,
+		Box,
+		Point,
+		Skin;
 
         /**
          * Returns the object type for the given name
@@ -187,9 +184,9 @@ public class Entity {
     }
 
     /**
-     * Represents the object info in a Spriter SCML file.
-     * An object info holds a {@link #type} and a {@link #name}.
-     * If the type is a Sprite it holds a list of frames. Otherwise it has a {@link #size} for debug drawing purposes.
+	 * Represents the object info in a Spriter SCML file. An object info holds a {@link #type} and a
+	 * {@link #name}. If the type is a Sprite it holds a list of frames. Otherwise it has a {@link
+	 * #size} for debug drawing purposes.
      *
      * @author Trixt0r
      */
@@ -220,9 +217,8 @@ public class Entity {
     }
 
     /**
-     * Represents a Spriter SCML character map.
-     * A character map maps {@link FileReference}s to {@link FileReference}s.
-     * It holds an {@link CharacterMap#id} and a {@link CharacterMap#name}.
+	 * Represents a Spriter SCML character map. A character map maps {@link FileReference}s to
+	 * {@link FileReference}s. It holds an {@link CharacterMap#id} and a {@link CharacterMap#name}.
      *
      * @author Trixt0r
      */
@@ -241,12 +237,12 @@ public class Entity {
          * Returns the mapped reference for the given key.
          *
          * @param key the key of the reference
-         * @return The mapped reference if the key is in this map, otherwise the given key itself is returned.
+		 * @return The mapped reference if the key is in this map, otherwise the given key itself is
+		 *     returned.
          */
         public FileReference get(FileReference key) {
             if (!super.containsKey(key)) return key;
             else return super.get(key);
         }
     }
-
 }

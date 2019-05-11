@@ -13,10 +13,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * This class parses a SCML file and creates a {@link Data} instance.
- * If you want to keep track of what is going on during the build process of the objects parsed from the SCML file,
- * you could extend this class and override the load*() methods for pre or post processing.
- * This could be e.g. useful for a loading screen which responds to the current building or parsing state.
+ * This class parses a SCML file and creates a {@link Data} instance. If you want to keep track of
+ * what is going on during the build process of the objects parsed from the SCML file, you could
+ * extend this class and override the load*() methods for pre or post processing. This could be e.g.
+ * useful for a loading screen which responds to the current building or parsing state.
  *
  * @author Trixt0r
  */
@@ -78,9 +78,14 @@ public class SCMLReader {
     protected Data load(Element root) {
         ArrayList<Element> folders = root.getChildrenByName("folder");
         ArrayList<Element> entities = root.getChildrenByName("entity");
-        data = new Data(root.get("scml_version"), root.get("generator"), root.get("generator_version"),
-                Data.PixelMode.get(root.getInt("pixel_mode", 0)),
-                folders.size(), entities.size());
+		data =
+				new Data(
+						root.get("scml_version"),
+						root.get("generator"),
+						root.get("generator_version"),
+						Data.PixelMode.get(root.getInt("pixel_mode", 0)),
+						folders.size(),
+						entities.size());
         loadFolders(folders);
         loadEntities(entities);
         return data;
@@ -95,7 +100,8 @@ public class SCMLReader {
         for (int i = 0; i < folders.size(); i++) {
             Element repo = folders.get(i);
             ArrayList<Element> files = repo.getChildrenByName("file");
-            Folder folder = new Folder(repo.getInt("id"), repo.get("name", "no_name_" + i), files.size());
+			Folder folder =
+					new Folder(repo.getInt("id"), repo.get("name", "no_name_" + i), files.size());
             loadFiles(files, folder);
             data.addFolder(folder);
         }
@@ -104,15 +110,18 @@ public class SCMLReader {
     /**
      * Iterates through the given files and adds them to the given {@link Folder} object.
      *
-     * @param files  a list of files to load
+	 * @param files a list of files to load
      * @param folder the folder containing the files
      */
     protected void loadFiles(ArrayList<Element> files, Folder folder) {
         for (int j = 0; j < files.size(); j++) {
             Element f = files.get(j);
-            File file = new File(f.getInt("id"), f.get("name"),
-                    new Dimension(f.getInt("width", 0), f.getInt("height", 0)),
-                    new Point(f.getFloat("pivot_x", 0f), f.getFloat("pivot_y", 1f)));
+			File file =
+					new File(
+							f.getInt("id"),
+							f.get("name"),
+							new Dimension(f.getInt("width", 0), f.getInt("height", 0)),
+							new Point(f.getFloat("pivot_x", 0f), f.getFloat("pivot_y", 1f)));
 
             folder.addFile(file);
         }
@@ -129,8 +138,13 @@ public class SCMLReader {
             ArrayList<Element> infos = e.getChildrenByName("obj_info");
             ArrayList<Element> charMaps = e.getChildrenByName("character_map");
             ArrayList<Element> animations = e.getChildrenByName("animation");
-            Entity entity = new Entity(e.getInt("id"), e.get("name"),
-                    animations.size(), charMaps.size(), infos.size());
+			Entity entity =
+					new Entity(
+							e.getInt("id"),
+							e.get("name"),
+							animations.size(),
+							charMaps.size(),
+							infos.size());
             data.addEntity(entity);
             loadObjectInfos(infos, entity);
             loadCharacterMaps(charMaps, entity);
@@ -141,15 +155,17 @@ public class SCMLReader {
     /**
      * Iterates through the given object infos and adds them to the given {@link Entity} object.
      *
-     * @param infos  a list of infos to load
+	 * @param infos a list of infos to load
      * @param entity the entity containing the infos
      */
     protected void loadObjectInfos(ArrayList<Element> infos, Entity entity) {
         for (int i = 0; i < infos.size(); i++) {
             Element info = infos.get(i);
-            ObjectInfo objInfo = new ObjectInfo(info.get("name", "info" + i),
-                    ObjectType.getObjectInfoFor(info.get("type", "")),
-                    new Dimension(info.getFloat("w", 0), info.getFloat("h", 0)));
+			ObjectInfo objInfo =
+					new ObjectInfo(
+							info.get("name", "info" + i),
+							ObjectType.getObjectInfoFor(info.get("type", "")),
+							new Dimension(info.getFloat("w", 0), info.getFloat("h", 0)));
             entity.addInfo(objInfo);
             Element frames = info.getChildByName("frames");
             if (frames == null) continue;
@@ -166,21 +182,25 @@ public class SCMLReader {
     /**
      * Iterates through the given character maps and adds them to the given {@link Entity} object.
      *
-     * @param maps   a list of character maps to load
+	 * @param maps a list of character maps to load
      * @param entity the entity containing the character maps
      */
     protected void loadCharacterMaps(ArrayList<Element> maps, Entity entity) {
         for (int i = 0; i < maps.size(); i++) {
             Element map = maps.get(i);
-            CharacterMap charMap = new CharacterMap(map.getInt("id"), map.getAttribute("name", "charMap" + i));
+			CharacterMap charMap =
+					new CharacterMap(map.getInt("id"), map.getAttribute("name", "charMap" + i));
             entity.addCharacterMap(charMap);
             ArrayList<Element> mappings = map.getChildrenByName("map");
             for (int i1 = 0; i1 < mappings.size(); i1++) {
                 Element mapping = mappings.get(i1);
                 int folder = mapping.getInt("folder");
                 int file = mapping.getInt("file");
-                charMap.put(new FileReference(folder, file),
-                        new FileReference(mapping.getInt("target_folder", folder), mapping.getInt("target_file", file)));
+				charMap.put(
+						new FileReference(folder, file),
+						new FileReference(
+								mapping.getInt("target_folder", folder),
+								mapping.getInt("target_file", file)));
             }
         }
     }
@@ -189,7 +209,7 @@ public class SCMLReader {
      * Iterates through the given animations and adds them to the given {@link Entity} object.
      *
      * @param animations a list of animations to load
-     * @param entity     the entity containing the animations maps
+	 * @param entity the entity containing the animations maps
      */
     protected void loadAnimations(ArrayList<Element> animations, Entity entity) {
         for (int i = 0; i < animations.size(); i++) {
@@ -197,9 +217,14 @@ public class SCMLReader {
             ArrayList<Element> timelines = a.getChildrenByName("timeline");
             Element mainline = a.getChildByName("mainline");
             ArrayList<Element> mainlineKeys = mainline.getChildrenByName("key");
-            Animation animation = new Animation(new Mainline(mainlineKeys.size()),
-                    a.getInt("id"), a.get("name"), a.getInt("length"),
-                    a.getBoolean("looping", true), timelines.size());
+			Animation animation =
+					new Animation(
+							new Mainline(mainlineKeys.size()),
+							a.getInt("id"),
+							a.get("name"),
+							a.getInt("length"),
+							a.getBoolean("looping", true),
+							timelines.size());
             entity.addAnimation(animation);
             loadMainlineKeys(mainlineKeys, animation.mainline);
             loadTimelines(timelines, animation, entity);
@@ -220,33 +245,53 @@ public class SCMLReader {
             ArrayList<Element> boneRefs = k.getChildrenByName("bone_ref");
             Curve curve = new Curve();
             curve.setType(Curve.getType(k.get("curve_type", "linear")));
-            curve.constraints.set(k.getFloat("c1", 0f), k.getFloat("c2", 0f), k.getFloat("c3", 0f), k.getFloat("c4", 0f));
-            Mainline.Key key = new Mainline.Key(k.getInt("id"), k.getInt("time", 0), curve,
-                    boneRefs.size(), objectRefs.size());
+			curve.constraints.set(
+					k.getFloat("c1", 0f),
+					k.getFloat("c2", 0f),
+					k.getFloat("c3", 0f),
+					k.getFloat("c4", 0f));
+			Mainline.Key key =
+					new Mainline.Key(
+							k.getInt("id"),
+							k.getInt("time", 0),
+							curve,
+							boneRefs.size(),
+							objectRefs.size());
             main.addKey(key);
             loadRefs(objectRefs, boneRefs, key);
         }
     }
 
     /**
-     * Iterates through the given bone and object references and adds them to the given {@link Mainline.Key} object.
+	 * Iterates through the given bone and object references and adds them to the given {@link
+	 * Mainline.Key} object.
      *
      * @param objectRefs a list of object references
-     * @param boneRefs   a list if bone references
-     * @param key        the mainline key
+	 * @param boneRefs a list if bone references
+	 * @param key the mainline key
      */
-    protected void loadRefs(ArrayList<Element> objectRefs, ArrayList<Element> boneRefs, Mainline.Key key) {
+	protected void loadRefs(
+			ArrayList<Element> objectRefs, ArrayList<Element> boneRefs, Mainline.Key key) {
         for (int i = 0; i < boneRefs.size(); i++) {
             Element e = boneRefs.get(i);
-            BoneRef boneRef = new BoneRef(e.getInt("id"), e.getInt("timeline"),
-                    e.getInt("key"), key.getBoneRef(e.getInt("parent", -1)));
+			BoneRef boneRef =
+					new BoneRef(
+							e.getInt("id"),
+							e.getInt("timeline"),
+							e.getInt("key"),
+							key.getBoneRef(e.getInt("parent", -1)));
             key.addBoneRef(boneRef);
         }
 
         for (int i = 0; i < objectRefs.size(); i++) {
             Element o = objectRefs.get(i);
-            ObjectRef objectRef = new ObjectRef(o.getInt("id"), o.getInt("timeline"),
-                    o.getInt("key"), key.getBoneRef(o.getInt("parent", -1)), o.getInt("z_index", 0));
+			ObjectRef objectRef =
+					new ObjectRef(
+							o.getInt("id"),
+							o.getInt("timeline"),
+							o.getInt("key"),
+							key.getBoneRef(o.getInt("parent", -1)),
+							o.getInt("z_index", 0));
             key.addObjectRef(objectRef);
         }
         Arrays.sort(key.objectRefs);
@@ -257,7 +302,7 @@ public class SCMLReader {
      *
      * @param timelines a list of timelines
      * @param animation the animation containing the timelines
-     * @param entity    entity for assigning the timeline an object info
+	 * @param entity entity for assigning the timeline an object info
      */
     protected void loadTimelines(ArrayList<Element> timelines, Animation animation, Entity entity) {
         for (int i = 0; i < timelines.size(); i++) {
@@ -276,7 +321,7 @@ public class SCMLReader {
     /**
      * Iterates through the given timeline keys and adds them to the given {@link Timeline} object.
      *
-     * @param keys     a list if timeline keys
+	 * @param keys a list if timeline keys
      * @param timeline the timeline containing the keys
      */
     protected void loadTimelineKeys(ArrayList<Element> keys, Timeline timeline) {
@@ -284,14 +329,25 @@ public class SCMLReader {
             Element k = keys.get(i);
             Curve curve = new Curve();
             curve.setType(Curve.getType(k.get("curve_type", "linear")));
-            curve.constraints.set(k.getFloat("c1", 0f), k.getFloat("c2", 0f), k.getFloat("c3", 0f), k.getFloat("c4", 0f));
-            Timeline.Key key = new Timeline.Key(k.getInt("id"), k.getInt("time", 0), k.getInt("spin", 1), curve);
+			curve.constraints.set(
+					k.getFloat("c1", 0f),
+					k.getFloat("c2", 0f),
+					k.getFloat("c3", 0f),
+					k.getFloat("c4", 0f));
+			Timeline.Key key =
+					new Timeline.Key(
+							k.getInt("id"), k.getInt("time", 0), k.getInt("spin", 1), curve);
             Element obj = k.getChildByName("bone");
             if (obj == null) obj = k.getChildByName("object");
 
             Point position = new Point(obj.getFloat("x", 0f), obj.getFloat("y", 0f));
             Point scale = new Point(obj.getFloat("scale_x", 1f), obj.getFloat("scale_y", 1f));
-            Point pivot = new Point(obj.getFloat("pivot_x", 0f), obj.getFloat("pivot_y", (timeline.objectInfo.type == ObjectType.Bone) ? .5f : 1f));
+			Point pivot =
+					new Point(
+							obj.getFloat("pivot_x", 0f),
+							obj.getFloat(
+									"pivot_y",
+									(timeline.objectInfo.type == ObjectType.Bone) ? .5f : 1f));
             float angle = obj.getFloat("angle", 0f), alpha = 1f;
             int folder = -1, file = -1;
             if (obj.getName().equals("object")) {
@@ -300,15 +356,32 @@ public class SCMLReader {
                     folder = obj.getInt("folder", -1);
                     file = obj.getInt("file", -1);
                     File f = data.getFolder(folder).getFile(file);
-                    pivot = new Point(obj.getFloat("pivot_x", f.pivot.x), obj.getFloat("pivot_y", f.pivot.y));
+					pivot =
+							new Point(
+									obj.getFloat("pivot_x", f.pivot.x),
+									obj.getFloat("pivot_y", f.pivot.y));
                     timeline.objectInfo.size.set(f.size);
                 }
             }
             Timeline.Key.Object object;
             if (obj.getName().equals("bone"))
-                object = new Timeline.Key.Object(position, scale, pivot, angle, alpha, new FileReference(folder, file));
+				object =
+						new Timeline.Key.Object(
+								position,
+								scale,
+								pivot,
+								angle,
+								alpha,
+								new FileReference(folder, file));
             else
-                object = new Timeline.Key.Object(position, scale, pivot, angle, alpha, new FileReference(folder, file));
+				object =
+						new Timeline.Key.Object(
+								position,
+								scale,
+								pivot,
+								angle,
+								alpha,
+								new FileReference(folder, file));
             key.setObject(object);
             timeline.addKey(key);
         }
@@ -322,6 +395,4 @@ public class SCMLReader {
     public Data getData() {
         return data;
     }
-
 }
-

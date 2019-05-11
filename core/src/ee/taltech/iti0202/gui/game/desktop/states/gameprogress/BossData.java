@@ -4,23 +4,26 @@ import com.google.gson.annotations.SerializedName;
 
 public class BossData {
 
-    public BossData(String type, int size, float locationX, float locationY, boolean decider) {
-        this.type = type;
-        this.size = size;
-        this.locationX = locationX;
-        this.locationY = locationY;
-        this.decider = decider;
-    }
-
     @SerializedName("type")
     public String type;
+
     @SerializedName("size")
     public int size;
-    @SerializedName("location_x")
+
+	@SerializedName("location_x")
     public float locationX;
-    @SerializedName("location_y")
+
+	@SerializedName("location_y")
     public float locationY;
-    @SerializedName("decider")
+
+	@SerializedName("decider")
     public boolean decider;
 
+	public BossData(String type, int size, float locationX, float locationY, boolean decider) {
+		this.type = type;
+		this.size = size;
+		this.locationX = locationX;
+		this.locationY = locationY;
+		this.decider = decider;
+	}
 }

@@ -7,11 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 
 import java.util.HashMap;
 import java.util.HashSet;
-
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
 
@@ -42,8 +41,7 @@ public abstract class Scene {
         mouseInWorld2D.x = Gdx.input.getX();
         mouseInWorld2D.y = Gdx.input.getY();
 
-        for (GameButton button : buttons)
-            button.update(mouseInWorld2D);
+		for (GameButton button : buttons) button.update(mouseInWorld2D);
     }
 
     public void render(SpriteBatch sb) {

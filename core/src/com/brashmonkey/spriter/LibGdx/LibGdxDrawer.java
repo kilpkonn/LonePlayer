@@ -1,6 +1,5 @@
 package com.brashmonkey.spriter.LibGdx;
 
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -8,12 +7,12 @@ import com.brashmonkey.spriter.Drawer;
 import com.brashmonkey.spriter.Loader;
 import com.brashmonkey.spriter.Timeline.Key.Object;
 
-public class LibGdxDrawer extends Drawer<Sprite>{
+public class LibGdxDrawer extends Drawer<Sprite> {
 
     SpriteBatch batch;
     ShapeRenderer renderer;
 
-    public LibGdxDrawer(Loader<Sprite> loader, SpriteBatch batch, ShapeRenderer renderer){
+	public LibGdxDrawer(Loader<Sprite> loader, SpriteBatch batch, ShapeRenderer renderer) {
         super(loader);
         this.batch = batch;
         this.renderer = renderer;

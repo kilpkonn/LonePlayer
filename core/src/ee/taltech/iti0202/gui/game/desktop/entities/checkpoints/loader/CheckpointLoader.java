@@ -2,18 +2,11 @@ package ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.loader;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
-
+import com.badlogic.gdx.physics.box2d.*;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENTSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class CheckpointLoader {
 

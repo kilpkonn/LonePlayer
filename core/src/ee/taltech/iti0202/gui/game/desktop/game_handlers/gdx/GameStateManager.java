@@ -1,7 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx;
 
-import java.util.Stack;
-
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.GameState;
@@ -9,14 +7,12 @@ import ee.taltech.iti0202.gui.game.desktop.states.Menu;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
+import java.util.Stack;
+
 public class GameStateManager {
 
     private static Game game;
     private static Stack<GameState> gameStates;
-
-    public enum State {
-        PLAY, MENU
-    }
 
     public GameStateManager(Game newGame) {
         game = newGame;
@@ -52,7 +48,8 @@ public class GameStateManager {
         return null;
     }
 
-    private static GameState getState(State state, String act, String map, B2DVars.gameDifficulty difficulty) {
+	private static GameState getState(
+			State state, String act, String map, B2DVars.gameDifficulty difficulty) {
         if (state == State.PLAY) {
             return new Play(act, map, difficulty);
         }
@@ -74,7 +71,8 @@ public class GameStateManager {
         gameStates.push(getState(state, progress));
     }
 
-    public static void pushState(State state, String act, String map, B2DVars.gameDifficulty difficulty) {
+	public static void pushState(
+			State state, String act, String map, B2DVars.gameDifficulty difficulty) {
         gameStates.push(getState(state, act, map, difficulty));
     }
 
@@ -82,4 +80,9 @@ public class GameStateManager {
         GameState g = gameStates.pop();
         g.dispose();
     }
+
+	public enum State {
+		PLAY,
+		MENU
+	}
 }

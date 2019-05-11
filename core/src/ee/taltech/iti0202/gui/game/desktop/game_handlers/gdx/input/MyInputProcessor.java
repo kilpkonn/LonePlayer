@@ -45,7 +45,7 @@ public class MyInputProcessor extends InputAdapter {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        //MyInput.setMouseLoc(screenX, screenY);
+		// MyInput.setMouseLoc(screenX, screenY);
         return true;
     }
 }
