@@ -15,10 +15,13 @@ import ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader.WeaponLoader;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 import lombok.Data;
 import lombok.ToString;
+
+import java.util.Random;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound.playSoundOnce;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
@@ -36,10 +39,12 @@ public class PlayerHandler implements Handler {
     private Vector2 current_force = new Vector2(0, 0);
     private boolean newPlayer = true;
     private int gracePeriod = 60;
+    private int stepTime = 0;
     private int selectedWeapon = 0;
     private GameProgress gameProgress;
     private Draw draw;
     private MyContactListener cl;
+    private static final Random RANDOM = new Random();
 
     public PlayerHandler(
             Play play, SpriteBatch sb, GameProgress gameProgress, MyContactListener cl, Draw draw) {
@@ -60,6 +65,7 @@ public class PlayerHandler implements Handler {
             // player jump / double jump / dash
             if (MyInput.isPressed(Game.settings.JUMP)) {
                 if (cl.isPlayerOnGround()) {
+                    Sound.playSoundOnce("sounds/jump/flaunch.ogg", 0.07f);
                     player.getBody()
                             .applyLinearImpulse(
                                     new Vector2(0, PLAYER_DASH_FORCE_UP),
@@ -67,6 +73,7 @@ public class PlayerHandler implements Handler {
                                     true); // .applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
                     player.setAnimation(Player.PlayerAnimation.JUMP);
                 } else if (cl.getWallJump() != 0) {
+                    Sound.playSoundOnce("sounds/jump/flaunch.ogg", 0.07f);
                     System.out.println("Walljump");
                     player.getBody()
                             .applyLinearImpulse(
@@ -77,6 +84,7 @@ public class PlayerHandler implements Handler {
                                     true);
                     cl.setWallJump(0);
                 } else if (cl.isDoubleJump()) {
+                    Sound.playSoundOnce("sounds/jump/flaunch.ogg", 0.07f);
                     System.out.println("Double jump");
                     player.getBody()
                             .applyLinearImpulse(
@@ -88,6 +96,15 @@ public class PlayerHandler implements Handler {
 
             // player move left
             if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
+                if (cl.isPlayerOnGround()) {
+                    if (stepTime == 0) {
+                        playSoundOnce(
+                                "sounds/footsteps/Footstep_Dirt_0" + RANDOM.nextInt(9) + ".ogg", 0.1f);
+                        stepTime = 10;
+                    } else {
+                        stepTime--;
+                    }
+                }
                 if (current_force.x > -MAX_SPEED) {
                     if (cl.isPlayerOnGround()) {
                         player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
@@ -102,6 +119,7 @@ public class PlayerHandler implements Handler {
             // player dash left
             if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
                 if (!cl.isPlayerOnGround() && cl.isDash()) {
+                    Sound.playSoundOnce("sounds/jump/slimeball.ogg", 0.07f);
                     current_force = player.getBody().getLinearVelocity();
                     if (current_force.x > 0) {
                         player.getBody()
@@ -122,6 +140,15 @@ public class PlayerHandler implements Handler {
 
             // player move right
             if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
+                if (cl.isPlayerOnGround()) {
+                    if (stepTime == 0) {
+                        playSoundOnce(
+                                "sounds/footsteps/Footstep_Dirt_0" + RANDOM.nextInt(9) + ".ogg", 0.1f);
+                        stepTime = 10;
+                    } else {
+                        stepTime--;
+                    }
+                }
                 if (current_force.x < MAX_SPEED) {
                     if (cl.isPlayerOnGround()) {
                         player.setAnimation(Player.PlayerAnimation.RUN);
@@ -136,6 +163,7 @@ public class PlayerHandler implements Handler {
             // player dash right
             if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
                 if (!cl.isPlayerOnGround() && cl.isDash()) {
+                    Sound.playSoundOnce("sounds/jump/slimeball.ogg", 0.07f);
                     if (current_force.x < 0) {
                         player.getBody()
                                 .applyLinearImpulse(
@@ -206,11 +234,10 @@ public class PlayerHandler implements Handler {
                 }
             }
 
-            System.out.println(selectedWeapon);
-
             if (MyInput.isMouseDown(Game.settings.SHOOT)
                     && player.getWeapon() != null
                     && player.getWeapon().canFire()) {
+                playSoundOnce("sounds/jumpland.wav");
                 player.getWeapon().fire();
                 Bullet bullet =
                         BulletLoader.bulletLoader(
@@ -241,12 +268,13 @@ public class PlayerHandler implements Handler {
         } else if (getGracePeriod() == 0) {
             if (cl.getDeathState() == 2) {
                 player.setHealth(player.getHealth() - gotHitBySnek * 10);
-                playSoundOnce("sounds/sfx_deathscream_alien1.wav");
+                playSoundOnce("sounds/aww/aw0" + new Random().nextInt(6) + ".ogg");
             }
             if (cl.getDeathState() == 3) {
                 if (!isNewPlayer()) player.setHealth(0); // TODO: Fix instant death on load game
             } else {
-                playSoundOnce("sounds/sfx_damage_hit2.wav", 0.1f);
+                String a = new Random().nextBoolean() ? "a" : "b";
+                playSoundOnce("sounds/hit/sword-1" + a + ".ogg", 0.05f);
                 player.setHealth(player.getHealth() - gotHitBySnek);
             }
             if (player.getHealth() <= 0) {

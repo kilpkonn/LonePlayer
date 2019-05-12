@@ -8,11 +8,13 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
@@ -96,6 +98,7 @@ public class Player extends SpriteAnimation {
 
     public void onLanded(Vector2 velocity, Boolean grounded) {
         // System.out.println(Math.abs(velocity.x));
+
         if (doneDmg.size() < 10) {
             doneDmg.add(new Vector2(velocity.x, velocity.y));
         } else {
@@ -120,6 +123,7 @@ public class Player extends SpriteAnimation {
                                             / DMG_ON_LANDING
                                             * DMG_MULTIPLIER);
                 }
+                Sound.playSoundOnce("sounds/jump/Jump " + new Random().nextInt(3) + ".ogg", 0.1f);
                 health -= Math.abs(velocity.y / 2);
                 health = Math.max(0, health);
             }
@@ -127,6 +131,7 @@ public class Player extends SpriteAnimation {
                 // body.applyForceToCenter(new Vector2(PLAYER_SPEED * velocity.x /
                 // Math.abs(velocity.x), 0),
                 // true); // Change to impulse?
+                Sound.playSoundOnce("sounds/jump/fall.ogg", 0.1f);
                 setAnimation(PlayerAnimation.ROLL2, true);
                 if (Math.abs(velocity.y) < ROLL_ON_LANDING_SPEED) {
                     health -= Math.abs(velocity.y / 2);

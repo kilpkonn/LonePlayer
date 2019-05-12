@@ -10,6 +10,9 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
+
+        //B2DVars.PATH = "assets/";
+
         final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
         Settings settings = new Settings().load(PATH + "settings/settings.json");
@@ -27,7 +30,7 @@ public class DesktopLauncher {
         config.width = V_WIDTH * SCALE;
         config.samples = 3;
         config.forceExit = true;
-        config.fullscreen = false;
+        config.fullscreen = true;
         config.height = V_HEIGHT * SCALE;
         // config.foregroundFPS = 300; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized

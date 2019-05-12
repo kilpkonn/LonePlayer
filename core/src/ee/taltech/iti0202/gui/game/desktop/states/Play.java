@@ -127,7 +127,7 @@ public class Play extends GameState {
                 game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/wind1.wav")));
                 game.getSound().setLooping(true);
                 game.getSound().play();
-                game.getSound().setVolume(0.2f);
+                game.getSound().setVolume(0.1f);
                 break;
         }
 
@@ -338,7 +338,7 @@ public class Play extends GameState {
             case END:
                 // if (cam.zoom < 5)
                 //     cam.zoom += 0.01; //TODO: Fix this
-                if (executeEnd) playSoundOnce("sounds/end.ogg");
+                if (executeEnd) playSoundOnce("sounds/end.ogg", 0.3f);
                 executeEnd = false;
                 // gameFadeOut = true;
                 // gameFadeDone = false;

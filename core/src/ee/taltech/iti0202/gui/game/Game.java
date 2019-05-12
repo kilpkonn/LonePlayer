@@ -63,7 +63,7 @@ public class Game extends ApplicationAdapter {
                 break;
         }
 
-        // B2DVars.PATH = "assets/";
+        //B2DVars.PATH = "assets/";
 
         // aiServer = new Server();
         // aiServer.setPortAndIp(aiPort, aiIpAddress); // Listen to port 55433 and ip 127.0.0.1
@@ -75,6 +75,7 @@ public class Game extends ApplicationAdapter {
         try {
             this.sound = Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/forest.ogg"));
             this.sound.play();
+            this.sound.setVolume(0.1f);
             System.out.println("Music");
         } catch (Exception e) {
             System.out.println(PATH + "sounds/forest.ogg");
