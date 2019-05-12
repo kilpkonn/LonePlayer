@@ -58,6 +58,7 @@ public class GameStateManager {
     }
 
     public static void setState(State state) {
+        game.getSound().stop();
         popState();
         pushState(state);
     }

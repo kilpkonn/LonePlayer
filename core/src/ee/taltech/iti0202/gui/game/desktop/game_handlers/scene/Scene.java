@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 
 import java.util.HashMap;
@@ -17,6 +18,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public abstract class Scene {
     protected Stage stage;
     protected OrthographicCamera hudCam;
+    protected Game game;
 
     protected Vector2 mouseInWorld2D;
     protected HashSet<GameButton> buttons;

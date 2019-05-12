@@ -38,8 +38,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.*;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound.playSoundOnce;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
@@ -118,18 +117,23 @@ public class Play extends GameState {
         }
 
         game.getSound().stop();
-        switch (act) {
-            case "Desert":
-                break;
-            case "Plains":
-                break;
-            case "Snow":
-                game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/wind1.wav")));
-                game.getSound().setLooping(true);
-                game.getSound().play();
-                game.getSound().setVolume(0.1f);
-                break;
-        }
+        List<String> songs =
+                new ArrayList<>(
+                        Arrays.asList(
+                                "ObservingTheStar.ogg",
+                                "Soliloquy.ogg",
+                                "Rise of spirit.ogg",
+                                "Cyberpunk Moonlight Sonata.ogg",
+                                "Hero Immortal.ogg", //Please credit me "Trevor Lentz" if you choose to use this. :)
+                                "Vilified (2012).ogg",
+                                "xeon6.ogg"));
+
+        String song = songs.get(new Random().nextInt(songs.size()));
+
+        game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/" + song)));
+        game.getSound().setLooping(true);
+        game.getSound().play();
+        game.getSound().setVolume(0.1f);
 
         // sey up world
         world.setContactListener(cl);

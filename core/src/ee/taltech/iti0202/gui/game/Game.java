@@ -73,12 +73,12 @@ public class Game extends ApplicationAdapter {
 
         // set up music player
         try {
-            this.sound = Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/forest.ogg"));
+            this.sound = Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg"));
             this.sound.play();
             this.sound.setVolume(0.1f);
             System.out.println("Music");
         } catch (Exception e) {
-            System.out.println(PATH + "sounds/forest.ogg");
+            System.out.println(PATH + "sounds/intro.ogg");
             System.out.println("Sound couldn't be located.");
         }
 
