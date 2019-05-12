@@ -1,4 +1,4 @@
-######Lone Player
+###### Lone Player
 
 **url for the downloadable ->** [https://livettu-my.sharepoint.com/:f:/g/personal/envomp_ttu_ee/ErtQRSVPIiZOmXrDwzXh6TYBtcFBjkCfRPhVc-UYrqU2Eg?e=pQyvLX](link OneDrive)
 
@@ -6,7 +6,7 @@ You find yourself on a prehistoric planet with nothing but your trusty M4 and De
 You have 2 choises, either die or die with putting out a fight.
 
 
-##Controls
+## Controls
 
 | Control | button |
 | ------ | ------ |
@@ -20,4 +20,4 @@ You have 2 choises, either die or die with putting out a fight.
 | Pervious weapon | q |
 | Shoot | LMB |
 
-##By envomp and Kilpkonn
+## By envomp and Kilpkonn
