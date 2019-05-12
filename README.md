@@ -21,4 +21,4 @@ You have 2 choises, either die or die with putting out a fight.
 | Pervious weapon | q |
 | Shoot | LMB |
 
-## By envomp and Kilpkonn
+## By envomp and kilpkonn
