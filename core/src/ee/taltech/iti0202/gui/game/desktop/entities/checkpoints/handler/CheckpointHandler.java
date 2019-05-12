@@ -66,7 +66,7 @@ public class CheckpointHandler implements Handler {
             if (playerHandler.getCheckpoint() != null) playerHandler.getCheckpoint().dispose();
             playerHandler.setCheckpoint(curTemp);
 
-            Sound.playSoundOnce("sounds/checkpoint.ogg");
+            Sound.playSoundOnce("sounds/checkpoint.ogg", 0.1f);
         }
     }
 

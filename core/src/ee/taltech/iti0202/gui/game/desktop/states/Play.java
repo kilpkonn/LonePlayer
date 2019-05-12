@@ -22,6 +22,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.handler.BulletHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader.WeaponLoader;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
@@ -124,7 +125,8 @@ public class Play extends GameState {
                                 "Soliloquy.ogg",
                                 "Rise of spirit.ogg",
                                 "Cyberpunk Moonlight Sonata.ogg",
-                                "Hero Immortal.ogg", //Please credit me "Trevor Lentz" if you choose to use this. :)
+                                "Hero Immortal.ogg", // Please credit me "Trevor Lentz" if you
+                                                     // choose to use this. :)
                                 "Vilified (2012).ogg",
                                 "xeon6.ogg"));
 
@@ -330,6 +332,14 @@ public class Play extends GameState {
 
             case PAUSE:
                 pauseMenu.update(dt);
+                if (pauseMenu.done) {
+                    game.getSound().stop();
+                    game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
+                    game.getSound().setLooping(true);
+                    game.getSound().play();
+                    game.getSound().setVolume(0.1f);
+                    GameStateManager.pushState(GameStateManager.State.MENU);
+                }
                 break;
 
             case RESUME:
@@ -340,15 +350,23 @@ public class Play extends GameState {
                 break;
 
             case END:
-                // if (cam.zoom < 5)
-                //     cam.zoom += 0.01; //TODO: Fix this
-                if (executeEnd) playSoundOnce("sounds/end.ogg", 0.3f);
+                if (cam.zoom < 5) cam.zoom += 0.01; // TODO: Fix this
+                game.getSound().stop();
+                if (executeEnd) playSoundOnce("sounds/end.ogg", 0.1f);
                 executeEnd = false;
                 // gameFadeOut = true;
                 // gameFadeDone = false;
                 // drawAndSetCamera();
                 cam.update();
                 endMenu.update(dt);
+                if (endMenu.done) {
+                    cam.zoom = 1f;
+                    game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
+                    game.getSound().setLooping(true);
+                    game.getSound().play();
+                    game.getSound().setVolume(0.1f);
+                    GameStateManager.pushState(GameStateManager.State.MENU);
+                }
 
             default:
                 break;

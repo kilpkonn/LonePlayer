@@ -26,6 +26,7 @@ public class EndMenu extends Scene {
     private GameButton nextButton;
     private GameButton playAgainButton;
     private GameButton timeButton;
+    public boolean done = false;
     private List<String> levels =
             Arrays.asList(
                     "Desert@Big_leaps.tmx",
@@ -108,7 +109,7 @@ public class EndMenu extends Scene {
                     break;
                 case EXIT:
                     playSoundOnce("sounds/negative_2.wav", 0.5f);
-                    GameStateManager.pushState(GameStateManager.State.MENU);
+                    done = true;
                     break;
             }
         }

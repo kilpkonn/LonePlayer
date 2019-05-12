@@ -25,6 +25,7 @@ public class PauseMenu extends Scene {
     private GameButton resumeButton;
     private GameButton saveButton;
     private GameButton saveAndExitButton;
+    public boolean done = false;
 
     public PauseMenu(
             String act,
@@ -93,7 +94,7 @@ public class PauseMenu extends Scene {
                     break;
                 case EXIT:
                     playSoundOnce("sounds/negative_2.wav", 0.5f);
-                    GameStateManager.pushState(GameStateManager.State.MENU);
+                    done = true;
                     break;
                 case SETTINGS:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);
