@@ -4,14 +4,16 @@ import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
-
-        //B2DVars.PATH = "assets/";
+		if (JAR) {
+			B2DVars.PATH = "assets/";
+		}
 
         final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
