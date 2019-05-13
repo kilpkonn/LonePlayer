@@ -26,3 +26,5 @@ You have 2 choises, either die or die with putting out a fight.
 | Next weapon | E |
 | Pervious weapon | Q |
 | Shoot | MOUSE1 |
+
+**May your parkour skills shine!**
