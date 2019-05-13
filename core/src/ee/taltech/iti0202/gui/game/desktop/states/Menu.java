@@ -212,6 +212,7 @@ public class Menu extends GameState {
         settingsMenu.dispose();
         loadGameMenu.dispose();
         mainMenuScene.dispose();
+        levelSelectionMenu.dispose();
         backgroundTexture.dispose();
         System.gc();
     }
