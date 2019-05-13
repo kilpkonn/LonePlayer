@@ -209,6 +209,10 @@ public class Menu extends GameState {
     @Override
     public void dispose() {
         stage.dispose();
+        settingsMenu.dispose();
+        loadGameMenu.dispose();
+        mainMenuScene.dispose();
+        backgroundTexture.dispose();
         System.gc();
     }
 

@@ -8,10 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Disposable;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
-public class GameButton {
+public class GameButton implements Disposable {
 
     // center at x, y
     public float x;
@@ -96,7 +97,9 @@ public class GameButton {
         this.text = text;
     }
 
+    @Override
     public void dispose() {
         font.dispose();
+        System.gc();
     }
 }

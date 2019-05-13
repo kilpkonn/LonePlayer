@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
@@ -15,7 +16,7 @@ import java.util.HashSet;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
 
-public abstract class Scene {
+public abstract class Scene implements Disposable {
     protected Stage stage;
     protected OrthographicCamera hudCam;
     protected Game game;
@@ -77,4 +78,12 @@ public abstract class Scene {
     }
 
     protected abstract void updateCurrentBlock(GameButton btn);
+
+    @Override
+    public void dispose() {
+        for (GameButton btn : buttons) {
+            btn.dispose();
+        }
+        System.gc();
+    }
 }

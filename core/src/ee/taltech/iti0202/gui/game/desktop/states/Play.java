@@ -575,6 +575,9 @@ public class Play extends GameState {
     public void dispose() {
         stage.dispose();
         hud.dispose();
+        settingsMenu.dispose();
+        pauseMenu.dispose();
+        endMenu.dispose();
         backgroundTexture.dispose();
         System.gc();
     }
