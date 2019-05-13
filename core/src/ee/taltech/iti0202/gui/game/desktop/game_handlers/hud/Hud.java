@@ -71,4 +71,10 @@ public class Hud {
         if (Game.settings.SHOW_FPS) fps.render(sb);
         time.render(sb);
     }
+
+    public void dispose() {
+        health.dispose();
+        fps.dispose();
+        time.dispose();
+    }
 }

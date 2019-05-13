@@ -22,8 +22,7 @@ public class GameButton {
     private boolean hoverOver;
     private boolean acceptHover = true;
 
-    private BitmapFont
-            font; // = new BitmapFont(Gdx.files.internal(PATH + "fonts/bullfrog.fnt"), false);
+    private BitmapFont font;
 
     private String text;
 
@@ -80,7 +79,7 @@ public class GameButton {
 
     public void setFontParameters(FreeTypeFontGenerator.FreeTypeFontParameter parameters) {
         FreeTypeFontGenerator generator =
-                new FreeTypeFontGenerator(Gdx.files.internal(PATH + "fonts/bullfrog.ttf"));
+                new FreeTypeFontGenerator(Gdx.files.local(PATH + "fonts/bullfrog.ttf"));
         font = generator.generateFont(parameters);
         generator.dispose();
     }
@@ -95,5 +94,9 @@ public class GameButton {
         width = layout.width; // contains the width of the current set text
         height = layout.height; // contains the height of the current set text
         this.text = text;
+    }
+
+    public void dispose() {
+        font.dispose();
     }
 }

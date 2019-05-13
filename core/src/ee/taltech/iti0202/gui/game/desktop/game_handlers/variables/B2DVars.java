@@ -84,7 +84,7 @@ public class B2DVars {
     public static boolean CHECKPOINTS = true;
     public static boolean BOSSES = true;
     public static boolean UPDATE = true;
-    public static String PATH = "android/assets/";
+    public static String PATH = "assets/";
     public static int V_WIDTH = 1920;
     public static int V_HEIGHT = 1080;
     public static int SCALE = 1;

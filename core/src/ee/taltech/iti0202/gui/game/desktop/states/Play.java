@@ -202,15 +202,15 @@ public class Play extends GameState {
         // set up background
         String backgroundPath = MAIN_SCREENS[BACKGROUND_SCREENS.get(act)];
         backgroundTexture =
-                new Texture(Gdx.files.internal(PATH + backgroundPath + "backgroundLayer.png"));
+                new Texture(Gdx.files.local(PATH + backgroundPath + "backgroundLayer.png"));
 
         backgroundSpeed = BACKGROUND_SPEEDS.get(act);
         Array<Texture> textures = new Array<>();
-        int layersCount = Gdx.files.internal(PATH + backgroundPath).list().length;
+        int layersCount = Gdx.files.local(PATH + backgroundPath).list().length;
         for (int i = 1; i < layersCount; i++) {
             textures.add(
                     new Texture(
-                            Gdx.files.internal(
+                            Gdx.files.local(
                                     PATH + backgroundPath + "backgroundLayer" + i + ".png")));
             textures.get(textures.size - 1)
                     .setWrap(
@@ -573,6 +573,8 @@ public class Play extends GameState {
 
     public void dispose() {
         stage.dispose();
+        hud.dispose();
+        backgroundTexture.dispose();
         System.gc();
     }
 
