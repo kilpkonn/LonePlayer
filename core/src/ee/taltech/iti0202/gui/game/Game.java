@@ -40,27 +40,29 @@ public class Game extends ApplicationAdapter {
     public void create() {
 
         // set up relative paths for devices
-        switch (Gdx.app.getType()) {
-            case Android:
-                // android specific code
-                B2DVars.SCALE = 2;
-                B2DVars.PATH = "";
-                B2DVars.V_WIDTH = Gdx.graphics.getWidth() / 2;
-                B2DVars.V_HEIGHT = Gdx.graphics.getHeight() / 2;
-                break;
-            case Desktop:
-                // desktop specific code
-                B2DVars.PATH = "assets/";
+        if (!JAR) {
+            switch (Gdx.app.getType()) {
+                case Android:
+                    // android specific code
+                    B2DVars.SCALE = 2;
+                    B2DVars.PATH = "";
+                    B2DVars.V_WIDTH = Gdx.graphics.getWidth() / 2;
+                    B2DVars.V_HEIGHT = Gdx.graphics.getHeight() / 2;
+                    break;
+                case Desktop:
+                    // desktop specific code
+                    B2DVars.PATH = "android/assets/";
 
-                break;
-            case HeadlessDesktop:
-                break;
-            case Applet:
-                break;
-            case WebGL:
-                break;
-            case iOS:
-                break;
+                    break;
+                case HeadlessDesktop:
+                    break;
+                case Applet:
+                    break;
+                case WebGL:
+                    break;
+                case iOS:
+                    break;
+            }
         }
 
         //B2DVars.PATH = "assets/";
@@ -75,7 +77,7 @@ public class Game extends ApplicationAdapter {
         try {
             this.sound = Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg"));
             this.sound.play();
-            this.sound.setVolume(0.1f);
+            this.sound.setVolume(0.2f);
             System.out.println("Music");
         } catch (Exception e) {
             System.out.println(PATH + "sounds/intro.ogg");
