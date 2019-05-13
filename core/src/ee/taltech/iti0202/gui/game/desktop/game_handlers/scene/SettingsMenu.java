@@ -261,6 +261,11 @@ public class SettingsMenu extends Scene {
         currBlock = buttonType.get(button);
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+    }
+
     public enum SettingBlock {
         MOVE_LEFT,
         MOVE_RIGHT,

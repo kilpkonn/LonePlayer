@@ -572,6 +572,7 @@ public class Play extends GameState {
         }
     }
 
+    @Override
     public void dispose() {
         stage.dispose();
         hud.dispose();

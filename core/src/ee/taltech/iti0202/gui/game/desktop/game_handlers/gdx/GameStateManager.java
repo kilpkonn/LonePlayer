@@ -64,20 +64,26 @@ public class GameStateManager {
     }
 
     public static void pushState(State state) {
+        popState();
         gameStates.push(getState(state));
         System.out.println(state);
     }
 
     public static void pushState(State state, GameProgress progress) {
+        popState();
         gameStates.push(getState(state, progress));
     }
 
     public static void pushState(
             State state, String act, String map, B2DVars.gameDifficulty difficulty) {
+        popState();
         gameStates.push(getState(state, act, map, difficulty));
     }
 
     public static void popState() {
+        if (gameStates.isEmpty()) {
+            return;
+        }
         GameState g = gameStates.pop();
         g.dispose();
     }
