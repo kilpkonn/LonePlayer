@@ -11,14 +11,14 @@ You have 2 choises, either die or die with putting out a fight.
 
 | Control | button |
 | ------ | ------ |
-| Jump | space |
-| Dash | space |
-| Wall Jump | space |
-| Move left | a |
-| Move right | d |
-| Change dimension | s |
-| Next weapon | e |
-| Pervious weapon | q |
-| Shoot | LMB |
+| Jump | SPACE |
+| Dash | SPACE |
+| Wall Jump | SPACE |
+| Move left | A |
+| Move right | D |
+| Change dimension | S |
+| Next weapon | E |
+| Pervious weapon | Q |
+| Shoot | MOUSE1 |
 
 ## By envomp and kilpkonn
