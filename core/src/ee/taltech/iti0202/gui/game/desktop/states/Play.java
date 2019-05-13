@@ -125,8 +125,7 @@ public class Play extends GameState {
                                 "Soliloquy.ogg",
                                 "Rise of spirit.ogg",
                                 "Cyberpunk Moonlight Sonata.ogg",
-                                "Hero Immortal.ogg", // Please credit me "Trevor Lentz" if you
-                                                     // choose to use this. :)
+                                "Hero Immortal.ogg", // Please credit me "Trevor Lentz" if you choose to use this. :)
                                 "Vilified (2012).ogg",
                                 "xeon6.ogg"));
 
@@ -135,7 +134,7 @@ public class Play extends GameState {
         game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/" + song)));
         game.getSound().setLooping(true);
         game.getSound().play();
-        game.getSound().setVolume(0.1f);
+        game.getSound().setVolume(0.12f);
 
         // sey up world
         world.setContactListener(cl);
@@ -334,10 +333,11 @@ public class Play extends GameState {
                 pauseMenu.update(dt);
                 if (pauseMenu.done) {
                     game.getSound().stop();
-                    game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
+                    game.setSound(
+                            Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
                     game.getSound().setLooping(true);
                     game.getSound().play();
-                    game.getSound().setVolume(0.1f);
+                    game.getSound().setVolume(0.2f);
                     GameStateManager.pushState(GameStateManager.State.MENU);
                 }
                 break;
@@ -361,7 +361,8 @@ public class Play extends GameState {
                 endMenu.update(dt);
                 if (endMenu.done) {
                     cam.zoom = 1f;
-                    game.setSound(Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
+                    game.setSound(
+                            Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
                     game.getSound().setLooping(true);
                     game.getSound().play();
                     game.getSound().setVolume(0.1f);
