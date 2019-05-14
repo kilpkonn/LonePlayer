@@ -7,13 +7,17 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
-		if (JAR) {
-			B2DVars.PATH = "assets/";
-		}
+        if (JAR) {
+            B2DVars.PATH = "assets/";
+        }
 
         final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
@@ -32,7 +36,8 @@ public class DesktopLauncher {
         config.width = V_WIDTH * SCALE;
         config.samples = 3;
         config.forceExit = true;
-        config.fullscreen = true;
+        List<String> arguments = new ArrayList<>((Arrays.asList(arg)));
+        config.fullscreen = !arguments.contains("-w");
         config.height = V_HEIGHT * SCALE;
         // config.foregroundFPS = 300; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized
