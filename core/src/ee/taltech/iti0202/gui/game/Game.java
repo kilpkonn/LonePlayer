@@ -51,7 +51,7 @@ public class Game extends ApplicationAdapter {
                     break;
                 case Desktop:
                     // desktop specific code
-                    B2DVars.PATH = "android/assets/";
+                    B2DVars.PATH = "assets/";
 
                     break;
                 case HeadlessDesktop:

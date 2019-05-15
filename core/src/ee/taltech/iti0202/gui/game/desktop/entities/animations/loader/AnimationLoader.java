@@ -19,7 +19,7 @@ public class AnimationLoader {
             return loaders.get(path);
         }
 
-        FileHandle handle = Gdx.files.internal(PATH + path);
+        FileHandle handle = Gdx.files.local(PATH + path);
         Data data = getData(path);
         LibGdxLoader loader = new LibGdxLoader(data);
         loader.load(handle.file());
