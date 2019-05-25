@@ -21,7 +21,7 @@ public class B2DVars {
     public static final float MAX_LOAD_TIME = 3f; // 3 seconds
     public static final float MIN_FPS_EXPECTED = 60f; // or 60 fps
     public static final boolean DEBUG = false;
-    public static final boolean JAR = true;
+    public static final boolean JAR = false;
     // bosses
     public static final String BOSS = "1";
     public static final int gotHitBySnek = 1;
@@ -84,7 +84,7 @@ public class B2DVars {
     public static boolean CHECKPOINTS = true;
     public static boolean BOSSES = true;
     public static boolean UPDATE = true;
-    public static String PATH = "assets/";
+    public static String PATH = "android/assets/";
     public static int V_WIDTH = 1920;
     public static int V_HEIGHT = 1080;
     public static int SCALE = 1;

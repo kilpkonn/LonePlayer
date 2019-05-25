@@ -250,6 +250,9 @@ public class Play extends GameState {
             playerHandler
                     .getPlayer()
                     .addWeapon(WeaponLoader.buildWeapon("Deagle", sb, draw.getWeaponHandler()));
+            playerHandler
+                    .getPlayer()
+                    .addWeapon(WeaponLoader.buildWeapon("Shotgun", sb, draw.getWeaponHandler()));
             playerHandler.getPlayer().setWeapon(playerHandler.getPlayer().getWeapons().get(0));
         }
 

@@ -238,7 +238,7 @@ public class PlayerHandler implements Handler {
                     && player.getWeapon() != null
                     && player.getWeapon().canFire()) {
                 playSoundOnce("sounds/jumpland.wav");
-                player.getWeapon().fire();
+                player.getWeapon().fire(); //TODO: Move bullet creation to weapon.fire()
                 Bullet bullet =
                         BulletLoader.bulletLoader(
                                 spriteBatch,
