@@ -48,7 +48,7 @@ public class WeaponHandler implements Handler {
         for (Weapon weapon : weaponsOnMap) {
             weapon.render(spriteBatch);
         }
-        draw.getPlayerHandler().getPlayer().getWeapon().render(spriteBatch);
+        draw.getPlayerHandler().getPlayer().getCurrentWeapon().render(spriteBatch);
     }
 
     public void addWeapon(Weapon weapon) {
@@ -58,9 +58,9 @@ public class WeaponHandler implements Handler {
     }
 
     public Weapon initWeapon(String type, SpriteBatch spriteBatch, Player player) {
-        Weapon weapon = WeaponLoader.buildWeapon(type, spriteBatch, this);
+        Weapon weapon = WeaponLoader.buildWeapon(type, spriteBatch, this, draw);
         addWeapon(weapon);
-        player.setWeapon(weapon);
+        player.setCurrentWeapon(weapon);
         return weapon;
     }
 }

@@ -4,10 +4,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
+
 public class M4 extends Weapon {
 
-    public M4(World world, SpriteBatch sb, Body body) {
-        super(world, sb, body, "images/bullets/m4/m4.scml");
+    public M4(World world, SpriteBatch sb, Body body, Draw draw) {
+        super(world, sb, body, "images/bullets/m4/m4.scml", draw);
         setScale(0.1f);
         setAnimationSpeed(50);
         coolDown = 0.2f;

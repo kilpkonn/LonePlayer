@@ -10,13 +10,14 @@ import ee.taltech.iti0202.gui.game.desktop.entities.weapons.M4;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Shotgun;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.handler.WeaponHandler;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class WeaponLoader {
 
     public static Weapon buildWeapon(
-            String type, SpriteBatch spriteBatch, WeaponHandler weaponHandler) {
+            String type, SpriteBatch spriteBatch, WeaponHandler weaponHandler, Draw draw) {
         BodyDef bdef = new BodyDef();
         FixtureDef fdef = new FixtureDef();
         CircleShape circle = new CircleShape();
@@ -32,16 +33,16 @@ public class WeaponLoader {
 
         switch (type) {
             case "Deagle":
-                weapon = new Deagle(weaponHandler.getWorld(), spriteBatch, body);
+                weapon = new Deagle(weaponHandler.getWorld(), spriteBatch, body, draw);
                 break;
             case "M4":
-                weapon = new M4(weaponHandler.getWorld(), spriteBatch, body);
+                weapon = new M4(weaponHandler.getWorld(), spriteBatch, body, draw);
                 break;
             case "Shotgun":
-                weapon = new Shotgun(weaponHandler.getWorld(), spriteBatch, body);
+                weapon = new Shotgun(weaponHandler.getWorld(), spriteBatch, body, draw);
                 break;
             default:
-                weapon = new Deagle(weaponHandler.getWorld(), spriteBatch, body);
+                weapon = new Deagle(weaponHandler.getWorld(), spriteBatch, body, draw);
                 break;
         }
 

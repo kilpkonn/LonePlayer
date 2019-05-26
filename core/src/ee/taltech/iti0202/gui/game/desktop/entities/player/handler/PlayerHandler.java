@@ -221,7 +221,7 @@ public class PlayerHandler implements Handler {
                 if (player.getWeapons().size() > 0) {
                     selectedWeapon++;
                     selectedWeapon %= player.getWeapons().size();
-                    player.setWeapon(player.getWeapons().get(selectedWeapon));
+                    player.setCurrentWeapon(player.getWeapons().get(selectedWeapon));
                 }
             }
 
@@ -230,26 +230,16 @@ public class PlayerHandler implements Handler {
                     selectedWeapon--;
                     if (selectedWeapon < 0) selectedWeapon += player.getWeapons().size();
                     selectedWeapon %= player.getWeapons().size();
-                    player.setWeapon(player.getWeapons().get(selectedWeapon));
+                    player.setCurrentWeapon(player.getWeapons().get(selectedWeapon));
                 }
             }
 
             if (MyInput.isMouseDown(Game.settings.SHOOT)
-                    && player.getWeapon() != null
-                    && player.getWeapon().canFire()) {
+                    && player.getCurrentWeapon() != null
+                    && player.getCurrentWeapon().canFire()) {
                 playSoundOnce("sounds/jumpland.wav");
-                player.getWeapon().fire(); //TODO: Move bullet creation to weapon.fire()
-                Bullet bullet =
-                        BulletLoader.bulletLoader(
-                                spriteBatch,
-                                play.getWorld(),
-                                new Vector2(V_WIDTH >> 1, V_HEIGHT >> 1),
-                                new Vector2(
-                                        MyInput.getMouseLocation().x,
-                                        V_HEIGHT - MyInput.getMouseLocation().y),
-                                player.getPosition(),
-                                player.getWeapon().getOffRadius());
-                draw.getBulletHandler().getBulletArray().add(bullet);
+                player.getCurrentWeapon().fire(new Vector2(MyInput.getMouseLocation().x,
+                        V_HEIGHT - MyInput.getMouseLocation().y));
             }
         }
     }
@@ -286,11 +276,12 @@ public class PlayerHandler implements Handler {
                         WeaponLoader.buildWeapon(
                                 "M4",
                                 spriteBatch,
-                                draw.getWeaponHandler())); // after death gets deagle and m4,
+                                draw.getWeaponHandler(),
+                                draw)); // after death gets deagle and m4,
                 // why not
                 this.player.addWeapon(
-                        WeaponLoader.buildWeapon("Deagle", spriteBatch, draw.getWeaponHandler()));
-                this.player.setWeapon(player.getWeapons().get(0));
+                        WeaponLoader.buildWeapon("Deagle", spriteBatch, draw.getWeaponHandler(), draw));
+                this.player.setCurrentWeapon(player.getWeapons().get(0));
             }
             cl.setDeathState((short) 0);
         }

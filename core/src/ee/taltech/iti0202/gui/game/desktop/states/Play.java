@@ -246,14 +246,14 @@ public class Play extends GameState {
             playerHandler.setPlayer(PlayerLoader.initPlayer(sb, playerHandler, draw, world, cl));
             playerHandler
                     .getPlayer()
-                    .addWeapon(WeaponLoader.buildWeapon("M4", sb, draw.getWeaponHandler()));
+                    .addWeapon(WeaponLoader.buildWeapon("M4", sb, draw.getWeaponHandler(), draw));
             playerHandler
                     .getPlayer()
-                    .addWeapon(WeaponLoader.buildWeapon("Deagle", sb, draw.getWeaponHandler()));
+                    .addWeapon(WeaponLoader.buildWeapon("Deagle", sb, draw.getWeaponHandler(), draw));
             playerHandler
                     .getPlayer()
-                    .addWeapon(WeaponLoader.buildWeapon("Shotgun", sb, draw.getWeaponHandler()));
-            playerHandler.getPlayer().setWeapon(playerHandler.getPlayer().getWeapons().get(0));
+                    .addWeapon(WeaponLoader.buildWeapon("Shotgun", sb, draw.getWeaponHandler(), draw));
+            playerHandler.getPlayer().setCurrentWeapon(playerHandler.getPlayer().getWeapons().get(0));
         }
 
         cam.position.set(

@@ -25,7 +25,7 @@ public class Player extends SpriteAnimation {
     private int health;
     private List<Vector2> doneDmg = new ArrayList<>();
     private List<Weapon> weapons = new ArrayList<>();
-    private Weapon weapon;
+    private Weapon currentWeapon;
 
     public Player(Body body, SpriteBatch sb) {
         super(body, sb, "images/player/rogue.scml");
@@ -49,20 +49,20 @@ public class Player extends SpriteAnimation {
             aim();
         }
 
-        if (weapon != null) {
+        if (currentWeapon != null) {
             Timeline.Key.Bone hand = getBone("right_hand");
-            weapon.getBody()
+            currentWeapon.getBody()
                     .setTransform(
                             new Vector2(hand.position.x / PPM, hand.position.y / PPM),
                             (float) Math.toRadians(hand.angle));
-            weapon.update(dt);
+            currentWeapon.update(dt);
         }
     }
 
     public void aim() {
-        if (weapon == null) return;
-        // float offset = weapon.getOffset().containsKey(getCurrentAnimation().name) ?
-        // weapon.getOffset().get(getCurrentAnimation().name) : 0;
+        if (currentWeapon == null) return;
+        // float offset = currentWeapon.getOffset().containsKey(getCurrentAnimation().name) ?
+        // currentWeapon.getOffset().get(getCurrentAnimation().name) : 0;
         // System.out.println(offset);
         // System.out.println(Math.toDegrees(body.getAngle()) + " - " + getBone("body").angle);
         /*float offset = (float) (body.getAngle()
@@ -91,7 +91,7 @@ public class Player extends SpriteAnimation {
     @Override
     public void setFlipX(boolean flipX) {
         super.setFlipX(flipX);
-        if (weapon != null) {
+        for (Weapon weapon : weapons) {
             weapon.setFlipX(flipX);
         }
     }
@@ -154,10 +154,10 @@ public class Player extends SpriteAnimation {
         this.weapons.add(weapon);
     }
 
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
-        if (!weapons.contains(weapon)) {
-            weapons.add(weapon);
+    public void setCurrentWeapon(Weapon currentWeapon) {
+        this.currentWeapon = currentWeapon;
+        if (!weapons.contains(currentWeapon)) {
+            weapons.add(currentWeapon);
         }
     }
 
