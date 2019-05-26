@@ -17,9 +17,11 @@ public class MainMenu extends Scene {
 
     private block currBlock = block.DEFAULT;
     private Runnable newGameFunc;
+    private Runnable matchmakingFunc;
     private Runnable resumeGameFunc;
     private Runnable settingsFunc;
     private GameButton newGameButton;
+    private GameButton matchmakingButton;
     private GameButton loadGameButton;
     private GameButton settingsButton;
     private GameButton exitButton;
@@ -28,26 +30,34 @@ public class MainMenu extends Scene {
     public MainMenu(
             OrthographicCamera cam,
             Runnable newGameFunc,
+            Runnable matchmakingFunc,
             Runnable resumeGameFunc,
             Runnable settingsFunc) {
         super(cam);
         this.newGameFunc = newGameFunc;
+        this.matchmakingFunc = matchmakingFunc;
         this.resumeGameFunc = resumeGameFunc;
         this.settingsFunc = settingsFunc;
 
-        newGameButton = new GameButton("New Game", V_WIDTH / 5f, V_HEIGHT / 1.5f);
+        newGameButton = new GameButton("New Game", V_WIDTH / 5f, V_HEIGHT / 1.5f + 40);
+        matchmakingButton = new GameButton("Matchmaking", V_WIDTH / 5f, V_HEIGHT / 1.5f);
         loadGameButton = new GameButton("Resume", V_WIDTH / 5f, V_HEIGHT / 1.5f - 40);
         settingsButton = new GameButton("Settings", V_WIDTH / 5f, V_HEIGHT / 1.5f - 80);
         exitButton = new GameButton("Exit", V_WIDTH / 5f, V_HEIGHT / 1.5f - 120);
 
         buttons =
                 new HashSet<>(
-                        Arrays.asList(newGameButton, loadGameButton, settingsButton, exitButton));
+                        Arrays.asList(newGameButton,
+                                loadGameButton,
+                                settingsButton,
+                                exitButton,
+                                matchmakingButton));
 
         buttonType =
                 new HashMap<GameButton, block>() {
                     {
                         put(newGameButton, block.NEWGAME);
+                        put(matchmakingButton, block.MATCHMAKING);
                         put(loadGameButton, block.RESUME);
                         put(settingsButton, block.SETTINGS);
                         put(exitButton, block.EXIT);
@@ -66,6 +76,10 @@ public class MainMenu extends Scene {
                 case NEWGAME:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);
                     newGameFunc.run();
+                    break;
+                case MATCHMAKING:
+                    playSoundOnce("sounds/menu_click.wav", 0.5f);
+                    matchmakingFunc.run();
                     break;
                 case RESUME:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);
@@ -90,6 +104,7 @@ public class MainMenu extends Scene {
 
     private enum block {
         NEWGAME,
+        MATCHMAKING,
         RESUME,
         EXIT,
         SETTINGS,

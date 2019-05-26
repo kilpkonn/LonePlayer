@@ -23,6 +23,7 @@ public class Menu extends GameState {
     private LevelSelectionMenu levelSelectionMenu;
     private SettingsMenu settingsMenu;
     private LoadGameMenu loadGameMenu;
+    private MatchmakingMenu matchmakingMenu;
     private Scene mainMenuScene;
     private World world;
     private Texture player;
@@ -43,55 +44,16 @@ public class Menu extends GameState {
 
         mouseInWorld2D = new Vector2();
 
-        levelSelectionMenu =
-                new LevelSelectionMenu(
-                        cam,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                menuState = state.MAIN;
-                            }
-                        });
-        settingsMenu =
-                new SettingsMenu(
-                        cam,
-                        game,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                menuState = state.MAIN;
-                            }
-                        });
-        loadGameMenu =
-                new LoadGameMenu(
-                        cam,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                menuState = state.MAIN;
-                            }
-                        });
+        levelSelectionMenu = new LevelSelectionMenu(cam, () -> menuState = state.MAIN);
+        settingsMenu = new SettingsMenu(cam, game, () -> menuState = state.MAIN);
+        loadGameMenu = new LoadGameMenu(cam, () -> menuState = state.MAIN);
+        matchmakingMenu = new MatchmakingMenu(cam, () -> menuState = state.MAIN);
         mainMenuScene =
-                new MainMenu(
-                        cam,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                menuState = state.LEVELS;
-                            }
-                        },
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                menuState = state.RESUME;
-                            }
-                        },
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                menuState = state.SETTINGS;
-                            }
-                        });
+                new MainMenu(cam,
+                        () -> menuState = state.LEVELS,
+                        () -> menuState = state.MATCHMAKING,
+                        () -> menuState = state.RESUME,
+                        () -> menuState = state.SETTINGS);
 
         // play button
 
@@ -135,6 +97,9 @@ public class Menu extends GameState {
             case SETTINGS:
                 settingsMenu.handleInput();
                 break;
+            case MATCHMAKING:
+                matchmakingMenu.handleInput();
+                break;
             default:
                 System.out.println("Error with menuState!!!");
         }
@@ -162,6 +127,9 @@ public class Menu extends GameState {
                 break;
             case SETTINGS:
                 settingsMenu.update(dt);
+                break;
+            case MATCHMAKING:
+                matchmakingMenu.update(dt);
                 break;
             default:
                 System.out.println("Error with menuState!");
@@ -196,6 +164,9 @@ public class Menu extends GameState {
             case SETTINGS:
                 settingsMenu.render(sb);
                 break;
+            case MATCHMAKING:
+                matchmakingMenu.render(sb);
+                break;
             default:
                 System.out.println("Error with menuState!");
         }
@@ -219,6 +190,7 @@ public class Menu extends GameState {
 
     private enum state {
         MAIN,
+        MATCHMAKING,
         SETTINGS,
         LEVELS,
         RESUME,
