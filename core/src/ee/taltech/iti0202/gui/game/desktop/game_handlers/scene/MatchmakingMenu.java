@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 
@@ -20,6 +19,7 @@ public class MatchmakingMenu extends Scene {
     private Runnable backFunc;
 
     private GameButton backButton;
+    private GameButton startButton;
     private HashMap<GameButton, block> buttonType;
 
     public MatchmakingMenu(OrthographicCamera cam, Runnable backFunc) {
@@ -28,13 +28,15 @@ public class MatchmakingMenu extends Scene {
         this.backFunc = backFunc;
 
         backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.2f - 40);
+        startButton = new GameButton("Start", V_WIDTH * 5 / 6f, V_HEIGHT / 1.2f - 40);
 
-        buttons = new HashSet<>(Arrays.asList(backButton));
+        buttons = new HashSet<>(Arrays.asList(backButton, startButton));
 
         buttonType =
                 new HashMap<GameButton, block>() {
                     {
                         put(backButton, block.BACK);
+                        put(startButton, block.START);
                     }
                 };
 
@@ -50,9 +52,11 @@ public class MatchmakingMenu extends Scene {
                 case START:
                     playSoundOnce("sounds/menu_click.wav", 0.5f);
                     // TODO: Start game
+                    break;
                 case BACK:
                     playSoundOnce("sounds/negative_2.wav", 0.5f);
                     backFunc.run();
+                    break;
             }
         }
     }
