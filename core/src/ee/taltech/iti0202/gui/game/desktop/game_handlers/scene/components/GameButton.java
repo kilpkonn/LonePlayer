@@ -20,6 +20,7 @@ public class GameButton implements Disposable {
     public float width;
     public float height;
 
+    private float lineLengthMultiplier = 1;
     private boolean hoverOver;
     private boolean acceptHover = true;
 
@@ -58,9 +59,9 @@ public class GameButton implements Disposable {
             ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.rectLine(
-                    x - 100, y - height / 2, x - 5, y - height / 2, 2, Color.MAGENTA, Color.CYAN);
+                    x - 100 * lineLengthMultiplier, y - height / 2, x - 5, y - height / 2, 2, Color.MAGENTA, Color.CYAN);
             shapeRenderer.rectLine(
-                    x + 420,
+                    x + 420 * lineLengthMultiplier,
                     y - height / 2,
                     x + width + 10,
                     y - height / 2,
@@ -95,6 +96,10 @@ public class GameButton implements Disposable {
         width = layout.width; // contains the width of the current set text
         height = layout.height; // contains the height of the current set text
         this.text = text;
+    }
+
+    public void setLineLengthMultiplier(float multiplier) {
+        this.lineLengthMultiplier = multiplier;
     }
 
     @Override
