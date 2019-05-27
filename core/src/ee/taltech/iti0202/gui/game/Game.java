@@ -13,6 +13,8 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInputProcessor;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
+import ee.taltech.iti0202.gui.game.networking.client.GameClient;
+import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
@@ -21,6 +23,8 @@ public class Game extends ApplicationAdapter {
     public static final String TITLE = "Lone Player";
     public static Content res;
     public static Settings settings;
+    public static GameServer server;
+    public static GameClient client;
     private SpriteBatch sb;
     private OrthographicCamera cam;
     private OrthographicCamera hudCam;

@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.networking;
+package ee.taltech.iti0202.gui.game.networking.client.listeners;
 
 import net.corpwar.lib.corpnet.Connection;
 import net.corpwar.lib.corpnet.DataReceivedListener;
@@ -9,7 +9,9 @@ import java.util.UUID;
 public class ClientListener implements DataReceivedListener {
 
     @Override
-    public void connected(Connection connection) {}
+    public void connected(Connection connection) {
+        System.out.println("Connected to: " + connection.getAddress().getHostAddress());
+    }
 
     @Override
     public void receivedMessage(Message message) {}
