@@ -48,12 +48,6 @@ public class GameServer {
         return new HashSet<>(players.values());
     }
 
-    public void addPlayer(Player player) {
-        if (!players.values().contains(player)) {
-            updateConnection(player.uuid, player);
-        }
-    }
-
     public void updateConnection(UUID uuid, Player player) {
         players.put(uuid, player);
     }
@@ -61,15 +55,5 @@ public class GameServer {
     public void performHandshake(UUID uuid) {
         Handshake.Request request = new Handshake.Request();
         server.sendReliableObjectToClient(request, uuid);
-
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (!players.get(uuid).handshakeDone) {
-                    players.remove(uuid);
-                }
-                cancel();  // Cleans up thread
-            }
-        }, 2 * 1000);
     }
 }

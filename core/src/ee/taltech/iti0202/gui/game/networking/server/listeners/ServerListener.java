@@ -27,7 +27,6 @@ public class ServerListener implements DataReceivedListener {
     @Override
     public void connected(Connection connection) {
         System.out.println("Player connected from: " + connection.getAddress().getHostAddress() + " -> " + connection.getConnectionId());
-        server.addPlayer(new Player(connection.getAddress().getHostName(), connection.getConnectionId()));
         server.performHandshake(connection.getConnectionId());
     }
 
@@ -38,7 +37,6 @@ public class ServerListener implements DataReceivedListener {
         if (obj instanceof Handshake.Response) {
             Handshake.Response response = (Handshake.Response) obj;
             Player player = new Player(response.name, message.getConnectionID());
-            player.handshakeDone = true;
             server.updateConnection(message.getConnectionID(), player);
         }
     }
