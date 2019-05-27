@@ -23,6 +23,8 @@ public class GameButton implements Disposable {
     private float lineLengthMultiplier = 1;
     private boolean hoverOver;
     private boolean acceptHover = true;
+    private boolean autoScale = true;
+    protected ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     private BitmapFont font;
 
@@ -56,7 +58,6 @@ public class GameButton implements Disposable {
 
     public void render(SpriteBatch sb) {
         if (acceptHover && hoverOver) {
-            ShapeRenderer shapeRenderer = new ShapeRenderer();
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.rectLine(
                     x - 100 * lineLengthMultiplier, y - height / 2, x - 5, y - height / 2, 2, Color.MAGENTA, Color.CYAN);
@@ -91,10 +92,12 @@ public class GameButton implements Disposable {
     }
 
     public void setText(String text) {
-        GlyphLayout layout = new GlyphLayout(); // dont do this every frame!
-        layout.setText(font, text);
-        width = layout.width; // contains the width of the current set text
-        height = layout.height; // contains the height of the current set text
+        if (autoScale) {
+            GlyphLayout layout = new GlyphLayout(); // dont do this every frame!
+            layout.setText(font, text);
+            width = layout.width; // contains the width of the current set text
+            height = layout.height; // contains the height of the current set text
+        }
         this.text = text;
     }
 
@@ -106,5 +109,26 @@ public class GameButton implements Disposable {
     public void dispose() {
         font.dispose();
         System.gc();
+    }
+
+    protected void roundedRect(float x, float y, float width, float height, float radius){
+        // Central rectangle
+        shapeRenderer.rect(x + radius, y - height + radius, width - 2*radius, height - 2*radius);
+
+        // Four side rectangles, in clockwise order
+        shapeRenderer.rect(x + radius, y - height, width - 2*radius, radius);
+        shapeRenderer.rect(x + width - radius, y - height + radius, radius, height - 2*radius);
+        shapeRenderer.rect(x + radius, y - height + height - radius, width - 2*radius, radius);
+        shapeRenderer.rect(x, y - height + radius, radius, height - 2*radius);
+
+        // Four arches, clockwise too
+        shapeRenderer.arc(x + radius, y - height + radius, radius, 180f, 90f);
+        shapeRenderer.arc(x + width - radius, y - height + radius, radius, 270f, 90f);
+        shapeRenderer.arc(x + width - radius, y - radius, radius, 0f, 90f);
+        shapeRenderer.arc(x + radius, y - radius, radius, 90f, 90f);
+    }
+
+    public void setAutoScale(boolean autoScale) {
+        this.autoScale = autoScale;
     }
 }

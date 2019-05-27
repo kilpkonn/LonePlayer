@@ -13,6 +13,7 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyTextListener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.TextField;
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
@@ -30,7 +31,7 @@ public class MatchmakingMenu extends Scene {
     private GameButton connectButton;
     private GameButton newServerButton;
     private GameButton playersCountLabel;
-    private GameButton ipAddressLabel;
+    private TextField ipAddressLabel;
     private Map<UUID, GameButton> playerNameButtons = new HashMap<>();
     private Map<GameButton, block> buttonType;
 
@@ -47,7 +48,7 @@ public class MatchmakingMenu extends Scene {
         connectButton = new GameButton("Connect", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f);
         newServerButton = new GameButton("Start Server", V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f);
         playersCountLabel = new GameButton("Players: 0", V_WIDTH / 6f, V_HEIGHT / 1.2f - 80);
-        ipAddressLabel = new GameButton("", V_WIDTH * 3 / 6f - 50, V_HEIGHT / 1.2f);
+        ipAddressLabel = new TextField("", V_WIDTH * 3 / 6f - 50, V_HEIGHT / 1.2f, V_WIDTH / 6f, 40f);
 
         playersCountLabel.setAcceptHover(false);
 
@@ -105,7 +106,9 @@ public class MatchmakingMenu extends Scene {
                     ipAddressLabel.setText(Game.server.getConnect());
                     break;
                 case IPADDRESS:
-                    Gdx.app.getClipboard().setContents(Game.server.getConnect());
+                    if (Game.server != null) {
+                        Gdx.app.getClipboard().setContents(Game.server.getConnect());
+                    }
                     break;
                 case BACK:
                     playSoundOnce("sounds/negative_2.wav", 0.5f);

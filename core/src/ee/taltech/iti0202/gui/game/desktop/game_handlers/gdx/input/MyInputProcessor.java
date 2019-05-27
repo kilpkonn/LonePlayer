@@ -6,6 +6,12 @@ import com.badlogic.gdx.InputAdapter;
 public class MyInputProcessor extends InputAdapter {
 
     @Override
+    public boolean keyTyped(char character) {
+        MyInput.appendText(character);
+        return true;
+    }
+
+    @Override
     public boolean keyDown(int k) {
         MyInput.setKeyDown(k, true);
         return true;

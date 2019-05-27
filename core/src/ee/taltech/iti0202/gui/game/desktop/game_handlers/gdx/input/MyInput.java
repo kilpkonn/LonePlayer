@@ -13,6 +13,15 @@ public class MyInput {
     private static Vector2 mouseLocation;
     private static boolean mouseDownPrev = true;
 
+    private static boolean listeningText = false;
+    private static StringBuilder text = new StringBuilder();
+
+    public static void appendText(char c) {
+        if (listeningText) {
+            text.append(c);
+        }
+    }
+
     public static void update() {
         for (Integer key : keysPressed) setKeyDown(key, true);
         if (!mouseDown) mouseDownPrev = false;
@@ -63,5 +72,18 @@ public class MyInput {
 
     public static boolean isMouseClicked(int btn) {
         return mouseDownPrev && !mouseDown;
+    }
+
+    public static void startListeningText() {
+        text = new StringBuilder();
+        listeningText = true;
+    }
+
+    public static void stopListeningText() {
+        listeningText = false;
+    }
+
+    public static String getTextInput() {
+        return text.toString();
     }
 }
