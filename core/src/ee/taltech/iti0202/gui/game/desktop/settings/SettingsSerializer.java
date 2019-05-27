@@ -19,6 +19,7 @@ public class SettingsSerializer implements JsonSerializer<Settings> {
         result.add("SHOW_FPS", new JsonPrimitive(settings.SHOW_FPS));
         result.add("MAX_FPS", new JsonPrimitive(settings.MAX_FPS));
         result.add("ENABLE_VSYNC", new JsonPrimitive(settings.ENABLE_VSYNC));
+        result.add("NAME", new JsonPrimitive(settings.NAME));
         return result;
     }
 }

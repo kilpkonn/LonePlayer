@@ -4,22 +4,26 @@ import net.corpwar.lib.corpnet.Server;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
+import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 public class GameServer {
-    Server server;
-    String connect = "";
+    private Server server;
+    private String connect = "";
 
-    private Set<UUID> players = new HashSet<>();
+    private Map<UUID, Player> players = new HashMap<>();
 
     public GameServer() {
         server = new Server();
         server.setKeepAlive(true);
-
+        server.keepConnectionsAlive();
 
         try {
             String address = InetAddress.getLocalHost().getHostAddress();
@@ -38,7 +42,22 @@ public class GameServer {
         return connect;
     }
 
-    public Set<UUID> getPlayers() {
-        return players;
+    public Set<Player> getPlayers() {
+        return new HashSet<>(players.values());
+    }
+
+    public void addPlayer(Player player) {
+        if (!players.values().contains(player)) {
+            updateConnection(player.uuid, player);
+        }
+    }
+
+    public void updateConnection(UUID uuid, Player player) {
+        players.put(uuid, player);
+    }
+
+    public void performHandshake(UUID uuid) {
+        Handshake.Request request = new Handshake.Request();
+        server.sendReliableObjectToClient(request, uuid);
     }
 }

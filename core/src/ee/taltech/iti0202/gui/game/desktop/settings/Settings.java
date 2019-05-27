@@ -22,6 +22,8 @@ public class Settings {
     public int MAX_FPS = 300;
     public boolean ENABLE_VSYNC = true;
 
+    public String NAME = "";
+
     public void save(String path) {
         Gson gson =
                 new GsonBuilder()

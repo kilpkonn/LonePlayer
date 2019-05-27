@@ -15,6 +15,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyTextListene
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
+import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
@@ -34,6 +35,7 @@ public class MatchmakingMenu extends Scene {
     private Map<GameButton, block> buttonType;
 
     private MyTextListener textListener;
+    private float timePassed = 0;
 
     public MatchmakingMenu(OrthographicCamera cam, Runnable backFunc) {
         super(cam);
@@ -76,16 +78,14 @@ public class MatchmakingMenu extends Scene {
 
     @Override
     public void update(float dt) {
-        super.update(dt);
+        timePassed += dt;
 
-        if (Game.server != null && Game.server.getPlayers().size() != playerNameButtons.size()) {
-            buttons.removeAll(playerNameButtons.values());
-            playerNameButtons.clear();
-            for (UUID uuid : Game.server.getPlayers()) {
-                addPlayer(uuid);
-            }
-            playersCountLabel.setText("Players: " + playerNameButtons.size());
+        if (timePassed > 2) {
+            updatePlayers();
+            timePassed = 0;
         }
+
+        super.update(dt);
     }
 
     @Override
@@ -116,7 +116,7 @@ public class MatchmakingMenu extends Scene {
 
         if (textListener != null && textListener.isDone()) {
             Game.client = new GameClient(textListener.getText());
-            Game.client.sendMessage("Testy!");
+            //Game.client.sendMessage("Testy!");
             textListener = null;
         }
     }
@@ -126,11 +126,23 @@ public class MatchmakingMenu extends Scene {
         currBlock = buttonType.get(btn);
     }
 
-    public void addPlayer(UUID uuid) {  //TODO: Make some actually working function here
-        GameButton btn = new GameButton(uuid.toString(), V_WIDTH / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
+    private void updatePlayers() {
+        if (Game.server != null) {
+            buttons.removeAll(playerNameButtons.values());
+            playerNameButtons.clear();
+            for (Player player : Game.server.getPlayers()) {
+                addPlayer(player);
+            }
+            playersCountLabel.setText("Players: " + playerNameButtons.size());
+        }
+    }
+
+    public void addPlayer(Player player) {  //TODO: Make some actually working function here
+        GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
         btn.setAcceptHover(false);
-        playerNameButtons.put(uuid, btn);
+        playerNameButtons.put(player.uuid, btn);
         buttons.add(btn);
+        played.put(btn, false);
     }
 
     private enum block {
