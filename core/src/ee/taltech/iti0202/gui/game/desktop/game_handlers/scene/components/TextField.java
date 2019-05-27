@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -40,6 +41,10 @@ public class TextField extends GameButton {
             setText(getText() + MyInput.getTextInput());
             MyInput.startListeningText();
         }
+
+        if (MyInput.getKeyDown() == Input.Keys.BACKSPACE) {
+            setText(getText().substring(0, getText().length() - 1));
+        }
     }
 
     @Override
@@ -49,7 +54,7 @@ public class TextField extends GameButton {
 
         shapeRenderer.setColor(new Color(0.01f, 0.01f, 0.01f, 0.3f));
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        roundedRect(x, y + 5, width, height, 5);
+        roundedRect(x - 5, y + 5, width, height, 5);
         shapeRenderer.end();
         super.render(sb);
     }

@@ -35,7 +35,6 @@ public class MatchmakingMenu extends Scene {
     private Map<UUID, GameButton> playerNameButtons = new HashMap<>();
     private Map<GameButton, block> buttonType;
 
-    private MyTextListener textListener;
     private float timePassed = 0;
 
     public MatchmakingMenu(OrthographicCamera cam, Runnable backFunc) {
@@ -48,7 +47,7 @@ public class MatchmakingMenu extends Scene {
         connectButton = new GameButton("Connect", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f);
         newServerButton = new GameButton("Start Server", V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f);
         playersCountLabel = new GameButton("Players: 0", V_WIDTH / 6f, V_HEIGHT / 1.2f - 80);
-        ipAddressLabel = new TextField("", V_WIDTH * 3 / 6f - 50, V_HEIGHT / 1.2f, V_WIDTH / 6f, 40f);
+        ipAddressLabel = new TextField("", V_WIDTH * 3 / 6f - 50, V_HEIGHT / 1.2f, V_WIDTH / 6f - 30, 40f);
 
         playersCountLabel.setAcceptHover(false);
 
@@ -98,11 +97,11 @@ public class MatchmakingMenu extends Scene {
                     // TODO: Start game
                     break;
                 case CONNECT:
-                    textListener = new MyTextListener();
-                    Gdx.input.getTextInput(textListener, "Connect", "", "xxxx.xxxx.xxxx.xxxx:port");
+                    Game.client = new GameClient(ipAddressLabel.getText());
                     break;
                 case NEWSERVER:
                     Game.server = new GameServer();
+                    Game.client = new GameClient(Game.server.getConnect());  // Auto connect
                     ipAddressLabel.setText(Game.server.getConnect());
                     break;
                 case IPADDRESS:
@@ -115,12 +114,6 @@ public class MatchmakingMenu extends Scene {
                     backFunc.run();
                     break;
             }
-        }
-
-        if (textListener != null && textListener.isDone()) {
-            Game.client = new GameClient(textListener.getText());
-            //Game.client.sendMessage("Testy!");
-            textListener = null;
         }
     }
 
