@@ -11,6 +11,7 @@ public class Player {
 
     public String name;
     public UUID uuid;
+    public boolean handshakeDone = false;
 
     @Override
     public String toString() {
