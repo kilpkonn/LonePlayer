@@ -14,6 +14,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 public class TextField extends GameButton {
 
     private boolean focused = false;
+    private Runnable onInputCompleted;
 
     public TextField(String text, float x, float y, float width, float height) {
         super(text, x, y);
@@ -28,21 +29,23 @@ public class TextField extends GameButton {
         super.update(mousePos);
 
         if (MyInput.isMouseClicked(Game.settings.SHOOT)) {
-            if (hoverOver()) {
+            if (hoverOver() && !focused) {
                 MyInput.startListeningText();
                 focused = true;
-            } else {
+            } else if (focused) {
                 MyInput.stopListeningText();
                 focused = false;
+                onInputCompleted();
             }
         }
 
-        if (!MyInput.getTextInput().equals("")) {
+        if (focused && !MyInput.getTextInput().equals("")) {
             setText(getText() + MyInput.getTextInput());
             MyInput.startListeningText();
         }
 
-        if (MyInput.getKeyDown() == Input.Keys.BACKSPACE) {
+        if (focused && MyInput.getKeyDown() == Input.Keys.BACKSPACE) {
+            if (getText().length() < 1) return;
             setText(getText().substring(0, getText().length() - 1));
         }
     }
@@ -57,5 +60,19 @@ public class TextField extends GameButton {
         roundedRect(x - 5, y + 5, width, height, 5);
         shapeRenderer.end();
         super.render(sb);
+    }
+
+    private void onInputCompleted() {
+        if (this.onInputCompleted != null) {
+            onInputCompleted.run();
+        }
+    }
+
+    public void setOnInputCompleted(Runnable runnable) {
+        this.onInputCompleted = runnable;
+    }
+
+    public boolean isFocused() {
+        return focused;
     }
 }

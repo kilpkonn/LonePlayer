@@ -11,9 +11,9 @@ import java.util.UUID;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyTextListener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.TextField;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
@@ -31,7 +31,9 @@ public class MatchmakingMenu extends Scene {
     private GameButton connectButton;
     private GameButton newServerButton;
     private GameButton playersCountLabel;
-    private TextField ipAddressLabel;
+    private GameButton nameLabel;
+    private TextField nameTextField;
+    private TextField connectTextField;
     private Map<UUID, GameButton> playerNameButtons = new HashMap<>();
     private Map<GameButton, block> buttonType;
 
@@ -47,16 +49,27 @@ public class MatchmakingMenu extends Scene {
         connectButton = new GameButton("Connect", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f);
         newServerButton = new GameButton("Start Server", V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f);
         playersCountLabel = new GameButton("Players: 0", V_WIDTH / 6f, V_HEIGHT / 1.2f - 80);
-        ipAddressLabel = new TextField("", V_WIDTH * 3 / 6f - 50, V_HEIGHT / 1.2f, V_WIDTH / 6f - 30, 40f);
+        nameLabel = new GameButton("Name:", V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f + 60);
+        nameTextField = new TextField(Game.settings.NAME, V_WIDTH * 4 / 6f + nameLabel.width + 10, V_HEIGHT / 1.2f + 60, V_WIDTH / 6f, 40f);
+        connectTextField = new TextField("", V_WIDTH * 3 / 6f - 50, V_HEIGHT / 1.2f, V_WIDTH / 6f - 30, 40f);
 
         playersCountLabel.setAcceptHover(false);
+        nameLabel.setAcceptHover(false);
+
+        nameTextField.setOnInputCompleted(() -> {
+            Game.settings.NAME = nameTextField.getText();
+            Game.settings.save(B2DVars.PATH + "settings/settings.json");
+            //TODO: Change name on server
+        });
 
         buttons = new HashSet<>(Arrays.asList(backButton,
                 startButton,
                 connectButton,
                 newServerButton,
                 playersCountLabel,
-                ipAddressLabel));
+                nameLabel,
+                nameTextField,
+                connectTextField));
 
         buttonType =
                 new HashMap<GameButton, block>() {
@@ -65,13 +78,13 @@ public class MatchmakingMenu extends Scene {
                         put(startButton, block.START);
                         put(connectButton, block.CONNECT);
                         put(newServerButton, block.NEWSERVER);
-                        put(ipAddressLabel, block.IPADDRESS);
+                        put(connectTextField, block.IPADDRESS);
                     }
                 };
 
         for (GameButton button : buttons) played.put(button, false);
         for (GameButton button : buttons) button.setLineLengthMultiplier(0.6f);
-        ipAddressLabel.setLineLengthMultiplier(0.8f);
+        //connectTextField.setLineLengthMultiplier(0.8f);
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
     }
@@ -97,12 +110,12 @@ public class MatchmakingMenu extends Scene {
                     // TODO: Start game
                     break;
                 case CONNECT:
-                    Game.client = new GameClient(ipAddressLabel.getText());
+                    Game.client = new GameClient(connectTextField.getText());
                     break;
                 case NEWSERVER:
                     Game.server = new GameServer();
                     Game.client = new GameClient(Game.server.getConnect());  // Auto connect
-                    ipAddressLabel.setText(Game.server.getConnect());
+                    connectTextField.setText(Game.server.getConnect());
                     break;
                 case IPADDRESS:
                     if (Game.server != null) {
