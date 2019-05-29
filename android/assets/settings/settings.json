@@ -1,1 +1,15 @@
-{"MOVE_LEFT":29,"MOVE_RIGHT":32,"CHANGE_DIMENSION":47,"JUMP":62,"SHOOT":0,"MENU":82,"ESC":131,"ENABLE_DEV_MAPS":false,"SHOW_FPS":false,"MAX_FPS":300,"ENABLE_VSYNC":true,"NAME":"test2"}
+{
+  "move_left": 29,
+  "move_right": 32,
+  "toggle_dimension": 47,
+  "jump": 62,
+  "attack": 0,
+  "next_weapon": 33,
+  "previous_weapon": 45,
+  "escape_button": 131,
+  "enable_dev_maps": false,
+  "show_fps": false,
+  "max_fps": 300,
+  "enable_vsync": true,
+  "name": ""
+}

@@ -3,31 +3,45 @@ package ee.taltech.iti0202.gui.game.desktop.settings;
 import com.badlogic.gdx.Input;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.*;
 
 public class Settings {
+    @SerializedName("move_left")
     public int MOVE_LEFT = Input.Keys.A;
+    @SerializedName("move_right")
     public int MOVE_RIGHT = Input.Keys.D;
+    @SerializedName("jump")
     public int JUMP = Input.Keys.SPACE;
+    @SerializedName("toggle_dimension")
     public int CHANGE_DIMENSION = Input.Keys.S;
-    public int MENU = Input.Keys.MENU;
+    @SerializedName("attack")
     public int SHOOT = Input.Buttons.LEFT;
+    @SerializedName("escape_button")
     public int ESC = Input.Keys.ESCAPE;
+    @SerializedName("next_weapon")
     public int NEXT_WEAPON = Input.Keys.E;
+    @SerializedName("previous_weapon")
     public int PREVIOUS_WEAPON = Input.Keys.Q;
 
+    @SerializedName("enable_dev_maps")
     public boolean ENABLE_DEV_MAPS = false;
+    @SerializedName("show_fps")
     public boolean SHOW_FPS = false;
+    @SerializedName("max_fps")
     public int MAX_FPS = 300;
+    @SerializedName("enable_vsync")
     public boolean ENABLE_VSYNC = true;
 
+    @SerializedName("name")
     public String NAME = "";
 
     public void save(String path) {
         Gson gson =
                 new GsonBuilder()
                         .registerTypeAdapter(Settings.class, new SettingsSerializer())
+                        .setPrettyPrinting()
                         .create();
         String jsonString = gson.toJson(this);
         try {

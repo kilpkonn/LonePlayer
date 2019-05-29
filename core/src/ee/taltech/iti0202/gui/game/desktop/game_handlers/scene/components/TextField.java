@@ -39,6 +39,10 @@ public class TextField extends GameButton {
             }
         }
 
+        if (focused && MyInput.isDown(Input.Keys.CONTROL_LEFT) && MyInput.isPressed(Input.Keys.V)) {
+            setText(getText() + Gdx.app.getClipboard().getContents());
+        }
+
         if (focused && !MyInput.getTextInput().equals("")) {
             setText(getText() + MyInput.getTextInput());
             MyInput.startListeningText();
