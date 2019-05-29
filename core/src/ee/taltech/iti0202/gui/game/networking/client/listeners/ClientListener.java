@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
+import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 
 public class ClientListener implements DataReceivedListener {
 
@@ -29,9 +30,13 @@ public class ClientListener implements DataReceivedListener {
 
         if (obj instanceof Handshake.Request) {
             client.performHandshake((Handshake.Request) obj);
+        } else if (obj instanceof Lobby.Details) {
+            client.updateLobbyDetails((Lobby.Details) obj);
         }
     }
 
     @Override
-    public void disconnected(UUID connectionId) {}
+    public void disconnected(UUID connectionId) {
+
+    }
 }

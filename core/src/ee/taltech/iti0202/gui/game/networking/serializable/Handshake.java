@@ -5,11 +5,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class Handshake implements Serializable {
-    static public class Request implements Serializable {
+    public static class Request implements Serializable {
         public Set<String> names = new HashSet<>();
     }
 
-    static public class Response implements Serializable {
+    public static class Response implements Serializable {
         public String name;
     }
 }

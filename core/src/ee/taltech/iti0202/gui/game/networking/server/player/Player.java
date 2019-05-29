@@ -1,8 +1,9 @@
 package ee.taltech.iti0202.gui.game.networking.server.player;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public class Player {
+public class Player implements Serializable {
 
     public Player(String name, UUID uuid) {
         this.name = name;

@@ -8,11 +8,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
+import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
@@ -50,6 +49,7 @@ public class GameServer {
 
     public void updateConnection(UUID uuid, Player player) {
         players.put(uuid, player);
+        updateLobbyDetails();
     }
 
     public void performHandshake(UUID uuid) {
@@ -62,6 +62,13 @@ public class GameServer {
 
     public void onDisconnected(UUID uuid) {
         players.remove(uuid);
+        updateLobbyDetails();
+    }
+
+    private void updateLobbyDetails() {
+        Lobby.Details details = new Lobby.Details();
+        details.players = getPlayers();
+        server.sendReliableObjectToAllClients(details);
     }
 
     public Set<String> getNames() {

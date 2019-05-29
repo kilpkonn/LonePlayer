@@ -15,6 +15,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameBu
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.TextField;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
+import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
@@ -92,12 +93,6 @@ public class MatchmakingMenu extends Scene {
     @Override
     public void update(float dt) {
         timePassed += dt;
-
-        if (timePassed > 2) {
-            updatePlayers();
-            timePassed = 0;
-        }
-
         super.update(dt);
     }
 
@@ -110,11 +105,11 @@ public class MatchmakingMenu extends Scene {
                     // TODO: Start game
                     break;
                 case CONNECT:
-                    Game.client = new GameClient(connectTextField.getText());
+                    Game.client = new GameClient(connectTextField.getText(), this);
                     break;
                 case NEWSERVER:
                     Game.server = new GameServer();
-                    Game.client = new GameClient(Game.server.getConnect());  // Auto connect
+                    Game.client = new GameClient(Game.server.getConnect(), this);  // Auto connect
                     connectTextField.setText(Game.server.getConnect());
                     break;
                 case IPADDRESS:
@@ -135,11 +130,11 @@ public class MatchmakingMenu extends Scene {
         currBlock = buttonType.get(btn);
     }
 
-    private void updatePlayers() {
-        if (Game.server != null) {
+    public void updateLobbyDetails(Lobby.Details details) {
+        if (details != null) {
             buttons.removeAll(playerNameButtons.values());
             playerNameButtons.clear();
-            for (Player player : Game.server.getPlayers()) {
+            for (Player player : details.players) {
                 addPlayer(player);
             }
             playersCountLabel.setText("Players: " + playerNameButtons.size());
