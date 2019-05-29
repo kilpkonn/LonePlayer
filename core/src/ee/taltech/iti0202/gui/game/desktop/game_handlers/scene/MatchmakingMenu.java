@@ -105,11 +105,19 @@ public class MatchmakingMenu extends Scene {
                     // TODO: Start game
                     break;
                 case CONNECT:
-                    Game.client = new GameClient(connectTextField.getText(), this);
+                    if (Game.client == null) {
+                        Game.client = new GameClient(connectTextField.getText(), this);
+                        connectButton.setText("Disconnect");
+                    } else {
+                        Game.client.disconnect();
+                        Game.client = null;
+                        connectButton.setText("Connect");
+                    }
                     break;
                 case NEWSERVER:
                     Game.server = new GameServer();
                     Game.client = new GameClient(Game.server.getConnect(), this);  // Auto connect
+                    connectButton.setText("Disconnect");
                     connectTextField.setText(Game.server.getConnect());
                     break;
                 case IPADDRESS:
@@ -131,14 +139,15 @@ public class MatchmakingMenu extends Scene {
     }
 
     public void updateLobbyDetails(Lobby.Details details) {
+        buttons.removeAll(playerNameButtons.values());
+        playerNameButtons.clear();
+
         if (details != null) {
-            buttons.removeAll(playerNameButtons.values());
-            playerNameButtons.clear();
             for (Player player : details.players) {
                 addPlayer(player);
             }
-            playersCountLabel.setText("Players: " + playerNameButtons.size());
         }
+        playersCountLabel.setText("Players: " + playerNameButtons.size());
     }
 
     public void addPlayer(Player player) {  //TODO: Make some actually working function here

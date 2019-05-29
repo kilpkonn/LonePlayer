@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import net.corpwar.lib.corpnet.Client;
 import net.corpwar.lib.corpnet.util.SerializationUtils;
 
+import java.net.SocketException;
+
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
 import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
@@ -38,6 +40,11 @@ public class GameClient {
 
     public void updateLobbyDetails(Lobby.Details details) {
         Gdx.app.postRunnable(() -> matchmakingMenu.updateLobbyDetails(details));
+    }
+
+    public void disconnect() {
+        client.killConnection();  //TODO: Throws error, idk if we should handle it or nah
+        updateLobbyDetails(null);
     }
 
     @Deprecated
