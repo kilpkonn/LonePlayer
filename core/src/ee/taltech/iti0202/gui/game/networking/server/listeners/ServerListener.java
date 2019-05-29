@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
+import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
@@ -42,6 +43,10 @@ public class ServerListener implements DataReceivedListener {
             }
             Player player = new Player(response.name, message.getConnectionID());
             server.updateConnection(message.getConnectionID(), player);
+        } else if (obj instanceof Lobby.NameChange) {
+            server.updatePlayerName(message.getConnectionID(), (Lobby.NameChange) obj);
+        } else if (obj instanceof Lobby.Kick) {
+            server.kickPlayer((Lobby.Kick) obj);
         }
     }
 

@@ -61,7 +61,7 @@ public class MatchmakingMenu extends Scene {
         nameTextField.setOnInputCompleted(() -> {
             Game.settings.NAME = nameTextField.getText();
             // Game.settings.save(B2DVars.PATH + "settings/settings.json");
-            //TODO: Change name on server
+            Game.client.updateName();
         });
 
         buttons = new HashSet<>(Arrays.asList(backButton,
@@ -158,7 +158,7 @@ public class MatchmakingMenu extends Scene {
         GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
         GameButton lblPing = new GameButton(Math.round(player.latency * 1000) + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
         GameButton btnKick = new GameButton("Kick", V_WIDTH * 2 / 6f + 100, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
-        btnKick.setOnAction(() -> System.out.println("Kicked"));  //TODO: Kick player
+        btnKick.setOnAction(() -> Game.client.kickPlayer(player));
         group.addButton(btn);
         group.addButton(lblPing);
         group.addButton(btnKick);

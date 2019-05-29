@@ -47,6 +47,19 @@ public class GameServer {
         return new HashSet<>(players.values());
     }
 
+    public void updatePlayerName(UUID uuid, Lobby.NameChange nameChange) {
+        Player player = players.get(uuid);
+        player.name = nameChange.newName;
+        players.remove(uuid);
+        players.put(uuid, player);
+        updateLobbyDetails();
+    }
+
+    public void kickPlayer(Lobby.Kick player) {
+        players.remove(player.playerToBeKicked.uuid);
+        updateLobbyDetails();
+    }
+
     public void updateConnection(UUID uuid, Player player) {
         players.put(uuid, player);
         updateLobbyDetails();

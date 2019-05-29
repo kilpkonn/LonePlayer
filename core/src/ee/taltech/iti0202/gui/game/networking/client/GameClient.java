@@ -12,6 +12,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
 import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
+import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 public class GameClient {
 
@@ -29,12 +30,21 @@ public class GameClient {
         client.startClient();
     }
 
+    public void updateName() {
+        client.sendReliableDataObject(new Lobby.NameChange(Game.settings.NAME));
+    }
+
+    public void kickPlayer(Player player) {
+        client.sendReliableDataObject(new Lobby.Kick(player));
+    }
+
     public void performHandshake(Handshake.Request request) {
         Handshake.Response response = new Handshake.Response();
-        if (request.names.contains(Game.settings.NAME)) {
-            Game.settings.NAME += Math.round(Math.random() * 100);
-        }
         response.name = Game.settings.NAME;
+        if (request.names.contains(Game.settings.NAME)) {
+            response.name += Math.round(Math.random() * 100);
+        }
+
         client.sendReliableData(SerializationUtils.getInstance().serialize(response));
     }
 

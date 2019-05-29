@@ -55,7 +55,7 @@ public abstract class Scene implements Disposable {
         stage.draw();
 
         for (GameButton button : buttons) {
-            if (button.hoverOver()) {
+            if (button.hoverOver() && played.keySet().contains(button)) {
                 if (!played.get(button)) {
                     played.put(button, true);
                     playSoundOnce("sounds/menu_hover.wav", 1.0f);
