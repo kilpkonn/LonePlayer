@@ -68,6 +68,9 @@ public class GameServer {
     private void updateLobbyDetails() {
         Lobby.Details details = new Lobby.Details();
         details.players = getPlayers();
+        for (Player player : details.players) {
+            player.latency = server.getConnectionFromUUID(player.uuid).getLastPingTime();
+        }
         server.sendReliableObjectToAllClients(details);
     }
 

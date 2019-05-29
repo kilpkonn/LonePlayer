@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.ButtonGroup;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.TextField;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
@@ -35,7 +36,7 @@ public class MatchmakingMenu extends Scene {
     private GameButton nameLabel;
     private TextField nameTextField;
     private TextField connectTextField;
-    private Map<UUID, GameButton> playerNameButtons = new HashMap<>();
+    private Map<UUID, ButtonGroup> playerNameButtons = new HashMap<>();
     private Map<GameButton, block> buttonType;
 
     private float timePassed = 0;
@@ -85,7 +86,6 @@ public class MatchmakingMenu extends Scene {
 
         for (GameButton button : buttons) played.put(button, false);
         for (GameButton button : buttons) button.setLineLengthMultiplier(0.6f);
-        //connectTextField.setLineLengthMultiplier(0.8f);
 
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
     }
@@ -139,7 +139,10 @@ public class MatchmakingMenu extends Scene {
     }
 
     public void updateLobbyDetails(Lobby.Details details) {
-        buttons.removeAll(playerNameButtons.values());
+        for (ButtonGroup group : playerNameButtons.values()) {
+            buttons.removeAll(group.getButtons());
+            group.dispose();
+        }
         playerNameButtons.clear();
 
         if (details != null) {
@@ -150,11 +153,20 @@ public class MatchmakingMenu extends Scene {
         playersCountLabel.setText("Players: " + playerNameButtons.size());
     }
 
-    public void addPlayer(Player player) {  //TODO: Make some actually working function here
+    public void addPlayer(Player player) {
+        ButtonGroup group = new ButtonGroup();
         GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
-        btn.setAcceptHover(false);
-        playerNameButtons.put(player.uuid, btn);
-        buttons.add(btn);
+        GameButton lblPing = new GameButton(Math.round(player.latency * 1000) + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
+        GameButton btnKick = new GameButton("Kick", V_WIDTH * 2 / 6f + 100, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
+        btnKick.setOnAction(() -> System.out.println("Kicked"));  //TODO: Kick player
+        group.addButton(btn);
+        group.addButton(lblPing);
+        group.addButton(btnKick);
+
+        group.setAcceptHover(false);
+
+        playerNameButtons.put(player.uuid, group);
+        buttons.addAll(group.getButtons());
         played.put(btn, false);
     }
 

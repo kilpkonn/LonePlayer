@@ -10,6 +10,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
+
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
 public class GameButton implements Disposable {
@@ -24,6 +27,7 @@ public class GameButton implements Disposable {
     private boolean hoverOver;
     private boolean acceptHover = true;
     private boolean autoScale = true;
+    private Runnable onAction;
     protected ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     private BitmapFont font;
@@ -50,6 +54,11 @@ public class GameButton implements Disposable {
                 (mousePos.x / SCALE >= x && mousePos.x / SCALE <= x + width)
                         && (V_HEIGHT - mousePos.y / SCALE >= y - height
                                 && V_HEIGHT - mousePos.y / SCALE <= y);
+        if (MyInput.isMouseClicked(Game.settings.SHOOT) && hoverOver) {
+            if (onAction != null) {
+                onAction.run();
+            }
+        }
     }
 
     public void setColor(Color color) {
@@ -103,6 +112,10 @@ public class GameButton implements Disposable {
 
     public void setLineLengthMultiplier(float multiplier) {
         this.lineLengthMultiplier = multiplier;
+    }
+
+    public void setOnAction(Runnable onAction) {
+        this.onAction = onAction;
     }
 
     @Override

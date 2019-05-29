@@ -12,6 +12,7 @@ public class Player implements Serializable {
 
     public String name;
     public UUID uuid;
+    public long latency;
 
     @Override
     public String toString() {
