@@ -54,6 +54,17 @@ public class GameServer {
 
     public void performHandshake(UUID uuid) {
         Handshake.Request request = new Handshake.Request();
+        for (Player player : players.values()) {
+            request.names.add(player.name);
+        }
         server.sendReliableObjectToClient(request, uuid);
+    }
+
+    public Set<String> getNames() {
+        Set<String> names = new HashSet<>();
+        for (Player player : players.values()) {
+            names.add(player.name);
+        }
+        return names;
     }
 }

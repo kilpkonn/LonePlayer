@@ -28,7 +28,7 @@ public class ClientListener implements DataReceivedListener {
         Object obj = SerializationUtils.getInstance().deserialize(message.getData());
 
         if (obj instanceof Handshake.Request) {
-            client.performHandshake();
+            client.performHandshake((Handshake.Request) obj);
         }
     }
 

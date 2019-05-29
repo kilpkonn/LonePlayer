@@ -36,6 +36,10 @@ public class ServerListener implements DataReceivedListener {
 
         if (obj instanceof Handshake.Response) {
             Handshake.Response response = (Handshake.Response) obj;
+            if (server.getNames().contains(response.name)) {
+                server.performHandshake(message.getConnectionID());
+                return;
+            }
             Player player = new Player(response.name, message.getConnectionID());
             server.updateConnection(message.getConnectionID(), player);
         }

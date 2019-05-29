@@ -21,8 +21,11 @@ public class GameClient {
         client.startClient();
     }
 
-    public void performHandshake() {
+    public void performHandshake(Handshake.Request request) {
         Handshake.Response response = new Handshake.Response();
+        if (request.names.contains(Game.settings.NAME)) {
+            Game.settings.NAME += Math.round(Math.random() * 100);
+        }
         response.name = Game.settings.NAME;
         client.sendReliableData(SerializationUtils.getInstance().serialize(response));
     }

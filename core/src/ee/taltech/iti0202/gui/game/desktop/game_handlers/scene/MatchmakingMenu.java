@@ -58,7 +58,7 @@ public class MatchmakingMenu extends Scene {
 
         nameTextField.setOnInputCompleted(() -> {
             Game.settings.NAME = nameTextField.getText();
-            Game.settings.save(B2DVars.PATH + "settings/settings.json");
+            // Game.settings.save(B2DVars.PATH + "settings/settings.json");
             //TODO: Change name on server
         });
 
