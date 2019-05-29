@@ -47,6 +47,6 @@ public class ServerListener implements DataReceivedListener {
 
     @Override
     public void disconnected(UUID connectionId) {
-
+        server.onDisconnected(connectionId);
     }
 }

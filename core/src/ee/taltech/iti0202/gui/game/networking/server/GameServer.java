@@ -60,6 +60,10 @@ public class GameServer {
         server.sendReliableObjectToClient(request, uuid);
     }
 
+    public void onDisconnected(UUID uuid) {
+        players.remove(uuid);
+    }
+
     public Set<String> getNames() {
         Set<String> names = new HashSet<>();
         for (Player player : players.values()) {
