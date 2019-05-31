@@ -17,8 +17,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class EndMenu extends Scene {
 
-    private block currBlock = block.DEFAULT;
-    private HashMap<GameButton, block> buttonType;
     private Runnable openSettingsFunc;
     private B2DVars.gameDifficulty difficulty;
     private GameButton exitButton;
@@ -64,6 +62,29 @@ public class EndMenu extends Scene {
         timeButton = new GameButton("Time: 0s", V_WIDTH * 2 / 3f, V_HEIGHT / 1.5f - 40);
         timeButton.setAcceptHover(false);
 
+        nextButton.setOnAction(() -> {
+            System.out.println(act);
+            System.out.println(map);
+            String[] newLevel = levels.get(levels.indexOf(act + "@" + map) + 1).split("@");
+            GameStateManager.pushState(
+                    GameStateManager.State.PLAY, newLevel[0], newLevel[1], difficulty);
+        });
+
+        playAgainButton.setOnAction(() -> {
+            playSoundOnce("sounds/menu_click.wav", 0.5f);
+            GameStateManager.pushState(GameStateManager.State.PLAY, act, map, difficulty);
+        });
+
+        settingsButton.setOnAction(() -> {
+            playSoundOnce("sounds/menu_click.wav", 0.5f);
+            openSettingsFunc.run();
+        });
+
+        exitButton.setOnAction(() -> {
+            playSoundOnce("sounds/negative_2.wav", 0.5f);
+            done = true;
+        });
+
         buttons =
                 new HashSet<>(
                         Arrays.asList(
@@ -73,62 +94,20 @@ public class EndMenu extends Scene {
                                 exitButton,
                                 timeButton));
 
-        buttonType =
-                new HashMap<GameButton, block>() {
-                    {
-                        put(nextButton, block.NEXT);
-                        put(playAgainButton, block.NEWGAME);
-                        put(settingsButton, block.SETTINGS);
-                        put(exitButton, block.EXIT);
-                        put(timeButton, block.DEFAULT);
-                    }
-                };
         cam.setToOrtho(false, V_WIDTH, V_HEIGHT);
 
         for (GameButton button : buttons) played.put(button, false);
     }
 
     @Override
-    public void handleInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && currBlock != null) {
-            switch (currBlock) {
-                case NEXT:
-                    System.out.println(act);
-                    System.out.println(map);
-                    String[] newLevel = levels.get(levels.indexOf(act + "@" + map) + 1).split("@");
-                    GameStateManager.pushState(
-                            GameStateManager.State.PLAY, newLevel[0], newLevel[1], difficulty);
-                    break;
-                case NEWGAME:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    GameStateManager.pushState(GameStateManager.State.PLAY, act, map, difficulty);
-                    break;
-                case SETTINGS:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    openSettingsFunc.run();
-                    break;
-                case EXIT:
-                    playSoundOnce("sounds/negative_2.wav", 0.5f);
-                    done = true;
-                    break;
-            }
-        }
-    }
+    public void handleInput() { }
 
     @Override
     protected void updateCurrentBlock(GameButton button) {
-        currBlock = buttonType.get(button);
+
     }
 
     public void setTime(float time) {
         timeButton.setText("Time: " + Math.round(time * 100) / 100f + "s");
-    }
-
-    private enum block {
-        NEWGAME,
-        NEXT,
-        EXIT,
-        SETTINGS,
-        DEFAULT
     }
 }

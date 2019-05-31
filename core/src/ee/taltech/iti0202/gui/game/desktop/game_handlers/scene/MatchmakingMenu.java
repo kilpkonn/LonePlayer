@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.ButtonGroup;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.TextField;

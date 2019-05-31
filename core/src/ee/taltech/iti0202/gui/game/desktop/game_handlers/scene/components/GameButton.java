@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -27,6 +28,7 @@ public class GameButton implements Disposable {
     private boolean acceptHover = true;
     private boolean autoScale = true;
     private Runnable onAction;
+    private Runnable onHover;
     protected ShapeRenderer shapeRenderer = new ShapeRenderer();
 
     private BitmapFont font;
@@ -53,8 +55,12 @@ public class GameButton implements Disposable {
                 (mousePos.x / SCALE >= x && mousePos.x / SCALE <= x + width)
                         && (V_HEIGHT - mousePos.y / SCALE >= y - height
                                 && V_HEIGHT - mousePos.y / SCALE <= y);
+        if (hoverOver && onHover != null) {
+            onHover.run();
+        }
         if (MyInput.isMouseClicked(Game.settings.SHOOT) && hoverOver) {
             if (onAction != null) {
+                playSoundOnce("sounds/menu_click.wav", 0.5f);
                 onAction.run();
             }
         }
@@ -117,6 +123,10 @@ public class GameButton implements Disposable {
         this.onAction = onAction;
     }
 
+    public void setOnHover(Runnable onHover) {
+        this.onHover = onHover;
+    }
+
     @Override
     public void dispose() {
         font.dispose();
@@ -142,5 +152,14 @@ public class GameButton implements Disposable {
 
     public void setAutoScale(boolean autoScale) {
         this.autoScale = autoScale;
+    }
+
+    protected void playSoundOnce(String source, float db) {
+        try {
+            Sound sound = Gdx.audio.newSound(Gdx.files.local(PATH + source));
+            sound.play(db);
+        } catch (Exception e) {
+            System.out.println("Sound couldn't be located.");
+        }
     }
 }

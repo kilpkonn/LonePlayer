@@ -18,7 +18,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class SettingsMenu extends Scene {
 
-    private block currBlock;
     private float settingsXLocation = V_WIDTH / 2f;
     private float displayXLocation = V_WIDTH / 1.3f;
     private Game game;
@@ -37,7 +36,6 @@ public class SettingsMenu extends Scene {
     private GameButton enableDevMapsDisplay;
     private HashMap<GameButton, SettingBlock> settingsButtons = new HashMap<>();
     private HashMap<GameButton, GameButton> keyBindButtons = new HashMap<>();
-    private HashMap<GameButton, block> buttonType;
     private GameButton btnWaitingInput;
 
     public SettingsMenu(OrthographicCamera cam, Game game, Runnable backFunc) {
@@ -54,17 +52,18 @@ public class SettingsMenu extends Scene {
         loadButton = new GameButton("Load", V_WIDTH / 6f, V_HEIGHT / 2f - 120);
         exitButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 2f - 160);
 
-        buttons = new HashSet<>(Arrays.asList(restoreButton, saveButton, exitButton, loadButton));
+        exitButton.setOnAction(backFunc);
+        saveButton.setOnAction(() -> Game.settings.save(B2DVars.PATH + "settings/settings.json"));
+        restoreButton.setOnAction(() -> {
+            Game.settings = Game.settings.loadDefault();
+            updateAllBindsDisplayed();
+        });
+        loadButton.setOnAction(() -> {
+            Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
+            updateAllBindsDisplayed();
+        });
 
-        buttonType =
-                new HashMap<GameButton, block>() {
-                    {
-                        put(restoreButton, block.NEXT);
-                        put(saveButton, block.SAVE);
-                        put(exitButton, block.EXIT);
-                        put(loadButton, block.LOAD);
-                    }
-                };
+        buttons = new HashSet<>(Arrays.asList(restoreButton, saveButton, exitButton, loadButton));
 
         GameButton enableVSyncButton =
                 new GameButton("Enable VSync", settingsXLocation, V_HEIGHT / 3f + 400);
@@ -144,11 +143,10 @@ public class SettingsMenu extends Scene {
         keyBindButtons.put(escButton, escDisplay);
         keyBindButtons.put(changeDimensionButton, changeDimensionDisplay);
 
-        for (GameButton btn : settingsButtons.keySet()) buttonType.put(btn, block.SETTINGS);
+        for (GameButton btn : settingsButtons.keySet()) btn.setOnAction(this::handleSettingsButtonClick);
         buttons.addAll(settingsButtons.keySet());
 
         for (GameButton btn : keyBindButtons.values()) {
-            buttonType.put(btn, block.SETTINGS);
             btn.setAcceptHover(false);
         }
         buttons.addAll(keyBindButtons.values());
@@ -161,33 +159,6 @@ public class SettingsMenu extends Scene {
     @Override
     public void handleInput() {
         handleKey(MyInput.getKeyDown());
-
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && currBlock != null) {
-            switch (currBlock) {
-                case EXIT:
-                    playSoundOnce("sounds/negative_2.wav", 0.5f);
-                    backFunc.run();
-                    break;
-                case SAVE:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    Game.settings.save(B2DVars.PATH + "settings/settings.json");
-                    break;
-                case NEXT:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    Game.settings = Game.settings.loadDefault();
-                    updateAllBindsDisplayed();
-                    break;
-                case LOAD:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    Game.settings = Game.settings.load(B2DVars.PATH + "settings/settings.json");
-                    updateAllBindsDisplayed();
-                    break;
-                case SETTINGS:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    handleSettingsButtonClick();
-                    break;
-            }
-        }
     }
 
     public void handleSettingsButtonClick() {
@@ -257,9 +228,7 @@ public class SettingsMenu extends Scene {
     }
 
     @Override
-    protected void updateCurrentBlock(GameButton button) {
-        currBlock = buttonType.get(button);
-    }
+    protected void updateCurrentBlock(GameButton button) { }
 
     @Override
     public void dispose() {
@@ -276,13 +245,5 @@ public class SettingsMenu extends Scene {
         SHOW_FPS,
         ENABLE_DEV_MAPS,
         DEFAULT
-    }
-
-    private enum block {
-        NEXT,
-        SAVE,
-        EXIT,
-        LOAD,
-        SETTINGS
     }
 }

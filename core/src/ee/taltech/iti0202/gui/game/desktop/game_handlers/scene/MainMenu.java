@@ -15,7 +15,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class MainMenu extends Scene {
 
-    private block currBlock = block.DEFAULT;
     private Runnable newGameFunc;
     private Runnable matchmakingFunc;
     private Runnable resumeGameFunc;
@@ -25,7 +24,6 @@ public class MainMenu extends Scene {
     private GameButton loadGameButton;
     private GameButton settingsButton;
     private GameButton exitButton;
-    private HashMap<GameButton, MainMenu.block> buttonType;
 
     public MainMenu(
             OrthographicCamera cam,
@@ -44,6 +42,14 @@ public class MainMenu extends Scene {
         loadGameButton = new GameButton("Resume", V_WIDTH / 5f, V_HEIGHT / 1.5f - 40);
         settingsButton = new GameButton("Settings", V_WIDTH / 5f, V_HEIGHT / 1.5f - 80);
         exitButton = new GameButton("Exit", V_WIDTH / 5f, V_HEIGHT / 1.5f - 120);
+        newGameButton.setOnAction(newGameFunc);
+        matchmakingButton.setOnAction(matchmakingFunc);
+        loadGameButton.setOnAction(resumeGameFunc);
+        settingsButton.setOnAction(settingsFunc);
+        exitButton.setOnAction(() -> {
+            playSoundOnce("sounds/negative_2.wav", 0.5f);
+            Gdx.app.exit();
+        });
 
         buttons =
                 new HashSet<>(
@@ -53,16 +59,6 @@ public class MainMenu extends Scene {
                                 exitButton,
                                 matchmakingButton));
 
-        buttonType =
-                new HashMap<GameButton, block>() {
-                    {
-                        put(newGameButton, block.NEWGAME);
-                        put(matchmakingButton, block.MATCHMAKING);
-                        put(loadGameButton, block.RESUME);
-                        put(settingsButton, block.SETTINGS);
-                        put(exitButton, block.EXIT);
-                    }
-                };
 
         for (GameButton button : buttons) played.put(button, false);
 
@@ -70,44 +66,8 @@ public class MainMenu extends Scene {
     }
 
     @Override
-    public void handleInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && currBlock != null) {
-            switch (currBlock) {
-                case NEWGAME:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    newGameFunc.run();
-                    break;
-                case MATCHMAKING:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    matchmakingFunc.run();
-                    break;
-                case RESUME:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    resumeGameFunc.run();
-                    break;
-                case SETTINGS:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    settingsFunc.run();
-                    break;
-                case EXIT:
-                    playSoundOnce("sounds/negative_2.wav", 0.5f);
-                    Gdx.app.exit();
-                    break;
-            }
-        }
-    }
+    public void handleInput() { }
 
     @Override
-    protected void updateCurrentBlock(GameButton button) {
-        currBlock = buttonType.get(button);
-    }
-
-    private enum block {
-        NEWGAME,
-        MATCHMAKING,
-        RESUME,
-        EXIT,
-        SETTINGS,
-        DEFAULT
-    }
+    protected void updateCurrentBlock(GameButton button) { }
 }

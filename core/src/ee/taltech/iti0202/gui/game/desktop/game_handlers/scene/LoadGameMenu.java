@@ -16,12 +16,9 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class LoadGameMenu extends Scene {
 
-    private LoadGameMenu.block currBlock;
     private Runnable backFunc;
     private GameButton backButton;
-    private HashMap<GameButton, String> savesButtons = new HashMap<>();
-    private HashMap<GameButton, LoadGameMenu.block> buttonType;
-    private String selectedMap;
+    private Set<GameButton> savesButtons = new HashSet<>();
 
     public LoadGameMenu(OrthographicCamera cam, Runnable backFunc) {
         super(cam);
@@ -29,14 +26,12 @@ public class LoadGameMenu extends Scene {
 
         backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.2f - 40);
 
-        buttons = new HashSet<>(Arrays.asList(backButton));
+        backButton.setOnAction(() -> {
+            playSoundOnce("sounds/negative_2.wav", 0.5f);
+            backFunc.run();
+        });
 
-        buttonType =
-                new HashMap<GameButton, block>() {
-                    {
-                        put(backButton, block.EXIT);
-                    }
-                };
+        buttons = new HashSet<>(Arrays.asList(backButton));
 
         showSaves();
 
@@ -52,30 +47,18 @@ public class LoadGameMenu extends Scene {
 
         for (GameButton button : buttons) {
             button.update(mouseInWorld2D);
-            if (button.hoverOver() && buttonType.get(button) == block.LOAD)
-                selectedMap = savesButtons.get(button);
         }
     }
 
     @Override
-    public void handleInput() {
-        if (MyInput.isMouseClicked(Game.settings.SHOOT) && currBlock != null) {
-            switch (currBlock) {
-                case LOAD:
-                    playSoundOnce("sounds/menu_click.wav", 0.5f);
-                    GameStateManager.pushState(GameStateManager.State.PLAY, getGameProgress());
-                case EXIT:
-                    playSoundOnce("sounds/negative_2.wav", 0.5f);
-                    backFunc.run();
-            }
-        }
-    }
+    public void handleInput() { }
 
-    public GameProgress getGameProgress() {
+    public GameProgress getGameProgress(String selectedMap) {
         return GameProgress.load(PATH + "saves/" + selectedMap);
     }
 
     private void showSaves() {
+        buttons.removeAll(savesButtons);
         savesButtons.clear();
         List<String> saves = loadSaves();
         Collections.sort(saves);
@@ -87,22 +70,21 @@ public class LoadGameMenu extends Scene {
                             saves.get(i).replace(".json", "").replace("_", " "),
                             V_WIDTH * 3 / 5f,
                             y - i * 40);
-            savesButtons.put(btn, saves.get(i));
-            buttonType.put(btn, block.LOAD);
+            savesButtons.add(btn);
+            String load = saves.get(i);
+            btn.setOnAction(() -> {
+                playSoundOnce("sounds/menu_click.wav", 0.5f);
+                GameStateManager.pushState(GameStateManager.State.PLAY, getGameProgress(load));
+            });
         }
-        buttons.addAll(savesButtons.keySet());
+        buttons.addAll(savesButtons);
     }
 
     private List<String> loadSaves() {
         String[] maps =
                 new File(PATH + "saves/")
                         .list(
-                                new FilenameFilter() {
-                                    @Override
-                                    public boolean accept(File file, String s) {
-                                        return !new File(file, s).isDirectory();
-                                    }
-                                });
+                                (file, s) -> !new File(file, s).isDirectory());
         if (maps != null) {
             return Arrays.asList(maps);
         }
@@ -110,13 +92,6 @@ public class LoadGameMenu extends Scene {
     }
 
     @Override
-    protected void updateCurrentBlock(GameButton button) {
-        currBlock = buttonType.get(button);
-    }
+    protected void updateCurrentBlock(GameButton button) { }
 
-    private enum block {
-        NEWGAME,
-        LOAD,
-        EXIT
-    }
 }
