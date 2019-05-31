@@ -38,7 +38,8 @@ public abstract class Scene implements Disposable {
         mouseInWorld2D = new Vector2();
     }
 
-    public abstract void handleInput();
+
+    public void handleInput() {}
 
     public void update(float dt) {
         mouseInWorld2D.x = Gdx.input.getX();
@@ -77,6 +78,7 @@ public abstract class Scene implements Disposable {
         }
     }
 
+    @Deprecated
     protected abstract void updateCurrentBlock(GameButton btn);
 
     @Override
