@@ -21,7 +21,7 @@ public class GameClient {
         this.matchmakingMenu = matchmakingMenu;
         client = new Client();
         String address = connect.substring(0, connect.indexOf(":"));
-        int port = Integer.parseInt(connect.substring(connect.indexOf(":") + 1));
+        int port = Integer.parseInt(connect.substring(connect.indexOf(":") + 1).trim());
         client.setMillisecondToTimeout(10 * 1000);
         client.setPortAndIp(port, address);
         client.registerClientListerner(new ClientListener(this));

@@ -20,7 +20,7 @@ public class B2DVars {
     public static final float DIMENSION_FADE_AMOUNT = 0.6f;
     public static final float MAX_LOAD_TIME = 3f; // 3 seconds
     public static final float MIN_FPS_EXPECTED = 60f; // or 60 fps
-    public static final boolean DEBUG = false;
+    public static boolean DEBUG = false;
     public static final boolean JAR = false;
     // bosses
     public static final String BOSS = "1";

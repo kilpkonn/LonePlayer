@@ -37,10 +37,12 @@ public class DesktopLauncher {
         config.samples = 3;
         config.forceExit = true;
         List<String> arguments = new ArrayList<>((Arrays.asList(arg)));
-        config.fullscreen = !arguments.contains("-w");
+        config.fullscreen = !(arguments.contains("-w") || arguments.contains("--windowed"));
         config.height = V_HEIGHT * SCALE;
         // config.foregroundFPS = 300; // <- limit when focused
         config.backgroundFPS = 60; // <- limit when minimized
         config.addIcon(PATH + "images/logos/logo-32.png", Files.FileType.Local);
+
+        DEBUG = arguments.contains("-d") || arguments.contains("--debug");
     }
 }
