@@ -17,7 +17,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class GameButton implements Disposable {
 
-    // center at x, y
     public float x;
     public float y;
     public float width;

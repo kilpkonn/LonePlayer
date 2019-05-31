@@ -50,5 +50,6 @@ public class ButtonGroup implements Disposable {
         for (GameButton btn : buttons) {
             btn.dispose();
         }
+        System.gc();
     }
 }
