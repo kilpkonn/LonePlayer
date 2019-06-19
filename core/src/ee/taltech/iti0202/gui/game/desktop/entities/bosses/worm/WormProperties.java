@@ -19,6 +19,6 @@ public class WormProperties extends Properties {
         fdef.restitution = 0f;
         fdef.density = 100f;
         fdef.filter.categoryBits = BIT_WORM;
-        fdef.filter.maskBits = DIMENTSION_1 | DIMENTSION_2 | BIT_BULLET;
+        fdef.filter.maskBits = DIMENSION_1 | DIMENSION_2 | BIT_BULLET;
     }
 }

@@ -28,14 +28,14 @@ public class B2DVars {
     // category bits
     public static final short NONE = 0;
     public static final short BIT_ALL = 1023;
-    public static final short DIMENTSION_1 = 1;
-    public static final short DIMENTSION_2 = 2;
+    public static final short DIMENSION_1 = 1;
+    public static final short DIMENSION_2 = 2;
     public static final short TERRA_SQUARES = 4;
     public static final short BIT_BOSSES = 8;
     public static final short BIT_WORM = 16;
     public static final short BACKGROUND = 32;
-    public static final short TERRA_DIMENTSION_1 = 64;
-    public static final short TERRA_DIMENTSION_2 = 128;
+    public static final short TERRA_DIMENSION_1 = 64;
+    public static final short TERRA_DIMENSION_2 = 128;
     public static final short BIT_BULLET = 256;
     public static final short BIT_WEAPON = 512;
     // corner coords

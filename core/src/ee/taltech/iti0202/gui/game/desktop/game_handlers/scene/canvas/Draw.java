@@ -119,23 +119,23 @@ public class Draw implements Handler {
                 case "barrier":
                     this.fdef.filter.categoryBits = BACKGROUND;
                     this.fdef.filter.maskBits =
-                            BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2 | BIT_WEAPON | BIT_BULLET;
+                            BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON | BIT_BULLET;
                     determineMapObject(layer);
                     break;
                 case "hitboxes_1":
-                    this.fdef.filter.categoryBits = TERRA_DIMENTSION_1;
-                    this.fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_1 | BIT_WEAPON;
+                    this.fdef.filter.categoryBits = TERRA_DIMENSION_1;
+                    this.fdef.filter.maskBits = BIT_BOSSES | DIMENSION_1 | BIT_WEAPON;
                     determineMapObject(layer);
                     break;
                 case "hitboxes_2":
-                    this.fdef.filter.categoryBits = TERRA_DIMENTSION_2;
-                    this.fdef.filter.maskBits = BIT_BOSSES | DIMENTSION_2 | BIT_WEAPON;
+                    this.fdef.filter.categoryBits = TERRA_DIMENSION_2;
+                    this.fdef.filter.maskBits = BIT_BOSSES | DIMENSION_2 | BIT_WEAPON;
                     determineMapObject(layer);
                     break;
                 case "hitboxes":
                     this.fdef.filter.categoryBits = TERRA_SQUARES;
                     this.fdef.filter.maskBits =
-                            BIT_BOSSES | DIMENTSION_1 | DIMENTSION_2 | BIT_WEAPON;
+                            BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON;
                     determineMapObject(layer);
                     break;
                 default:

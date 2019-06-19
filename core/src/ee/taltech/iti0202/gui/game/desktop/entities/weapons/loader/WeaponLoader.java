@@ -26,7 +26,7 @@ public class WeaponLoader {
         circle.setRadius(9 / PPM);
         fdef.shape = circle;
         fdef.filter.categoryBits = BIT_WEAPON;
-        fdef.filter.maskBits = TERRA_SQUARES | BACKGROUND | TERRA_DIMENTSION_1 | TERRA_DIMENTSION_2;
+        fdef.filter.maskBits = TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2;
         body.createFixture(fdef).setUserData("weapon");
 
         Weapon weapon;

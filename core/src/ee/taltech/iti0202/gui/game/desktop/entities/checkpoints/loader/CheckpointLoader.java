@@ -20,7 +20,7 @@ public class CheckpointLoader {
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(4 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
         fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
         fdef.filter.maskBits = B2DVars.BIT_ALL;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("checkpoint");
@@ -37,7 +37,7 @@ public class CheckpointLoader {
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(64 / PPM, 32 / PPM, new Vector2(0, 4 / PPM), 0);
         fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENTSION_1 | DIMENTSION_2;
+        fdef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
         fdef.filter.maskBits = B2DVars.BIT_ALL;
         fdef.isSensor = true;
         body.createFixture(fdef).setUserData("end");

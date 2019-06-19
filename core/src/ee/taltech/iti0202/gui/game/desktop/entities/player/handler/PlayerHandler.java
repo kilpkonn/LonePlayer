@@ -9,8 +9,6 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.loader.PlayerLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
-import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader.WeaponLoader;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
@@ -192,20 +190,20 @@ public class PlayerHandler implements Handler {
                     mask =
                             BIT_BOSSES
                                     | BIT_WORM
-                                    | DIMENTSION_1
-                                    | DIMENTSION_2
+                                    | DIMENSION_1
+                                    | DIMENSION_2
                                     | TERRA_SQUARES
                                     | BACKGROUND
-                                    | TERRA_DIMENTSION_1;
+                                    | TERRA_DIMENSION_1;
                 } else {
                     mask =
                             BIT_BOSSES
                                     | BIT_WORM
-                                    | DIMENTSION_1
-                                    | DIMENTSION_2
+                                    | DIMENSION_1
+                                    | DIMENSION_2
                                     | TERRA_SQUARES
                                     | BACKGROUND
-                                    | TERRA_DIMENTSION_2;
+                                    | TERRA_DIMENSION_2;
                 }
 
                 Filter filter = new Filter();
