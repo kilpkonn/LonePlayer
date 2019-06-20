@@ -2,7 +2,11 @@ package ee.taltech.iti0202.gui.game.networking.server;
 
 import net.corpwar.lib.corpnet.Server;
 
-import java.net.InetAddress;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -24,16 +28,27 @@ public class GameServer {
     public GameServer() {
         server = new Server();
         server.setKeepAlive(true);
+        server.setWaitingQue(true);
+        server.setMaxConnections(6);
+        server.setMilisecoundToTimeout(20000);
         server.keepConnectionsAlive();
 
         try {
-            String address = InetAddress.getLocalHost().getHostAddress();
-            int port = 55000 + (int) Math.round(Math.random() * 1000);
-            server.setPortAndIp(port, address);
+            URL url_name = new URL("http://bot.whatismyipaddress.com");
+
+            BufferedReader sc =
+                    new BufferedReader(new InputStreamReader(url_name.openStream()));
+            String address = sc.readLine().trim(); //InetAddress.getLocalHost().getHostAddress();
+            int port = 55000; // + (int) Math.round(Math.random() * 1000);
+            server.setPortAndIp(port, "192.168.0.254"); //address);
             connect = address + ":" + port;
         } catch (UnknownHostException e) {
             System.out.println(e.getMessage());
             //TODO: Some actual error handling
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         server.registerServerListerner(new ServerListener(this));
         server.startServer();

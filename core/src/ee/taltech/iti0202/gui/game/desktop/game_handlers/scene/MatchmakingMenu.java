@@ -133,7 +133,7 @@ public class MatchmakingMenu extends Scene {
     public void addPlayer(Player player) {
         ButtonGroup group = new ButtonGroup();
         GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
-        GameButton lblPing = new GameButton(Math.round(player.latency * 1000) + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
+        GameButton lblPing = new GameButton(player.latency + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
         GameButton btnKick = new GameButton("Kick", V_WIDTH * 2 / 6f + 100, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
         btnKick.setOnAction(() -> Game.client.kickPlayer(player));
         group.addButton(btn);

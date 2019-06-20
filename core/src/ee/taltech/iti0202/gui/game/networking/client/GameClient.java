@@ -22,7 +22,7 @@ public class GameClient {
         client = new Client();
         String address = connect.substring(0, connect.indexOf(":"));
         int port = Integer.parseInt(connect.substring(connect.indexOf(":") + 1).trim());
-        client.setMillisecondToTimeout(10 * 1000);
+        client.setMillisecondToTimeout(20000);
         client.setPortAndIp(port, address);
         client.registerClientListerner(new ClientListener(this));
         client.startClient();
