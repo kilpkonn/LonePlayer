@@ -61,15 +61,6 @@ public class Player extends SpriteAnimation {
 
     public void aim() {
         if (currentWeapon == null) return;
-        // float offset = currentWeapon.getOffset().containsKey(getCurrentAnimation().name) ?
-        // currentWeapon.getOffset().get(getCurrentAnimation().name) : 0;
-        // System.out.println(offset);
-        // System.out.println(Math.toDegrees(body.getAngle()) + " - " + getBone("body").angle);
-        /*float offset = (float) (body.getAngle()
-        + Math.toRadians((getBone("right_hand").angle)
-        - (getBone("right_arm").angle))
-        //- Math.toRadians(getBone("body").angle)
-        + Math.PI / 3);*/
         float offset =
                 getCurrentAnimation().name.equals("run")
                         ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))

@@ -149,38 +149,20 @@ public class Play extends GameState {
                         act,
                         map,
                         hudCam,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                playState = pauseState.RUN;
-                                draw.setGameFadeOut(false);
-                                draw.setGameFadeDone(false);
-                                UPDATE = true;
-                            }
+                        () -> {
+                            playState = pauseState.RUN;
+                            draw.setGameFadeOut(false);
+                            draw.setGameFadeDone(false);
+                            UPDATE = true;
                         },
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                saveGame();
-                            }
-                        },
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                playState = pauseState.SETTINGS;
-                            }
-                        });
+                        this::saveGame,
+                        () -> playState = pauseState.SETTINGS);
 
         settingsMenu =
                 new SettingsMenu(
                         hudCam,
                         game,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                playState = pauseState.PAUSE;
-                            }
-                        });
+                        () -> playState = pauseState.PAUSE);
 
         endMenu =
                 new EndMenu(
@@ -188,12 +170,7 @@ public class Play extends GameState {
                         map,
                         hudCam,
                         difficulty,
-                        new Runnable() {
-                            @Override
-                            public void run() {
-                                playState = pauseState.SETTINGS;
-                            }
-                        });
+                        () -> playState = pauseState.SETTINGS);
         hud = new Hud(hudCam, this);
 
         playState = pauseState.RUN;
