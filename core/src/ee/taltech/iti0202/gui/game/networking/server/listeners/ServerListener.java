@@ -47,6 +47,8 @@ public class ServerListener implements DataReceivedListener {
             server.updatePlayerName(message.getConnectionID(), (Lobby.NameChange) obj);
         } else if (obj instanceof Lobby.Kick) {
             server.kickPlayer((Lobby.Kick) obj);
+        } else if (obj instanceof Lobby.ActMapDifficulty) {
+            server.updateActMapDifficulty((Lobby.ActMapDifficulty) obj);
         }
     }
 

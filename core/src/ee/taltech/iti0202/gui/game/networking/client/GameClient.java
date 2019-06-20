@@ -7,6 +7,7 @@ import net.corpwar.lib.corpnet.util.SerializationUtils;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
@@ -30,6 +31,10 @@ public class GameClient {
 
     public void updateName() {
         client.sendReliableDataObject(new Lobby.NameChange(Game.settings.NAME));
+    }
+
+    public void updateActMapDifficulty(String act, String map, B2DVars.GameDifficulty difficulty) {
+        client.sendReliableDataObject(new Lobby.ActMapDifficulty(act, map, difficulty));
     }
 
     public void kickPlayer(Player player) {

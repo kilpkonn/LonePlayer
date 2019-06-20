@@ -2,6 +2,7 @@ package ee.taltech.iti0202.gui.game.desktop.game_handlers.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,6 +26,8 @@ public class MatchmakingMenu extends Scene {
 
     private Runnable backFunc;
 
+    private LevelSelectionMenu levelSelectionMenu;
+
     private GameButton backButton;
     private GameButton startButton;
     private GameButton connectButton;
@@ -36,6 +39,8 @@ public class MatchmakingMenu extends Scene {
     private TextField connectTextField;
     private Map<UUID, ButtonGroup> playerNameButtons = new HashMap<>();
 
+    private MatchmakingState state = MatchmakingState.MAIN_MENU;
+
     private float timePassed = 0;
 
     public MatchmakingMenu(OrthographicCamera cam, Runnable backFunc) {
@@ -43,11 +48,18 @@ public class MatchmakingMenu extends Scene {
 
         this.backFunc = backFunc;
 
+        levelSelectionMenu = new LevelSelectionMenu(cam,
+                () -> state = MatchmakingState.MAIN_MENU,
+                (a, m, d) -> {
+                    Game.client.updateActMapDifficulty(a, m, d);
+                    state = MatchmakingState.MAIN_MENU;
+                });
+
         backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.2f);
         startButton = new GameButton("Start", V_WIDTH * 5 / 6f, V_HEIGHT / 1.2f);
         connectButton = new GameButton("Connect", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f);
         newServerButton = new GameButton("Start Server", V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f);
-        mapSelectionButton = new GameButton("Map: Not Selected", V_WIDTH * 4 / 6f, V_HEIGHT / 6f);
+        mapSelectionButton = new GameButton("Map: Not selected", V_WIDTH * 4 / 6f, V_HEIGHT / 6f);
         playersCountLabel = new GameButton("Players: 0", V_WIDTH / 6f, V_HEIGHT / 1.2f - 80);
         nameLabel = new GameButton("Name:", V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f + 60);
         nameTextField = new TextField(Game.settings.NAME, V_WIDTH * 4 / 6f + nameLabel.width + 10, V_HEIGHT / 1.2f + 60, V_WIDTH / 6f, 40f);
@@ -84,7 +96,7 @@ public class MatchmakingMenu extends Scene {
                 Gdx.app.getClipboard().setContents(Game.server.getConnect());
             }
         });
-        mapSelectionButton.setOnAction(() -> System.out.println("Map")); //TODO: Select map
+        mapSelectionButton.setOnAction(() -> state = MatchmakingState.MAP_SELECTION_MENU);
         backButton.setOnAction(backFunc);
 
         buttons = new HashSet<>(Arrays.asList(backButton,
@@ -105,9 +117,29 @@ public class MatchmakingMenu extends Scene {
     }
 
     @Override
+    public void render(SpriteBatch sb) {
+        switch (state) {
+            case MAIN_MENU:
+                super.render(sb);
+                break;
+            case MAP_SELECTION_MENU:
+                levelSelectionMenu.render(sb);
+                break;
+        }
+    }
+
+    @Override
     public void update(float dt) {
         timePassed += dt;
-        super.update(dt);
+
+        switch (state) {
+            case MAIN_MENU:
+                super.update(dt);
+                break;
+            case MAP_SELECTION_MENU:
+                levelSelectionMenu.update(dt);
+                break;
+        }
     }
 
     @Override
@@ -124,6 +156,12 @@ public class MatchmakingMenu extends Scene {
         playerNameButtons.clear();
 
         if (details != null) {
+            if (details.act == null || details.map == null || details.difficulty == null) {
+                mapSelectionButton.setText("Map: Not selected");
+            } else {
+                mapSelectionButton.setText(String.format("Map: %s - %s - %s", details.act, details.map.replace(".tmx", ""), details.difficulty));
+            }
+
             for (Player player : details.players) {
                 addPlayer(player);
             }
@@ -146,5 +184,9 @@ public class MatchmakingMenu extends Scene {
         playerNameButtons.put(player.uuid, group);
         buttons.addAll(group.getButtons());
         played.put(btn, false);
+    }
+
+    private enum MatchmakingState {
+        MAIN_MENU, MAP_SELECTION_MENU
     }
 }

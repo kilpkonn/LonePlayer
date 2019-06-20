@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
@@ -22,6 +23,10 @@ import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 public class GameServer {
     private Server server;
     private String connect = "";
+
+    private String act;
+    private String map;
+    private B2DVars.GameDifficulty difficulty;
 
     private Map<UUID, Player> players = new HashMap<>();
 
@@ -75,6 +80,13 @@ public class GameServer {
         updateLobbyDetails();
     }
 
+    public void updateActMapDifficulty(Lobby.ActMapDifficulty obj) {
+        this.act = obj.act;
+        this.map = obj.map;
+        this.difficulty = obj.difficulty;
+        updateLobbyDetails();
+    }
+
     public void updateConnection(UUID uuid, Player player) {
         players.put(uuid, player);
         updateLobbyDetails();
@@ -95,6 +107,9 @@ public class GameServer {
 
     private void updateLobbyDetails() {
         Lobby.Details details = new Lobby.Details();
+        details.act = act;
+        details.map = map;
+        details.difficulty = difficulty;
         details.players = getPlayers();
         for (Player player : details.players) {
             player.latency = server.getConnectionFromUUID(player.uuid).getLastPingTime();

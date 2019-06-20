@@ -92,7 +92,7 @@ public class LevelSelectionMenu extends Scene {
             String selectedMap = maps.get(i);
             btn.setOnAction(() -> selectedFunc.run(selectedAct, selectedMap, difficulty));
             /*btn.setOnAction(() -> GameStateManager.pushState(
-                    GameStateManager.State.PLAY, selectedAct, selectedMap, difficulty));*/
+                    GameStateManager.State.PLAY, act, map, difficulty));*/
         }
         toBeAdded.addAll(mapButtons);
     }

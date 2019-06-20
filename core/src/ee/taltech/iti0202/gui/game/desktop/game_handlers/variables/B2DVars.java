@@ -2,6 +2,7 @@ package ee.taltech.iti0202.gui.game.desktop.game_handlers.variables;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -90,7 +91,7 @@ public class B2DVars {
     public static int SCALE = 1;
     public static int BOSS_BASE_HP = 25;
 
-    public enum GameDifficulty {
+    public enum GameDifficulty implements Serializable {
         @SerializedName("1")
         EASY(1),
 
