@@ -18,7 +18,7 @@ public class GameProgress {
     public float time;
     public List<BossData> bosses = new ArrayList<>();
     public boolean dimension;
-    public B2DVars.gameDifficulty difficulty;
+    public B2DVars.GameDifficulty difficulty;
     public String act;
     public String map;
 

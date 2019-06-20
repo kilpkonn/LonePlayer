@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.*;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
@@ -44,7 +45,9 @@ public class Menu extends GameState {
 
         mouseInWorld2D = new Vector2();
 
-        levelSelectionMenu = new LevelSelectionMenu(cam, () -> menuState = state.MAIN);
+        levelSelectionMenu = new LevelSelectionMenu(cam,
+                () -> menuState = state.MAIN,
+                (a, m, d) -> GameStateManager.pushState(GameStateManager.State.PLAY, a, m, d));
         settingsMenu = new SettingsMenu(cam, game, () -> menuState = state.MAIN);
         loadGameMenu = new LoadGameMenu(cam, () -> menuState = state.MAIN);
         matchmakingMenu = new MatchmakingMenu(cam, () -> menuState = state.MAIN);

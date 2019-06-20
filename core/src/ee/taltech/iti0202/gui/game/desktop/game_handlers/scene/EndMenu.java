@@ -1,14 +1,12 @@
 package ee.taltech.iti0202.gui.game.desktop.game_handlers.scene;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import ee.taltech.iti0202.gui.game.Game;
+
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
@@ -18,7 +16,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class EndMenu extends Scene {
 
     private Runnable openSettingsFunc;
-    private B2DVars.gameDifficulty difficulty;
+    private B2DVars.GameDifficulty difficulty;
     private GameButton exitButton;
     private GameButton settingsButton;
     private GameButton nextButton;
@@ -47,7 +45,7 @@ public class EndMenu extends Scene {
             String act,
             String map,
             OrthographicCamera cam,
-            B2DVars.gameDifficulty difficulty,
+            B2DVars.GameDifficulty difficulty,
             Runnable openSettingsFunc) {
         super(act, map, cam);
         this.openSettingsFunc = openSettingsFunc;

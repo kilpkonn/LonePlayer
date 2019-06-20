@@ -84,6 +84,7 @@ public class MatchmakingMenu extends Scene {
                 Gdx.app.getClipboard().setContents(Game.server.getConnect());
             }
         });
+        mapSelectionButton.setOnAction(() -> System.out.println("Map")); //TODO: Select map
         backButton.setOnAction(backFunc);
 
         buttons = new HashSet<>(Arrays.asList(backButton,

@@ -75,7 +75,7 @@ public class Play extends GameState {
     private Stage stage = new Stage(new ScreenViewport());
     private String act;
     private String map;
-    private B2DVars.gameDifficulty difficulty;
+    private GameDifficulty difficulty;
     // Background based variables
     private Texture backgroundTexture;
     private ParallaxBackground parallaxBackground;
@@ -85,7 +85,7 @@ public class Play extends GameState {
     private float playTime = 0;
     private boolean loading = true;
 
-    private Play(String act, String map, B2DVars.gameDifficulty difficulty, GameProgress progress) {
+    private Play(String act, String map, GameDifficulty difficulty, GameProgress progress) {
         this.act = act;
         this.map = map;
         this.difficulty = difficulty;
@@ -266,7 +266,7 @@ public class Play extends GameState {
         setCursor(true);
     }
 
-    public Play(String act, String map, B2DVars.gameDifficulty difficulty) {
+    public Play(String act, String map, GameDifficulty difficulty) {
         this(act, map, difficulty, null);
     }
 

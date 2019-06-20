@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
 import java.io.File;
 import java.util.*;
@@ -14,6 +13,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class LevelSelectionMenu extends Scene {
 
     private Runnable backFunc;
+    private OnSelected<String, String, GameDifficulty> selectedFunc;
     private GameButton backButton;
     private GameButton difficultyButton;
     private Set<GameButton> actButtons = new HashSet<>();
@@ -22,11 +22,12 @@ public class LevelSelectionMenu extends Scene {
     private Set<GameButton> toBeAdded = new HashSet<>();
     private String selectedAct = "";
     private boolean showDevMaps = Game.settings.ENABLE_DEV_MAPS;
-    private B2DVars.gameDifficulty difficulty = B2DVars.gameDifficulty.HARD;
+    private GameDifficulty difficulty = GameDifficulty.HARD;
 
-    public LevelSelectionMenu(OrthographicCamera cam, Runnable backFunc) {
+    public LevelSelectionMenu(OrthographicCamera cam, Runnable backFunc, OnSelected<String, String, GameDifficulty> selectedFunc) {
         super(cam);
         this.backFunc = backFunc;
+        this.selectedFunc = selectedFunc;
 
         backButton = new GameButton("Back", V_WIDTH / 6f, V_HEIGHT / 1.2f - 40);
         difficultyButton =
@@ -60,13 +61,13 @@ public class LevelSelectionMenu extends Scene {
     private void updateDifficulty() {
         switch (difficulty) {
             case EASY:
-                difficulty = B2DVars.gameDifficulty.HARD;
+                difficulty = GameDifficulty.HARD;
                 break;
             case HARD:
-                difficulty = B2DVars.gameDifficulty.BRUTAL;
+                difficulty = GameDifficulty.BRUTAL;
                 break;
             case BRUTAL:
-                difficulty = B2DVars.gameDifficulty.EASY;
+                difficulty = GameDifficulty.EASY;
                 break;
         }
         difficultyButton.setText(difficulty.toString());
@@ -89,8 +90,9 @@ public class LevelSelectionMenu extends Scene {
                             V_HEIGHT / 2f - i * 40);
             mapButtons.add(btn);
             String selectedMap = maps.get(i);
-            btn.setOnAction(() -> GameStateManager.pushState(
-                    GameStateManager.State.PLAY, selectedAct, selectedMap, difficulty));
+            btn.setOnAction(() -> selectedFunc.run(selectedAct, selectedMap, difficulty));
+            /*btn.setOnAction(() -> GameStateManager.pushState(
+                    GameStateManager.State.PLAY, selectedAct, selectedMap, difficulty));*/
         }
         toBeAdded.addAll(mapButtons);
     }
@@ -150,4 +152,8 @@ public class LevelSelectionMenu extends Scene {
 
     @Override
     protected void updateCurrentBlock(GameButton button) { }
+
+    public interface OnSelected<T, U, V> {
+        void run(T act, U map, V difficulty);
+    }
 }

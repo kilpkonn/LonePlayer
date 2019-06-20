@@ -90,7 +90,7 @@ public class B2DVars {
     public static int SCALE = 1;
     public static int BOSS_BASE_HP = 25;
 
-    public enum gameDifficulty {
+    public enum GameDifficulty {
         @SerializedName("1")
         EASY(1),
 
@@ -102,7 +102,7 @@ public class B2DVars {
 
         private final int value;
 
-        gameDifficulty(int value) {
+        GameDifficulty(int value) {
             this.value = value;
         }
 

@@ -49,7 +49,7 @@ public class GameStateManager {
     }
 
     private static GameState getState(
-            State state, String act, String map, B2DVars.gameDifficulty difficulty) {
+            State state, String act, String map, B2DVars.GameDifficulty difficulty) {
         if (state == State.PLAY) {
             return new Play(act, map, difficulty);
         }
@@ -75,7 +75,7 @@ public class GameStateManager {
     }
 
     public static void pushState(
-            State state, String act, String map, B2DVars.gameDifficulty difficulty) {
+            State state, String act, String map, B2DVars.GameDifficulty difficulty) {
         popState();
         gameStates.push(getState(state, act, map, difficulty));
     }
