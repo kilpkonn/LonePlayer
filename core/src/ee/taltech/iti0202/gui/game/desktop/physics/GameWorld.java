@@ -20,6 +20,7 @@ public class GameWorld implements Disposable {
 
     public GameWorld() {
         world.setContactListener(contactListener);
+        //TODO: Load map hit boxes, maybe in builder?
     }
 
     public void update(float dt) {

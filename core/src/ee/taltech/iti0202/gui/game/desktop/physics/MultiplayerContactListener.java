@@ -9,7 +9,7 @@ public class MultiplayerContactListener implements ContactListener {
 
     @Override
     public void beginContact(Contact contact) {
-
+        //TODO: Handle collisions
     }
 
     @Override

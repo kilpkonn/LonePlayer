@@ -150,8 +150,14 @@ public class Game extends ApplicationAdapter {
             B2DVars.V_HEIGHT = h;
             B2DVars.V_WIDTH = w;
             super.resize(w, h);
-            cam.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            cam.viewportHeight = h;
+            cam.viewportWidth = w;
+            hudCam.viewportWidth = h;
+            hudCam.viewportWidth = w;
+            cam.setToOrtho(false, B2DVars.V_WIDTH, B2DVars.V_HEIGHT);
+            hudCam.setToOrtho(false, B2DVars.V_WIDTH, B2DVars.V_HEIGHT);
             cam.update();
+            hudCam.update();
             sb.setProjectionMatrix(cam.combined);
             System.out.println("resized");
         }

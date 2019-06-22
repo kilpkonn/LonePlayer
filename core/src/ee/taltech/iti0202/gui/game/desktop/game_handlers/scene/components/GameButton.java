@@ -71,6 +71,7 @@ public class GameButton implements Disposable {
     }
 
     public void render(SpriteBatch sb) {
+        shapeRenderer.setProjectionMatrix(sb.getProjectionMatrix());
         if (acceptHover && hoverOver) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.rectLine(
