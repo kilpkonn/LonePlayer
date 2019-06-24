@@ -97,7 +97,6 @@ public class MatchmakingMenu extends Scene {
                 newServerButton.setText("Stop server");
                 connectTextField.setText(Game.server.getConnect());
             } else {
-                //TODO: stop server
                 Game.server.dispose();
                 newServerButton.setText("Start server");
                 Game.server = null;

@@ -142,28 +142,10 @@ project(":core") {
         compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         compile 'com.google.code.gson:gson:2.8.5'
-        //compile 'net.corpwar.lib:corpnet:2.0.0'  //TODO: remove
         compile "com.esotericsoftware:kryonet:2.22.0-RC1"
 
     }
 }
-
-// project(":ios-moe") {
-//     apply plugin: "moe"
-// 
-//     configurations { natives }
-//
-//     dependencies {
-//         implementation project(":core")
-//         implementation "com.badlogicgames.gdx:gdx-backend-moe:$gdxVersion"
-//         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-//         natives "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-ios"
-//         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
-//         natives "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
-//         implementation 'com.google.code.gson:gson:2.8.5'
-//
-//     }
-// }
 
 tasks.eclipse.doLast {
     delete ".project"
