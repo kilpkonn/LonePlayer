@@ -18,7 +18,7 @@ public class ServerListener extends Listener {
 
     @Override
     public void connected(Connection connection) {
-        System.out.println("Player connected from: " + connection.toString());
+        System.out.println("Player connected from: " + connection.getRemoteAddressTCP());
         server.performHandshake(connection.getID());
     }
 

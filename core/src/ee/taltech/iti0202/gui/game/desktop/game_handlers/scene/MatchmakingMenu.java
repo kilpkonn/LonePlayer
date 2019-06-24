@@ -63,9 +63,9 @@ public class MatchmakingMenu extends Scene {
         mapSelectionButton = new GameButton("Map: Not selected", V_WIDTH * 4 / 6f, V_HEIGHT / 6f);
         playersCountLabel = new GameButton("Players: 0", V_WIDTH / 6f, V_HEIGHT / 1.2f - 80);
         nameLabel = new GameButton("Name:", V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f + 60);
-        connectLabel = new GameButton("Connect:", V_WIDTH * 2 / 5f, V_HEIGHT / 1.2f + 60);
+        connectLabel = new GameButton("Connect:", V_WIDTH * 2 / 5f - 50, V_HEIGHT / 1.2f + 60);
         nameTextField = new TextField(Game.settings.NAME, V_WIDTH * 4 / 6f + nameLabel.width + 10, V_HEIGHT / 1.2f + 60, V_WIDTH / 6f, 40f);
-        connectTextField = new TextField("", V_WIDTH * 2 / 5f + connectLabel.width + 10, V_HEIGHT / 1.2f + 60, V_WIDTH / 5f, 40f);
+        connectTextField = new TextField("", V_WIDTH * 2 / 5f + connectLabel.width - 40, V_HEIGHT / 1.2f + 60, V_WIDTH / 5f, 40f);
 
         playersCountLabel.setAcceptHover(false);
         nameLabel.setAcceptHover(false);
@@ -85,6 +85,7 @@ public class MatchmakingMenu extends Scene {
             } else {
                 Game.client.dispose();
                 Game.client = null;
+                updateLobbyDetails(null);
                 connectButton.setText("Connect");
             }
         });
@@ -160,7 +161,7 @@ public class MatchmakingMenu extends Scene {
     @Override
     protected void updateCurrentBlock(GameButton btn) { }
 
-    public void updateLobbyDetails(Lobby.Details details) {
+    public void updateLobbyDetails(Lobby.Details details) {  //TODO: remove buttons w/o crash
         for (ButtonGroup group : playerNameButtons.values()) {
             buttons.removeAll(group.getButtons());
             group.dispose();
