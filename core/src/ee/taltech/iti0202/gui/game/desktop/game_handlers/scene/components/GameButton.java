@@ -35,7 +35,7 @@ public class GameButton implements Disposable {
 
     private String text;
 
-    public GameButton(String text, float x, float y) {
+    public GameButton(String text, float x, float y) {  //TODO: set position relatively
         this.x = x;
         this.y = y;
         FreeTypeFontGenerator.FreeTypeFontParameter parameter =

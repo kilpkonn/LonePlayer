@@ -143,6 +143,7 @@ project(":core") {
         compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         compile 'com.google.code.gson:gson:2.8.5'
         compile 'net.corpwar.lib:corpnet:2.0.0'
+        compile "com.esotericsoftware:kryonet:2.22.0-RC1"
 
     }
 }
