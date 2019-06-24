@@ -10,6 +10,7 @@ import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 public class Lobby implements Serializable {
 
     public static class NameChange implements Serializable {
+        public NameChange() {}
         public NameChange(String newName) {
             this.newName = newName;
         }
@@ -17,6 +18,7 @@ public class Lobby implements Serializable {
     }
 
     public static class Kick implements Serializable {
+        public Kick() {}
         public Kick(Player playerToBeKicked) {
             this.playerToBeKicked = playerToBeKicked;
         }
@@ -24,6 +26,7 @@ public class Lobby implements Serializable {
     }
 
     public static class ActMapDifficulty implements Serializable {
+        public ActMapDifficulty() {}
         public ActMapDifficulty(String act, String map, B2DVars.GameDifficulty difficulty) {
             this.act = act;
             this.map = map;

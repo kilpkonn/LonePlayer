@@ -1,23 +1,14 @@
 package ee.taltech.iti0202.gui.game.networking.server.listeners;
 
-import net.corpwar.lib.corpnet.Connection;
-import net.corpwar.lib.corpnet.DataReceivedListener;
-import net.corpwar.lib.corpnet.Message;
-import net.corpwar.lib.corpnet.Server;
-import net.corpwar.lib.corpnet.util.SerializationUtils;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.UUID;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
-public class ServerListener implements DataReceivedListener {
+public class ServerListener extends Listener {
 
     private GameServer server;
 
@@ -27,33 +18,36 @@ public class ServerListener implements DataReceivedListener {
 
     @Override
     public void connected(Connection connection) {
-        System.out.println("Player connected from: " + connection.getAddress().getHostAddress() + " -> " + connection.getConnectionId());
-        server.performHandshake(connection.getConnectionId());
+        System.out.println("Player connected from: " + connection.toString());
+        server.performHandshake(connection.getID());
     }
 
     @Override
-    public void receivedMessage(Message message) {
-        Object obj = SerializationUtils.getInstance().deserialize(message.getData());
+    public void disconnected(Connection connection) {
+        server.onDisconnected(connection.getID());
+    }
 
-        if (obj instanceof Handshake.Response) {
-            Handshake.Response response = (Handshake.Response) obj;
+    @Override
+    public void received(Connection connection, Object object) {
+        if (object instanceof Handshake.Response) {
+            Handshake.Response response = (Handshake.Response) object;
             if (server.getNames().contains(response.name)) {
-                server.performHandshake(message.getConnectionID());
+                server.performHandshake(connection.getID());
                 return;
             }
-            Player player = new Player(response.name, message.getConnectionID());
-            server.updateConnection(message.getConnectionID(), player);
-        } else if (obj instanceof Lobby.NameChange) {
-            server.updatePlayerName(message.getConnectionID(), (Lobby.NameChange) obj);
-        } else if (obj instanceof Lobby.Kick) {
-            server.kickPlayer((Lobby.Kick) obj);
-        } else if (obj instanceof Lobby.ActMapDifficulty) {
-            server.updateActMapDifficulty((Lobby.ActMapDifficulty) obj);
+            Player player = new Player(response.name, connection.getID());
+            server.updateConnection(connection.getID(), player);
+        } else if (object instanceof Lobby.NameChange) {
+            server.updatePlayerName(connection.getID(), (Lobby.NameChange) object);
+        } else if (object instanceof Lobby.Kick) {
+            server.kickPlayer((Lobby.Kick) object);
+        } else if (object instanceof Lobby.ActMapDifficulty) {
+            server.updateActMapDifficulty((Lobby.ActMapDifficulty) object);
         }
     }
 
     @Override
-    public void disconnected(UUID connectionId) {
-        server.onDisconnected(connectionId);
+    public void idle(Connection connection) {
+        super.idle(connection);
     }
 }

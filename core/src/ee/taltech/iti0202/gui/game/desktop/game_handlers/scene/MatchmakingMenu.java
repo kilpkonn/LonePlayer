@@ -37,7 +37,7 @@ public class MatchmakingMenu extends Scene {
     private GameButton nameLabel;
     private TextField nameTextField;
     private TextField connectTextField;
-    private Map<UUID, ButtonGroup> playerNameButtons = new HashMap<>();
+    private Map<Integer, ButtonGroup> playerNameButtons = new HashMap<>();
 
     private MatchmakingState state = MatchmakingState.MAIN_MENU;
 
@@ -181,7 +181,7 @@ public class MatchmakingMenu extends Scene {
 
         group.setAcceptHover(false);
 
-        playerNameButtons.put(player.uuid, group);
+        playerNameButtons.put(player.id, group);
         buttons.addAll(group.getButtons());
         played.put(btn, false);
     }

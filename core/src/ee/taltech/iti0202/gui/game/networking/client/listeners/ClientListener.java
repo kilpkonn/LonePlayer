@@ -1,17 +1,13 @@
 package ee.taltech.iti0202.gui.game.networking.client.listeners;
 
-import net.corpwar.lib.corpnet.Connection;
-import net.corpwar.lib.corpnet.DataReceivedListener;
-import net.corpwar.lib.corpnet.Message;
-import net.corpwar.lib.corpnet.util.SerializationUtils;
-
-import java.util.UUID;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Listener;
 
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 
-public class ClientListener implements DataReceivedListener {
+public class ClientListener extends Listener {
 
     private GameClient client;
 
@@ -21,22 +17,26 @@ public class ClientListener implements DataReceivedListener {
 
     @Override
     public void connected(Connection connection) {
-        System.out.println("Connected to: " + connection.getAddress().getHostAddress());
+        System.out.println("Connected to: " + connection.getRemoteAddressTCP().getHostName());
     }
 
     @Override
-    public void receivedMessage(Message message) {
-        Object obj = SerializationUtils.getInstance().deserialize(message.getData());
+    public void disconnected(Connection connection) {
+        super.disconnected(connection);
+    }
 
-        if (obj instanceof Handshake.Request) {
-            client.performHandshake((Handshake.Request) obj);
-        } else if (obj instanceof Lobby.Details) {
-            client.updateLobbyDetails((Lobby.Details) obj);
+    @Override
+    public void received(Connection connection, Object object) {
+        if (object instanceof Handshake.Request) {
+            client.performHandshake((Handshake.Request) object);
+        } else if (object instanceof Lobby.Details) {
+            client.updateLobbyDetails((Lobby.Details) object);
         }
     }
 
     @Override
-    public void disconnected(UUID connectionId) {
-
+    public void idle(Connection connection) {
+        super.idle(connection);
     }
+
 }

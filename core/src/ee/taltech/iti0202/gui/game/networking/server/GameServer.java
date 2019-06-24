@@ -1,6 +1,8 @@
 package ee.taltech.iti0202.gui.game.networking.server;
 
-import net.corpwar.lib.corpnet.Server;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Connection;
+import com.esotericsoftware.kryonet.Server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,7 +14,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
@@ -21,6 +22,8 @@ import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 public class GameServer {
+    private int tcpPort = 55000;
+    private int udpPort = 55001;
     private Server server;
     private String connect = "";
 
@@ -28,15 +31,22 @@ public class GameServer {
     private String map;
     private B2DVars.GameDifficulty difficulty;
 
-    private Map<UUID, Player> players = new HashMap<>();
+    private Map<Integer, Player> players = new HashMap<>();
 
     public GameServer() {
         server = new Server();
-        server.setKeepAlive(true);
-        server.setWaitingQue(true);
-        server.setMaxConnections(6);
-        server.setMilisecoundToTimeout(20000);
-        server.keepConnectionsAlive();
+        server.start();
+
+        Kryo kryo = server.getKryo();
+        kryo.register(Handshake.Request.class);
+        kryo.register(Handshake.Response.class);
+        kryo.register(Lobby.ActMapDifficulty.class);
+        kryo.register(Lobby.Kick.class);
+        kryo.register(Lobby.NameChange.class);
+        kryo.register(Lobby.Details.class);
+        kryo.register(HashSet.class);
+        kryo.register(B2DVars.GameDifficulty.class);
+        kryo.register(Player.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
@@ -44,9 +54,10 @@ public class GameServer {
             BufferedReader sc =
                     new BufferedReader(new InputStreamReader(url_name.openStream()));
             String address = sc.readLine().trim(); //InetAddress.getLocalHost().getHostAddress();
-            int port = 55000; // + (int) Math.round(Math.random() * 1000);
-            server.setPortAndIp(port, "192.168.0.254"); //address);
-            connect = address + ":" + port;
+            server.bind(tcpPort, udpPort);
+            //server.setPortAndIp(port, "192.168.0.254"); //address);
+            address = "192.168.0.254";
+            connect = address + ":" + tcpPort + "|" + udpPort;
         } catch (UnknownHostException e) {
             System.out.println(e.getMessage());
             //TODO: Some actual error handling
@@ -55,8 +66,7 @@ public class GameServer {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        server.registerServerListerner(new ServerListener(this));
-        server.startServer();
+        server.addListener(new ServerListener(this));
     }
 
     public String getConnect() {
@@ -67,16 +77,16 @@ public class GameServer {
         return new HashSet<>(players.values());
     }
 
-    public void updatePlayerName(UUID uuid, Lobby.NameChange nameChange) {
-        Player player = players.get(uuid);
+    public void updatePlayerName(int id, Lobby.NameChange nameChange) {
+        Player player = players.get(id);
         player.name = nameChange.newName;
-        players.remove(uuid);
-        players.put(uuid, player);
+        players.remove(id);
+        players.put(id, player);
         updateLobbyDetails();
     }
 
     public void kickPlayer(Lobby.Kick player) {
-        players.remove(player.playerToBeKicked.uuid);
+        players.remove(player.playerToBeKicked.id);
         updateLobbyDetails();
     }
 
@@ -87,21 +97,21 @@ public class GameServer {
         updateLobbyDetails();
     }
 
-    public void updateConnection(UUID uuid, Player player) {
-        players.put(uuid, player);
+    public void updateConnection(int id, Player player) {
+        players.put(id, player);
         updateLobbyDetails();
     }
 
-    public void performHandshake(UUID uuid) {
+    public void performHandshake(int id) {
         Handshake.Request request = new Handshake.Request();
         for (Player player : players.values()) {
             request.names.add(player.name);
         }
-        server.sendReliableObjectToClient(request, uuid);
+        server.sendToTCP(id, request);
     }
 
-    public void onDisconnected(UUID uuid) {
-        players.remove(uuid);
+    public void onDisconnected(int id) {
+        players.remove(id);
         updateLobbyDetails();
     }
 
@@ -110,11 +120,12 @@ public class GameServer {
         details.act = act;
         details.map = map;
         details.difficulty = difficulty;
-        details.players = getPlayers();
-        for (Player player : details.players) {
-            player.latency = server.getConnectionFromUUID(player.uuid).getLastPingTime();
+        for (Connection con : server.getConnections()) {
+            Player player = players.get(con.getID());
+            player.latency = con.getReturnTripTime();
+            details.players.add(player);
         }
-        server.sendReliableObjectToAllClients(details);
+        server.sendToAllTCP(details);
     }
 
     public Set<String> getNames() {

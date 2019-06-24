@@ -1,9 +1,11 @@
 package ee.taltech.iti0202.gui.game.networking.client;
 
 import com.badlogic.gdx.Gdx;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryonet.Client;
 
-import net.corpwar.lib.corpnet.Client;
-import net.corpwar.lib.corpnet.util.SerializationUtils;
+import java.io.IOException;
+import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
@@ -17,28 +19,45 @@ public class GameClient {
 
     private Client client;
     private MatchmakingMenu matchmakingMenu;
+    private int timeout = 5000;
 
     public GameClient(String connect, MatchmakingMenu matchmakingMenu) {
         this.matchmakingMenu = matchmakingMenu;
         client = new Client();
-        String address = connect.substring(0, connect.indexOf(":"));
-        int port = Integer.parseInt(connect.substring(connect.indexOf(":") + 1).trim());
-        client.setMillisecondToTimeout(20000);
-        client.setPortAndIp(port, address);
-        client.registerClientListerner(new ClientListener(this));
-        client.startClient();
+        client.start();
+        client.addListener(new ClientListener(this));
+        String address = connect.substring(0, connect.indexOf(":")).trim();
+        int tcpPort = Integer.parseInt(connect.substring(connect.indexOf(":") + 1, connect.indexOf("|")).trim());
+        int udpPort = Integer.parseInt(connect.substring(connect.indexOf("|") + 1).trim());
+
+        Kryo kryo = client.getKryo();
+        kryo.register(Handshake.Request.class);
+        kryo.register(Handshake.Response.class);
+        kryo.register(Lobby.ActMapDifficulty.class);
+        kryo.register(Lobby.Kick.class);
+        kryo.register(Lobby.NameChange.class);
+        kryo.register(Lobby.Details.class);
+        kryo.register(HashSet.class);
+        kryo.register(B2DVars.GameDifficulty.class);
+        kryo.register(Player.class);
+
+        try {
+            client.connect(timeout, address, tcpPort, udpPort);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void updateName() {
-        client.sendReliableDataObject(new Lobby.NameChange(Game.settings.NAME));
+        client.sendTCP(new Lobby.NameChange(Game.settings.NAME));
     }
 
     public void updateActMapDifficulty(String act, String map, B2DVars.GameDifficulty difficulty) {
-        client.sendReliableDataObject(new Lobby.ActMapDifficulty(act, map, difficulty));
+        client.sendTCP(new Lobby.ActMapDifficulty(act, map, difficulty));
     }
 
     public void kickPlayer(Player player) {
-        client.sendReliableDataObject(new Lobby.Kick(player));
+        client.sendTCP(new Lobby.Kick(player));
     }
 
     public void performHandshake(Handshake.Request request) {
@@ -48,7 +67,7 @@ public class GameClient {
             response.name += Math.round(Math.random() * 100);
         }
 
-        client.sendReliableData(SerializationUtils.getInstance().serialize(response));
+        client.sendTCP(response);
     }
 
     public void updateLobbyDetails(Lobby.Details details) {
@@ -56,12 +75,7 @@ public class GameClient {
     }
 
     public void disconnect() {
-        client.killConnection();  //TODO: Throws error, idk if we should handle it or nah
+        client.close();  //TODO: Throws error, idk if we should handle it or nah
         updateLobbyDetails(null);
-    }
-
-    @Deprecated
-    public void sendMessage(String message) {
-        client.sendReliableData(message.getBytes());
     }
 }
