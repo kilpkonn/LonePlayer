@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.networking.client;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
@@ -15,7 +16,7 @@ import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
-public class GameClient {
+public class GameClient implements Disposable {
 
     private Client client;
     private MatchmakingMenu matchmakingMenu;
@@ -77,5 +78,14 @@ public class GameClient {
     public void disconnect() {
         client.close();  //TODO: Throws error, idk if we should handle it or nah
         updateLobbyDetails(null);
+    }
+
+    @Override
+    public void dispose() {
+        try {
+            client.dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

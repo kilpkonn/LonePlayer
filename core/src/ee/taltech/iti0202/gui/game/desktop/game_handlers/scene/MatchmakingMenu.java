@@ -35,6 +35,7 @@ public class MatchmakingMenu extends Scene {
     private GameButton mapSelectionButton;
     private GameButton playersCountLabel;
     private GameButton nameLabel;
+    private GameButton connectLabel;
     private TextField nameTextField;
     private TextField connectTextField;
     private Map<Integer, ButtonGroup> playerNameButtons = new HashMap<>();
@@ -62,16 +63,18 @@ public class MatchmakingMenu extends Scene {
         mapSelectionButton = new GameButton("Map: Not selected", V_WIDTH * 4 / 6f, V_HEIGHT / 6f);
         playersCountLabel = new GameButton("Players: 0", V_WIDTH / 6f, V_HEIGHT / 1.2f - 80);
         nameLabel = new GameButton("Name:", V_WIDTH * 4 / 6f, V_HEIGHT / 1.2f + 60);
+        connectLabel = new GameButton("Connect:", V_WIDTH * 2 / 5f, V_HEIGHT / 1.2f + 60);
         nameTextField = new TextField(Game.settings.NAME, V_WIDTH * 4 / 6f + nameLabel.width + 10, V_HEIGHT / 1.2f + 60, V_WIDTH / 6f, 40f);
-        connectTextField = new TextField("", V_WIDTH * 3 / 6f - 50, V_HEIGHT / 1.2f, V_WIDTH / 6f - 30, 40f);
+        connectTextField = new TextField("", V_WIDTH * 2 / 5f + connectLabel.width + 10, V_HEIGHT / 1.2f + 60, V_WIDTH / 5f, 40f);
 
         playersCountLabel.setAcceptHover(false);
         nameLabel.setAcceptHover(false);
+        connectLabel.setAcceptHover(false);
 
         nameTextField.setOnInputCompleted(() -> {
             Game.settings.NAME = nameTextField.getText();
             // Game.settings.save(B2DVars.PATH + "settings/settings.json");
-            Game.client.updateName();
+            if (Game.client != null) Game.client.updateName();
         });
 
         startButton.setOnAction(() -> System.out.println("Start game"));
@@ -80,16 +83,25 @@ public class MatchmakingMenu extends Scene {
                 Game.client = new GameClient(connectTextField.getText(), this);
                 connectButton.setText("Disconnect");
             } else {
-                Game.client.disconnect();
+                Game.client.dispose();
                 Game.client = null;
                 connectButton.setText("Connect");
             }
         });
         newServerButton.setOnAction(() -> {
-            Game.server = new GameServer();
-            Game.client = new GameClient(Game.server.getConnect(), this);  // Auto connect
-            connectButton.setText("Disconnect");
-            connectTextField.setText(Game.server.getConnect());
+            if (Game.server == null) {
+                Game.server = new GameServer();
+                if (Game.client != null) Game.client.dispose();
+                Game.client = new GameClient(Game.server.getLocalConnect(), this);  // Auto connect
+                connectButton.setText("Disconnect");
+                newServerButton.setText("Stop server");
+                connectTextField.setText(Game.server.getConnect());
+            } else {
+                //TODO: stop server
+                Game.server.dispose();
+                newServerButton.setText("Start server");
+                Game.server = null;
+            }
         });
         connectTextField.setOnAction(() -> {
             if (Game.server != null) {
@@ -106,6 +118,7 @@ public class MatchmakingMenu extends Scene {
                 mapSelectionButton,
                 playersCountLabel,
                 nameLabel,
+                connectLabel,
                 nameTextField,
                 connectTextField));
 

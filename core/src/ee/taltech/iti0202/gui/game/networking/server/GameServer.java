@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.networking.server;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
@@ -21,7 +22,7 @@ import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
-public class GameServer {
+public class GameServer implements Disposable {
     private int tcpPort = 55000;
     private int udpPort = 55001;
     private Server server;
@@ -56,8 +57,7 @@ public class GameServer {
             String address = sc.readLine().trim(); //InetAddress.getLocalHost().getHostAddress();
             server.bind(tcpPort, udpPort);
             //server.setPortAndIp(port, "192.168.0.254"); //address);
-            address = "192.168.0.254";
-            connect = address + ":" + tcpPort + "|" + udpPort;
+            connect = String.format("%s:%s|%s", address, tcpPort, udpPort);
         } catch (UnknownHostException e) {
             System.out.println(e.getMessage());
             //TODO: Some actual error handling
@@ -71,6 +71,10 @@ public class GameServer {
 
     public String getConnect() {
         return connect;
+    }
+
+    public String getLocalConnect() {
+        return String.format("127.0.0.1:%s|%s", tcpPort, udpPort);
     }
 
     public Set<Player> getPlayers() {
@@ -121,9 +125,11 @@ public class GameServer {
         details.map = map;
         details.difficulty = difficulty;
         for (Connection con : server.getConnections()) {
-            Player player = players.get(con.getID());
-            player.latency = con.getReturnTripTime();
-            details.players.add(player);
+            if (players.containsKey(con.getID())) {
+                Player player = players.get(con.getID());
+                player.latency = con.getReturnTripTime();
+                details.players.add(player);
+            }
         }
         server.sendToAllTCP(details);
     }
@@ -134,5 +140,14 @@ public class GameServer {
             names.add(player.name);
         }
         return names;
+    }
+
+    @Override
+    public void dispose() {
+        try {
+            server.dispose();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
