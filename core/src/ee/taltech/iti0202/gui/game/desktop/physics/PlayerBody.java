@@ -25,7 +25,7 @@ public class PlayerBody extends Body {
         super(world, addr);
     }
 
-    public static Body createPlayer(World world) {
+    public static Body createPlayer(World world, int id) {
         BodyDef bodyDef = new BodyDef();
         short mask;
         // TODO: Make masks work, make usable when re-spawning
@@ -80,7 +80,7 @@ public class PlayerBody extends Body {
         fixtureDef.shape = polyShape;
         fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
         fixtureDef.filter.maskBits = mask;
-        body.createFixture(fixtureDef).setUserData("playerBody");
+        body.createFixture(fixtureDef).setUserData(new PlayerBodyData(id));
 
         polyShape.setAsBox(4 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
         fixtureDef.shape = polyShape;
@@ -89,5 +89,13 @@ public class PlayerBody extends Body {
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData("foot");
         return body;
+    }
+
+    public static class PlayerBodyData {
+        public int id;
+
+        public PlayerBodyData(int id) {
+            this.id = id;
+        }
     }
 }

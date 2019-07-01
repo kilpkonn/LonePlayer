@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
+import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
@@ -37,8 +38,9 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class GameWorld implements Disposable {
 
     private World world = new World(new Vector2(0, GRAVITY), true);
-    private MultiplayerContactListener contactListener = new MultiplayerContactListener();
-    private Map<Integer, Body> players = new HashMap<>();
+    private Map<Integer, Body> playerBodies = new HashMap<>();
+    private Map<Integer, Player> players = new HashMap<>();
+    private MultiplayerContactListener contactListener;
 
     private TiledMap tiledMap;
     private TiledMapTileLayer foreground;
@@ -48,13 +50,12 @@ public class GameWorld implements Disposable {
     private int newPlayerIdentifier;
 
     public GameWorld(String act, String map) {
+        contactListener = new MultiplayerContactListener(players);
         world.setContactListener(contactListener);
 
         String path = PATH + "maps/levels/" + act + "/" + map;
         tiledMap = new TmxMapLoader().load(path);
         createHitboxes(tiledMap);
-
-        //TODO: Spawn players
     }
 
     public void update(float dt) {
@@ -63,15 +64,15 @@ public class GameWorld implements Disposable {
 
     public int addPlayer() {
         newPlayerIdentifier++;
-        Body player = PlayerBody.createPlayer(world);
-        players.put(newPlayerIdentifier, player);
+        Body player = PlayerBody.createPlayer(world, newPlayerIdentifier);
+        playerBodies.put(newPlayerIdentifier, player);
         return newPlayerIdentifier;
     }
 
     public boolean removePlayer(int id) {
-        if (players.containsKey(id)) {
-            world.destroyBody(players.get(id));
-            players.remove(id);
+        if (playerBodies.containsKey(id)) {
+            world.destroyBody(playerBodies.get(id));
+            playerBodies.remove(id);
             return true;
         }
         return false;
@@ -79,27 +80,29 @@ public class GameWorld implements Disposable {
 
     private void createHitboxes(TiledMap tiledMap) {
         for (MapLayer layer : tiledMap.getLayers()) {
-            FixtureDef fdef = new FixtureDef();
+            FixtureDef fixtureDef = new FixtureDef();
             switch (layer.getName()) {
                 case "barrier":
-                    fdef.filter.categoryBits = BACKGROUND;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON | BIT_BULLET;
-                    determineMapObject(layer, fdef);
+                    fixtureDef.filter.categoryBits = BACKGROUND;
+                    fixtureDef.filter.maskBits =
+                            BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON | BIT_BULLET;
+                    determineMapObject(layer, fixtureDef);
                     break;
                 case "hitboxes_1":
-                    fdef.filter.categoryBits = TERRA_DIMENSION_1;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENSION_1 | BIT_WEAPON;
-                    determineMapObject(layer, fdef);
+                    fixtureDef.filter.categoryBits = TERRA_DIMENSION_1;
+                    fixtureDef.filter.maskBits = BIT_BOSSES | DIMENSION_1 | BIT_WEAPON;
+                    determineMapObject(layer, fixtureDef);
                     break;
                 case "hitboxes_2":
-                    fdef.filter.categoryBits = TERRA_DIMENSION_2;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENSION_2 | BIT_WEAPON;
-                    determineMapObject(layer, fdef);
+                    fixtureDef.filter.categoryBits = TERRA_DIMENSION_2;
+                    fixtureDef.filter.maskBits = BIT_BOSSES | DIMENSION_2 | BIT_WEAPON;
+                    determineMapObject(layer, fixtureDef);
                     break;
                 case "hitboxes":
-                    fdef.filter.categoryBits = TERRA_SQUARES;
-                    fdef.filter.maskBits = BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON;
-                    determineMapObject(layer, fdef);
+                    fixtureDef.filter.categoryBits = TERRA_SQUARES;
+                    fixtureDef.filter.maskBits =
+                            BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON;
+                    determineMapObject(layer, fixtureDef);
                     break;
             }
         }

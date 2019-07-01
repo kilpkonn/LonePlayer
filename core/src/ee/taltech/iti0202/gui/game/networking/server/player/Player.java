@@ -15,6 +15,9 @@ public class Player implements Serializable {
     public int id;
     public long latency;
 
+    public short health = 100;
+    public short wallJump = 0;
+
     @Override
     public String toString() {
         return "Player{" +
