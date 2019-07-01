@@ -26,9 +26,9 @@ public class PlayerBody extends Body {
     }
 
     public static Body createPlayer(World world) {
-        BodyDef bdef = new BodyDef();
+        BodyDef bodyDef = new BodyDef();
         short mask;
-        // TODO: Make masks work
+        // TODO: Make masks work, make usable when re-spawning
         if (true) { //(draw.isDimension()) {
             mask =
                     BIT_BOSSES
@@ -48,46 +48,46 @@ public class PlayerBody extends Body {
                             | BACKGROUND
                             | TERRA_DIMENSION_2;
         }
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        Body body = world.createBody(bdef);
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        Body body = world.createBody(bodyDef);
 
         PolygonShape polyShape = new PolygonShape();
         polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(-20 / PPM, 20 / PPM), 0);
-        FixtureDef fdef = new FixtureDef();
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
-        fdef.filter.maskBits = mask;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("side_l");
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = polyShape;
+        fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
+        fixtureDef.filter.maskBits = mask;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef).setUserData("side_l");
 
         polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(20 / PPM, 20 / PPM), 0);
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
-        fdef.filter.maskBits = mask;
-        body.createFixture(fdef).setUserData("side_r");
+        fixtureDef.shape = polyShape;
+        fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
+        fixtureDef.filter.maskBits = mask;
+        body.createFixture(fixtureDef).setUserData("side_r");
 
         CircleShape circle = new CircleShape();
 
-        fdef.isSensor = false;
+        fixtureDef.isSensor = false;
         circle.setRadius(9 / PPM);
-        fdef.shape = circle;
-        fdef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
-        fdef.filter.maskBits = mask;
-        body.createFixture(fdef).setFriction(FRICTION);
+        fixtureDef.shape = circle;
+        fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
+        fixtureDef.filter.maskBits = mask;
+        body.createFixture(fixtureDef).setFriction(FRICTION);
         body.setUserData("playerBody");
 
         polyShape.setAsBox(8 / PPM, 18 / PPM, new Vector2(0, 12 / PPM), 0);
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
-        fdef.filter.maskBits = mask;
-        body.createFixture(fdef).setUserData("playerBody");
+        fixtureDef.shape = polyShape;
+        fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
+        fixtureDef.filter.maskBits = mask;
+        body.createFixture(fixtureDef).setUserData("playerBody");
 
         polyShape.setAsBox(4 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
-        fdef.shape = polyShape;
-        fdef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
-        fdef.filter.maskBits = mask;
-        fdef.isSensor = true;
-        body.createFixture(fdef).setUserData("foot");
+        fixtureDef.shape = polyShape;
+        fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
+        fixtureDef.filter.maskBits = mask;
+        fixtureDef.isSensor = true;
+        body.createFixture(fixtureDef).setUserData("foot");
         return body;
     }
 }

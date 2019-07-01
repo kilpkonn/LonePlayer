@@ -182,7 +182,7 @@ public class MatchmakingMenu extends Scene {
         playersCountLabel.setText("Players: " + playerNameButtons.size());
     }
 
-    public void addPlayer(Player player) {
+    private void addPlayer(Player player) {
         ButtonGroup group = new ButtonGroup();
         GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
         GameButton lblPing = new GameButton(player.latency + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);

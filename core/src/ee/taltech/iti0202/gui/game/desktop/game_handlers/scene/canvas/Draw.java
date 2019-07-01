@@ -105,7 +105,9 @@ public class Draw implements Handler {
                 shape = ShapesGreator.getPolyline((PolylineMapObject) object);
             else if (object instanceof EllipseMapObject)
                 shape = ShapesGreator.getCircle((EllipseMapObject) object);
-            else continue;
+            else
+                continue;
+
             this.bdef.type = BodyDef.BodyType.StaticBody;
             this.fdef.isSensor = false;
             this.fdef.shape = shape;
