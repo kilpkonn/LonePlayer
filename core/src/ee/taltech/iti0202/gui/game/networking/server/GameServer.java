@@ -140,6 +140,10 @@ public class GameServer implements Disposable {
         serverLogic.run(getPlayers());
     }
 
+    public void onUpdatePlayer(Player player) {
+        serverLogic.setPlayer(player);
+    }
+
     private void updateLobbyDetails() {
         Lobby.Details details = new Lobby.Details();
         details.act = act;

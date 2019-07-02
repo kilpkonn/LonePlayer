@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
+import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
@@ -93,6 +94,12 @@ public class GameWorld implements Disposable {
             return true;
         }
         return false;
+    }
+
+    public void updatePlayer(Player player) {
+        Body body = playerBodies.get(player.bodyId);
+        body.setTransform(player.position, 0);
+        body.setLinearVelocity(player.velocity);
     }
 
     private void createHitboxes(TiledMap tiledMap) {

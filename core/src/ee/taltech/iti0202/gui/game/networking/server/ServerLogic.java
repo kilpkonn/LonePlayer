@@ -28,6 +28,10 @@ public class ServerLogic implements Disposable {
         gameWorld.update(dt);
     }
 
+    public void setPlayer(Player player) {
+        gameWorld.updatePlayer(player);
+    }
+
     public void addPlayer(Player player) {
         player.bodyId = gameWorld.addPlayer();
     }
