@@ -10,14 +10,12 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import java.util.HashMap;
 import java.util.Map;
 
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
-
 public class MultiplayerContactListener implements ContactListener {
 
-    public Map<Integer, Player> players;
+    public Map<Integer, PlayerBody.PlayerBodyData> players;
     private HashMap<Body, Body> collidedBullets = new HashMap<>();
 
-    public MultiplayerContactListener(Map<Integer, Player> players) {
+    public MultiplayerContactListener(Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.players = players;
     }
 
@@ -26,22 +24,52 @@ public class MultiplayerContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-        if (fa.getUserData() != null && fb.getUserData() != null) {
+        Object oa = fa.getBody().getUserData();
+        Object ob = fb.getBody().getUserData();
+
+        if (oa != null && ob != null) {
 
             // detect bullet collision
             bulletDetection(fa, fb);
 
             // set wall jump
-            setWallJump(fa, fb, (short) 1);
+            setWallJump(oa, ob, 1);
 
             // detection happens when player goes outside of initial game border
-            dmgDetection(fa, fb);
+            dmgDetection(oa, ob);
         }
     }
 
     @Override
     public void endContact(Contact contact) {
+        Fixture fa = contact.getFixtureA();
+        Fixture fb = contact.getFixtureB();
 
+        Object oa = fa.getBody().getUserData();
+        Object ob = fb.getBody().getUserData();
+
+        if (oa != null && ob != null) {
+
+            setWallJump(oa, ob, 0);
+
+            PlayerBody.PlayerBodyData player;
+            if (oa instanceof PlayerBody.PlayerFoot) {
+                player = players.get(((PlayerBody.PlayerFoot) oa).id);
+
+                player.onGround = false;
+                player.doubleJump = true;
+                // wallJump = 0;
+                player.dash = true;
+            }
+            if (ob instanceof PlayerBody.PlayerFoot) {
+                player = players.get(((PlayerBody.PlayerFoot) ob).id);
+
+                player.onGround = false;
+                player.doubleJump = true;
+                // wallJump = 0;
+                player.dash = true;
+            }
+        }
     }
 
     @Override
@@ -62,43 +90,40 @@ public class MultiplayerContactListener implements ContactListener {
         }
     }
 
-    private void dmgDetection(Fixture fa, Fixture fb) {
-        Object oa = fa.getBody().getUserData();
-        Object ob = fb.getBody().getUserData();
+    private void dmgDetection(Object oa, Object ob) {
 
         if (oa instanceof PlayerBody.PlayerBodyData) {
-            Player player = players.get(((PlayerBody.PlayerBodyData) oa).id);
+            PlayerBody.PlayerBodyData player = players.get(((PlayerBody.PlayerBodyData) oa).id);
             if (ob.equals("barrier")) {
                 player.health = 0;
             }
         }
 
         if (ob instanceof PlayerBody.PlayerBodyData) {
-            Player player = players.get(((PlayerBody.PlayerBodyData) ob).id);
+            PlayerBody.PlayerBodyData player = players.get(((PlayerBody.PlayerBodyData) ob).id);
             if (oa.equals("barrier")) {
                 player.health = 0;
             }
         }
     }
 
-    private void setWallJump(Fixture fa, Fixture fb, short i) {
-        Object oa = fa.getBody().getUserData();
-        Object ob = fb.getBody().getUserData();
+    private void setWallJump(Object oa, Object ob, int i) {
+        PlayerBody.PlayerBodyData playerA;
+        PlayerBody.PlayerBodyData playerB;
 
-        Player playerA = players.get(((PlayerBody.PlayerBodyData) oa).id);
-        Player playerB = players.get(((PlayerBody.PlayerBodyData) ob).id);
-
-        if (fa.getUserData().equals("side_r")) {
-            playerA.wallJump = (short) (-1 * i);
-        }
-        if (fb.getUserData().equals("side_r")) {
-            playerB.wallJump = (short) (-1 * i);
-        }
-
-        if (fa.getUserData().equals("side_l")) {
+        if (oa instanceof PlayerBody.PlayerRightSide) {
+            playerA = players.get(((PlayerBody.PlayerRightSide) oa).id);
+            playerA.wallJump = -1 * i;
+        } else if (oa instanceof PlayerBody.PlayerLeftSide) {
+            playerA = players.get(((PlayerBody.PlayerLeftSide) oa).id);
             playerA.wallJump = i;
         }
-        if (fb.getUserData().equals("side_l")) {
+
+        if (ob instanceof PlayerBody.PlayerRightSide) {
+            playerB = players.get(((PlayerBody.PlayerRightSide) ob).id);
+            playerB.wallJump = -1 * i;
+        } else if (ob instanceof PlayerBody.PlayerLeftSide) {
+            playerB = players.get(((PlayerBody.PlayerLeftSide) ob).id);
             playerB.wallJump = i;
         }
     }

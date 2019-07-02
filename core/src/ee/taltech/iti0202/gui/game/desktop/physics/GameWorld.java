@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
@@ -39,7 +38,7 @@ public class GameWorld implements Disposable {
 
     private World world = new World(new Vector2(0, GRAVITY), true);
     private Map<Integer, Body> playerBodies = new HashMap<>();
-    private Map<Integer, Player> players = new HashMap<>();
+    private Map<Integer, PlayerBody.PlayerBodyData> players = new HashMap<>();
     private MultiplayerContactListener contactListener;
 
     private TiledMap tiledMap;
@@ -66,6 +65,7 @@ public class GameWorld implements Disposable {
         newPlayerIdentifier++;
         Body player = PlayerBody.createPlayer(world, newPlayerIdentifier);
         playerBodies.put(newPlayerIdentifier, player);
+        players.put(newPlayerIdentifier, (PlayerBody.PlayerBodyData) player.getUserData());
         return newPlayerIdentifier;
     }
 
@@ -73,6 +73,7 @@ public class GameWorld implements Disposable {
         if (playerBodies.containsKey(id)) {
             world.destroyBody(playerBodies.get(id));
             playerBodies.remove(id);
+            players.remove(id);
             return true;
         }
         return false;

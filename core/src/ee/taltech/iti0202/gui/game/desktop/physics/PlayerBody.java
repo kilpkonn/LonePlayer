@@ -58,13 +58,13 @@ public class PlayerBody extends Body {
         fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
         fixtureDef.filter.maskBits = mask;
         fixtureDef.isSensor = true;
-        body.createFixture(fixtureDef).setUserData("side_l");
+        body.createFixture(fixtureDef).setUserData(new PlayerLeftSide(id));
 
         polyShape.setAsBox(2 / PPM, 8 / PPM, new Vector2(20 / PPM, 20 / PPM), 0);
         fixtureDef.shape = polyShape;
         fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
         fixtureDef.filter.maskBits = mask;
-        body.createFixture(fixtureDef).setUserData("side_r");
+        body.createFixture(fixtureDef).setUserData(new PlayerRightSide(id));
 
         CircleShape circle = new CircleShape();
 
@@ -74,25 +74,54 @@ public class PlayerBody extends Body {
         fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
         fixtureDef.filter.maskBits = mask;
         body.createFixture(fixtureDef).setFriction(FRICTION);
-        body.setUserData("playerBody");
+        body.setUserData(new PlayerBodyData(id));
 
         polyShape.setAsBox(8 / PPM, 18 / PPM, new Vector2(0, 12 / PPM), 0);
         fixtureDef.shape = polyShape;
         fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
         fixtureDef.filter.maskBits = mask;
-        body.createFixture(fixtureDef).setUserData(new PlayerBodyData(id));
+        body.createFixture(fixtureDef).setUserData(body.getUserData());
 
         polyShape.setAsBox(4 / PPM, 1 / PPM, new Vector2(0, -15 / PPM), 0);
         fixtureDef.shape = polyShape;
         fixtureDef.filter.categoryBits = DIMENSION_1 | DIMENSION_2;
         fixtureDef.filter.maskBits = mask;
         fixtureDef.isSensor = true;
-        body.createFixture(fixtureDef).setUserData("foot");
+        body.createFixture(fixtureDef).setUserData(new PlayerFoot(id));
         return body;
+    }
+
+    public static class PlayerRightSide {
+        public int id;
+
+        public PlayerRightSide(int id) {
+            this.id = id;
+        }
+    }
+
+    public static class PlayerLeftSide {
+        public int id;
+
+        public PlayerLeftSide(int id) {
+            this.id = id;
+        }
+    }
+
+    public static class PlayerFoot {
+        public int id;
+
+        public PlayerFoot(int id) {
+            this.id = id;
+        }
     }
 
     public static class PlayerBodyData {
         public int id;
+        public int wallJump = 0;
+        public int health = 100;
+        public boolean dash = false;
+        public boolean onGround = false;
+        public boolean doubleJump = false;
 
         public PlayerBodyData(int id) {
             this.id = id;
