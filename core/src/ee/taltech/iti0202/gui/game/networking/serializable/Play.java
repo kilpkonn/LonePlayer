@@ -7,5 +7,8 @@ import java.util.Set;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 public class Play implements Serializable {
-    public Set<Player> players = new HashSet<>();
+
+    public static class Players implements Serializable{
+        public Set<Player> players = new HashSet<>();
+    }
 }

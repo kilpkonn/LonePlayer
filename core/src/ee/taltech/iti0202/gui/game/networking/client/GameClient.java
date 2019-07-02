@@ -44,7 +44,7 @@ public class GameClient implements Disposable {
         kryo.register(B2DVars.GameDifficulty.class);
         kryo.register(Player.class);
         kryo.register(Vector2.class);
-        kryo.register(Play.class);
+        kryo.register(Play.Players.class);
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);

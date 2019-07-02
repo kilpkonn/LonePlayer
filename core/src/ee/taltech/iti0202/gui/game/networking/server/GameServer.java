@@ -52,7 +52,7 @@ public class GameServer implements Disposable {
         kryo.register(B2DVars.GameDifficulty.class);
         kryo.register(Player.class);
         kryo.register(Vector2.class);
-        kryo.register(Play.class);
+        kryo.register(Play.Players.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
@@ -87,7 +87,10 @@ public class GameServer implements Disposable {
     }
 
     public void updateWorld() {
+        Play.Players players = new Play.Players();
+        players.players = getPlayers();
 
+        server.sendToAllUDP(players);
     }
 
     public void updatePlayerName(int id, Lobby.NameChange nameChange) {
