@@ -69,6 +69,7 @@ public class GameWorld implements Disposable {
         //Random spawn
         Array<Fixture> fixtures = new Array<>();
         world.getFixtures(fixtures);
+        fixtures.shuffle();
         Vector2 spawnCoordinates = new Vector2(0, 0);
         for (Fixture f : fixtures) {
             if (f.getUserData().equals("hitboxes")) {

@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.networking.server;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
@@ -19,6 +20,7 @@ import java.util.Set;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
+import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
@@ -33,6 +35,7 @@ public class GameServer implements Disposable {
     private B2DVars.GameDifficulty difficulty;
 
     private Map<Integer, Player> players = new HashMap<>();
+    private ServerLogic serverLogic = new ServerLogic();
 
     public GameServer() {
         server = new Server();
@@ -48,6 +51,8 @@ public class GameServer implements Disposable {
         kryo.register(HashSet.class);
         kryo.register(B2DVars.GameDifficulty.class);
         kryo.register(Player.class);
+        kryo.register(Vector2.class);
+        kryo.register(Play.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
@@ -79,6 +84,10 @@ public class GameServer implements Disposable {
 
     public Set<Player> getPlayers() {
         return new HashSet<>(players.values());
+    }
+
+    public void updateWorld() {
+
     }
 
     public void updatePlayerName(int id, Lobby.NameChange nameChange) {
@@ -119,6 +128,15 @@ public class GameServer implements Disposable {
         updateLobbyDetails();
     }
 
+    public void onStartGame() {
+        serverLogic.loadWorld(act, map);
+
+        for (Player player : getPlayers()) {
+            serverLogic.addPlayer(player);
+        }
+        serverLogic.run(getPlayers());
+    }
+
     private void updateLobbyDetails() {
         Lobby.Details details = new Lobby.Details();
         details.act = act;
@@ -144,6 +162,7 @@ public class GameServer implements Disposable {
 
     @Override
     public void dispose() {
+        serverLogic.dispose();
         try {
             server.dispose();
         } catch (IOException e) {

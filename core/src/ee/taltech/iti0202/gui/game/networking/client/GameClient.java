@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.networking.client;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
@@ -14,6 +15,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
+import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 public class GameClient implements Disposable {
@@ -41,6 +43,8 @@ public class GameClient implements Disposable {
         kryo.register(HashSet.class);
         kryo.register(B2DVars.GameDifficulty.class);
         kryo.register(Player.class);
+        kryo.register(Vector2.class);
+        kryo.register(Play.class);
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
