@@ -25,7 +25,7 @@ public class PlayerBody extends Body {
         super(world, addr);
     }
 
-    public static Body createPlayer(World world, int id) {
+    public static Body createPlayer(World world, Vector2 pos, int id) {
         BodyDef bodyDef = new BodyDef();
         short mask;
         // TODO: Make masks work, make usable when re-spawning
@@ -88,6 +88,9 @@ public class PlayerBody extends Body {
         fixtureDef.filter.maskBits = mask;
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(new PlayerFoot(id));
+
+        body.setTransform(pos, 0);
+
         return body;
     }
 

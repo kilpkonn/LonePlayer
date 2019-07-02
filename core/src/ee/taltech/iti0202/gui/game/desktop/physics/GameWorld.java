@@ -12,9 +12,11 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
 import java.util.HashMap;
@@ -63,7 +65,20 @@ public class GameWorld implements Disposable {
 
     public int addPlayer() {
         newPlayerIdentifier++;
-        Body player = PlayerBody.createPlayer(world, newPlayerIdentifier);
+
+        //Random spawn
+        Array<Fixture> fixtures = new Array<>();
+        world.getFixtures(fixtures);
+        Vector2 spawnCoordinates = new Vector2(0, 0);
+        for (Fixture f : fixtures) {
+            if (f.getUserData().equals("hitboxes")) {
+                spawnCoordinates = f.getBody().getPosition();
+                spawnCoordinates.y += f.getShape().getRadius();
+                break;
+            }
+        }
+
+        Body player = PlayerBody.createPlayer(world, spawnCoordinates, newPlayerIdentifier);
         playerBodies.put(newPlayerIdentifier, player);
         players.put(newPlayerIdentifier, (PlayerBody.PlayerBodyData) player.getUserData());
         return newPlayerIdentifier;
@@ -129,6 +144,14 @@ public class GameWorld implements Disposable {
             fixtureDef.shape = shape;
             world.createBody(bodyDef).createFixture(fixtureDef).setUserData(layer.getName());
         }
+    }
+
+    public Map<Integer, Body> getPlayerBodies() {
+        return playerBodies;
+    }
+
+    public Map<Integer, PlayerBody.PlayerBodyData> getPlayers() {
+        return players;
     }
 
     @Override
