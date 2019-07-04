@@ -45,9 +45,6 @@ public class GameWorld implements Disposable {
     private MultiplayerContactListener contactListener;
 
     private TiledMap tiledMap;
-    private TiledMapTileLayer foreground;
-    private TiledMapTileLayer dimension_2;
-    private TiledMapTileLayer dimension_1;
 
     private int newPlayerIdentifier;
 
@@ -160,6 +157,10 @@ public class GameWorld implements Disposable {
 
     public Map<Integer, PlayerBody.PlayerBodyData> getPlayers() {
         return players;
+    }
+
+    public TiledMap getTiledMap() {
+        return tiledMap;
     }
 
     @Override

@@ -1,7 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -17,6 +17,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
+import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS_BASE_HP;
@@ -44,6 +45,10 @@ public class Multiplayer extends GameState {
     private Vector2 camSpeed = new Vector2(0, 0);
     private float playTime = 0;
     private boolean loading = true;
+
+    private WorldRenderer worldRenderer;
+
+    private State state = State.RUN;
 
     public Multiplayer(String act, String map, B2DVars.GameDifficulty difficulty) {
         this.act = act;
@@ -108,11 +113,51 @@ public class Multiplayer extends GameState {
 
     @Override
     public void render() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        switch (state) {
+            case RUN:
+                drawAndSetCamera();
+                break;
+        }
     }
 
     @Override
     public void dispose() {
 
+    }
+
+    private void drawAndSetCamera() {
+
+        // clear screen
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        sb.begin();
+        sb.draw(backgroundTexture, 0, 0);
+        sb.end();
+        parallaxBackground.setSpeed(backgroundSpeed + camSpeed.x / 10);
+        stage.act();
+        stage.draw();
+
+        // draw tilemap
+
+        worldRenderer.render(sb);
+
+        hud.render(sb);
+
+        //TODO: Render fade over hud
+    }
+
+    private enum State {
+        PAUSE,
+        RUN,
+        RESUME,
+        SETTINGS,
+        END,
+        DEFAULT,
     }
 }
