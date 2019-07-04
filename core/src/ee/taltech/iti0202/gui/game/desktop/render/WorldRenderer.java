@@ -7,11 +7,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
+import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
@@ -36,6 +38,8 @@ public class WorldRenderer implements Handler {
     private boolean dimension = true;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
 
+    private Map<Integer, Player> players = new HashMap<>();
+
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
         this.gameWorld = gameWorld;
         this.tiledMap = gameWorld.getTiledMap();
@@ -45,6 +49,11 @@ public class WorldRenderer implements Handler {
 
     @Override
     public void update(float dt) {
+
+        for (Player player : players.values()) {
+            player.update(dt);
+        }
+
         if (!dimensionFadeDone) {
             if (dimension) {
                 if (currentDimensionFade > 0) {
@@ -81,6 +90,14 @@ public class WorldRenderer implements Handler {
         if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
         if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
 
+        for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {
+            //Add missing players -> move to update?
+            if (!players.containsKey(playerEntry.getKey())) {
+                players.put(playerEntry.getKey(), new Player(playerEntry.getValue(), sb));
+            }
+
+            players.get(playerEntry.getKey()).render(sb);
+        }
         //TODO: Render player, bullets, etc.
     }
 
