@@ -3,6 +3,7 @@ package ee.taltech.iti0202.gui.game.desktop.render;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -45,6 +46,10 @@ public class WorldRenderer implements Handler {
         this.tiledMap = gameWorld.getTiledMap();
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         renderer.setView(cam);
+
+        for (MapLayer layer : tiledMap.getLayers()) {
+            readVertices((TiledMapTileLayer) layer);
+        }
     }
 
     @Override
