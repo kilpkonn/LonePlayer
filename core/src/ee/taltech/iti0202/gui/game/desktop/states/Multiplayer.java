@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
@@ -19,11 +20,14 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
 
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SCREENS;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SPEEDS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS_BASE_HP;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.CHECKPOINTS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
 
 public class Multiplayer extends GameState {
@@ -99,6 +103,29 @@ public class Multiplayer extends GameState {
         game.getSound().setLooping(true);
         game.getSound().play();
         game.getSound().setVolume(0.12f);
+
+        // set up background
+        String backgroundPath = MAIN_SCREENS[BACKGROUND_SCREENS.get(act)];
+        backgroundTexture =
+                new Texture(Gdx.files.local(PATH + backgroundPath + "backgroundLayer.png"));
+
+        backgroundSpeed = BACKGROUND_SPEEDS.get(act);
+        Array<Texture> textures = new Array<>();
+        int layersCount = Gdx.files.local(PATH + backgroundPath).list().length;
+        for (int i = 1; i < layersCount; i++) {
+            textures.add(
+                    new Texture(
+                            Gdx.files.local(
+                                    PATH + backgroundPath + "backgroundLayer" + i + ".png")));
+            textures.get(textures.size - 1)
+                    .setWrap(
+                            Texture.TextureWrap.MirroredRepeat, Texture.TextureWrap.MirroredRepeat);
+        }
+
+        parallaxBackground = new ParallaxBackground(textures);
+        parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        parallaxBackground.setSpeed(0f);
+        stage.addActor(parallaxBackground);
     }
 
     @Override
@@ -108,7 +135,7 @@ public class Multiplayer extends GameState {
 
     @Override
     public void update(float dt) {
-
+        worldRenderer.update(dt);
     }
 
     @Override
@@ -124,7 +151,7 @@ public class Multiplayer extends GameState {
 
     @Override
     public void dispose() {
-
+        worldRenderer.dispose();
     }
 
     private void drawAndSetCamera() {
