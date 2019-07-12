@@ -46,6 +46,8 @@ public class ServerListener extends Listener {
             server.updateActMapDifficulty((Lobby.ActMapDifficulty) object);
         } else if (object instanceof Player) {
             server.onUpdatePlayer((Player) object);
+        } else if (object instanceof Lobby.StartGame) {
+            server.onStartGame();
         }
     }
 

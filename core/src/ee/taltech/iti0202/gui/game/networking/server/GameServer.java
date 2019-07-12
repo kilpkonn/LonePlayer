@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.networking.server;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.esotericsoftware.kryo.Kryo;
@@ -53,6 +54,7 @@ public class GameServer implements Disposable {
         kryo.register(Player.class);
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
+        kryo.register(Lobby.StartGame.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
@@ -132,12 +134,19 @@ public class GameServer implements Disposable {
     }
 
     public void onStartGame() {
-        serverLogic.loadWorld(act, map);
+        Gdx.app.postRunnable(() -> {
+            serverLogic.loadWorld(act, map);
 
-        for (Player player : getPlayers()) {
-            serverLogic.addPlayer(player);
-        }
-        serverLogic.run(getPlayers());
+            for (Player player : getPlayers()) {
+                serverLogic.addPlayer(player);
+            }
+            serverLogic.run(getPlayers());
+            Lobby.StartGame data = new Lobby.StartGame();
+            data.details.act = act;
+            data.details.map = map;
+            data.details.difficulty = difficulty;
+            server.sendToAllTCP(data);
+        });
     }
 
     public void onUpdatePlayer(Player player) {

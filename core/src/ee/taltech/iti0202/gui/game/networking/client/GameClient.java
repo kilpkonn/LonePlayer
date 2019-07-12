@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
@@ -45,6 +46,7 @@ public class GameClient implements Disposable {
         kryo.register(Player.class);
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
+        kryo.register(Lobby.StartGame.class);
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
@@ -77,6 +79,17 @@ public class GameClient implements Disposable {
 
     public void updateLobbyDetails(Lobby.Details details) {
         Gdx.app.postRunnable(() -> matchmakingMenu.updateLobbyDetails(details));
+    }
+
+    public void onStartGame(Lobby.StartGame obj) {
+        Gdx.app.postRunnable(() -> GameStateManager.pushState(GameStateManager.State.MULTIPLAYER,
+                obj.details.act,
+                obj.details.map,
+                obj.details.difficulty));
+    }
+
+    public void startGame() {
+        client.sendTCP(new Lobby.StartGame());
     }
 
     public void disconnect() {

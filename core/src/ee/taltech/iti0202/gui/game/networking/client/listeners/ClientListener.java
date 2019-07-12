@@ -31,6 +31,8 @@ public class ClientListener extends Listener {
             client.performHandshake((Handshake.Request) object);
         } else if (object instanceof Lobby.Details) {
             client.updateLobbyDetails((Lobby.Details) object);
+        } else if (object instanceof Lobby.StartGame) {
+            client.onStartGame((Lobby.StartGame) object);
         }
     }
 

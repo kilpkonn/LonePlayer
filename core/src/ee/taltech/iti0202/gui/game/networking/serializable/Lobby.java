@@ -43,4 +43,8 @@ public class Lobby implements Serializable {
         public String map = "";
         public B2DVars.GameDifficulty difficulty;
     }
+
+    public static class StartGame implements Serializable {
+        public Details details = new Details();
+    }
 }

@@ -18,12 +18,12 @@ public class Hud {
     protected GameButton health;
     protected GameButton fps;
     protected GameButton time;
-    protected Play play;
+    protected int hp;
+    private float playTime;
 
-    public Hud(OrthographicCamera cam, Play play) {
+    public Hud(OrthographicCamera cam) {
         this.cam = cam;
         stage = new Stage(new ScreenViewport());
-        this.play = play;
 
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter =
                 new FreeTypeFontGenerator.FreeTypeFontParameter();
@@ -44,7 +44,6 @@ public class Hud {
     }
 
     public void update(float dt) {
-        int hp = play.getPlayerHandler().getPlayer().getHealth();
         health.setText(hp + "hp");
         health.setColor(new Color((100 - hp) / 70f, hp / 70f, 0, 1));
 
@@ -58,7 +57,7 @@ public class Hud {
                         0,
                         1));
 
-        time.setText(Math.round(play.getPlayTime() * 10) / 10f + "s");
+        time.setText(Math.round(playTime * 10) / 10f + "s");
     }
 
     public void render(SpriteBatch sb) {
@@ -70,6 +69,14 @@ public class Hud {
         health.render(sb);
         if (Game.settings.SHOW_FPS) fps.render(sb);
         time.render(sb);
+    }
+
+    public void setHp(int hp) {
+        this.hp = hp;
+    }
+
+    public void setPlayTime(float playTime) {
+        this.playTime = playTime;
     }
 
     public void dispose() {

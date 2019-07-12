@@ -19,7 +19,6 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_FADE_AMOUNT;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.SQUARE_CORNERS;
 
 public class WorldRenderer implements Handler {
 
@@ -47,7 +46,10 @@ public class WorldRenderer implements Handler {
         renderer.setView(cam);
 
         for (MapLayer layer : tiledMap.getLayers()) {
-            readVertices((TiledMapTileLayer) layer);
+            // Only visuals
+            if (layer instanceof  TiledMapTileLayer) {
+                readVertices((TiledMapTileLayer) layer);
+            }
         }
     }
 
@@ -85,14 +87,16 @@ public class WorldRenderer implements Handler {
     @Override
     public void render(SpriteBatch sb) {
         // render animations
+        renderer.render();
+        /*renderer.getBatch().begin();
         if (animatedCells != null)
             for (TiledMapTileLayer.Cell cell : animatedCells.keySet())
                 cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
-
         if (background != null) renderer.renderTileLayer(background);
         if (foreground != null) renderer.renderTileLayer(foreground);
         if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
         if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
+        renderer.getBatch().end();*/
 
         for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {
             //Add missing players -> move to update?
@@ -106,9 +110,7 @@ public class WorldRenderer implements Handler {
     }
 
     private void readVertices(TiledMapTileLayer layer) {
-        int[] corner_coords = SQUARE_CORNERS;
         String type = layer.getName();
-        float tileSize = layer.getTileWidth();
 
         switch (type) {
             case "dimension_1":

@@ -171,7 +171,7 @@ public class Play extends GameState {
                         hudCam,
                         difficulty,
                         () -> playState = pauseState.SETTINGS);
-        hud = new Hud(hudCam, this);
+        hud = new Hud(hudCam);
 
         playState = pauseState.RUN;
 
@@ -306,6 +306,8 @@ public class Play extends GameState {
         switch (playState) {
             case RUN:
                 updateProps(dt);
+                hud.setHp(draw.getPlayerHandler().getPlayer().getHealth());
+                hud.setPlayTime(getPlayTime());
                 hud.update(dt);
                 break;
 

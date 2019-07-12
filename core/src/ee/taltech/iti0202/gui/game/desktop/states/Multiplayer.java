@@ -126,6 +126,11 @@ public class Multiplayer extends GameState {
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         parallaxBackground.setSpeed(0f);
         stage.addActor(parallaxBackground);
+
+        gameWorld = new GameWorld(act, map);
+        worldRenderer = new WorldRenderer(gameWorld, cam);
+
+        hud = new Hud(cam);
     }
 
     @Override

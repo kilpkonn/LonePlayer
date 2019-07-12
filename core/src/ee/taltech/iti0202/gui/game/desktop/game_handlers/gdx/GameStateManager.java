@@ -4,6 +4,7 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.GameState;
 import ee.taltech.iti0202.gui.game.desktop.states.Menu;
+import ee.taltech.iti0202.gui.game.desktop.states.Multiplayer;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
@@ -52,6 +53,8 @@ public class GameStateManager {
             State state, String act, String map, B2DVars.GameDifficulty difficulty) {
         if (state == State.PLAY) {
             return new Play(act, map, difficulty);
+        } else if (state == State.MULTIPLAYER) {
+            return new Multiplayer(act, map, difficulty);
         }
         System.out.println("desired state was no found!");
         return null;
@@ -90,6 +93,7 @@ public class GameStateManager {
 
     public enum State {
         PLAY,
-        MENU
+        MENU,
+        MULTIPLAYER
     }
 }
