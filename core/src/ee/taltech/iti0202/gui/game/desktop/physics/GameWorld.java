@@ -7,19 +7,19 @@ import com.badlogic.gdx.maps.objects.PolygonMapObject;
 import com.badlogic.gdx.maps.objects.PolylineMapObject;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
@@ -33,6 +33,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.GRAVITY;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
@@ -43,6 +44,7 @@ public class GameWorld implements Disposable {
     private Map<Integer, Body> playerBodies = new HashMap<>();
     private Map<Integer, PlayerBody.PlayerBodyData> players = new HashMap<>();
     private MultiplayerContactListener contactListener;
+    private List<Vector2> spawns = new ArrayList<>();
 
     private TiledMap tiledMap;
 
@@ -65,17 +67,7 @@ public class GameWorld implements Disposable {
         newPlayerIdentifier++;
 
         //Random spawn
-        Array<Fixture> fixtures = new Array<>();
-        world.getFixtures(fixtures);
-        fixtures.shuffle();
-        Vector2 spawnCoordinates = new Vector2(0, 0);
-        for (Fixture f : fixtures) {
-            if (f.getUserData().equals("hitboxes")) {
-                spawnCoordinates = f.getBody().getPosition();
-                spawnCoordinates.y += f.getShape().getRadius();
-                break;
-            }
-        }
+        Vector2 spawnCoordinates = spawns.get((int) Math.floor(Math.random() * spawns.size()));
 
         Body player = PlayerBody.createPlayer(world, spawnCoordinates, newPlayerIdentifier);
         playerBodies.put(newPlayerIdentifier, player);
@@ -94,6 +86,12 @@ public class GameWorld implements Disposable {
     }
 
     public void updatePlayer(Player player) {
+        if (!playerBodies.containsKey(player.bodyId)) {
+            Body playerBody = PlayerBody.createPlayer(world, player.position, player.bodyId);
+            playerBodies.put(player.bodyId, playerBody);
+            players.put(player.bodyId, (PlayerBody.PlayerBodyData) playerBody.getUserData());
+            if (player.bodyId < newPlayerIdentifier) newPlayerIdentifier = player.bodyId + 1;
+        }
         Body body = playerBodies.get(player.bodyId);
         body.setTransform(player.position, 0);
         body.setLinearVelocity(player.velocity);
@@ -132,17 +130,25 @@ public class GameWorld implements Disposable {
     private void determineMapObject(MapLayer layer, FixtureDef fixtureDef) {
         BodyDef bodyDef = new BodyDef();
         Shape shape;
+        Vector2 pos = new Vector2();
         for (MapObject object : layer.getObjects()) {
-            if (object instanceof RectangleMapObject)
-                shape = ShapesGreator.getRectangle((RectangleMapObject) object);
-            else if (object instanceof PolygonMapObject)
+            if (object instanceof RectangleMapObject) {
+                RectangleMapObject rect = (RectangleMapObject) object;
+                shape = ShapesGreator.getRectangle(rect);
+                if (layer.getName().equals("hitboxes")) {
+                    pos.x = rect.getRectangle().x / PPM;
+                    pos.y = (rect.getRectangle().y + rect.getRectangle().width + 10) / PPM;
+                    spawns.add(pos);
+                }
+            } else if (object instanceof PolygonMapObject) {
                 shape = ShapesGreator.getPolygon((PolygonMapObject) object);
-            else if (object instanceof PolylineMapObject)
+            } else if (object instanceof PolylineMapObject) {
                 shape = ShapesGreator.getPolyline((PolylineMapObject) object);
-            else if (object instanceof EllipseMapObject)
+            } else if (object instanceof EllipseMapObject) {
                 shape = ShapesGreator.getCircle((EllipseMapObject) object);
-            else
+            } else {
                 continue;
+            }
 
             bodyDef.type = BodyDef.BodyType.StaticBody;
             fixtureDef.isSensor = false;

@@ -21,6 +21,10 @@ public class GameStateManager {
         pushState(State.MENU);
     }
 
+    public static GameState currentState() {
+        return gameStates.peek();
+    }
+
     public static Game game() {
         return game;
     }

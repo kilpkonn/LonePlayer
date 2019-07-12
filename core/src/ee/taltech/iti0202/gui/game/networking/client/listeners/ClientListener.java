@@ -6,6 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
+import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 
 public class ClientListener extends Listener {
 
@@ -33,6 +34,8 @@ public class ClientListener extends Listener {
             client.updateLobbyDetails((Lobby.Details) object);
         } else if (object instanceof Lobby.StartGame) {
             client.onStartGame((Lobby.StartGame) object);
+        } else if (object instanceof Play.Players) {
+            client.onUpdatePlayers((Play.Players) object);
         }
     }
 

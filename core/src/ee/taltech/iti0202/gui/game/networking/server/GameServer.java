@@ -136,17 +136,26 @@ public class GameServer implements Disposable {
     public void onStartGame() {
         Gdx.app.postRunnable(() -> {
             serverLogic.loadWorld(act, map);
-
-            for (Player player : getPlayers()) {
-                serverLogic.addPlayer(player);
-            }
-            serverLogic.run(getPlayers());
-            Lobby.StartGame data = new Lobby.StartGame();
-            data.details.act = act;
-            data.details.map = map;
-            data.details.difficulty = difficulty;
-            server.sendToAllTCP(data);
         });
+
+        while (!serverLogic.isLoaded()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        for (Player player : getPlayers()) {
+            serverLogic.addPlayer(player);
+        }
+        Lobby.StartGame data = new Lobby.StartGame();
+        data.details.act = act;
+        data.details.map = map;
+        data.details.difficulty = difficulty;
+        server.sendToAllTCP(data);
+
+        serverLogic.run(getPlayers());
     }
 
     public void onUpdatePlayer(Player player) {

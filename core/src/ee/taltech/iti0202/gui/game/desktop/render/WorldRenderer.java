@@ -6,7 +6,7 @@ import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.HashMap;
@@ -19,10 +19,12 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_FADE_AMOUNT;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class WorldRenderer implements Handler {
 
     private GameWorld gameWorld;
+    private OrthographicCamera cam;
 
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
@@ -33,15 +35,19 @@ public class WorldRenderer implements Handler {
     private TiledMapTileLayer dimension_2;
     private TiledMapTileLayer dimension_1;
 
+    private Vector2 camSpeed = new Vector2(0, 0);
+
     private boolean dimensionFadeDone = false;
     private boolean dimension = true;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
 
     private Map<Integer, Player> players = new HashMap<>();
+    private ee.taltech.iti0202.gui.game.networking.server.player.Player playerToFollow;
 
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
         this.gameWorld = gameWorld;
         this.tiledMap = gameWorld.getTiledMap();
+        this.cam = cam;
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         renderer.setView(cam);
 
@@ -58,6 +64,23 @@ public class WorldRenderer implements Handler {
 
         for (Player player : players.values()) {
             player.update(dt);
+        }
+
+        // Set camera
+        if (playerToFollow != null) {
+            Body playerLocation = gameWorld.getPlayerBodies().get(playerToFollow.bodyId);
+            camSpeed =
+                    new Vector2(
+                            (playerLocation.getPosition().x - cam.position.x / PPM) * 2 * PPM,
+                            (playerLocation.getPosition().y - cam.position.y / PPM) * 4 * PPM);
+
+            cam.position.x += camSpeed.x * dt;
+            cam.position.y += camSpeed.y * dt;
+
+            cam.position.x = Math.round(cam.position.x);
+            cam.position.y = Math.round(cam.position.y);
+
+            cam.update();
         }
 
         if (!dimensionFadeDone) {
@@ -109,6 +132,10 @@ public class WorldRenderer implements Handler {
         //TODO: Render player, bullets, etc.
     }
 
+    public void setPlayerToFollow(ee.taltech.iti0202.gui.game.networking.server.player.Player player) {
+        playerToFollow = player;
+    }
+
     private void readVertices(TiledMapTileLayer layer) {
         String type = layer.getName();
 
@@ -139,6 +166,10 @@ public class WorldRenderer implements Handler {
                 layer.setVisible(false);
                 break;
         }
+    }
+
+    public Vector2 getCamSpeed() {
+        return camSpeed;
     }
 
     public void dispose() {

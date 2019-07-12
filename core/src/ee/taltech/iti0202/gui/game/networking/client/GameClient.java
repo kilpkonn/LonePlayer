@@ -13,6 +13,7 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
+import ee.taltech.iti0202.gui.game.desktop.states.Multiplayer;
 import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
@@ -86,6 +87,14 @@ public class GameClient implements Disposable {
                 obj.details.act,
                 obj.details.map,
                 obj.details.difficulty));
+    }
+
+    public void onUpdatePlayers(Play.Players players) {
+        Gdx.app.postRunnable(() -> {
+            if (GameStateManager.currentState() instanceof Multiplayer) {
+                ((Multiplayer) GameStateManager.currentState()).updatePlayers(players.players);
+            }
+        });
     }
 
     public void startGame() {

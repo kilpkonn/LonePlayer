@@ -22,6 +22,7 @@ public class ServerLogic implements Disposable {
     public void run(Set<Player> players) {
         if (logicThread != null) logicThread.close();
         logicThread = new ServerLogicThread(players);
+        logicThread.run();
     }
 
     public void update(float dt) {
@@ -50,6 +51,10 @@ public class ServerLogic implements Disposable {
             player.position = body.getPosition();
             player.velocity = body.getLinearVelocity();
         }
+    }
+
+    public boolean isLoaded() {
+        return gameWorld != null;
     }
 
     @Override
@@ -84,7 +89,7 @@ public class ServerLogic implements Disposable {
                 Game.server.updateWorld();
 
                 try {
-                    Thread.sleep(10);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

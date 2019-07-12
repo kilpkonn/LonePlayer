@@ -13,12 +13,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
+import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SPEEDS;
@@ -46,7 +48,6 @@ public class Multiplayer extends GameState {
     private ParallaxBackground parallaxBackground;
     private float backgroundSpeed;
     // Boss logic, helpful variables
-    private Vector2 camSpeed = new Vector2(0, 0);
     private float playTime = 0;
     private boolean loading = true;
 
@@ -133,6 +134,13 @@ public class Multiplayer extends GameState {
         hud = new Hud(cam);
     }
 
+    public void updatePlayers(Set<Player> players) {
+        for (Player player : players) {
+            gameWorld.updatePlayer(player);
+            worldRenderer.setPlayerToFollow(player); // TODO: Just test
+        }
+    }
+
     @Override
     public void handleInput() {
 
@@ -171,7 +179,7 @@ public class Multiplayer extends GameState {
         sb.begin();
         sb.draw(backgroundTexture, 0, 0);
         sb.end();
-        parallaxBackground.setSpeed(backgroundSpeed + camSpeed.x / 10);
+        parallaxBackground.setSpeed(backgroundSpeed + worldRenderer.getCamSpeed().x / 10);
         stage.act();
         stage.draw();
 
