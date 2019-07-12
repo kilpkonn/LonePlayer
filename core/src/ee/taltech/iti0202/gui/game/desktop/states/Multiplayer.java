@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -15,10 +16,14 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
+import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
+import ee.taltech.iti0202.gui.game.desktop.physics.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 
@@ -35,6 +40,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class Multiplayer extends GameState {
 
     private GameWorld gameWorld;
+    private PlayerController playerController;
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
 
@@ -54,6 +60,9 @@ public class Multiplayer extends GameState {
     private WorldRenderer worldRenderer;
 
     private State state = State.RUN;
+
+    private boolean shouldUpdate = false;
+    private Player playerToFollow;
 
     public Multiplayer(String act, String map, B2DVars.GameDifficulty difficulty) {
         this.act = act;
@@ -130,6 +139,7 @@ public class Multiplayer extends GameState {
 
         gameWorld = new GameWorld(act, map);
         worldRenderer = new WorldRenderer(gameWorld, cam);
+        playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers());
 
         hud = new Hud(cam);
     }
@@ -137,18 +147,42 @@ public class Multiplayer extends GameState {
     public void updatePlayers(Set<Player> players) {
         for (Player player : players) {
             gameWorld.updatePlayer(player);
-            worldRenderer.setPlayerToFollow(player); // TODO: Just test
+            if (player.id == Game.client.id) {
+                setPlayerToFollow(player);
+            }
         }
     }
 
     @Override
     public void handleInput() {
-
+        switch (state) {
+            case RUN:
+                handleRunInput();
+                break;
+        }
     }
 
     @Override
     public void update(float dt) {
+        handleInput();
+        gameWorld.update(dt);
         worldRenderer.update(dt);
+
+        if (shouldUpdate) {
+            Player player = new Player(Game.settings.NAME, Game.client.id);
+            Body body = gameWorld.getPlayerBodies().get(player.id);
+            PlayerBody.PlayerBodyData bodyData = gameWorld.getPlayers().get(player.id);
+
+            player.wallJump = (short) bodyData.wallJump;
+            player.health = (short) bodyData.health;
+            player.dash = bodyData.dash;
+            player.onGround = bodyData.onGround;
+            player.doubleJump = bodyData.doubleJump;
+
+            player.position = body.getPosition();
+            player.velocity = body.getLinearVelocity();
+            Game.client.updatePlayer(player);
+        }
     }
 
     @Override
@@ -157,7 +191,7 @@ public class Multiplayer extends GameState {
 
         switch (state) {
             case RUN:
-                drawAndSetCamera();
+                renderWorld();
                 break;
         }
     }
@@ -167,7 +201,13 @@ public class Multiplayer extends GameState {
         worldRenderer.dispose();
     }
 
-    private void drawAndSetCamera() {
+    private void handleRunInput() {
+        if (MyInput.isPressed(Game.settings.JUMP)) {
+            shouldUpdate = playerController.tryJump(Game.client.id);
+        }
+    }
+
+    private void renderWorld() {
 
         // clear screen
         Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -190,6 +230,11 @@ public class Multiplayer extends GameState {
         hud.render(sb);
 
         //TODO: Render fade over hud
+    }
+
+    public void setPlayerToFollow(Player playerToFollow) {
+        this.playerToFollow = playerToFollow;
+        worldRenderer.setPlayerToFollow(playerToFollow);
     }
 
     private enum State {

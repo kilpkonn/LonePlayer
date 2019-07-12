@@ -24,6 +24,7 @@ public class GameClient implements Disposable {
 
     private Client client;
     private MatchmakingMenu matchmakingMenu;
+    public int id;
     private int timeout = 5000;
 
     public GameClient(String connect, MatchmakingMenu matchmakingMenu) {
@@ -51,6 +52,7 @@ public class GameClient implements Disposable {
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
+            client.setKeepAliveUDP(10000);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -71,6 +73,7 @@ public class GameClient implements Disposable {
     public void performHandshake(Handshake.Request request) {
         Handshake.Response response = new Handshake.Response();
         response.name = Game.settings.NAME;
+        this.id = request.id;
         if (request.names.contains(Game.settings.NAME)) {
             response.name += Math.round(Math.random() * 100);
         }
@@ -95,6 +98,10 @@ public class GameClient implements Disposable {
                 ((Multiplayer) GameStateManager.currentState()).updatePlayers(players.players);
             }
         });
+    }
+
+    public void updatePlayer(Player player) {
+        client.sendUDP(player);
     }
 
     public void startGame() {

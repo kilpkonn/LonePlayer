@@ -125,6 +125,7 @@ public class GameServer implements Disposable {
         for (Player player : players.values()) {
             request.names.add(player.name);
         }
+        request.id = id;
         server.sendToTCP(id, request);
     }
 

@@ -7,6 +7,7 @@ import java.util.Set;
 public class Handshake implements Serializable {
     public static class Request implements Serializable {
         public Set<String> names = new HashSet<>();
+        public int id;
     }
 
     public static class Response implements Serializable {
