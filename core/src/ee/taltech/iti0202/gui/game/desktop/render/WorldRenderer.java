@@ -110,6 +110,8 @@ public class WorldRenderer implements Handler {
     @Override
     public void render(SpriteBatch sb) {
         // render animations
+        sb.setProjectionMatrix(cam.combined );
+        renderer.setView(cam);
         renderer.render();
         /*renderer.getBatch().begin();
         if (animatedCells != null)

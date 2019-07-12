@@ -136,8 +136,8 @@ public class GameWorld implements Disposable {
                 RectangleMapObject rect = (RectangleMapObject) object;
                 shape = ShapesGreator.getRectangle(rect);
                 if (layer.getName().equals("hitboxes")) {
-                    pos.x = rect.getRectangle().x / PPM;
-                    pos.y = (rect.getRectangle().y + rect.getRectangle().width + 10) / PPM;
+                    pos.x = (rect.getRectangle().x + rect.getRectangle().width / 2) / PPM;
+                    pos.y = (rect.getRectangle().y + rect.getRectangle().width + 100) / PPM;
                     spawns.add(pos);
                 }
             } else if (object instanceof PolygonMapObject) {
@@ -154,6 +154,7 @@ public class GameWorld implements Disposable {
             fixtureDef.isSensor = false;
             fixtureDef.shape = shape;
             world.createBody(bodyDef).createFixture(fixtureDef).setUserData(layer.getName());
+            shape.dispose();
         }
     }
 
