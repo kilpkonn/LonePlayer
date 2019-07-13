@@ -176,6 +176,7 @@ public class Multiplayer extends GameState {
         if (shouldUpdate) {
             controls.id = playerToFollow.id;
             Game.client.updatePlayerControls(controls);
+            shouldUpdate = false;
         }
     }
 

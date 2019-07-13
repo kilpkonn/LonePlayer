@@ -26,7 +26,7 @@ public class GameClient implements Disposable {
     private Client client;
     private MatchmakingMenu matchmakingMenu;
     public int id;
-    private int timeout = 5000;
+    private final int timeout = 50000;
 
     public GameClient(String connect, MatchmakingMenu matchmakingMenu) {
         this.matchmakingMenu = matchmakingMenu;
@@ -54,7 +54,6 @@ public class GameClient implements Disposable {
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
-            client.setKeepAliveUDP(10000);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -103,7 +102,7 @@ public class GameClient implements Disposable {
     }
 
     public void updatePlayerControls(PlayerControls controls) {
-        client.sendUDP(controls);
+        client.sendTCP(controls); // TODO: Use UDP?
     }
 
     public void startGame() {

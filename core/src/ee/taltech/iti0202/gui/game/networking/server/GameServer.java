@@ -159,6 +159,7 @@ public class GameServer implements Disposable {
         server.sendToAllTCP(data);
 
         serverLogic.run(getPlayers());
+        System.out.println("Server word ready!");
     }
 
     public void onUpdatePlayer(Player player) {

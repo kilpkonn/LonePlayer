@@ -24,8 +24,8 @@ public class MultiplayerContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-        Object oa = fa.getBody().getUserData();
-        Object ob = fb.getBody().getUserData();
+        Object oa = fa.getUserData();
+        Object ob = fb.getUserData();
 
         //if (oa != null && ob != null) {
 
@@ -47,8 +47,8 @@ public class MultiplayerContactListener implements ContactListener {
         Fixture fa = contact.getFixtureA();
         Fixture fb = contact.getFixtureB();
 
-        Object oa = fa.getBody().getUserData();
-        Object ob = fb.getBody().getUserData();
+        Object oa = fa.getUserData();
+        Object ob = fb.getUserData();
 
         //if (oa != null && ob != null) {
 

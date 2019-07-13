@@ -26,12 +26,8 @@ public class ServerLogic implements Disposable {
     public void run(Set<Player> players) {
         if (logicThread != null) logicThread.close();
         logicThread = new ServerLogicThread(players);
-        logicThread.run();
+        logicThread.start();
     }
-
-    /*public void update(float dt) {
-        gameWorld.update(dt);
-    }*/
 
     public void setPlayer(Player player) {
         gameWorld.updatePlayer(player);

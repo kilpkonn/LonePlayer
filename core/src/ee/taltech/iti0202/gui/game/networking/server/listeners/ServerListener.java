@@ -5,7 +5,6 @@ import com.esotericsoftware.kryonet.Listener;
 
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
-import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;

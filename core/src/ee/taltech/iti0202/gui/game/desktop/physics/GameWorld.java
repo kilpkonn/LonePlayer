@@ -92,7 +92,7 @@ public class GameWorld implements Disposable {
             if (player.bodyId < newPlayerIdentifier) newPlayerIdentifier = player.bodyId + 1;
         }
         Body body = playerBodies.get(player.bodyId);
-        body.setTransform(player.position, 0);  // TODO: These 2 are not working? >:D
+        body.setTransform(player.position, 0);
         body.setLinearVelocity(player.velocity);
     }
 
