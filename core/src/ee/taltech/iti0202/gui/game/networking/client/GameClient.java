@@ -102,7 +102,7 @@ public class GameClient implements Disposable {
     }
 
     public void updatePlayerControls(PlayerControls controls) {
-        client.sendTCP(controls); // TODO: Use UDP?
+        client.sendUDP(controls);
     }
 
     public void startGame() {
