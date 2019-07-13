@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -65,6 +66,7 @@ public class Multiplayer extends GameState {
     private boolean shouldUpdate = false;
     private PlayerControls controls;
     private Player playerToFollow;
+    private Set<Player> tmpPlayers = new HashSet<>();
 
     public Multiplayer(String act, String map, B2DVars.GameDifficulty difficulty) {
         this.act = act;
@@ -166,6 +168,7 @@ public class Multiplayer extends GameState {
 
     @Override
     public void update(float dt) {
+        updatePlayers(tmpPlayers);
         handleInput();
         gameWorld.update(dt);
         worldRenderer.update(dt);

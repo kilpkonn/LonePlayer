@@ -102,10 +102,6 @@ public class GameClient implements Disposable {
         });
     }
 
-    public void updatePlayer(Player player) {
-        client.sendUDP(player);
-    }
-
     public void updatePlayerControls(PlayerControls controls) {
         client.sendUDP(controls);
     }

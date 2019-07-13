@@ -56,7 +56,7 @@ public class ServerLogic implements Disposable {
             player.onGround = bodyData.onGround;
             player.doubleJump = bodyData.doubleJump;
 
-            player.position = body.getPosition();
+            player.position = body.getTransform().getPosition();
             player.velocity = body.getLinearVelocity();
         }
     }
@@ -88,7 +88,7 @@ public class ServerLogic implements Disposable {
         public void run() {
             long start = System.currentTimeMillis();
             while (running) {
-                float dt = (System.currentTimeMillis() - start) / 1000000f;
+                float dt = (System.currentTimeMillis() - start) / 1000f;
                 start = System.currentTimeMillis();
                 //TODO: Fixed rate?
 
