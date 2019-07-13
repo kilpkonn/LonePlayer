@@ -26,6 +26,7 @@ import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
+import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SPEEDS;
@@ -62,6 +63,7 @@ public class Multiplayer extends GameState {
     private State state = State.RUN;
 
     private boolean shouldUpdate = false;
+    private PlayerControls controls;
     private Player playerToFollow;
 
     public Multiplayer(String act, String map, B2DVars.GameDifficulty difficulty) {
@@ -147,7 +149,7 @@ public class Multiplayer extends GameState {
     public void updatePlayers(Set<Player> players) {
         for (Player player : players) {
             gameWorld.updatePlayer(player);
-            if (player.id == Game.client.id) {
+            if (playerToFollow == null && player.id == Game.client.id) {
                 setPlayerToFollow(player);
             }
         }
@@ -169,19 +171,8 @@ public class Multiplayer extends GameState {
         worldRenderer.update(dt);
 
         if (shouldUpdate) {
-            Player player = new Player(Game.settings.NAME, Game.client.id);
-            Body body = gameWorld.getPlayerBodies().get(player.id);
-            PlayerBody.PlayerBodyData bodyData = gameWorld.getPlayers().get(player.id);
-
-            player.wallJump = (short) bodyData.wallJump;
-            player.health = (short) bodyData.health;
-            player.dash = bodyData.dash;
-            player.onGround = bodyData.onGround;
-            player.doubleJump = bodyData.doubleJump;
-
-            player.position = body.getPosition();
-            player.velocity = body.getLinearVelocity();
-            Game.client.updatePlayer(player);
+            controls.id = playerToFollow.id;
+            Game.client.updatePlayerControls(controls);
         }
     }
 
@@ -202,8 +193,10 @@ public class Multiplayer extends GameState {
     }
 
     private void handleRunInput() {
+        controls = new PlayerControls();
         if (MyInput.isPressed(Game.settings.JUMP)) {
-            shouldUpdate = playerController.tryJump(Game.client.id);
+            controls.jump = true;
+            shouldUpdate = true;
         }
     }
 

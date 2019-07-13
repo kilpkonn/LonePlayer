@@ -19,6 +19,7 @@ import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
+import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
 
 public class GameClient implements Disposable {
 
@@ -49,6 +50,7 @@ public class GameClient implements Disposable {
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
         kryo.register(Lobby.StartGame.class);
+        kryo.register(PlayerControls.class);
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
@@ -102,6 +104,10 @@ public class GameClient implements Disposable {
 
     public void updatePlayer(Player player) {
         client.sendUDP(player);
+    }
+
+    public void updatePlayerControls(PlayerControls controls) {
+        client.sendUDP(controls);
     }
 
     public void startGame() {

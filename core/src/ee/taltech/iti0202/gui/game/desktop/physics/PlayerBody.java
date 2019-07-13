@@ -48,6 +48,7 @@ public class PlayerBody extends Body {
                             | BACKGROUND
                             | TERRA_DIMENSION_2;
         }
+        bodyDef.position.set(pos);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bodyDef);
 
@@ -89,7 +90,7 @@ public class PlayerBody extends Body {
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(new PlayerFoot(id));
 
-        body.setTransform(pos, 0);
+        //body.setTransform(pos, 0);
 
         return body;
     }

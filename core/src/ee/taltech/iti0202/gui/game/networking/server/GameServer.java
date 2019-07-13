@@ -24,6 +24,7 @@ import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
+import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
 
 public class GameServer implements Disposable {
     private int tcpPort = 55000;
@@ -55,6 +56,7 @@ public class GameServer implements Disposable {
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
         kryo.register(Lobby.StartGame.class);
+        kryo.register(PlayerControls.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
@@ -161,6 +163,10 @@ public class GameServer implements Disposable {
 
     public void onUpdatePlayer(Player player) {
         serverLogic.setPlayer(player);
+    }
+
+    public void onUpdatePlayerControls(PlayerControls controls) {
+        serverLogic.updatePlayerControls(controls);
     }
 
     private void updateLobbyDetails() {

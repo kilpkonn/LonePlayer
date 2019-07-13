@@ -8,6 +8,7 @@ import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
+import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
 
 public class ServerListener extends Listener {
 
@@ -48,6 +49,8 @@ public class ServerListener extends Listener {
             server.onUpdatePlayer((Player) object);
         } else if (object instanceof Lobby.StartGame) {
             server.onStartGame();
+        } else if (object instanceof PlayerControls) {
+            server.onUpdatePlayerControls((PlayerControls) object);
         }
     }
 
