@@ -128,7 +128,8 @@ public class WorldRenderer implements Handler {
             if (!players.containsKey(playerEntry.getKey())) {
                 players.put(playerEntry.getKey(), new Player(playerEntry.getValue(), sb));
             }
-
+            float opacity = playerEntry.getKey() == playerToFollow.bodyId ? 1 : 0.5f;
+            players.get(playerEntry.getKey()).setOpacity(opacity);
             players.get(playerEntry.getKey()).render(sb);
         }
         //TODO: Render player, bullets, etc.

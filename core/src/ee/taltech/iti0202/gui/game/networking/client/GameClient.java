@@ -54,6 +54,7 @@ public class GameClient implements Disposable {
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
+            client.setKeepAliveUDP(5000);
         } catch (IOException e) {
             e.printStackTrace();
         }

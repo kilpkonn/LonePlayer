@@ -67,7 +67,8 @@ public class ServerLogic implements Disposable {
 
     @Override
     public void dispose() {
-        gameWorld.dispose();
+        if (gameWorld != null)gameWorld.dispose();
+        if (logicThread != null) logicThread.close();
         System.gc();
     }
 
