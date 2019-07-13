@@ -27,7 +27,7 @@ public class MultiplayerContactListener implements ContactListener {
         Object oa = fa.getBody().getUserData();
         Object ob = fb.getBody().getUserData();
 
-        if (oa != null && ob != null) {
+        //if (oa != null && ob != null) {
 
             // detect bullet collision
             bulletDetection(fa, fb);
@@ -35,9 +35,11 @@ public class MultiplayerContactListener implements ContactListener {
             // set wall jump
             setWallJump(oa, ob, 1);
 
+            groundDetection(oa, ob);
+
             // detection happens when player goes outside of initial game border
             dmgDetection(oa, ob);
-        }
+        //}
     }
 
     @Override
@@ -48,7 +50,7 @@ public class MultiplayerContactListener implements ContactListener {
         Object oa = fa.getBody().getUserData();
         Object ob = fb.getBody().getUserData();
 
-        if (oa != null && ob != null) {
+        //if (oa != null && ob != null) {
 
             setWallJump(oa, ob, 0);
 
@@ -69,7 +71,7 @@ public class MultiplayerContactListener implements ContactListener {
                 // wallJump = 0;
                 player.dash = true;
             }
-        }
+        //}
     }
 
     @Override
@@ -82,15 +84,30 @@ public class MultiplayerContactListener implements ContactListener {
 
     }
 
+    private void groundDetection(Object oa, Object ob) {
+        if (oa instanceof PlayerBody.PlayerFoot) {
+            players.get(((PlayerBody.PlayerFoot) oa).id).onGround = true;
+        }
+        if (ob instanceof PlayerBody.PlayerFoot) {
+            players.get(((PlayerBody.PlayerFoot) ob).id).onGround = true;
+        }
+    }
+
     private void bulletDetection(Fixture fa, Fixture fb) {
+        /*if (fa.getUserData() == null && fb.getUserData() == null) {
+            return;
+        }
         if (fa.getUserData().toString().endsWith("bullet")) {
             collidedBullets.put(fa.getBody(), fb.getBody());
         } else if (fb.getUserData().toString().endsWith("bullet")) {
             collidedBullets.put(fb.getBody(), fa.getBody());
-        }
+        }*/
     }
 
     private void dmgDetection(Object oa, Object ob) {
+        if (oa == null || ob == null) {
+            return;
+        }
 
         if (oa instanceof PlayerBody.PlayerBodyData) {
             PlayerBody.PlayerBodyData player = players.get(((PlayerBody.PlayerBodyData) oa).id);

@@ -136,7 +136,7 @@ public class GameWorld implements Disposable {
                 shape = ShapesGreator.getRectangle(rect);
                 if (layer.getName().equals("hitboxes")) {
                     pos.x = (rect.getRectangle().x + rect.getRectangle().width / 2) / PPM;
-                    pos.y = (rect.getRectangle().y + rect.getRectangle().width + 100) / PPM;
+                    pos.y = (rect.getRectangle().y + rect.getRectangle().width + 200) / PPM;
                     spawns.add(pos);
                 }
             } else if (object instanceof PolygonMapObject) {
