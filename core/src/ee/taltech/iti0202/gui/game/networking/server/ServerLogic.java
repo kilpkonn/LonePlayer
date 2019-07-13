@@ -39,6 +39,10 @@ public class ServerLogic implements Disposable {
 
     public void updatePlayerControls(PlayerControls controls) {
         if (controls.jump) playerController.tryJump(controls.id);
+        if (controls.moveLeft) playerController.tryMoveLeft(controls.id);
+        if (controls.moveRight) playerController.tryMoveRight(controls.id);
+        if (controls.dashLeft) playerController.tryDashLeft(controls.id);
+        if (controls.dashRight) playerController.tryDashRight(controls.id);
     }
 
     private void updatePlayers(Set<Player> players) {

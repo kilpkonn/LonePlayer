@@ -200,6 +200,22 @@ public class Multiplayer extends GameState {
         controls = new PlayerControls();
         if (MyInput.isPressed(Game.settings.JUMP)) {
             controls.jump = true;
+            shouldUpdate = true;  //TODO: Something better here
+        }
+        if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
+            controls.moveLeft = true;
+            shouldUpdate = true;
+        }
+        if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
+            controls.moveRight = true;
+            shouldUpdate = true;
+        }
+        if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
+            controls.dashLeft = true;
+            shouldUpdate = true;
+        }
+        if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
+            controls.dashRight = true;
             shouldUpdate = true;
         }
     }

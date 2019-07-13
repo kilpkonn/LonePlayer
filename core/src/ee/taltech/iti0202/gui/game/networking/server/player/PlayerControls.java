@@ -6,5 +6,7 @@ public class PlayerControls implements Serializable {
     public int id;
     public boolean moveRight = false;
     public boolean moveLeft = false;
+    public boolean dashRight = false;
+    public boolean dashLeft = false;
     public boolean jump = false;
 }

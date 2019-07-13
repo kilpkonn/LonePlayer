@@ -29,16 +29,16 @@ public class MultiplayerContactListener implements ContactListener {
 
         //if (oa != null && ob != null) {
 
-            // detect bullet collision
-            bulletDetection(fa, fb);
+        // detect bullet collision
+        bulletDetection(fa, fb);
 
-            // set wall jump
-            setWallJump(oa, ob, 1);
+        // set wall jump
+        setWallJump(oa, ob, 1);
 
-            groundDetection(oa, ob);
+        groundDetection(oa, ob);
 
-            // detection happens when player goes outside of initial game border
-            dmgDetection(oa, ob);
+        // detection happens when player goes outside of initial game border
+        dmgDetection(oa, ob);
         //}
     }
 
@@ -52,25 +52,25 @@ public class MultiplayerContactListener implements ContactListener {
 
         //if (oa != null && ob != null) {
 
-            setWallJump(oa, ob, 0);
+        setWallJump(oa, ob, 0);
 
-            PlayerBody.PlayerBodyData player;
-            if (oa instanceof PlayerBody.PlayerFoot) {
-                player = players.get(((PlayerBody.PlayerFoot) oa).id);
+        PlayerBody.PlayerBodyData player;
+        if (oa instanceof PlayerBody.PlayerFoot) {
+            player = players.get(((PlayerBody.PlayerFoot) oa).id);
 
-                player.onGround = false;
-                player.doubleJump = true;
-                // wallJump = 0;
-                player.dash = true;
-            }
-            if (ob instanceof PlayerBody.PlayerFoot) {
-                player = players.get(((PlayerBody.PlayerFoot) ob).id);
+            player.onGround = false;
+            player.doubleJump = true;
+            // wallJump = 0;
+            player.dash = true;
+        }
+        if (ob instanceof PlayerBody.PlayerFoot) {
+            player = players.get(((PlayerBody.PlayerFoot) ob).id);
 
-                player.onGround = false;
-                player.doubleJump = true;
-                // wallJump = 0;
-                player.dash = true;
-            }
+            player.onGround = false;
+            player.doubleJump = true;
+            // wallJump = 0;
+            player.dash = true;
+        }
         //}
     }
 
