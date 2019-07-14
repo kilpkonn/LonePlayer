@@ -53,6 +53,8 @@ public class PlayerController {
             } else {
                body.applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
             }
+            data.animation = Player.PlayerAnimation.RUN;
+            data.flippedAnimation = true;
             return true;
         }
         return false;
@@ -67,6 +69,8 @@ public class PlayerController {
             } else {
                 body.applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
             }
+            data.animation = Player.PlayerAnimation.RUN;
+            data.flippedAnimation = false;
             return true;
         }
         return false;
@@ -83,6 +87,9 @@ public class PlayerController {
                 body.applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), body.getPosition(), true);
             }
             data.dash = false;
+
+            data.animation = Player.PlayerAnimation.DASH;
+            data.flippedAnimation = true;
             return true;
         }
         return false;
@@ -99,6 +106,9 @@ public class PlayerController {
                 body.applyLinearImpulse(new Vector2(PLAYER_DASH_FORCE_SIDE, 0), body.getPosition(), true);
             }
             data.dash = false;
+
+            data.animation = Player.PlayerAnimation.DASH;
+            data.flippedAnimation = false;
             return true;
         }
         return false;

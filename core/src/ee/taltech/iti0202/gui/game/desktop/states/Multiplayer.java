@@ -184,6 +184,7 @@ public class Multiplayer extends GameState {
 
         hud.setPlayTime(playTime);
         if (playerToFollow != null) hud.setHp(playerToFollow.health);
+        hud.update(dt);
     }
 
     @Override
