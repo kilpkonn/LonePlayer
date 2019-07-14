@@ -7,11 +7,9 @@ import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
-import ee.taltech.iti0202.gui.game.desktop.entities.animations.MyPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerController;
-import ee.taltech.iti0202.gui.game.desktop.states.Multiplayer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
 
@@ -38,6 +36,7 @@ public class ServerLogic implements Disposable {
 
     public void addPlayer(Player player) {
         player.bodyId = gameWorld.addPlayer();
+        playerController.addAnimation(player.id);
     }
 
     public void updatePlayerControls(PlayerControls controls) {
@@ -71,7 +70,7 @@ public class ServerLogic implements Disposable {
     }
 
     public boolean isLoaded() {
-        return gameWorld != null;
+        return gameWorld != null && playerController != null;
     }
 
     @Override
@@ -104,6 +103,7 @@ public class ServerLogic implements Disposable {
 
                 gameWorld.update(dt);
                 updatePlayers(players);
+                playerController.updateAnimations(dt);
                 Game.server.updateWorld();
 
                 try {

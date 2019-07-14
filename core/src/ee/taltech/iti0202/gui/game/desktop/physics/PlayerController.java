@@ -2,21 +2,16 @@ package ee.taltech.iti0202.gui.game.desktop.physics;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.brashmonkey.spriter.Data;
 import com.brashmonkey.spriter.Entity;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
-import ee.taltech.iti0202.gui.game.desktop.entities.animations.MyPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
-import ee.taltech.iti0202.gui.game.desktop.states.Multiplayer;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAX_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_SPEED;
@@ -26,14 +21,27 @@ public class PlayerController {
     private Map<Integer, PlayerBody.PlayerBodyData> players;
     private Map<Integer, MultiplayerPlayerTweener> animations;
 
+    private Entity playerEntity;
+
     public PlayerController(Map<Integer, Body> playerBodies, Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.playerBodies = playerBodies;
         this.players = players;
-        Entity playerEntity = AnimationLoader.getData(PATH + "images/player/rogue.scml").getEntity(0);
+        playerEntity = AnimationLoader.getData("images/player/rogue.scml").getEntity(0);
         this.animations = new HashMap<>();
         for (int i : players.keySet()) {
-            MultiplayerPlayerTweener player = new MultiplayerPlayerTweener(playerEntity);
-            animations.put(i, player);
+            addAnimation(i);
+        }
+    }
+
+    public void addAnimation(int id) {
+        MultiplayerPlayerTweener tweener = new MultiplayerPlayerTweener(playerEntity);
+        tweener.speed = 100;
+        animations.put(id, tweener);
+    }
+
+    public void updateAnimations(float dt) {
+        for (MultiplayerPlayerTweener playerTweener : animations.values()) {
+            playerTweener.update(dt);
         }
     }
 
@@ -70,7 +78,6 @@ public class PlayerController {
             } else {
                body.applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
             }
-            data.animation = Player.PlayerAnimation.RUN;
             data.flippedAnimation = true;
             return true;
         }
@@ -86,7 +93,6 @@ public class PlayerController {
             } else {
                 body.applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
             }
-            data.animation = Player.PlayerAnimation.RUN;
             data.flippedAnimation = false;
             return true;
         }
@@ -105,7 +111,6 @@ public class PlayerController {
             }
             data.dash = false;
 
-            data.animation = Player.PlayerAnimation.DASH;
             data.flippedAnimation = true;
             return true;
         }
@@ -124,19 +129,10 @@ public class PlayerController {
             }
             data.dash = false;
 
-            data.animation = Player.PlayerAnimation.DASH;
             data.flippedAnimation = false;
             return true;
         }
         return false;
-    }
-
-    public boolean trySetIdle(int id) {
-        PlayerBody.PlayerBodyData data = players.get(id);
-        Body body = playerBodies.get(id);
-
-        data.animation = Player.PlayerAnimation.IDLE;
-        return true;
     }
 
     public Map<Integer, MultiplayerPlayerTweener> getAnimations() {

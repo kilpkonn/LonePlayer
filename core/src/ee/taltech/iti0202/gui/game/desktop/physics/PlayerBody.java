@@ -129,7 +129,6 @@ public class PlayerBody extends Body {
         public boolean onGround = false;
         public boolean doubleJump = false;
 
-        public Player.PlayerAnimation animation;
         public boolean flippedAnimation = false;
 
         public PlayerBodyData(int id) {
