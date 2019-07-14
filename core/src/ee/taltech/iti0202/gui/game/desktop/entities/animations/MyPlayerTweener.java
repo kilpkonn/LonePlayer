@@ -3,6 +3,8 @@ package ee.taltech.iti0202.gui.game.desktop.entities.animations;
 import com.brashmonkey.spriter.Animation;
 import com.brashmonkey.spriter.Entity;
 import com.brashmonkey.spriter.PlayerTweener;
+
+import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
 import java.util.HashSet;
@@ -47,6 +49,10 @@ public class MyPlayerTweener extends PlayerTweener {
             setWeight(influence);
         }
         super.update(dt);
+    }
+
+    public void setAnimation(Player.PlayerAnimation animation) {
+        setAnimation(animation.name(), animation.isToPlayOnce());
     }
 
     public void setAnimation(String anim, boolean playOnce) {

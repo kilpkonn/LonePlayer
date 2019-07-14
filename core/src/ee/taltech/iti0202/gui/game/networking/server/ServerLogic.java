@@ -6,9 +6,12 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.MyPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerController;
+import ee.taltech.iti0202.gui.game.desktop.states.Multiplayer;
 import ee.taltech.iti0202.gui.game.networking.server.player.Player;
 import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
 
@@ -50,6 +53,7 @@ public class ServerLogic implements Disposable {
         for (Player player : players) {
             Body body = gameWorld.getPlayerBodies().get(player.id);
             PlayerBody.PlayerBodyData bodyData = gameWorld.getPlayers().get(player.id);
+            MultiplayerPlayerTweener animation = playerController.getAnimations().get(player.id);
 
             player.wallJump = (short) bodyData.wallJump;
             player.health = (short) bodyData.health;
@@ -60,12 +64,9 @@ public class ServerLogic implements Disposable {
             player.position = body.getTransform().getPosition();
             player.velocity = body.getLinearVelocity();
 
-            player.animation = bodyData.animation;
+            player.animation = animation.getCurrentAnimation();
             player.flippedAnimation = bodyData.flippedAnimation;
 
-            if (bodyData.animation != null && bodyData.animation.isToPlayOnce()) {
-                bodyData.animation = null;  //TODO: Fix endless animation loop
-            }
         }
     }
 

@@ -2,12 +2,21 @@ package ee.taltech.iti0202.gui.game.desktop.physics;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.brashmonkey.spriter.Data;
+import com.brashmonkey.spriter.Entity;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.MyPlayerTweener;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
+import ee.taltech.iti0202.gui.game.desktop.states.Multiplayer;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAX_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_SPEED;
@@ -15,20 +24,27 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class PlayerController {
     private Map<Integer, Body> playerBodies;
     private Map<Integer, PlayerBody.PlayerBodyData> players;
+    private Map<Integer, MultiplayerPlayerTweener> animations;
 
     public PlayerController(Map<Integer, Body> playerBodies, Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.playerBodies = playerBodies;
         this.players = players;
-        //TODO: Simulate animations to know when to return to previous.
+        Entity playerEntity = AnimationLoader.getData(PATH + "images/player/rogue.scml").getEntity(0);
+        this.animations = new HashMap<>();
+        for (int i : players.keySet()) {
+            MultiplayerPlayerTweener player = new MultiplayerPlayerTweener(playerEntity);
+            animations.put(i, player);
+        }
     }
 
     public boolean tryJump(int id) {
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
+        MultiplayerPlayerTweener animation = animations.get(id);
 
         if (data.onGround) {
             body.applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), body.getPosition(), true);
-            data.animation = Player.PlayerAnimation.JUMP;
+            animation.setAnimation(Player.PlayerAnimation.JUMP);
             return true;
         } else if (data.wallJump != 0) {
             body.applyLinearImpulse(new Vector2(data.wallJump * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP),
@@ -36,8 +52,8 @@ public class PlayerController {
             data.wallJump = 0;
             return true;
         } else if (data.doubleJump) {
-            data.animation = Player.PlayerAnimation.ROLL;
             body.applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), body.getPosition(), true);
+            animation.setAnimation(Player.PlayerAnimation.ROLL);
             data.doubleJump = false;
             return true;
         }
@@ -121,5 +137,9 @@ public class PlayerController {
 
         data.animation = Player.PlayerAnimation.IDLE;
         return true;
+    }
+
+    public Map<Integer, MultiplayerPlayerTweener> getAnimations() {
+        return animations;
     }
 }
