@@ -62,6 +62,10 @@ public class ServerLogic implements Disposable {
 
             player.animation = bodyData.animation;
             player.flippedAnimation = bodyData.flippedAnimation;
+
+            if (bodyData.animation != null && bodyData.animation.isToPlayOnce()) {
+                bodyData.animation = null;  //TODO: Fix endless animation loop
+            }
         }
     }
 

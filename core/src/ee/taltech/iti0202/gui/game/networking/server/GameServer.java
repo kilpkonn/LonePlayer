@@ -66,7 +66,7 @@ public class GameServer implements Disposable {
                     new BufferedReader(new InputStreamReader(url_name.openStream()));
             String address = sc.readLine().trim(); //InetAddress.getLocalHost().getHostAddress();
             server.bind(tcpPort, udpPort);
-            //server.setPortAndIp(port, "192.168.0.254"); //address);
+            //server.setPortAndIp(port, "192.168.0.254"); //address);  //TODO: Fix connecting issues via public ip
             connect = String.format("%s:%s|%s", address, tcpPort, udpPort);
         } catch (UnknownHostException e) {
             System.out.println(e.getMessage());

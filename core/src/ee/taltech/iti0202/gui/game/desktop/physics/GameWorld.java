@@ -54,7 +54,7 @@ public class GameWorld implements Disposable {
         world.setContactListener(contactListener);
 
         String path = PATH + "maps/levels/" + act + "/" + map;
-        tiledMap = new TmxMapLoader().load(path);
+        tiledMap = new TmxMapLoader().load(path);  //TODO: @Enrico Selle mapi laadimise peaks saama nii, et see toimiks ka mitte mainthreadil. Siis saab serverit headlessina ka runnida, etm jama
         createHitboxes(tiledMap);
     }
 

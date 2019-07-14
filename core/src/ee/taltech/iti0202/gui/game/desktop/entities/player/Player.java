@@ -154,19 +154,25 @@ public class Player extends SpriteAnimation {
     }
 
     public enum PlayerAnimation implements Serializable {
-        RUN("run"),
-        JUMP("jump"),
-        IDLE("idle"),
-        ROLL("roll"),
-        ROLL2("roll2"),
-        FACEPLANT("faceplant"),
-        DASH("dash"),
-        WAVE("wave");
+        RUN("run", false),
+        JUMP("jump", false),
+        IDLE("idle", false),
+        ROLL("roll", true),
+        ROLL2("roll2", true),
+        FACEPLANT("faceplant", false),
+        DASH("dash", true),
+        WAVE("wave", true);
 
         private final String name;
+        private final boolean toPlayOnce;
 
-        PlayerAnimation(String s) {
+        PlayerAnimation(String s, boolean playOnce) {
             name = s;
+            toPlayOnce = playOnce;
+        }
+
+        public boolean isToPlayOnce() {
+            return toPlayOnce;
         }
 
         public String toString() {

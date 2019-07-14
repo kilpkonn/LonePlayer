@@ -19,6 +19,7 @@ public class PlayerController {
     public PlayerController(Map<Integer, Body> playerBodies, Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.playerBodies = playerBodies;
         this.players = players;
+        //TODO: Simulate animations to know when to return to previous.
     }
 
     public boolean tryJump(int id) {
