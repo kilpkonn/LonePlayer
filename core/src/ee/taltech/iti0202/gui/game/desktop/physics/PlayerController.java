@@ -72,12 +72,14 @@ public class PlayerController {
     public boolean tryMoveLeft(int id) {
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
+        MultiplayerPlayerTweener animation = animations.get(id);
         if (body.getLinearVelocity().x > -MAX_SPEED) {
             if (data.onGround) {
                 body.applyForceToCenter(-PLAYER_SPEED, 0, true);
             } else {
                body.applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
             }
+            animation.setAnimation(Player.PlayerAnimation.RUN);
             data.flippedAnimation = true;
             return true;
         }
@@ -87,12 +89,14 @@ public class PlayerController {
     public boolean tryMoveRight(int id) {
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
+        MultiplayerPlayerTweener animation = animations.get(id);
         if (body.getLinearVelocity().x < MAX_SPEED) {
             if (data.onGround) {
                 body.applyForceToCenter(PLAYER_SPEED, 0, true);
             } else {
                 body.applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
             }
+            animation.setAnimation(Player.PlayerAnimation.RUN);
             data.flippedAnimation = false;
             return true;
         }
@@ -102,6 +106,7 @@ public class PlayerController {
     public boolean tryDashLeft(int id) {
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
+        MultiplayerPlayerTweener animation = animations.get(id);
 
         if (!data.onGround && data.dash) {
             if (body.getLinearVelocity().x > 0) {
@@ -110,7 +115,7 @@ public class PlayerController {
                 body.applyLinearImpulse(new Vector2(-PLAYER_DASH_FORCE_SIDE, 0), body.getPosition(), true);
             }
             data.dash = false;
-
+            animation.setAnimation(Player.PlayerAnimation.DASH);
             data.flippedAnimation = true;
             return true;
         }
@@ -120,6 +125,7 @@ public class PlayerController {
     public boolean tryDashRight(int id) {
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
+        MultiplayerPlayerTweener animation = animations.get(id);
 
         if (!data.onGround && data.dash) {
             if (body.getLinearVelocity().x < 0) {
@@ -130,6 +136,7 @@ public class PlayerController {
             data.dash = false;
 
             data.flippedAnimation = false;
+            animation.setAnimation(Player.PlayerAnimation.DASH);
             return true;
         }
         return false;
