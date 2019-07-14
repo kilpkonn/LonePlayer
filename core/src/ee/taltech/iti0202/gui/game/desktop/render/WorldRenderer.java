@@ -110,18 +110,9 @@ public class WorldRenderer implements Handler {
     @Override
     public void render(SpriteBatch sb) {
         // render animations
-         sb.setProjectionMatrix(cam.combined);
+        sb.setProjectionMatrix(cam.combined);
         renderer.setView(cam);
         renderer.render();
-        /*renderer.getBatch().begin();
-        if (animatedCells != null)
-            for (TiledMapTileLayer.Cell cell : animatedCells.keySet())
-                cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
-        if (background != null) renderer.renderTileLayer(background);
-        if (foreground != null) renderer.renderTileLayer(foreground);
-        if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
-        if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
-        renderer.getBatch().end();*/
 
         for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {
             //Add missing players -> move to update?

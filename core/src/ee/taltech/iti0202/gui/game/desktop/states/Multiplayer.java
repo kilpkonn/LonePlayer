@@ -145,7 +145,7 @@ public class Multiplayer extends GameState {
         worldRenderer = new WorldRenderer(gameWorld, cam);
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers());
 
-        hud = new Hud(cam);
+        hud = new Hud(hudCam);
     }
 
     public void updatePlayers(Set<Player> players) {
@@ -168,6 +168,8 @@ public class Multiplayer extends GameState {
 
     @Override
     public void update(float dt) {
+        playTime += dt;
+
         updatePlayers(tmpPlayers);
         handleInput();
         gameWorld.update(dt);
@@ -178,6 +180,9 @@ public class Multiplayer extends GameState {
             Game.client.updatePlayerControls(controls);
             shouldUpdate = false;
         }
+
+        hud.setPlayTime(playTime);
+        if (playerToFollow != null) hud.setHp(playerToFollow.health);
     }
 
     @Override
