@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
+
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
@@ -126,6 +128,9 @@ public class PlayerBody extends Body {
         public boolean dash = false;
         public boolean onGround = false;
         public boolean doubleJump = false;
+
+        public Player.PlayerAnimation animation;
+        public boolean flippedAnimation = false;
 
         public PlayerBodyData(int id) {
             this.id = id;

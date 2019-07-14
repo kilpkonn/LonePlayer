@@ -43,6 +43,7 @@ public class ServerLogic implements Disposable {
         if (controls.moveRight) playerController.tryMoveRight(controls.id);
         if (controls.dashLeft) playerController.tryDashLeft(controls.id);
         if (controls.dashRight) playerController.tryDashRight(controls.id);
+        if (controls.idle) playerController.trySetIdle(controls.id);
     }
 
     private void updatePlayers(Set<Player> players) {
@@ -58,6 +59,9 @@ public class ServerLogic implements Disposable {
 
             player.position = body.getTransform().getPosition();
             player.velocity = body.getLinearVelocity();
+
+            player.animation = bodyData.animation;
+            player.flippedAnimation = bodyData.flippedAnimation;
         }
     }
 

@@ -154,6 +154,7 @@ public class Multiplayer extends GameState {
             if (playerToFollow == null && player.id == Game.client.id) {
                 setPlayerToFollow(player);
             }
+            worldRenderer.updatePlayerAnimation(player);
         }
     }
 

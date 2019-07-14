@@ -57,6 +57,7 @@ public class GameServer implements Disposable {
         kryo.register(Play.Players.class);
         kryo.register(Lobby.StartGame.class);
         kryo.register(PlayerControls.class);
+        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");

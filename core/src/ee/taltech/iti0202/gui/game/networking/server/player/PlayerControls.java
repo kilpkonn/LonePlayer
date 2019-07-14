@@ -9,4 +9,5 @@ public class PlayerControls implements Serializable {
     public boolean dashRight = false;
     public boolean dashLeft = false;
     public boolean jump = false;
+    public boolean idle = false;
 }

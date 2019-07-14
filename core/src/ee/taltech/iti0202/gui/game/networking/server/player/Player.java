@@ -27,6 +27,9 @@ public class Player implements Serializable {
     public Vector2 position;
     public Vector2 velocity;
 
+    public ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation animation;
+    public boolean flippedAnimation = false;
+
     @Override
     public String toString() {
         return "Player{" +

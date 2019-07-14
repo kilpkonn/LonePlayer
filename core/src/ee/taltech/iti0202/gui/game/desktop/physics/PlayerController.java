@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAX_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
@@ -28,6 +27,7 @@ public class PlayerController {
 
         if (data.onGround) {
             body.applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), body.getPosition(), true);
+            data.animation = Player.PlayerAnimation.JUMP;
             return true;
         } else if (data.wallJump != 0) {
             body.applyLinearImpulse(new Vector2(data.wallJump * PLAYER_DASH_FORCE_UP, PLAYER_DASH_FORCE_UP),
@@ -35,6 +35,7 @@ public class PlayerController {
             data.wallJump = 0;
             return true;
         } else if (data.doubleJump) {
+            data.animation = Player.PlayerAnimation.ROLL;
             body.applyLinearImpulse(new Vector2(0, PLAYER_DASH_FORCE_UP), body.getPosition(), true);
             data.doubleJump = false;
             return true;
@@ -101,5 +102,13 @@ public class PlayerController {
             return true;
         }
         return false;
+    }
+
+    public boolean trySetIdle(int id) {
+        PlayerBody.PlayerBodyData data = players.get(id);
+        Body body = playerBodies.get(id);
+
+        data.animation = Player.PlayerAnimation.IDLE;
+        return true;
     }
 }

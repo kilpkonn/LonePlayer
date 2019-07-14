@@ -12,6 +12,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -152,7 +153,7 @@ public class Player extends SpriteAnimation {
         }
     }
 
-    public enum PlayerAnimation {
+    public enum PlayerAnimation implements Serializable {
         RUN("run"),
         JUMP("jump"),
         IDLE("idle"),
