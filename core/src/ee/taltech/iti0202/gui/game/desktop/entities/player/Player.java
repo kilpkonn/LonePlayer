@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Timeline;
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
@@ -134,8 +135,8 @@ public class Player extends SpriteAnimation {
         }
     }
 
-    public void setAnimation(PlayerAnimation animation) {
-        setAnimation(animation.name, false);
+    public void setAnimation(MultiplayerAnimation animation) {
+        setAnimation(animation.getName(), animation.isToPlayOnce());
     }
 
     public void setAnimation(PlayerAnimation animation, boolean playOnce) {
@@ -153,7 +154,7 @@ public class Player extends SpriteAnimation {
         }
     }
 
-    public enum PlayerAnimation implements Serializable {
+    public enum PlayerAnimation implements MultiplayerAnimation, Serializable {
         RUN("run", false),
         JUMP("jump", false),
         IDLE("idle", false),
@@ -171,9 +172,16 @@ public class Player extends SpriteAnimation {
             toPlayOnce = playOnce;
         }
 
+        @Override
         public boolean isToPlayOnce() {
             return toPlayOnce;
         }
+
+        @Override
+        public String getName() {
+            return this.name;
+        }
+
 
         public String toString() {
             return this.name;

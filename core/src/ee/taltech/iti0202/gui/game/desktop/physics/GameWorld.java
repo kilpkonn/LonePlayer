@@ -138,7 +138,7 @@ public class GameWorld implements Disposable {
             if (object instanceof RectangleMapObject) {
                 RectangleMapObject rect = (RectangleMapObject) object;
                 shape = ShapesGreator.getRectangle(rect);
-                if (layer.getName().equals("hitboxes")) {
+                if (layer.getName().equals("hitboxes")) {  //TODO: make spawns layer
                     pos.x = (rect.getRectangle().x + rect.getRectangle().width / 2) / PPM;
                     pos.y = (rect.getRectangle().y + rect.getRectangle().height + 200) / PPM;
                     spawns.add(pos.cpy());

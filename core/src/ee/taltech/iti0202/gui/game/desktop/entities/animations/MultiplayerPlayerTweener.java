@@ -5,14 +5,14 @@ import com.brashmonkey.spriter.PlayerTweener;
 
 import java.util.Stack;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
 public class MultiplayerPlayerTweener extends PlayerTweener {
 
     private float influence;
     private float changeSpeed;
-    private Stack<Player.PlayerAnimation> animations = new Stack<>();
+    private Stack<MultiplayerAnimation> animations = new Stack<>();
 
     public MultiplayerPlayerTweener(Entity entity) {
         super(entity);
@@ -34,16 +34,16 @@ public class MultiplayerPlayerTweener extends PlayerTweener {
         super.update(dt);
     }
 
-    public void setAnimation(Player.PlayerAnimation animation) {
+    public void setAnimation(MultiplayerAnimation animation) {
         if (animations.isEmpty() || animations.peek() != animation)animations.push(animation);
         influence = 0;
         getFirstPlayer().setAnimation(getSecondPlayer().getAnimation());
-        getSecondPlayer().setAnimation(animation.toString());
+        getSecondPlayer().setAnimation(animation.getName());
 
         changeSpeed = animation.isToPlayOnce() || animations.peek().isToPlayOnce() ? 2f : 1f;
     }
 
-    public Player.PlayerAnimation getCurrentAnimation() {
+    public MultiplayerAnimation getCurrentAnimation() {
         return !animations.isEmpty() ? animations.peek() : null;
     }
 }

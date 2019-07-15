@@ -2,6 +2,8 @@ package ee.taltech.iti0202.gui.game.networking.server.entity;
 
 import java.io.Serializable;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
+
 public class Player extends Entity implements Serializable {
 
     public Player () {}
@@ -21,7 +23,7 @@ public class Player extends Entity implements Serializable {
     public boolean onGround = false;
     public boolean doubleJump = false;
 
-    public ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation animation;
+    public MultiplayerAnimation animation;
     public boolean flippedAnimation = false;
 
     @Override
