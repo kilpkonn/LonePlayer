@@ -127,7 +127,7 @@ public class WorldRenderer implements Handler {
     }
 
     public void updatePlayerAnimation(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
-        if (player.animation != null) {
+        if (player.animation != null && players.containsKey(player.bodyId)) {
             Player p = players.get(player.bodyId);
             p.setAnimation(player.animation);
             p.setFlipX(player.flippedAnimation);

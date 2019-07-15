@@ -147,6 +147,8 @@ public class Multiplayer extends GameState {
 
     public void updatePlayers(Set<Player> players) {
         for (Player player : players) {
+            if (player == null) continue;
+
             gameWorld.updatePlayer(player);
             if (playerToFollow == null && player.id == Game.client.id) {
                 setPlayerToFollow(player);

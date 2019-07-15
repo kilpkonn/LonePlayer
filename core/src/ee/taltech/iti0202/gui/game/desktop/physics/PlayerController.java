@@ -36,6 +36,7 @@ public class PlayerController {
     public void addAnimation(int id) {
         MultiplayerPlayerTweener tweener = new MultiplayerPlayerTweener(playerEntity);
         tweener.speed = 100;
+        tweener.setAnimation(Player.PlayerAnimation.IDLE);
         animations.put(id, tweener);
     }
 
