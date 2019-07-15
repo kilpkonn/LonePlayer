@@ -77,10 +77,10 @@ public class PlayerController {
         if (body.getLinearVelocity().x > -MAX_SPEED) {
             if (data.onGround) {
                 body.applyForceToCenter(-PLAYER_SPEED, 0, true);
+                animation.setAnimation(Player.PlayerAnimation.RUN);
             } else {
                body.applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
             }
-            animation.setAnimation(Player.PlayerAnimation.RUN);
             data.flippedAnimation = true;
             return true;
         }
@@ -94,10 +94,10 @@ public class PlayerController {
         if (body.getLinearVelocity().x < MAX_SPEED) {
             if (data.onGround) {
                 body.applyForceToCenter(PLAYER_SPEED, 0, true);
+                animation.setAnimation(Player.PlayerAnimation.RUN);
             } else {
                 body.applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
             }
-            animation.setAnimation(Player.PlayerAnimation.RUN);
             data.flippedAnimation = false;
             return true;
         }
@@ -138,6 +138,19 @@ public class PlayerController {
 
             data.flippedAnimation = false;
             animation.setAnimation(Player.PlayerAnimation.DASH);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean trySetIdle(int id) {
+        PlayerBody.PlayerBodyData data = players.get(id);
+        Body body = playerBodies.get(id);
+        MultiplayerPlayerTweener animation = animations.get(id);
+        if (data.onGround
+                && Math.abs(body.getLinearVelocity().x) < MAX_SPEED / 2
+                && Math.abs(body.getLinearVelocity().y) < MAX_SPEED / 2) {
+            animation.setAnimation(Player.PlayerAnimation.IDLE);
             return true;
         }
         return false;

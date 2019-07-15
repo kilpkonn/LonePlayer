@@ -175,10 +175,10 @@ public class Multiplayer extends GameState {
         gameWorld.update(dt);
         worldRenderer.update(dt);
 
-        if (shouldUpdate) {
+        if (playerToFollow != null) {
             controls.id = playerToFollow.id;
             Game.client.updatePlayerControls(controls);
-            shouldUpdate = false;
+            controls.idle = !(controls.jump || controls.dashLeft || controls.dashRight || controls.moveLeft || controls.moveRight);
         }
 
         hud.setPlayTime(playTime);
@@ -206,23 +206,18 @@ public class Multiplayer extends GameState {
         controls = new PlayerControls();
         if (MyInput.isPressed(Game.settings.JUMP)) {
             controls.jump = true;
-            shouldUpdate = true;  //TODO: Something better here
         }
         if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
             controls.moveLeft = true;
-            shouldUpdate = true;
         }
         if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
             controls.moveRight = true;
-            shouldUpdate = true;
         }
         if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
             controls.dashLeft = true;
-            shouldUpdate = true;
         }
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             controls.dashRight = true;
-            shouldUpdate = true;
         }
     }
 
