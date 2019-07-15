@@ -1,10 +1,8 @@
-package ee.taltech.iti0202.gui.game.networking.server.player;
-
-import com.badlogic.gdx.math.Vector2;
+package ee.taltech.iti0202.gui.game.networking.server.entity;
 
 import java.io.Serializable;
 
-public class Player implements Serializable {
+public class Player extends Entity implements Serializable {
 
     public Player () {}
 
@@ -15,7 +13,6 @@ public class Player implements Serializable {
 
     public String name;
     public int id;
-    public int bodyId = -1;
     public long latency;
 
     public short health = 100;
@@ -23,9 +20,6 @@ public class Player implements Serializable {
     public boolean dash = false;
     public boolean onGround = false;
     public boolean doubleJump = false;
-
-    public Vector2 position;
-    public Vector2 velocity;
 
     public ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation animation;
     public boolean flippedAnimation = false;

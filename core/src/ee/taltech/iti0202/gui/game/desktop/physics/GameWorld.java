@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
@@ -72,6 +72,10 @@ public class GameWorld implements Disposable {
         playerBodies.put(newPlayerIdentifier, player);
         players.put(newPlayerIdentifier, (PlayerBody.PlayerBodyData) player.getUserData());
         return newPlayerIdentifier;
+    }
+
+    public void addWeapon() {
+
     }
 
     public boolean removePlayer(int id) {

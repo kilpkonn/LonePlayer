@@ -11,14 +11,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
-import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_FADE_AMOUNT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
@@ -44,7 +42,7 @@ public class WorldRenderer implements Handler {
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
 
     private Map<Integer, Player> players = new HashMap<>();
-    private ee.taltech.iti0202.gui.game.networking.server.player.Player playerToFollow;
+    private ee.taltech.iti0202.gui.game.networking.server.entity.Player playerToFollow;
 
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
         this.gameWorld = gameWorld;
@@ -128,7 +126,7 @@ public class WorldRenderer implements Handler {
         //TODO: Render player, bullets, etc.
     }
 
-    public void updatePlayerAnimation(ee.taltech.iti0202.gui.game.networking.server.player.Player player) {
+    public void updatePlayerAnimation(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
         if (player.animation != null) {
             Player p = players.get(player.bodyId);
             p.setAnimation(player.animation);
@@ -137,7 +135,7 @@ public class WorldRenderer implements Handler {
 
     }
 
-    public void setPlayerToFollow(ee.taltech.iti0202.gui.game.networking.server.player.Player player) {
+    public void setPlayerToFollow(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
         playerToFollow = player;
     }
 

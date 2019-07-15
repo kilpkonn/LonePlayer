@@ -22,9 +22,10 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Entity;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
-import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
 
 public class GameServer implements Disposable {
     private int tcpPort = 55000;
@@ -57,6 +58,7 @@ public class GameServer implements Disposable {
         kryo.register(Play.Players.class);
         kryo.register(Lobby.StartGame.class);
         kryo.register(PlayerControls.class);
+        kryo.register(Entity.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation.class);
 
         try {

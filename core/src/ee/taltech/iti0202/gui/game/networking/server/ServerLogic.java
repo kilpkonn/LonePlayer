@@ -10,8 +10,8 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayer
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerController;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
-import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
 
 public class ServerLogic implements Disposable {
     private GameWorld gameWorld;

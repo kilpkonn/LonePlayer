@@ -5,7 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 
 public class Lobby implements Serializable {
 
