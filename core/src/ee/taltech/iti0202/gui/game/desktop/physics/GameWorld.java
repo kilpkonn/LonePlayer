@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 
@@ -42,12 +43,18 @@ public class GameWorld implements Disposable {
     private World world = new World(new Vector2(0, GRAVITY), true);
     private Map<Integer, Body> playerBodies = new HashMap<>();
     private Map<Integer, PlayerBody.PlayerBodyData> players = new HashMap<>();
+
+    private Map<Integer, Body> weaponBodies = new HashMap<>();
+    private Map<Integer, WeaponBody.WeaponBodyData> weapons = new HashMap<>(); // Merge into one map?
+
+
     private MultiplayerContactListener contactListener;
     private List<Vector2> spawns = new ArrayList<>();
 
     private TiledMap tiledMap;
 
     private int newPlayerIdentifier;
+    private int newWeaponIdentifier;
 
     public GameWorld(String act, String map) {
         contactListener = new MultiplayerContactListener(players);
@@ -74,8 +81,16 @@ public class GameWorld implements Disposable {
         return newPlayerIdentifier;
     }
 
-    public void addWeapon() {
+    public int addWeapon() {
+        newWeaponIdentifier++;
 
+        //Random spawn, same as player
+        Vector2 spawnCoordinates = spawns.get((int) Math.floor(Math.random() * spawns.size()));
+
+        Body weapon = WeaponBody.createWeapon(world, spawnCoordinates, newWeaponIdentifier, Weapon.Type.M4);
+        weaponBodies.put(newWeaponIdentifier, weapon);
+        weapons.put(newWeaponIdentifier, (WeaponBody.WeaponBodyData) weapon.getUserData());
+        return newWeaponIdentifier;
     }
 
     public boolean removePlayer(int id) {
@@ -88,16 +103,38 @@ public class GameWorld implements Disposable {
         return false;
     }
 
+    public boolean removeWeapon(int id) {
+        if (weaponBodies.containsKey(id)) {
+            world.destroyBody(weaponBodies.get(id));
+            weaponBodies.remove(id);
+            weapons.remove(id);
+            return true;
+        }
+        return false;
+    }
+
     public void updatePlayer(Player player) {
         if (!playerBodies.containsKey(player.bodyId)) {
             Body playerBody = PlayerBody.createPlayer(world, player.position, player.bodyId);
             playerBodies.put(player.bodyId, playerBody);
             players.put(player.bodyId, (PlayerBody.PlayerBodyData) playerBody.getUserData());
-            if (player.bodyId < newPlayerIdentifier) newPlayerIdentifier = player.bodyId + 1;
+            if (player.bodyId < newPlayerIdentifier) newPlayerIdentifier = player.bodyId;
         }
         Body body = playerBodies.get(player.bodyId);
         body.setTransform(player.position, 0);
         body.setLinearVelocity(player.velocity);
+    }
+
+    public void updateWeapon(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon weapon) {
+        if (!weaponBodies.containsKey(weapon.bodyId)) {
+            Body weaponBody = PlayerBody.createPlayer(world, weapon.position, weapon.bodyId);
+            weaponBodies.put(weapon.bodyId, weaponBody);
+            weapons.put(weapon.bodyId, (WeaponBody.WeaponBodyData) weaponBody.getUserData());
+            if (weapon.bodyId < newPlayerIdentifier) newPlayerIdentifier = weapon.bodyId;
+        }
+        Body body = playerBodies.get(weapon.bodyId);
+        body.setTransform(weapon.position, weapon.angle);
+        body.setLinearVelocity(weapon.velocity);
     }
 
     private void createHitboxes(TiledMap tiledMap) {
@@ -159,6 +196,14 @@ public class GameWorld implements Disposable {
             world.createBody(bodyDef).createFixture(fixtureDef).setUserData(layer.getName());
             shape.dispose();
         }
+    }
+
+    public Map<Integer, Body> getWeaponBodies() {
+        return weaponBodies;
+    }
+
+    public Map<Integer, WeaponBody.WeaponBodyData> getWeapons() {
+        return weapons;
     }
 
     public Map<Integer, Body> getPlayerBodies() {

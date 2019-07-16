@@ -4,6 +4,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+
+import java.io.Serializable;
+
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
@@ -82,5 +85,11 @@ public abstract class Weapon extends SpriteAnimation {
         public String toString() {
             return this.name;
         }
+    }
+
+    public enum Type implements Serializable {
+        DEAGLE,
+        SHOTGUN,
+        M4
     }
 }

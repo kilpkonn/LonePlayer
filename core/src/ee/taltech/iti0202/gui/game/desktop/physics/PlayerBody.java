@@ -18,11 +18,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
 
-public class PlayerBody extends Body {
-
-    public PlayerBody(World world, long addr) {
-        super(world, addr);
-    }
+public class PlayerBody {
 
     public static Body createPlayer(World world, Vector2 pos, int id) {
         BodyDef bodyDef = new BodyDef();
