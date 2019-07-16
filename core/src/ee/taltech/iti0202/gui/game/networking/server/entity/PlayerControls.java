@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class PlayerControls implements Serializable {
     public int id;
+    public boolean dimension = true;  // Represents dimension, rather than change of it
     public boolean moveRight = false;
     public boolean moveLeft = false;
     public boolean dashRight = false;

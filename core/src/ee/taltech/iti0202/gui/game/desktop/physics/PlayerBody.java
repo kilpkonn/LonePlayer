@@ -128,6 +128,7 @@ public class PlayerBody extends Body {
         public boolean dash = false;
         public boolean onGround = false;
         public boolean doubleJump = false;
+        public boolean dimension = true;
 
         public boolean flippedAnimation = false;
 

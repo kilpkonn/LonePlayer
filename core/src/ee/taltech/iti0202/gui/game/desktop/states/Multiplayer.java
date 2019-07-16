@@ -65,6 +65,8 @@ public class Multiplayer extends GameState {
     private Player playerToFollow;
     private Set<Player> tmpPlayers = new HashSet<>();
 
+    private boolean dimension = true;
+
     public Multiplayer(String act, String map, B2DVars.GameDifficulty difficulty) {
         this.act = act;
         this.map = map;
@@ -150,7 +152,7 @@ public class Multiplayer extends GameState {
             if (player == null) continue;
 
             gameWorld.updatePlayer(player);
-            if (playerToFollow == null && player.id == Game.client.id) {
+            if (player.id == Game.client.id) {
                 setPlayerToFollow(player);
             }
             worldRenderer.updatePlayerAnimation(player);
@@ -177,8 +179,9 @@ public class Multiplayer extends GameState {
 
         if (playerToFollow != null) {
             controls.id = playerToFollow.id;
-            Game.client.updatePlayerControls(controls);
+            controls.dimension = dimension;
             controls.idle = !(controls.jump || controls.dashLeft || controls.dashRight || controls.moveLeft || controls.moveRight);
+            Game.client.updatePlayerControls(controls);
         }
 
         hud.setPlayTime(playTime);
@@ -218,6 +221,9 @@ public class Multiplayer extends GameState {
         }
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             controls.dashRight = true;
+        }
+        if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
+            dimension = !dimension;
         }
     }
 

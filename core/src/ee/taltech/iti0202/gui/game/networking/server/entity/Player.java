@@ -22,6 +22,7 @@ public class Player extends Entity implements Serializable {
     public boolean dash = false;
     public boolean onGround = false;
     public boolean doubleJump = false;
+    public boolean dimension = true;
 
     public MultiplayerAnimation animation;
     public boolean flippedAnimation = false;

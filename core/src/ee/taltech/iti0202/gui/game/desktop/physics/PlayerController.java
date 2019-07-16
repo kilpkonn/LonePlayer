@@ -2,6 +2,8 @@ package ee.taltech.iti0202.gui.game.desktop.physics;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Filter;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.brashmonkey.spriter.Entity;
 
 import java.util.HashMap;
@@ -11,10 +13,18 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayer
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAX_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
 
 public class PlayerController {
     private Map<Integer, Body> playerBodies;
@@ -79,7 +89,7 @@ public class PlayerController {
                 body.applyForceToCenter(-PLAYER_SPEED, 0, true);
                 animation.setAnimation(Player.PlayerAnimation.RUN);
             } else {
-               body.applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
+                body.applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
             }
             data.flippedAnimation = true;
             return true;
@@ -151,6 +161,44 @@ public class PlayerController {
                 && Math.abs(body.getLinearVelocity().x) < MAX_SPEED / 2
                 && Math.abs(body.getLinearVelocity().y) < MAX_SPEED / 2) {
             animation.setAnimation(Player.PlayerAnimation.IDLE);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean trySetDimension(int id, boolean dimension) {
+        PlayerBody.PlayerBodyData data = players.get(id);
+        Body body = playerBodies.get(id);
+
+        if (data.dimension != dimension) {
+            data.dimension = dimension;
+
+            short mask;
+            if (dimension) {
+                mask = BIT_BOSSES
+                        | BIT_WORM
+                        | DIMENSION_1
+                        | DIMENSION_2
+                        | TERRA_SQUARES
+                        | BACKGROUND
+                        | TERRA_DIMENSION_1;
+            } else {
+                mask = BIT_BOSSES
+                        | BIT_WORM
+                        | DIMENSION_1
+                        | DIMENSION_2
+                        | TERRA_SQUARES
+                        | BACKGROUND
+                        | TERRA_DIMENSION_2;
+            }
+
+            Filter filter = new Filter();
+            for (Fixture playerFixture : body.getFixtureList()) {
+                filter.groupIndex = playerFixture.getFilterData().groupIndex;
+                filter.categoryBits = playerFixture.getFilterData().categoryBits;
+                filter.maskBits = mask;
+                playerFixture.setFilterData(filter);
+            }
             return true;
         }
         return false;

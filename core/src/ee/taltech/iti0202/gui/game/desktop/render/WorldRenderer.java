@@ -18,7 +18,6 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animat
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_FADE_AMOUNT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class WorldRenderer implements Handler {
@@ -83,8 +82,13 @@ public class WorldRenderer implements Handler {
             cam.update();
         }
 
-        if (!dimensionFadeDone) {
-            if (dimension) {
+        if (playerToFollow != null && dimension != playerToFollow.dimension) {
+            dimensionFadeDone = false;
+            dimension = playerToFollow.dimension;
+        }
+
+        if (playerToFollow != null && !dimensionFadeDone) {
+            if (playerToFollow.dimension) {
                 if (currentDimensionFade > 0) {
                     currentDimensionFade -=
                             (B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
@@ -145,13 +149,11 @@ public class WorldRenderer implements Handler {
         switch (type) {
             case "dimension_1":
                 layer.setVisible(true);
-                layer.setOpacity(dimension ? 1f : 1 - DIMENSION_FADE_AMOUNT);
                 dimension_1 = layer;
                 break;
 
             case "dimension_2":
                 layer.setVisible(true);
-                layer.setOpacity(dimension ? 1 - DIMENSION_FADE_AMOUNT : 1f);
                 dimension_2 = layer;
                 break;
 

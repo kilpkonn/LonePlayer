@@ -47,6 +47,8 @@ public class ServerLogic implements Disposable {
         if (controls.dashRight) playerController.tryDashRight(controls.id);
 
         if (controls.idle) playerController.trySetIdle(controls.id);
+
+        playerController.trySetDimension(controls.id, controls.dimension);
     }
 
     private void updatePlayers(Set<Player> players) {
@@ -60,6 +62,7 @@ public class ServerLogic implements Disposable {
             player.dash = bodyData.dash;
             player.onGround = bodyData.onGround;
             player.doubleJump = bodyData.doubleJump;
+            player.dimension = bodyData.dimension;
 
             player.position = body.getTransform().getPosition();
             player.velocity = body.getLinearVelocity();
