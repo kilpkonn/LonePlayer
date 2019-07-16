@@ -76,7 +76,11 @@ public class MatchmakingMenu extends Scene {
             if (Game.client != null) Game.client.updateName();
         });
 
-        startButton.setOnAction(() -> Game.client.startGame());
+        startButton.setOnAction(() -> {
+            if (act != null && map != null) {
+                Game.client.startGame();
+            }
+        });
         connectButton.setOnAction(() -> {
             if (Game.client == null) {
                 Game.client = new GameClient(connectTextField.getText(), this);

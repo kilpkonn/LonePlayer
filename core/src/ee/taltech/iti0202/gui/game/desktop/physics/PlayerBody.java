@@ -8,8 +8,6 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
-
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
@@ -18,7 +16,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
 
 public class PlayerBody extends Body {
@@ -29,27 +26,13 @@ public class PlayerBody extends Body {
 
     public static Body createPlayer(World world, Vector2 pos, int id) {
         BodyDef bodyDef = new BodyDef();
-        short mask;
-        // TODO: Make masks work, make usable when re-spawning
-        if (true) { //(draw.isDimension()) {
-            mask =
-                    BIT_BOSSES
-                            | BIT_WORM
-                            | DIMENSION_1
-                            | DIMENSION_2
-                            | TERRA_SQUARES
-                            | BACKGROUND
-                            | TERRA_DIMENSION_1;
-        } else {
-            mask =
-                    BIT_BOSSES
-                            | BIT_WORM
-                            | DIMENSION_1
-                            | DIMENSION_2
-                            | TERRA_SQUARES
-                            | BACKGROUND
-                            | TERRA_DIMENSION_2;
-        }
+        short mask = BIT_BOSSES
+                | BIT_WORM
+                | DIMENSION_1
+                | DIMENSION_2
+                | TERRA_SQUARES
+                | BACKGROUND
+                | TERRA_DIMENSION_1;
         bodyDef.position.set(pos);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bodyDef);
