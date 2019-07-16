@@ -36,6 +36,8 @@ public class ClientListener extends Listener {
             client.onStartGame((Lobby.StartGame) object);
         } else if (object instanceof Play.Players) {
             client.onUpdatePlayers((Play.Players) object);
+        } else if (object instanceof Play.Weapons) {
+            client.onUpdateWeapons((Play.Weapons) object);
         }
     }
 

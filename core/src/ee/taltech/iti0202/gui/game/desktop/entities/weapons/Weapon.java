@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import java.io.Serializable;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
@@ -68,22 +69,38 @@ public abstract class Weapon extends SpriteAnimation {
         draw.getBulletHandler().getBulletArray().add(bullet);
     }
 
+    public void setAnimation(Animation animation) {
+        setAnimation(animation.getName(), animation.isToPlayOnce());
+    }
+
     public boolean canFire() {
         return bulletHeat <= 0;
     }
 
-    public enum Animation {
-        DEFAULT("default"),
-        FIRE("fire");
+    public enum Animation implements MultiplayerAnimation, Serializable {
+        DEFAULT("default", false),
+        FIRE("fire", true);
 
         private final String name;
+        private boolean isToPlayOnce;
 
-        Animation(String s) {
+        Animation(String s, boolean playOnce) {
             name = s;
         }
 
         public String toString() {
             return this.name;
+        }
+
+
+        @Override
+        public boolean isToPlayOnce() {
+            return isToPlayOnce;
+        }
+
+        @Override
+        public String getName() {
+            return name;
         }
     }
 

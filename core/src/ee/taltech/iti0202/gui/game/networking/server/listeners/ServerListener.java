@@ -8,6 +8,7 @@ import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 
 public class ServerListener extends Listener {
 
@@ -46,6 +47,8 @@ public class ServerListener extends Listener {
             server.updateActMapDifficulty((Lobby.ActMapDifficulty) object);
         } else if (object instanceof Player) {
             server.onUpdatePlayer((Player) object);
+        } else if (object instanceof Weapon) {
+            server.onUpdateWeapon((Weapon) object);
         } else if (object instanceof Lobby.StartGame) {
             server.onStartGame();
         } else if (object instanceof PlayerControls) {

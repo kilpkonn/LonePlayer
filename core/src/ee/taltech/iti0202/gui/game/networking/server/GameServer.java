@@ -23,6 +23,7 @@ import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Entity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
@@ -168,6 +169,11 @@ public class GameServer implements Disposable {
     public void onUpdatePlayer(Player player) {
         serverLogic.setPlayer(player);
     }
+
+    public void onUpdateWeapon(Weapon weapon) {
+        serverLogic.setWeapon(weapon);
+    }
+
 
     public void onUpdatePlayerControls(PlayerControls controls) {
         serverLogic.updatePlayerControls(controls);

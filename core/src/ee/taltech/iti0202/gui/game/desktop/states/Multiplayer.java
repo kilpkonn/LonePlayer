@@ -3,14 +3,12 @@ package ee.taltech.iti0202.gui.game.desktop.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -21,10 +19,11 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
-import ee.taltech.iti0202.gui.game.desktop.physics.PlayerController;
+import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SPEEDS;
@@ -39,9 +38,9 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class Multiplayer extends GameState {
 
     private GameWorld gameWorld;
+    private WorldRenderer worldRenderer;
     private PlayerController playerController;
     private Hud hud;
-    private OrthogonalTiledMapRenderer renderer;
 
     private Stage stage = new Stage(new ScreenViewport());
     private String act;
@@ -52,19 +51,13 @@ public class Multiplayer extends GameState {
     private Texture backgroundTexture;
     private ParallaxBackground parallaxBackground;
     private float backgroundSpeed;
-    // Boss logic, helpful variables
-    private float playTime = 0;
-    private boolean loading = true;
 
-    private WorldRenderer worldRenderer;
+    private float playTime = 0;
 
     private State state = State.RUN;
 
-    private boolean shouldUpdate = false;
     private PlayerControls controls;
     private Player playerToFollow;
-    private Set<Player> tmpPlayers = new HashSet<>();
-
     private boolean dimension = true;
 
     public Multiplayer(String act, String map, B2DVars.GameDifficulty difficulty) {
@@ -159,6 +152,15 @@ public class Multiplayer extends GameState {
         }
     }
 
+    public void updateWeapons(Set<Weapon> weapons) {
+        for (Weapon weapon : weapons) {
+            if (weapon == null) continue;
+
+            gameWorld.updateWeapon(weapon);
+            worldRenderer.updateWeaponAnimation(weapon);
+        }
+    }
+
     @Override
     public void handleInput() {
         switch (state) {
@@ -172,7 +174,6 @@ public class Multiplayer extends GameState {
     public void update(float dt) {
         playTime += dt;
 
-        updatePlayers(tmpPlayers);
         handleInput();
         gameWorld.update(dt);
         worldRenderer.update(dt);

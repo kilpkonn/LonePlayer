@@ -105,6 +105,14 @@ public class GameClient implements Disposable {
         });
     }
 
+    public void onUpdateWeapons(Play.Weapons weapons) {
+        Gdx.app.postRunnable(() -> {
+            if (GameStateManager.currentState() instanceof Multiplayer) {
+                ((Multiplayer) GameStateManager.currentState()).updateWeapons(weapons.weapons);
+            }
+        });
+    }
+
     public void updatePlayerControls(PlayerControls controls) {
         client.sendUDP(controls);
     }

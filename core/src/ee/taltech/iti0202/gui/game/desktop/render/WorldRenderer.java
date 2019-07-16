@@ -17,6 +17,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
@@ -41,6 +42,7 @@ public class WorldRenderer implements Handler {
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
 
     private Map<Integer, Player> players = new HashMap<>();
+    private Map<Integer, ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon> weapons = new HashMap<>();
     private ee.taltech.iti0202.gui.game.networking.server.entity.Player playerToFollow;
 
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
@@ -136,7 +138,14 @@ public class WorldRenderer implements Handler {
             p.setAnimation(player.animation);
             p.setFlipX(player.flippedAnimation);
         }
+    }
 
+    public void updateWeaponAnimation(Weapon weapon) {
+        if (weapon.animation != null && weapons.containsKey(weapon.bodyId)) {
+            ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon w = weapons.get(weapon.bodyId);
+            w.setAnimation(weapon.animation);
+            w.setFlipX(weapon.flippedAnimation);
+        }
     }
 
     public void setPlayerToFollow(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {

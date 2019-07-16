@@ -6,22 +6,26 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
-import ee.taltech.iti0202.gui.game.desktop.physics.PlayerController;
+import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 
 public class ServerLogic implements Disposable {
     private GameWorld gameWorld;
     private ServerLogicThread logicThread;
     private PlayerController playerController;
+    private WeaponController weaponController;
 
     public void loadWorld(String act, String map) {
         if (gameWorld != null) gameWorld.dispose();
         gameWorld = new GameWorld(act, map);
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers());
+        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons());
     }
 
     public void run(Set<Player> players) {
@@ -34,9 +38,19 @@ public class ServerLogic implements Disposable {
         gameWorld.updatePlayer(player);
     }
 
+    public void setWeapon(Weapon weapon) {
+        gameWorld.updateWeapon(weapon);
+    }
+
     public void addPlayer(Player player) {
         player.bodyId = gameWorld.addPlayer();
         playerController.addAnimation(player.id);
+    }
+
+    public void addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Type type) {
+        Weapon weapon = new Weapon();
+        weapon.bodyId = gameWorld.addWeapon(type);
+        weaponController.addAnimation(weapon.bodyId);
     }
 
     public void updatePlayerControls(PlayerControls controls) {

@@ -81,13 +81,13 @@ public class GameWorld implements Disposable {
         return newPlayerIdentifier;
     }
 
-    public int addWeapon() {
+    public int addWeapon(Weapon.Type type) {
         newWeaponIdentifier++;
 
         //Random spawn, same as player
         Vector2 spawnCoordinates = spawns.get((int) Math.floor(Math.random() * spawns.size()));
 
-        Body weapon = WeaponBody.createWeapon(world, spawnCoordinates, newWeaponIdentifier, Weapon.Type.M4);
+        Body weapon = WeaponBody.createWeapon(world, spawnCoordinates, newWeaponIdentifier, type);
         weaponBodies.put(newWeaponIdentifier, weapon);
         weapons.put(newWeaponIdentifier, (WeaponBody.WeaponBodyData) weapon.getUserData());
         return newWeaponIdentifier;
