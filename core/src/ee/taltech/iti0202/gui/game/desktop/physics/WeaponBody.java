@@ -10,7 +10,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WEAPON;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
@@ -27,7 +30,7 @@ public class WeaponBody {
         circle.setRadius(9 / PPM);
         fixtureDef.shape = circle;
         fixtureDef.filter.categoryBits = BIT_WEAPON;
-        fixtureDef.filter.maskBits = TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2;
+        fixtureDef.filter.maskBits = DIMENSION_1 | DIMENSION_2 | TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2 | BIT_BULLET;
 
         Body body = world.createBody(bodyDef);
         WeaponBodyData data = new WeaponBodyData(id, type);

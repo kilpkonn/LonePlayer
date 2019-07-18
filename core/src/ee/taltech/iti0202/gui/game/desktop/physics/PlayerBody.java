@@ -75,8 +75,6 @@ public class PlayerBody {
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(new PlayerFoot(id));
 
-        //body.setTransform(pos, 0);
-
         return body;
     }
 
