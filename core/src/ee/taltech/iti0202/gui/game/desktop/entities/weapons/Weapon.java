@@ -102,20 +102,4 @@ public abstract class Weapon extends SpriteAnimation {
             return name;
         }
     }
-
-    public enum Type implements Serializable {
-        DEAGLE ("images/bullets/deagle/deagle.scml"),
-        SHOTGUN ("images/bullets/shotgun/shotgun.scml"),
-        M4 ("images/bullets/m4/m4.scml");
-
-        private final String animationFile;
-
-        Type(String t) {
-            animationFile = t;
-        }
-
-        public String getAnimationFile() {
-            return animationFile;
-        }
-    }
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.WeaponBuilder;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
@@ -42,7 +43,7 @@ public class WorldRenderer implements Handler {
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
 
     private Map<Integer, Player> players = new HashMap<>();
-    private Map<Integer, ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon> weapons = new HashMap<>();
+    private Map<Integer, ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon> weapons = new HashMap<>();
     private ee.taltech.iti0202.gui.game.networking.server.entity.Player playerToFollow;
 
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
@@ -129,7 +130,18 @@ public class WorldRenderer implements Handler {
             players.get(playerEntry.getKey()).setOpacity(opacity);
             players.get(playerEntry.getKey()).render(sb);
         }
-        //TODO: Render player, bullets, etc.
+
+        for (Map.Entry<Integer, Body> weaponEntry : gameWorld.getWeaponBodies().entrySet()) {
+            if (!weapons.containsKey(weaponEntry.getKey())) {
+                weapons.put(weaponEntry.getKey(), new WeaponBuilder()
+                        .setBody(weaponEntry.getValue())
+                        .setSpriteBatch(sb)
+                        .setType(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.M4)
+                        .create());
+            }
+            players.get(weaponEntry.getKey()).render(sb);
+        }
+        //TODO: Render weapons, bullets, etc.
     }
 
     public void updatePlayerAnimation(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
@@ -142,7 +154,7 @@ public class WorldRenderer implements Handler {
 
     public void updateWeaponAnimation(Weapon weapon) {
         if (weapon.animation != null && weapons.containsKey(weapon.bodyId)) {
-            ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon w = weapons.get(weapon.bodyId);
+            ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon w = weapons.get(weapon.bodyId);
             w.setAnimation(weapon.animation);
             w.setFlipX(weapon.flippedAnimation);
         }
