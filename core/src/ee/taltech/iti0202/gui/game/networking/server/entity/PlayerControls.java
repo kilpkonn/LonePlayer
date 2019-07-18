@@ -11,4 +11,7 @@ public class PlayerControls implements Serializable {
     public boolean dashLeft = false;
     public boolean jump = false;
     public boolean idle = true;
+
+    public boolean isShooting;
+    public float shootingAngle;
 }

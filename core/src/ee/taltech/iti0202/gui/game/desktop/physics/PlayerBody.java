@@ -8,6 +8,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 
+import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
+
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
@@ -112,6 +114,7 @@ public class PlayerBody {
         public boolean dimension = true;
 
         public boolean flippedAnimation = false;
+        public WeaponBody.WeaponBodyData[] weapons = new WeaponBody.WeaponBodyData[3];
 
         public PlayerBodyData(int id) {
             this.id = id;

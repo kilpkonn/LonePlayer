@@ -90,6 +90,11 @@ public class ServerLogic implements Disposable {
             player.animation = animation.getCurrentAnimation();
             player.flippedAnimation = bodyData.flippedAnimation;
 
+            for (int i = 0; i < player.weapons.length; i++) {
+                if (bodyData.weapons[i] != null)
+                    player.weapons[i] = bodyData.weapons[i].id;
+            }
+
         }
     }
 
@@ -102,6 +107,8 @@ public class ServerLogic implements Disposable {
             weapon.position = body.getTransform().getPosition();
             weapon.angle = body.getAngle();
             weapon.velocity = body.getLinearVelocity();
+
+            weapon.dropped = bodyData.dropped;
 
             weapon.animation = animation.getCurrentAnimation();
             weapon.flippedAnimation = bodyData.flippedAnimation;

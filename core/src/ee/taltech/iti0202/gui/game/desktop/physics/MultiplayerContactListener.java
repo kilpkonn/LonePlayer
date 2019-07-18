@@ -37,6 +37,8 @@ public class MultiplayerContactListener implements ContactListener {
 
         groundDetection(oa, ob);
 
+        weaponPickup(oa, ob);
+
         // detection happens when player goes outside of initial game border
         dmgDetection(oa, ob);
         //}
@@ -90,6 +92,30 @@ public class MultiplayerContactListener implements ContactListener {
         }
         if (ob instanceof PlayerBody.PlayerFoot) {
             players.get(((PlayerBody.PlayerFoot) ob).id).onGround = true;
+        }
+    }
+
+    private void weaponPickup(Object oa, Object ob) {
+        if (oa instanceof  PlayerBody.PlayerBodyData && ob instanceof WeaponBody.WeaponBodyData) {
+            PlayerBody.PlayerBodyData data = players.get(((PlayerBody.PlayerBodyData) oa).id);
+            for (int i = 0; i < data.weapons.length; i++) {
+                if (data.weapons[i] == null) {
+                    WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) ob;
+                    data.weapons[i] = weaponBodyData;
+                    weaponBodyData.dropped = false;
+                }
+            }
+        }
+
+        if (ob instanceof  PlayerBody.PlayerBodyData && oa instanceof WeaponBody.WeaponBodyData) {
+            PlayerBody.PlayerBodyData data = players.get(((PlayerBody.PlayerBodyData) ob).id);
+            for (int i = 0; i < data.weapons.length; i++) {
+                if (data.weapons[i] == null) {
+                    WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) oa;
+                    data.weapons[i] = weaponBodyData;
+                    weaponBodyData.dropped = false;
+                }
+            }
         }
     }
 

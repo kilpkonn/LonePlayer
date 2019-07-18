@@ -17,7 +17,7 @@ public class Player extends Entity implements Serializable {
     public int id;
     public long latency;
 
-    public Weapon[] weapons;
+    public int[] weapons = new int[3];
     public short currentWeaponIndex;
     public boolean isAiming = false;
 
