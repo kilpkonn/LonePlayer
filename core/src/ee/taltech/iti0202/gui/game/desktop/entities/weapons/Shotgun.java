@@ -11,7 +11,7 @@ public class Shotgun extends Weapon {
     private int bulletsPerShot;
 
     public Shotgun(World world, SpriteBatch sb, Body body, Draw draw) {
-        super(world, sb, body, "images/bullets/shotgun/shotgun.scml", draw);
+        super(world, sb, body, Type.SHOTGUN.getAnimationFile(), draw);
         setScale(0.1f);
         setAnimationSpeed(50);
         coolDown = 1.5f;

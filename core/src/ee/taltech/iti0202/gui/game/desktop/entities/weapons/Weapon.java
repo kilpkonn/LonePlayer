@@ -11,7 +11,6 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -105,8 +104,18 @@ public abstract class Weapon extends SpriteAnimation {
     }
 
     public enum Type implements Serializable {
-        DEAGLE,
-        SHOTGUN,
-        M4
+        DEAGLE ("images/bullets/deagle/deagle.scml"),
+        SHOTGUN ("images/bullets/shotgun/shotgun.scml"),
+        M4 ("images/bullets/m4/m4.scml");
+
+        private final String animationFile;
+
+        Type(String t) {
+            animationFile = t;
+        }
+
+        public String getAnimationFile() {
+            return animationFile;
+        }
     }
 }

@@ -9,7 +9,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 public class M4 extends Weapon {
 
     public M4(World world, SpriteBatch sb, Body body, Draw draw) {
-        super(world, sb, body, "images/bullets/m4/m4.scml", draw);
+        super(world, sb, body, Type.M4.getAnimationFile(), draw);
         setScale(0.1f);
         setAnimationSpeed(50);
         coolDown = 0.2f;

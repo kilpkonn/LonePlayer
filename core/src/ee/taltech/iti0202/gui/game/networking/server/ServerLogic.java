@@ -50,7 +50,7 @@ public class ServerLogic implements Disposable {
     public void addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Type type) {
         Weapon weapon = new Weapon();
         weapon.bodyId = gameWorld.addWeapon(type);
-        weaponController.addAnimation(weapon.bodyId);
+        weaponController.addAnimation(weapon.bodyId, weapon.type);
     }
 
     public void updatePlayerControls(PlayerControls controls) {
@@ -117,11 +117,11 @@ public class ServerLogic implements Disposable {
             while (running) {
                 float dt = (System.currentTimeMillis() - start) / 1000f;
                 start = System.currentTimeMillis();
-                //TODO: Fixed rate?
 
                 gameWorld.update(dt);
                 updatePlayers(players);
                 playerController.updateAnimations(dt);
+                weaponController.updateAnimations(dt);
                 Game.server.updateWorld();
 
                 try {
