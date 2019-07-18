@@ -45,8 +45,6 @@ public class ServerListener extends Listener {
             server.kickPlayer((Lobby.Kick) object);
         } else if (object instanceof Lobby.ActMapDifficulty) {
             server.updateActMapDifficulty((Lobby.ActMapDifficulty) object);
-        } else if (object instanceof Player) {
-            server.onUpdatePlayer((Player) object);
         } else if (object instanceof Weapon) {
             server.onUpdateWeapon((Weapon) object);
         } else if (object instanceof Lobby.StartGame) {
