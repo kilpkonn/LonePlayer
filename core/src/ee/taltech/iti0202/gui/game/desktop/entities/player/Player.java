@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Timeline;
+
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
@@ -67,16 +68,14 @@ public class Player extends SpriteAnimation {
                 getCurrentAnimation().name.equals("run")
                         ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
                         : (getCurrentAnimation().name.equals("dash")
-                                ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
-                                : (float) (Math.PI / 8));
+                        ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
+                        : (float) (Math.PI / 8));
         float flipped = isFlippedX() ? -(float) Math.PI / 4 + (float) Math.PI : 0;
-        float angle =
-                (float)
-                                Math.atan2(
-                                        MyInput.getMouseLocation().y - (double) V_HEIGHT / 2,
-                                        MyInput.getMouseLocation().x - (double) V_WIDTH / 2)
-                        + flipped
-                        + offset;
+        float angle = (float) Math.atan2(
+                MyInput.getMouseLocation().y - (double) V_HEIGHT / 2,
+                MyInput.getMouseLocation().x - (double) V_WIDTH / 2)
+                + flipped
+                + offset;
 
         rotateBone("right_shoulder", (((float) -Math.toDegrees(angle))));
     }
