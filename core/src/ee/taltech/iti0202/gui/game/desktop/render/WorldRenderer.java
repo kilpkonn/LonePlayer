@@ -68,6 +68,10 @@ public class WorldRenderer implements Handler {
             player.update(dt);
         }
 
+        for (ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon weapon : weapons.values()) {
+            weapon.update(dt);
+        }
+
         // Set camera
         if (playerToFollow != null) {
             Body playerLocation = gameWorld.getPlayerBodies().get(playerToFollow.bodyId);
@@ -139,7 +143,7 @@ public class WorldRenderer implements Handler {
                         .setType(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.M4)
                         .create());
             }
-            players.get(weaponEntry.getKey()).render(sb);
+            weapons.get(weaponEntry.getKey()).render(sb);
         }
         //TODO: Render weapons, bullets, etc.
     }

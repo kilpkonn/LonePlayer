@@ -3,6 +3,7 @@ package ee.taltech.iti0202.gui.game.networking.server;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.Game;
@@ -11,6 +12,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayer
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
+import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
@@ -21,6 +23,8 @@ public class ServerLogic implements Disposable {
     private PlayerController playerController;
     private WeaponController weaponController;
 
+    private Set<Weapon> weapons = new HashSet<>();
+
     public void loadWorld(String act, String map) {
         if (gameWorld != null) gameWorld.dispose();
         gameWorld = new GameWorld(act, map);
@@ -30,7 +34,7 @@ public class ServerLogic implements Disposable {
 
     public void run(Set<Player> players) {
         if (logicThread != null) logicThread.close();
-        logicThread = new ServerLogicThread(players);
+        logicThread = new ServerLogicThread(players, weapons);
         logicThread.start();
     }
 
@@ -47,10 +51,12 @@ public class ServerLogic implements Disposable {
         playerController.addAnimation(player.id);
     }
 
-    public void addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Type type) {
+    public void addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type type) {
         Weapon weapon = new Weapon();
         weapon.bodyId = gameWorld.addWeapon(type);
+        weapon.type = type;
         weaponController.addAnimation(weapon.bodyId, weapon.type);
+        weapons.add(weapon);
     }
 
     public void updatePlayerControls(PlayerControls controls) {
@@ -87,8 +93,27 @@ public class ServerLogic implements Disposable {
         }
     }
 
+    private void updateWeapons(Set<Weapon> weapons) {
+        for (Weapon weapon : weapons) {
+            Body body = gameWorld.getWeaponBodies().get(weapon.bodyId);
+            WeaponBody.WeaponBodyData bodyData = gameWorld.getWeapons().get(weapon.bodyId);
+            MultiplayerPlayerTweener animation = weaponController.getAnimations().get(weapon.bodyId);
+
+            weapon.position = body.getTransform().getPosition();
+            weapon.angle = body.getAngle();
+            weapon.velocity = body.getLinearVelocity();
+
+            weapon.animation = animation.getCurrentAnimation();
+            weapon.flippedAnimation = bodyData.flippedAnimation;
+        }
+    }
+
     public boolean isLoaded() {
         return gameWorld != null && playerController != null;
+    }
+
+    public Set<Weapon> getWeapons() {
+        return weapons;
     }
 
     @Override
@@ -102,9 +127,11 @@ public class ServerLogic implements Disposable {
 
         private boolean running = true;
         private Set<Player> players;
+        private Set<Weapon> weapons;
 
-        public ServerLogicThread(Set<Player> players) {
+        public ServerLogicThread(Set<Player> players, Set<Weapon> weapons) {
             this.players = players;
+            this.weapons = weapons;
         }
 
         public void close() {
@@ -120,6 +147,7 @@ public class ServerLogic implements Disposable {
 
                 gameWorld.update(dt);
                 updatePlayers(players);
+                updateWeapons(weapons);
                 playerController.updateAnimations(dt);
                 weaponController.updateAnimations(dt);
                 Game.server.updateWorld();

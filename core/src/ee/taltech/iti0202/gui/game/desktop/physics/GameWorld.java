@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 
@@ -127,12 +127,12 @@ public class GameWorld implements Disposable {
 
     public void updateWeapon(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon weapon) {
         if (!weaponBodies.containsKey(weapon.bodyId)) {
-            Body weaponBody = PlayerBody.createPlayer(world, weapon.position, weapon.bodyId);
+            Body weaponBody = WeaponBody.createWeapon(world, weapon.position, weapon.bodyId, weapon.type);
             weaponBodies.put(weapon.bodyId, weaponBody);
             weapons.put(weapon.bodyId, (WeaponBody.WeaponBodyData) weaponBody.getUserData());
             if (weapon.bodyId < newPlayerIdentifier) newPlayerIdentifier = weapon.bodyId;
         }
-        Body body = playerBodies.get(weapon.bodyId);
+        Body body = weaponBodies.get(weapon.bodyId);
         body.setTransform(weapon.position, weapon.angle);
         body.setLinearVelocity(weapon.velocity);
     }

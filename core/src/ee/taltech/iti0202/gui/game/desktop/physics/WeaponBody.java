@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WEAPON;
@@ -30,13 +30,16 @@ public class WeaponBody {
         fixtureDef.filter.maskBits = TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2;
 
         Body body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef).setUserData(new WeaponBodyData(id, type));
+        WeaponBodyData data = new WeaponBodyData(id, type);
+        body.createFixture(fixtureDef).setUserData(data);
+        body.setUserData(data);
         return body;
     }
 
     public static class WeaponBodyData {
         public int id;
         public Weapon.Type type;
+        public boolean flippedAnimation;
         public boolean dropped = true;
 
         public WeaponBodyData(int id, Weapon.Type type) {

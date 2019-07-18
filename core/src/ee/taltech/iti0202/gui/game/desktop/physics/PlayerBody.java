@@ -10,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WEAPON;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_2;
@@ -28,7 +30,9 @@ public class PlayerBody {
                 | DIMENSION_2
                 | TERRA_SQUARES
                 | BACKGROUND
-                | TERRA_DIMENSION_1;
+                | TERRA_DIMENSION_1
+                | BIT_BULLET
+                | BIT_WEAPON;
         bodyDef.position.set(pos);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bodyDef);

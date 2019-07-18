@@ -57,10 +57,14 @@ public class GameServer implements Disposable {
         kryo.register(Player.class);
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
+        kryo.register(Play.Weapons.class);
+        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.class);
         kryo.register(Lobby.StartGame.class);
         kryo.register(PlayerControls.class);
         kryo.register(Entity.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation.class);
+        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.class);
+        kryo.register(Weapon.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
@@ -99,6 +103,20 @@ public class GameServer implements Disposable {
         players.players = getPlayers();
 
         server.sendToAllUDP(players);
+
+        Play.Weapons weapons = new Play.Weapons();
+        weapons.weapons = new HashSet<>();
+        int i = 0;
+        for (Weapon weapon : serverLogic.getWeapons()) {
+            weapons.weapons.add(weapon);
+            i++;
+            if (i >= 10) {
+                server.sendToAllUDP(weapons);
+                i = 0;
+                weapons.weapons.clear();
+            }
+        }
+        server.sendToAllUDP(weapons);
     }
 
     public void updatePlayerName(int id, Lobby.NameChange nameChange) {
@@ -155,6 +173,10 @@ public class GameServer implements Disposable {
 
         for (Player player : getPlayers()) {
             serverLogic.addPlayer(player);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            serverLogic.addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.M4);
         }
         Lobby.StartGame data = new Lobby.StartGame();
         data.details.act = act;

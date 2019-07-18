@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
@@ -50,10 +51,14 @@ public class GameClient implements Disposable {
         kryo.register(Player.class);
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
+        kryo.register(Play.Weapons.class);
+        kryo.register(Weapon.Type.class);
         kryo.register(Lobby.StartGame.class);
         kryo.register(PlayerControls.class);
         kryo.register(Entity.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation.class);
+        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.class);
+        kryo.register(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon.class);
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);

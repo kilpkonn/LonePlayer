@@ -8,7 +8,7 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
 
 public class WeaponController {
@@ -27,7 +27,7 @@ public class WeaponController {
         Entity entity = AnimationLoader.getData(type.getAnimationFile()).getEntity(0);
         MultiplayerPlayerTweener tweener = new MultiplayerPlayerTweener(entity);
         tweener.speed = 100;
-        tweener.setAnimation(Weapon.Animation.DEFAULT);
+        tweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
         animations.put(id, tweener);
     }
 
