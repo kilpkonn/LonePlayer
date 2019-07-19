@@ -189,15 +189,6 @@ public class GameServer implements Disposable {
         System.out.println("Server word ready!");
     }
 
-    /*public void onUpdatePlayer(Player player) {
-        serverLogic.setPlayer(player);
-    }*/
-
-    public void onUpdateWeapon(Weapon weapon) {
-        serverLogic.setWeapon(weapon);
-    }
-
-
     public void onUpdatePlayerControls(PlayerControls controls) {
         serverLogic.updatePlayerControls(controls);
     }

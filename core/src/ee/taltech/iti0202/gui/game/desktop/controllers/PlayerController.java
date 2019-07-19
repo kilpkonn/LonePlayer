@@ -13,6 +13,8 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayer
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
+import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
@@ -207,5 +209,9 @@ public class PlayerController {
 
     public Map<Integer, MultiplayerPlayerTweener> getAnimations() {
         return animations;
+    }
+
+    public Map<Integer, PlayerBody.PlayerBodyData> getPlayers() {
+        return players;
     }
 }

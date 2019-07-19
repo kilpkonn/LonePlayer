@@ -1,11 +1,14 @@
 package ee.taltech.iti0202.gui.game.desktop.entities.player;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.brashmonkey.spriter.Timeline;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
 public class Player2 extends SpriteAnimation {
 
@@ -26,6 +29,15 @@ public class Player2 extends SpriteAnimation {
         super.update(dt);
         if (isAiming) {
             rotateBone("right_shoulder", (((float) -Math.toDegrees(aimAngle))));
+        }
+
+        Timeline.Key.Bone hand = getBone("right_hand");
+        for (Weapon weapon: weapons) {
+            if (weapon != null) {
+                weapon.getBody().setTransform(
+                        new Vector2(hand.position.x / B2DVars.PPM, hand.position.y / B2DVars.PPM),
+                        (float) Math.toRadians(hand.angle));
+            }
         }
     }
 

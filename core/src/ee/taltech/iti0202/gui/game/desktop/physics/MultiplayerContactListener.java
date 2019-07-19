@@ -4,11 +4,20 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
 
 public class MultiplayerContactListener implements ContactListener {
 
@@ -37,7 +46,7 @@ public class MultiplayerContactListener implements ContactListener {
 
         groundDetection(oa, ob);
 
-        weaponPickup(oa, ob);
+        weaponPickup(oa, ob, fa, fa);
 
         // detection happens when player goes outside of initial game border
         dmgDetection(oa, ob);
@@ -88,32 +97,50 @@ public class MultiplayerContactListener implements ContactListener {
 
     private void groundDetection(Object oa, Object ob) {
         if (oa instanceof PlayerBody.PlayerFoot) {
-            players.get(((PlayerBody.PlayerFoot) oa).id).onGround = true;
+            players.get(((BodyData) oa).id).onGround = true;
         }
         if (ob instanceof PlayerBody.PlayerFoot) {
-            players.get(((PlayerBody.PlayerFoot) ob).id).onGround = true;
+            players.get(((BodyData) ob).id).onGround = true;
         }
     }
 
-    private void weaponPickup(Object oa, Object ob) {
-        if (oa instanceof  PlayerBody.PlayerBodyData && ob instanceof WeaponBody.WeaponBodyData) {
-            PlayerBody.PlayerBodyData data = players.get(((PlayerBody.PlayerBodyData) oa).id);
-            for (int i = 0; i < data.weapons.length; i++) {
-                if (data.weapons[i] == null) {
-                    WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) ob;
-                    data.weapons[i] = weaponBodyData;
-                    weaponBodyData.dropped = false;
+    private void weaponPickup(Object oa, Object ob, Fixture fa, Fixture fb) {
+        short mask = TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2 | BIT_BULLET;
+        Filter filter = new Filter();
+        if (oa != null && PlayerBody.class.equals(oa.getClass().getEnclosingClass()) && ob instanceof WeaponBody.WeaponBodyData) {
+            PlayerBody.PlayerBodyData data = players.get(((BodyData) oa).id);
+            WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) ob;
+            if (weaponBodyData.dropped) {
+                for (int i = 0; i < data.weapons.length; i++) {
+                    if (data.weapons[i] == null) {
+                        data.weapons[i] = weaponBodyData;
+                        weaponBodyData.dropped = false;
+
+                        filter.groupIndex = fb.getFilterData().groupIndex;
+                        filter.categoryBits = fb.getFilterData().categoryBits;
+                        filter.maskBits = mask;
+                        fb.setFilterData(filter);
+                        break;
+                    }
                 }
             }
         }
 
-        if (ob instanceof  PlayerBody.PlayerBodyData && oa instanceof WeaponBody.WeaponBodyData) {
-            PlayerBody.PlayerBodyData data = players.get(((PlayerBody.PlayerBodyData) ob).id);
-            for (int i = 0; i < data.weapons.length; i++) {
-                if (data.weapons[i] == null) {
-                    WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) oa;
-                    data.weapons[i] = weaponBodyData;
-                    weaponBodyData.dropped = false;
+        if (ob != null && PlayerBody.class.equals(ob.getClass().getEnclosingClass()) && oa instanceof WeaponBody.WeaponBodyData) {
+            PlayerBody.PlayerBodyData data = players.get(((BodyData) ob).id);
+            WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) oa;
+            if (weaponBodyData.dropped) {
+                for (int i = 0; i < data.weapons.length; i++) {
+                    if (data.weapons[i] == null) {
+                        data.weapons[i] = weaponBodyData;
+                        weaponBodyData.dropped = false;
+
+                        filter.groupIndex = fa.getFilterData().groupIndex;
+                        filter.categoryBits = fa.getFilterData().categoryBits;
+                        filter.maskBits = mask;
+                        fa.setFilterData(filter);
+                        break;
+                    }
                 }
             }
         }

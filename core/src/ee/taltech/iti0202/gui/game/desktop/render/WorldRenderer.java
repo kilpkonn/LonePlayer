@@ -132,8 +132,9 @@ public class WorldRenderer implements Handler {
                 players.put(playerEntry.getKey(), new Player2(playerEntry.getValue(), sb));
             }
             float opacity = playerEntry.getKey() == playerToFollow.bodyId ? 1 : 0.5f;
-            players.get(playerEntry.getKey()).setOpacity(opacity);
-            players.get(playerEntry.getKey()).render(sb);
+            Player2 player =  players.get(playerEntry.getKey());
+            player.setOpacity(opacity);
+            player.render(sb);
         }
 
         for (Map.Entry<Integer, Body> weaponEntry : gameWorld.getWeaponBodies().entrySet()) {
@@ -154,6 +155,11 @@ public class WorldRenderer implements Handler {
             Player2 p = players.get(player.bodyId);
             p.setAnimation(player.animation);
             p.setFlipX(player.flippedAnimation);
+            ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon[] weapons = new ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon[3];
+            for (int i = 0; i < weapons.length; i++) {
+                weapons[i] = this.weapons.get(player.weapons[i]);
+            }
+            p.setWeapons(weapons);
         }
     }
 
@@ -161,7 +167,7 @@ public class WorldRenderer implements Handler {
         if (weapon.animation != null && weapons.containsKey(weapon.bodyId)) {
             ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon w = weapons.get(weapon.bodyId);
             w.setAnimation(weapon.animation);
-            w.setFlipX(weapon.flippedAnimation);
+            if (weapon.dropped) w.setFlipX(weapon.flippedAnimation);
         }
     }
 

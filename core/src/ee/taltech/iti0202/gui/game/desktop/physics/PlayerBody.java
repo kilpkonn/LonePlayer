@@ -80,32 +80,25 @@ public class PlayerBody {
         return body;
     }
 
-    public static class PlayerRightSide {
-        public int id;
-
+    public static class PlayerRightSide extends BodyData{
         public PlayerRightSide(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerLeftSide {
-        public int id;
-
+    public static class PlayerLeftSide extends BodyData{
         public PlayerLeftSide(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerFoot {
-        public int id;
-
+    public static class PlayerFoot extends BodyData{
         public PlayerFoot(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerBodyData {
-        public int id;
+    public static class PlayerBodyData extends BodyData{
         public int wallJump = 0;
         public int health = 100;
         public boolean dash = false;

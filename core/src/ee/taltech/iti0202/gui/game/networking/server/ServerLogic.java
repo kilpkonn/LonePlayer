@@ -29,21 +29,13 @@ public class ServerLogic implements Disposable {
         if (gameWorld != null) gameWorld.dispose();
         gameWorld = new GameWorld(act, map);
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers());
-        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons());
+        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons(), playerController);
     }
 
     public void run(Set<Player> players) {
         if (logicThread != null) logicThread.close();
         logicThread = new ServerLogicThread(players, weapons);
         logicThread.start();
-    }
-
-    public void setPlayer(Player player) {
-        gameWorld.updatePlayer(player);
-    }
-
-    public void setWeapon(Weapon weapon) {
-        gameWorld.updateWeapon(weapon);
     }
 
     public void addPlayer(Player player) {
@@ -153,10 +145,11 @@ public class ServerLogic implements Disposable {
                 start = System.currentTimeMillis();
 
                 gameWorld.update(dt);
-                updatePlayers(players);
-                updateWeapons(weapons);
                 playerController.updateAnimations(dt);
                 weaponController.updateAnimations(dt);
+
+                updatePlayers(players);
+                updateWeapons(weapons);
                 Game.server.updateWorld();
 
                 try {

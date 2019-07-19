@@ -39,8 +39,7 @@ public class WeaponBody {
         return body;
     }
 
-    public static class WeaponBodyData {
-        public int id;
+    public static class WeaponBodyData extends BodyData{
         public Weapon.Type type;
         public boolean flippedAnimation;
         public boolean dropped = true;
