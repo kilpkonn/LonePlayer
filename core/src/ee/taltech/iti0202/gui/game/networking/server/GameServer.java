@@ -176,8 +176,10 @@ public class GameServer implements Disposable {
             serverLogic.addPlayer(player);
         }
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             serverLogic.addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.M4);
+            serverLogic.addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.DEAGLE);
+            serverLogic.addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.SHOTGUN);
         }
         Lobby.StartGame data = new Lobby.StartGame();
         data.details.act = act;

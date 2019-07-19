@@ -27,6 +27,10 @@ public class WeaponBuilder {
         switch (type) {
             case M4:
                 return new M4(body, spriteBatch);
+            case DEAGLE:
+                return new Deagle(body, spriteBatch);
+            case SHOTGUN:
+                return new Shotgun(body, spriteBatch);
         }
         return null; // Never get here
     }

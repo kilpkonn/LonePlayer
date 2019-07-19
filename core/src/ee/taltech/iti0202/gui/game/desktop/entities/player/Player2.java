@@ -46,7 +46,7 @@ public class Player2 extends SpriteAnimation {
         super.render(sb);
 
         if (weapons[currentWeapon] != null) {
-            weapons[currentWeapon].render(sb);
+            weapons[currentWeapon].forceRender(sb);
         }
     }
 

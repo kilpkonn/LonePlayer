@@ -10,12 +10,25 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.Multiplaye
 
 public abstract class Weapon extends SpriteAnimation {
 
+    public boolean isDropped;
+
     public Weapon(Body body, SpriteBatch sb, String path) {
         super(body, sb, path);
     }
 
     public void setAnimation(MultiplayerAnimation animation) {
         setAnimation(animation.getName(), animation.isToPlayOnce());
+    }
+
+    @Override
+    public void render(SpriteBatch sb) {
+        if (isDropped) {
+            super.render(sb);
+        }
+    }
+
+    public void forceRender(SpriteBatch sb) {
+        super.render(sb);
     }
 
     public enum Type implements Serializable {

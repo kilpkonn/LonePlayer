@@ -13,7 +13,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player2;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.WeaponBuilder;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
@@ -142,7 +141,7 @@ public class WorldRenderer implements Handler {
                 weapons.put(weaponEntry.getKey(), new WeaponBuilder()
                         .setBody(weaponEntry.getValue())
                         .setSpriteBatch(sb)
-                        .setType(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.M4)
+                        .setType(gameWorld.getWeapons().get(weaponEntry.getKey()).type)
                         .create());
             }
             weapons.get(weaponEntry.getKey()).render(sb);
@@ -167,6 +166,7 @@ public class WorldRenderer implements Handler {
         if (weapon.animation != null && weapons.containsKey(weapon.bodyId)) {
             ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon w = weapons.get(weapon.bodyId);
             w.setAnimation(weapon.animation);
+            w.isDropped = weapon.dropped;
             if (weapon.dropped) w.setFlipX(weapon.flippedAnimation);
         }
     }
