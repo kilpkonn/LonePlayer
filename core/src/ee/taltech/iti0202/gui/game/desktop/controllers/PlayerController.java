@@ -205,6 +205,21 @@ public class PlayerController {
         return false;
     }
 
+    public boolean trySetCurrentWeapon(int id, short index) {
+        PlayerBody.PlayerBodyData data = players.get(id);
+        if (data.currentWeaponIndex != index) {
+            while (index >= data.weapons.length) {
+                index -= data.weapons.length;
+            }
+            while (index < 0) {
+                index += data.weapons.length;
+            }
+            data.currentWeaponIndex = index;
+            return true;
+        }
+        return false;
+    }
+
     public Map<Integer, MultiplayerPlayerTweener> getAnimations() {
         return animations;
     }

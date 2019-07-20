@@ -123,6 +123,9 @@ public class GameWorld implements Disposable {
         Body body = playerBodies.get(player.bodyId);
         body.setTransform(player.position, 0);
         body.setLinearVelocity(player.velocity);
+
+        PlayerBody.PlayerBodyData playerBodyData = players.get(player.bodyId);
+        playerBodyData.currentWeaponIndex = player.currentWeaponIndex;
     }
 
     public void updateWeapon(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon weapon) {

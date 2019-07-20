@@ -180,9 +180,15 @@ public class Multiplayer extends GameState {
 
         if (playerToFollow != null) {
             controls.id = playerToFollow.id;
+            controls.currentWeapon += playerToFollow.currentWeaponIndex;
             controls.dimension = dimension;
             controls.idle = !(controls.jump || controls.dashLeft || controls.dashRight || controls.moveLeft || controls.moveRight);
             Game.client.updatePlayerControls(controls);
+
+            playerToFollow.currentWeaponIndex = controls.currentWeapon;
+            while (playerToFollow.currentWeaponIndex < 0 || playerToFollow.currentWeaponIndex > playerToFollow.weapons.length) {
+                playerToFollow.currentWeaponIndex += playerToFollow.weapons.length * ((playerToFollow.currentWeaponIndex < 0) ? 1 : -1);
+            }
         }
 
         hud.setPlayTime(playTime);
@@ -225,6 +231,14 @@ public class Multiplayer extends GameState {
         }
         if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
             dimension = !dimension;
+        }
+        if (MyInput.isPressed(Game.settings.NEXT_WEAPON)) {
+            controls.currentWeapon++;
+            System.out.println("Next wpn");
+        }
+        if (MyInput.isPressed(Game.settings.PREVIOUS_WEAPON)) {
+            controls.currentWeapon--;
+            System.out.println("Prev wpn");
         }
     }
 

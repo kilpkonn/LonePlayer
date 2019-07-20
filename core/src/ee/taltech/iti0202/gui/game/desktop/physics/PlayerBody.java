@@ -105,6 +105,7 @@ public class PlayerBody {
         public boolean onGround = false;
         public boolean doubleJump = false;
         public boolean dimension = true;
+        public int currentWeaponIndex;
 
         public boolean flippedAnimation = false;
         public WeaponBody.WeaponBodyData[] weapons = new WeaponBody.WeaponBodyData[3];

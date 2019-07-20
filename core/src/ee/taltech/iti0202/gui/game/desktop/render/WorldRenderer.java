@@ -159,6 +159,7 @@ public class WorldRenderer implements Handler {
                 weapons[i] = this.weapons.get(player.weapons[i]);
             }
             p.setWeapons(weapons);
+            p.setCurrentWeapon(player.currentWeaponIndex);
         }
     }
 

@@ -60,6 +60,7 @@ public class ServerLogic implements Disposable {
 
         if (controls.idle) playerController.trySetIdle(controls.id);
 
+        playerController.trySetCurrentWeapon(controls.id, controls.currentWeapon);
         playerController.trySetDimension(controls.id, controls.dimension);
     }
 
@@ -86,6 +87,7 @@ public class ServerLogic implements Disposable {
                 if (bodyData.weapons[i] != null)
                     player.weapons[i] = bodyData.weapons[i].id;
             }
+            player.currentWeaponIndex = (short) bodyData.currentWeaponIndex;
 
         }
     }
