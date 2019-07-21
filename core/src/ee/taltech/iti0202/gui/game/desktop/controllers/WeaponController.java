@@ -1,10 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.controllers;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Entity;
-import com.brashmonkey.spriter.Timeline;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,8 +10,6 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationL
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
-
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class WeaponController {
 
@@ -39,18 +34,17 @@ public class WeaponController {
     }
 
     public void updateAnimations(float dt) {
-        /*for (PlayerBody.PlayerBodyData player : playerController.getPlayers().values()) {
-            Timeline.Key.Bone hand = playerController.getAnimations().get(player.id).getBone("right_hand");
-            for (WeaponBody.WeaponBodyData weapon : player.weapons) {
-                if (weapon != null) {
-                    weaponBodies.get(weapon.id).setTransform(
-                            new Vector2(hand.position.x / PPM, hand.position.y / PPM),
-                            (float) Math.toRadians(hand.angle));
-                }
+        for (MultiplayerPlayerTweener weaponTweener : animations.values()) {
+            weaponTweener.update(dt);
+        }
+        for (PlayerBody.PlayerBodyData playerBodyData : playerController.getPlayers().values()) {
+            if (playerBodyData.weapons[playerBodyData.currentWeaponIndex] == null) continue;
+            MultiplayerPlayerTweener weaponTweener = animations.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
+            if (playerBodyData.isAiming) {
+                weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.FIRE);
+            } else {
+                weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
             }
-        }*/
-        for (MultiplayerPlayerTweener playerTweener : animations.values()) {
-            playerTweener.update(dt);
         }
     }
 
