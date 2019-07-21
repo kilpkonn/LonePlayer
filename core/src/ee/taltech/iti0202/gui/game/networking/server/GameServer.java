@@ -10,6 +10,7 @@ import com.esotericsoftware.kryonet.Server;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -72,7 +73,7 @@ public class GameServer implements Disposable {
 
             BufferedReader sc =
                     new BufferedReader(new InputStreamReader(url_name.openStream()));
-            String address = sc.readLine().trim(); //InetAddress.getLocalHost().getHostAddress();
+            String address = InetAddress.getLocalHost().getHostAddress(); // sc.readLine().trim();
             server.bind(tcpPort, udpPort);
             //server.setPortAndIp(port, "192.168.0.254"); //address);  //TODO: Fix connecting issues via public ip
             connect = String.format("%s:%s|%s", address, tcpPort, udpPort);
