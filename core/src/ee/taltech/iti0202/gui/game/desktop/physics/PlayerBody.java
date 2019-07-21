@@ -110,6 +110,9 @@ public class PlayerBody {
         public boolean flippedAnimation = false;
         public WeaponBody.WeaponBodyData[] weapons = new WeaponBody.WeaponBodyData[3];
 
+        public boolean isAiming;
+        public float aimAngle;
+
         public PlayerBodyData(int id) {
             this.id = id;
         }

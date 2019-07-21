@@ -62,6 +62,7 @@ public class ServerLogic implements Disposable {
 
         playerController.trySetCurrentWeapon(controls.id, controls.currentWeapon);
         playerController.trySetDimension(controls.id, controls.dimension);
+        playerController.trySetAim(controls.id, controls.isAiming, controls.aimingAngle);
     }
 
     private void updatePlayers(Set<Player> players) {
@@ -88,7 +89,8 @@ public class ServerLogic implements Disposable {
                     player.weapons[i] = bodyData.weapons[i].id;
             }
             player.currentWeaponIndex = (short) bodyData.currentWeaponIndex;
-
+            player.isAiming = bodyData.isAiming;
+            player.aimAngle = bodyData.aimAngle;
         }
     }
 

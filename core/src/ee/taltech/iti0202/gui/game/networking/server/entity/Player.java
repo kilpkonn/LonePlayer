@@ -20,6 +20,7 @@ public class Player extends Entity implements Serializable {
     public int[] weapons = new int[3];
     public short currentWeaponIndex;
     public boolean isAiming = false;
+    public float aimAngle;
 
     public short health = 100;
     public short wallJump = 0;

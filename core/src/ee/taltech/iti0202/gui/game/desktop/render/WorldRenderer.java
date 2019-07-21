@@ -160,6 +160,8 @@ public class WorldRenderer implements Handler {
             }
             p.setWeapons(weapons);
             p.setCurrentWeapon(player.currentWeaponIndex);
+
+            p.setAiming(player.isAiming, player.aimAngle);
         }
     }
 

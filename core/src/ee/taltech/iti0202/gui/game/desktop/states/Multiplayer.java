@@ -34,6 +34,8 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
 public class Multiplayer extends GameState {
 
@@ -235,11 +237,15 @@ public class Multiplayer extends GameState {
         }
         if (MyInput.isPressed(Game.settings.NEXT_WEAPON)) {
             controls.currentWeapon++;
-            System.out.println("Next wpn");
         }
         if (MyInput.isPressed(Game.settings.PREVIOUS_WEAPON)) {
             controls.currentWeapon--;
-            System.out.println("Prev wpn");
+        }
+        if (MyInput.isMouseDown(Game.settings.SHOOT)) {
+            controls.isAiming = true;
+            controls.aimingAngle = (float) Math.atan2(
+                    MyInput.getMouseLocation().y - (double) V_HEIGHT / 2,
+                    MyInput.getMouseLocation().x - (double) V_WIDTH / 2);
         }
     }
 

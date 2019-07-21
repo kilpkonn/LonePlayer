@@ -28,7 +28,13 @@ public class Player2 extends SpriteAnimation {
     public void update(float dt) {
         super.update(dt);
         if (isAiming) {
-            rotateBone("right_shoulder", (((float) -Math.toDegrees(aimAngle))));
+            float offset = getCurrentAnimation().name.equals("run")
+                            ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
+                            : (getCurrentAnimation().name.equals("dash")
+                            ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
+                            : (float) (Math.PI / 8));
+            float flipped = isFlippedX() ? -(float) Math.PI / 4 + (float) Math.PI : 0;
+            rotateBone("right_shoulder", (((float) -Math.toDegrees(aimAngle + offset + flipped))));
         }
 
         Timeline.Key.Bone hand = getBone("right_hand");
@@ -62,6 +68,11 @@ public class Player2 extends SpriteAnimation {
 
     public void setAnimation(MultiplayerAnimation animation) {
         setAnimation(animation.getName(), animation.isToPlayOnce());
+    }
+
+    public void setAiming(boolean isAiming, float aimAngle) {
+        this.isAiming = isAiming;
+        this.aimAngle = aimAngle;
     }
 
     public void setWeapons(Weapon[] weapons) {

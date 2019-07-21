@@ -220,6 +220,16 @@ public class PlayerController {
         return false;
     }
 
+    public boolean trySetAim(int id, boolean isAiming, float aimAngle) {
+        PlayerBody.PlayerBodyData data = players.get(id);
+        if (data.isAiming != isAiming || (isAiming && data.aimAngle != aimAngle)) {
+            data.isAiming = isAiming;
+            data.aimAngle = aimAngle;
+            return true;
+        }
+        return false;
+    }
+
     public Map<Integer, MultiplayerPlayerTweener> getAnimations() {
         return animations;
     }
