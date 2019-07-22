@@ -21,8 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
@@ -41,12 +43,15 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class GameWorld implements Disposable {
 
     private World world = new World(new Vector2(0, GRAVITY), true);
+
     private Map<Integer, Body> playerBodies = new HashMap<>();
     private Map<Integer, PlayerBody.PlayerBodyData> players = new HashMap<>();
 
     private Map<Integer, Body> weaponBodies = new HashMap<>();
     private Map<Integer, WeaponBody.WeaponBodyData> weapons = new HashMap<>(); // Merge into one map?
 
+    private Map<Integer, Body> bulletBodies = new HashMap<>();
+    private Map<Integer, BulletBody.BulletBodyData> bullets = new HashMap<>();
 
     private MultiplayerContactListener contactListener;
     private List<Vector2> spawns = new ArrayList<>();
@@ -55,6 +60,7 @@ public class GameWorld implements Disposable {
 
     private int newPlayerIdentifier;
     private int newWeaponIdentifier;
+    private int newBulletIdentifier;
 
     public GameWorld(String act, String map) {
         contactListener = new MultiplayerContactListener(players);
@@ -93,6 +99,15 @@ public class GameWorld implements Disposable {
         return newWeaponIdentifier;
     }
 
+    public int addBullet(Vector2 pos, Vector2 velocity, WeaponProjectile.Type type) {
+        newBulletIdentifier++;
+
+        Body bullet = BulletBody.createBullet(world, pos, velocity, newBulletIdentifier, type);
+        bulletBodies.put(newBulletIdentifier, bullet);
+        bullets.put(newBulletIdentifier, (BulletBody.BulletBodyData) bullet.getUserData());
+        return newBulletIdentifier;
+    }
+
     public boolean removePlayer(int id) {
         if (playerBodies.containsKey(id)) {
             world.destroyBody(playerBodies.get(id));
@@ -108,6 +123,16 @@ public class GameWorld implements Disposable {
             world.destroyBody(weaponBodies.get(id));
             weaponBodies.remove(id);
             weapons.remove(id);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeBullet(int id) {
+        if (bulletBodies.containsKey(id)) {
+            world.destroyBody(bulletBodies.get(id));
+            bulletBodies.remove(id);
+            bullets.remove(id);
             return true;
         }
         return false;
@@ -138,6 +163,18 @@ public class GameWorld implements Disposable {
         Body body = weaponBodies.get(weapon.bodyId);
         body.setTransform(weapon.position, weapon.angle);
         body.setLinearVelocity(weapon.velocity);
+    }
+
+    public void updateBullet(Bullet bullet) {
+        if (!bulletBodies.containsKey(bullet.bodyId)) {
+            Body bulletBody = BulletBody.createBullet(world, bullet.position, bullet.velocity, bullet.bodyId, bullet.type);
+            bulletBodies.put(bullet.bodyId, bulletBody);
+            bullets.put(bullet.bodyId, (BulletBody.BulletBodyData) bulletBody.getUserData());
+            if (bullet.bodyId < newBulletIdentifier) newBulletIdentifier = bullet.bodyId;
+        }
+        Body body = bulletBodies.get(bullet.bodyId);
+        body.setTransform(bullet.position, bullet.angle);
+        body.setLinearVelocity(bullet.velocity);
     }
 
     private void createHitboxes(TiledMap tiledMap) {

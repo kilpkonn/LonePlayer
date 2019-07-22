@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.controllers.BulletController;
 import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
@@ -22,6 +23,7 @@ public class ServerLogic implements Disposable {
     private ServerLogicThread logicThread;
     private PlayerController playerController;
     private WeaponController weaponController;
+    private BulletController bulletController;
 
     private Set<Weapon> weapons = new HashSet<>();
 
