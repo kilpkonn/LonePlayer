@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.desktop.physics;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -8,13 +7,10 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
@@ -22,7 +18,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class MultiplayerContactListener implements ContactListener {
 
     public Map<Integer, PlayerBody.PlayerBodyData> players;
-    private HashMap<Body, Body> collidedBullets = new HashMap<>();
 
     public MultiplayerContactListener(Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.players = players;
@@ -105,6 +100,7 @@ public class MultiplayerContactListener implements ContactListener {
     }
 
     private void weaponPickup(Object oa, Object ob, Fixture fa, Fixture fb) {
+        // TODO: Seems to fail often when 1 weapon is already picked up
         short mask = TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2 | BIT_BULLET;
         Filter filter = new Filter();
         if (oa != null && PlayerBody.class.equals(oa.getClass().getEnclosingClass()) && ob instanceof WeaponBody.WeaponBodyData) {
@@ -146,15 +142,13 @@ public class MultiplayerContactListener implements ContactListener {
         }
     }
 
-    private void bulletDetection(Fixture fa, Fixture fb) {
-        /*if (fa.getUserData() == null && fb.getUserData() == null) {
-            return;
+    private void bulletDetection(Object oa, Object ob) {
+        if (oa instanceof BulletBody.BulletBodyData) {
+            ((BulletBody.BulletBodyData) oa).isHit = true;
         }
-        if (fa.getUserData().toString().endsWith("bullet")) {
-            collidedBullets.put(fa.getBody(), fb.getBody());
-        } else if (fb.getUserData().toString().endsWith("bullet")) {
-            collidedBullets.put(fb.getBody(), fa.getBody());
-        }*/
+        if (ob instanceof BulletBody.BulletBodyData) {
+            ((BulletBody.BulletBodyData) ob).isHit = true;
+        }
     }
 
     private void dmgDetection(Object oa, Object ob) {

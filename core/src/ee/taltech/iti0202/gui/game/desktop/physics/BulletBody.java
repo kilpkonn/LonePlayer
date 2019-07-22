@@ -57,6 +57,7 @@ public class BulletBody {
     }
 
     public static class BulletBodyData extends BodyData {
+        public boolean isHit;
         public BulletBodyData(int id) {
             this.id = id;
         }
