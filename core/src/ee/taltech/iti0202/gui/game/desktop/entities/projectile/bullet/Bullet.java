@@ -4,6 +4,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+
+import java.io.Serializable;
+
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.WeaponProjectile;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -52,18 +56,30 @@ public class Bullet extends WeaponProjectile {
         return hit && isAnimationOver();
     }
 
-    public enum Animation {
-        FLY("fly"),
-        HIT("hit");
+    public enum Animation implements MultiplayerAnimation, Serializable {
+        FLY("fly", false),
+        HIT("hit", true);
 
         private final String name;
+        private final boolean isToPlayOnce;
 
-        Animation(String s) {
+        Animation(String s, boolean toPlayOnce) {
             name = s;
+            isToPlayOnce = toPlayOnce;
         }
 
         public String toString() {
             return this.name;
+        }
+
+        @Override
+        public boolean isToPlayOnce() {
+            return isToPlayOnce;
+        }
+
+        @Override
+        public String getName() {
+            return name;
         }
     }
 }
