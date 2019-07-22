@@ -9,4 +9,6 @@ public class Weapon extends Entity implements Serializable {
     public boolean flippedAnimation;
     public MultiplayerAnimation animation;
     public ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type type;
+
+    public boolean dropped;
 }

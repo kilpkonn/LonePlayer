@@ -238,6 +238,14 @@ public class GameWorld implements Disposable {
         }
     }
 
+    public Map<Integer, Body> getBulletBodies() {
+        return bulletBodies;
+    }
+
+    public Map<Integer, BulletBody.BulletBodyData> getBullets() {
+        return bullets;
+    }
+
     public Map<Integer, Body> getWeaponBodies() {
         return weaponBodies;
     }

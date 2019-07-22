@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.networking.server;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -10,10 +11,12 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.controllers.BulletController;
 import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
+import ee.taltech.iti0202.gui.game.desktop.physics.BulletBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
@@ -26,6 +29,7 @@ public class ServerLogic implements Disposable {
     private BulletController bulletController;
 
     private Set<Weapon> weapons = new HashSet<>();
+    private Set<Bullet> bullets = new HashSet<>();
 
     public void loadWorld(String act, String map) {
         if (gameWorld != null) gameWorld.dispose();
@@ -36,7 +40,7 @@ public class ServerLogic implements Disposable {
 
     public void run(Set<Player> players) {
         if (logicThread != null) logicThread.close();
-        logicThread = new ServerLogicThread(players, weapons);
+        logicThread = new ServerLogicThread(players, weapons, bullets);
         logicThread.start();
     }
 
@@ -51,6 +55,12 @@ public class ServerLogic implements Disposable {
         weapon.type = type;
         weaponController.addAnimation(weapon.bodyId, weapon.type);
         weapons.add(weapon);
+    }
+
+    private void addBullet(Bullet bullet) {
+        bullet.bodyId = gameWorld.addBullet(bullet.position, bullet.velocity, bullet.type);
+        bulletController.addAnimation(bullet.bodyId, bullet.type);
+        bullets.add(bullet);
     }
 
     public void updatePlayerControls(PlayerControls controls) {
@@ -113,6 +123,22 @@ public class ServerLogic implements Disposable {
         }
     }
 
+    private void updateBullets(Set<Bullet> bullets) {
+        for (Bullet bullet : bullets) {
+            Body body = gameWorld.getBulletBodies().get(bullet.bodyId);
+            BulletBody.BulletBodyData bodyData = gameWorld.getBullets().get(bullet.bodyId);
+            MultiplayerPlayerTweener animation = bulletController.getAnimations().get(bullet.bodyId);
+
+            bullet.position = body.getTransform().getPosition();
+            bullet.angle = body.getAngle();
+            bullet.velocity = body.getLinearVelocity();
+
+            bullet.isHit = bodyData.isHit;
+
+            bullet.animation = animation.getCurrentAnimation();
+        }
+    }
+
     public boolean isLoaded() {
         return gameWorld != null && playerController != null;
     }
@@ -133,10 +159,12 @@ public class ServerLogic implements Disposable {
         private boolean running = true;
         private Set<Player> players;
         private Set<Weapon> weapons;
+        private Set<Bullet> bullets;
 
-        public ServerLogicThread(Set<Player> players, Set<Weapon> weapons) {
+        public ServerLogicThread(Set<Player> players, Set<Weapon> weapons, Set<Bullet> bullets) {
             this.players = players;
             this.weapons = weapons;
+            this.bullets = bullets;
         }
 
         public void close() {
@@ -153,9 +181,12 @@ public class ServerLogic implements Disposable {
                 gameWorld.update(dt);
                 playerController.updateAnimations(dt);
                 weaponController.updateAnimations(dt);
+                bulletController.updateAnimations(dt);
 
                 updatePlayers(players);
                 updateWeapons(weapons);
+                updateBullets(bullets);
+
                 Game.server.updateWorld();
 
                 try {
