@@ -36,6 +36,7 @@ public class ServerLogic implements Disposable {
         gameWorld = new GameWorld(act, map);
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers());
         weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons(), playerController);
+        bulletController = new BulletController(gameWorld.getBulletBodies(), gameWorld.getBullets());
     }
 
     public void run(Set<Player> players) {
@@ -134,7 +135,7 @@ public class ServerLogic implements Disposable {
             bullet.velocity = body.getLinearVelocity();
 
             bullet.isHit = bodyData.isHit;
-
+            bullet.type = bodyData.type;
             bullet.animation = animation.getCurrentAnimation();
         }
     }
@@ -145,6 +146,10 @@ public class ServerLogic implements Disposable {
 
     public Set<Weapon> getWeapons() {
         return weapons;
+    }
+
+    public Set<Bullet> getBullets() {
+        return bullets;
     }
 
     @Override

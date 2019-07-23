@@ -14,10 +14,13 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player2;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectileBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.WeaponBuilder;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
@@ -44,6 +47,7 @@ public class WorldRenderer implements Handler {
 
     private Map<Integer, Player2> players = new HashMap<>();
     private Map<Integer, ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon> weapons = new HashMap<>();
+    private Map<Integer, WeaponProjectile> bullets = new HashMap<>();
     private ee.taltech.iti0202.gui.game.networking.server.entity.Player playerToFollow;
 
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
@@ -125,7 +129,7 @@ public class WorldRenderer implements Handler {
         renderer.setView(cam);
         renderer.render();
 
-        for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {
+        for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {  //TODO: Need simpler and faster method to render
             //Add missing players -> move to update?
             if (!players.containsKey(playerEntry.getKey())) {
                 players.put(playerEntry.getKey(), new Player2(playerEntry.getValue(), sb));
@@ -146,7 +150,18 @@ public class WorldRenderer implements Handler {
             }
             weapons.get(weaponEntry.getKey()).render(sb);
         }
-        //TODO: Render weapons, bullets, etc.
+
+        for (Map.Entry<Integer, Body> bulletEntry : gameWorld.getBulletBodies().entrySet()) {
+            if (!bullets.containsKey(bulletEntry.getKey())) {
+                bullets.put(bulletEntry.getKey(), new WeaponProjectileBuilder()
+                .setBody(bulletEntry.getValue())
+                .setSb(sb)
+                .setType(gameWorld.getBullets().get(bulletEntry.getKey()).type)
+                .createWeaponProjectile());
+            }
+            bullets.get(bulletEntry.getKey()).render(sb);
+        }
+        //TODO: Render bullets, etc.
     }
 
     public void updatePlayerAnimation(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
@@ -171,6 +186,13 @@ public class WorldRenderer implements Handler {
             w.setAnimation(weapon.animation);
             w.isDropped = weapon.dropped;
             if (weapon.dropped) w.setFlipX(weapon.flippedAnimation);
+        }
+    }
+
+    public void updateBulletAnimation(Bullet bullet) {
+        if (bullet.animation != null && bullets.containsKey(bullet.bodyId)) {
+            WeaponProjectile b = bullets.get(bullet.bodyId);
+            b.setAnimation(bullet.animation);
         }
     }
 

@@ -23,6 +23,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Entity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
@@ -67,13 +68,14 @@ public class GameServer implements Disposable {
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.class);
         kryo.register(Weapon.class);
         kryo.register(int[].class);
+        kryo.register(Play.Bullets.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
 
             BufferedReader sc =
                     new BufferedReader(new InputStreamReader(url_name.openStream()));
-            String address = InetAddress.getLocalHost().getHostAddress(); // sc.readLine().trim();
+            String address = sc.readLine().trim();  // InetAddress.getLocalHost().getHostAddress();
             server.bind(tcpPort, udpPort);
             //server.setPortAndIp(port, "192.168.0.254"); //address);  //TODO: Fix connecting issues via public ip
             connect = String.format("%s:%s|%s", address, tcpPort, udpPort);
@@ -107,7 +109,6 @@ public class GameServer implements Disposable {
         server.sendToAllUDP(players);
 
         Play.Weapons weapons = new Play.Weapons();
-        weapons.weapons = new HashSet<>();
         int i = 0;
         for (Weapon weapon : serverLogic.getWeapons()) {
             weapons.weapons.add(weapon);
@@ -119,6 +120,19 @@ public class GameServer implements Disposable {
             }
         }
         server.sendToAllUDP(weapons);
+
+        Play.Bullets bullets = new Play.Bullets();
+        i = 0;
+        for (Bullet bullet : serverLogic.getBullets()) {
+            bullets.bullets.add(bullet);
+            i++;
+            if (i >= 15) {
+                server.sendToAllUDP(bullets);
+                i = 0;
+                bullets.bullets.clear();
+            }
+        }
+        server.sendToAllUDP(bullets);
     }
 
     public void updatePlayerName(int id, Lobby.NameChange nameChange) {

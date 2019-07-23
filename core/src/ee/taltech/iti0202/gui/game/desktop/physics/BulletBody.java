@@ -51,15 +51,17 @@ public class BulletBody {
         bodyDef.linearVelocity.set(velocity);
 
         Body body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef).setUserData(new BulletBodyData(id));
+        body.createFixture(fixtureDef).setUserData(new BulletBodyData(id, type));
 
         return body;
     }
 
     public static class BulletBodyData extends BodyData {
         public boolean isHit;
-        public BulletBodyData(int id) {
+        public WeaponProjectile.Type type;
+        public BulletBodyData(int id, WeaponProjectile.Type type) {
             this.id = id;
+            this.type = type;
         }
     }
 }

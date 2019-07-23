@@ -38,6 +38,8 @@ public class ClientListener extends Listener {
             client.onUpdatePlayers((Play.Players) object);
         } else if (object instanceof Play.Weapons) {
             client.onUpdateWeapons((Play.Weapons) object);
+        } else if (object instanceof Play.Bullets) {
+            client.onUpdateBullets((Play.Bullets) object);
         }
     }
 

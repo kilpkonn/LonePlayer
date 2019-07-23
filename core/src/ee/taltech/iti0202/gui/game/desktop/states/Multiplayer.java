@@ -21,6 +21,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
@@ -160,6 +161,15 @@ public class Multiplayer extends GameState {
 
             gameWorld.updateWeapon(weapon);
             worldRenderer.updateWeaponAnimation(weapon);
+        }
+    }
+
+    public void updateBullets(Set<Bullet> bullets) {
+        for (Bullet bullet : bullets) {
+            if (bullet == null) continue;
+
+            gameWorld.updateBullet(bullet);
+            worldRenderer.updateBulletAnimation(bullet);
         }
     }
 

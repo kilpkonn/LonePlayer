@@ -60,6 +60,7 @@ public class GameClient implements Disposable {
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.class);
         kryo.register(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon.class);
         kryo.register(int[].class);
+        kryo.register(Play.Bullets.class);
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
@@ -115,6 +116,14 @@ public class GameClient implements Disposable {
         Gdx.app.postRunnable(() -> {
             if (GameStateManager.currentState() instanceof Multiplayer) {
                 ((Multiplayer) GameStateManager.currentState()).updateWeapons(weapons.weapons);
+            }
+        });
+    }
+
+    public void onUpdateBullets(Play.Bullets bullets) {
+        Gdx.app.postRunnable(() -> {
+            if (GameStateManager.currentState() instanceof  Multiplayer) {
+                ((Multiplayer) GameStateManager.currentState()).updateBullets(bullets.bullets);
             }
         });
     }
