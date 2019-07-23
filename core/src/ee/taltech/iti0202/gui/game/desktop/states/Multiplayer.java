@@ -14,6 +14,7 @@ import java.util.Random;
 import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
@@ -43,6 +44,7 @@ public class Multiplayer extends GameState {
     private GameWorld gameWorld;
     private WorldRenderer worldRenderer;
     private PlayerController playerController;
+    private WeaponController weaponController;
     private Hud hud;
 
     private Stage stage = new Stage(new ScreenViewport());
@@ -138,7 +140,8 @@ public class Multiplayer extends GameState {
 
         gameWorld = new GameWorld(act, map);
         worldRenderer = new WorldRenderer(gameWorld, cam);
-        playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers());
+        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons());
+        playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
 
         hud = new Hud(hudCam);
     }
@@ -192,7 +195,6 @@ public class Multiplayer extends GameState {
 
         if (playerToFollow != null) {
             controls.id = playerToFollow.id;
-            controls.currentWeapon += playerToFollow.currentWeaponIndex;
             controls.dimension = dimension;
             controls.idle = !(controls.jump || controls.dashLeft || controls.dashRight || controls.moveLeft || controls.moveRight);
             Game.client.updatePlayerControls(controls);
@@ -227,6 +229,8 @@ public class Multiplayer extends GameState {
 
     private void handleRunInput() {
         controls = new PlayerControls();
+        if (playerToFollow != null) controls.currentWeapon = playerToFollow.currentWeaponIndex;
+
         if (MyInput.isPressed(Game.settings.JUMP)) {
             controls.jump = true;
             playerController.tryJump(playerToFollow.bodyId);

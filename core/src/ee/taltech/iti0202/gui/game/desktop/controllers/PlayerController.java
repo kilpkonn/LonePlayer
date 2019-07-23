@@ -32,11 +32,14 @@ public class PlayerController {
     private Map<Integer, PlayerBody.PlayerBodyData> players;
     private Map<Integer, MultiplayerPlayerTweener> animations;
 
+    private WeaponController weaponController;
+
     private Entity playerEntity;
 
-    public PlayerController(Map<Integer, Body> playerBodies, Map<Integer, PlayerBody.PlayerBodyData> players) {
+    public PlayerController(Map<Integer, Body> playerBodies, Map<Integer, PlayerBody.PlayerBodyData> players, WeaponController weaponController) {
         this.playerBodies = playerBodies;
         this.players = players;
+        this.weaponController = weaponController;
         playerEntity = AnimationLoader.getData("images/player/rogue.scml").getEntity(0);
         this.animations = new HashMap<>();
         for (int i : players.keySet()) {
@@ -227,6 +230,7 @@ public class PlayerController {
             data.aimAngle = aimAngle;
             return true;
         }
+        weaponController.updateFireing(data);
         return false;
     }
 

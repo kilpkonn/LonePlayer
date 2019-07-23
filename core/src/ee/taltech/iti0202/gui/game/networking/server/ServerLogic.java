@@ -34,9 +34,9 @@ public class ServerLogic implements Disposable {
     public void loadWorld(String act, String map) {
         if (gameWorld != null) gameWorld.dispose();
         gameWorld = new GameWorld(act, map);
-        playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers());
-        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons(), playerController);
         bulletController = new BulletController(gameWorld.getBulletBodies(), gameWorld.getBullets());
+        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons());
+        playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
     }
 
     public void run(Set<Player> players) {

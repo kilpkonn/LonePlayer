@@ -2,6 +2,7 @@ package ee.taltech.iti0202.gui.game.desktop.controllers;
 
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Entity;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,12 +17,10 @@ public class WeaponController {
     private Map<Integer, Body> weaponBodies;
     private Map<Integer, WeaponBody.WeaponBodyData> weapons;
     private Map<Integer, MultiplayerPlayerTweener> animations;
-    private PlayerController playerController;
 
-    public WeaponController(Map<Integer, Body> weaponBodies, Map<Integer, WeaponBody.WeaponBodyData> weapons, PlayerController playerController) {
+    public WeaponController(Map<Integer, Body> weaponBodies, Map<Integer, WeaponBody.WeaponBodyData> weapons) {
         this.weaponBodies = weaponBodies;
         this.weapons = weapons;
-        this.playerController = playerController;
         this.animations = new HashMap<>();
     }
 
@@ -37,14 +36,15 @@ public class WeaponController {
         for (MultiplayerPlayerTweener weaponTweener : animations.values()) {
             weaponTweener.update(dt);
         }
-        for (PlayerBody.PlayerBodyData playerBodyData : playerController.getPlayers().values()) {
-            if (playerBodyData.weapons[playerBodyData.currentWeaponIndex] == null) continue;
-            MultiplayerPlayerTweener weaponTweener = animations.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
-            if (playerBodyData.isAiming) {
-                weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.FIRE);
-            } else {
-                weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
-            }
+    }
+
+    public void updateFireing(PlayerBody.PlayerBodyData playerBodyData) {
+        if (playerBodyData.weapons[playerBodyData.currentWeaponIndex] == null) return;
+        MultiplayerPlayerTweener weaponTweener = animations.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
+        if (playerBodyData.isAiming) {
+            weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.FIRE);
+        } else {
+            weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
         }
     }
 
