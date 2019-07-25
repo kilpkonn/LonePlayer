@@ -85,6 +85,7 @@ public abstract class Weapon extends SpriteAnimation {
 
         Animation(String s, boolean playOnce) {
             name = s;
+            isToPlayOnce = playOnce;
         }
 
         public String toString() {

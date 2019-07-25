@@ -48,8 +48,7 @@ public class WeaponController {
 
         if (playerBodyData.isAiming && data.bulletHeat <= 0) {
             weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.FIRE);
-        } else {
-            weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
+            data.bulletHeat = data.type.getData().getCoolDown();
         }
     }
 

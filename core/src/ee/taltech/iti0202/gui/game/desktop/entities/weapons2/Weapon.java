@@ -32,16 +32,18 @@ public abstract class Weapon extends SpriteAnimation {
     }
 
     public enum Type implements Serializable {
-        DEAGLE ("images/bullets/deagle/deagle.scml", 50),
-        SHOTGUN ("images/bullets/shotgun/shotgun.scml", 50),
-        M4 ("images/bullets/m4/m4.scml", 50);
+        DEAGLE ("images/bullets/deagle/deagle.scml", 50, WeaponData.DEAGLE),
+        SHOTGUN ("images/bullets/shotgun/shotgun.scml", 50, WeaponData.SHOTGUN),
+        M4 ("images/bullets/m4/m4.scml", 50, WeaponData.M4);
 
         private final String animationFile;
         private final int animationSpeed;
+        private final WeaponData data;
 
-        Type(String t, int speed) {
+        Type(String t, int s, WeaponData d) {
             animationFile = t;
-            animationSpeed = speed;
+            animationSpeed = s;
+            data = d;
         }
 
         public String getAnimationFile() {
@@ -50,6 +52,10 @@ public abstract class Weapon extends SpriteAnimation {
 
         public int getAnimationSpeed() {
             return animationSpeed;
+        }
+
+        public WeaponData getData() {
+            return data;
         }
     }
 }
