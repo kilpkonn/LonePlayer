@@ -140,7 +140,7 @@ public class Multiplayer extends GameState {
 
         gameWorld = new GameWorld(act, map);
         worldRenderer = new WorldRenderer(gameWorld, cam);
-        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons());
+        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons(), null);
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
 
         hud = new Hud(hudCam);

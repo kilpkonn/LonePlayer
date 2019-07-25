@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
@@ -19,6 +20,7 @@ import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
+import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Entity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
@@ -61,6 +63,9 @@ public class GameClient implements Disposable {
         kryo.register(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon.class);
         kryo.register(int[].class);
         kryo.register(Play.Bullets.class);
+        kryo.register(Bullet.class);
+        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet.Animation.class);
+        kryo.register(WeaponProjectile.Type.class);
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);

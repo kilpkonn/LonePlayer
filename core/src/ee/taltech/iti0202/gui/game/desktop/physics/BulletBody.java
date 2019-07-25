@@ -50,8 +50,10 @@ public class BulletBody {
         bodyDef.position.set(pos);
         bodyDef.linearVelocity.set(velocity);
 
+        BulletBodyData data = new BulletBodyData(id, type);
         Body body = world.createBody(bodyDef);
-        body.createFixture(fixtureDef).setUserData(new BulletBodyData(id, type));
+        body.setUserData(data);
+        body.createFixture(fixtureDef).setUserData(data);
 
         return body;
     }

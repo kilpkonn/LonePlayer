@@ -1,12 +1,15 @@
 package ee.taltech.iti0202.gui.game.desktop.entities.weapons2;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 
 import java.io.Serializable;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.bullet.Bullet;
 
 public abstract class Weapon extends SpriteAnimation {
 
@@ -29,6 +32,18 @@ public abstract class Weapon extends SpriteAnimation {
 
     public void forceRender(SpriteBatch sb) {
         super.render(sb);
+    }
+
+    public static class BulletInitData {
+        public BulletInitData(Vector2 pos, Vector2 velocity, Bullet.Type type) {
+            this.pos = pos;
+            this.velocity = velocity;
+            this.type = type;
+        }
+
+        public Vector2 pos;
+        public Vector2 velocity;
+        public Bullet.Type type;
     }
 
     public enum Type implements Serializable {

@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
@@ -69,6 +70,9 @@ public class GameServer implements Disposable {
         kryo.register(Weapon.class);
         kryo.register(int[].class);
         kryo.register(Play.Bullets.class);
+        kryo.register(Bullet.class);
+        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet.Animation.class);
+        kryo.register(WeaponProjectile.Type.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");

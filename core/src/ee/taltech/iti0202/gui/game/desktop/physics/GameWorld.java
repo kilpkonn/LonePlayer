@@ -145,6 +145,7 @@ public class GameWorld implements Disposable {
             players.put(player.bodyId, (PlayerBody.PlayerBodyData) playerBody.getUserData());
             if (player.bodyId < newPlayerIdentifier) newPlayerIdentifier = player.bodyId;
         }
+        if (world.isLocked()) return;
         Body body = playerBodies.get(player.bodyId);
         body.setTransform(player.position, 0);
         body.setLinearVelocity(player.velocity);
@@ -160,6 +161,7 @@ public class GameWorld implements Disposable {
             weapons.put(weapon.bodyId, (WeaponBody.WeaponBodyData) weaponBody.getUserData());
             if (weapon.bodyId < newPlayerIdentifier) newPlayerIdentifier = weapon.bodyId;
         }
+        if (world.isLocked()) return;
         Body body = weaponBodies.get(weapon.bodyId);
         body.setTransform(weapon.position, weapon.angle);
         body.setLinearVelocity(weapon.velocity);
@@ -167,11 +169,12 @@ public class GameWorld implements Disposable {
 
     public void updateBullet(Bullet bullet) {
         if (!bulletBodies.containsKey(bullet.bodyId)) {
-            Body bulletBody = BulletBody.createBullet(world, bullet.position, bullet.velocity, bullet.bodyId, bullet.type);
+            Body bulletBody = BulletBody.createBullet(world, bullet.position, bullet.velocity, bullet.bodyId, bullet.type);  //todo: FIX BULLETS spawning at (0,0)
             bulletBodies.put(bullet.bodyId, bulletBody);
             bullets.put(bullet.bodyId, (BulletBody.BulletBodyData) bulletBody.getUserData());
             if (bullet.bodyId < newBulletIdentifier) newBulletIdentifier = bullet.bodyId;
         }
+        if (world.isLocked()) return;
         Body body = bulletBodies.get(bullet.bodyId);
         body.setTransform(bullet.position, bullet.angle);
         body.setLinearVelocity(bullet.velocity);

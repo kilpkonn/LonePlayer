@@ -9,5 +9,6 @@ public class Bullet extends WeaponProjectile {
 
     public Bullet(Body body, SpriteBatch sb) {
         super(body, sb, Type.BULLET.getAnimationFile());
+        setScale(0.03f);
     }
 }

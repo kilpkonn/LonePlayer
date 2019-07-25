@@ -230,7 +230,7 @@ public class PlayerController {
             data.aimAngle = aimAngle;
             return true;
         }
-        weaponController.updateFireing(data);
+        weaponController.updateFiring(data);
         return false;
     }
 

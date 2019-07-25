@@ -1,6 +1,5 @@
 package ee.taltech.iti0202.gui.game.networking.server;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -35,7 +34,7 @@ public class ServerLogic implements Disposable {
         if (gameWorld != null) gameWorld.dispose();
         gameWorld = new GameWorld(act, map);
         bulletController = new BulletController(gameWorld.getBulletBodies(), gameWorld.getBullets());
-        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons());
+        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons(), this);
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
     }
 
@@ -58,7 +57,7 @@ public class ServerLogic implements Disposable {
         weapons.add(weapon);
     }
 
-    private void addBullet(Bullet bullet) {
+    public void addBullet(Bullet bullet) {
         bullet.bodyId = gameWorld.addBullet(bullet.position, bullet.velocity, bullet.type);
         bulletController.addAnimation(bullet.bodyId, bullet.type);
         bullets.add(bullet);
@@ -91,7 +90,7 @@ public class ServerLogic implements Disposable {
             player.doubleJump = bodyData.doubleJump;
             player.dimension = bodyData.dimension;
 
-            player.position = body.getTransform().getPosition();
+            player.position = body.getPosition();
             player.velocity = body.getLinearVelocity();
 
             player.animation = animation.getCurrentAnimation();
@@ -113,7 +112,7 @@ public class ServerLogic implements Disposable {
             WeaponBody.WeaponBodyData bodyData = gameWorld.getWeapons().get(weapon.bodyId);
             MultiplayerPlayerTweener animation = weaponController.getAnimations().get(weapon.bodyId);
 
-            weapon.position = body.getTransform().getPosition();
+            weapon.position = body.getPosition();
             weapon.angle = body.getAngle();
             weapon.velocity = body.getLinearVelocity();
 
@@ -130,7 +129,7 @@ public class ServerLogic implements Disposable {
             BulletBody.BulletBodyData bodyData = gameWorld.getBullets().get(bullet.bodyId);
             MultiplayerPlayerTweener animation = bulletController.getAnimations().get(bullet.bodyId);
 
-            bullet.position = body.getTransform().getPosition();
+            bullet.position = body.getPosition();
             bullet.angle = body.getAngle();
             bullet.velocity = body.getLinearVelocity();
 

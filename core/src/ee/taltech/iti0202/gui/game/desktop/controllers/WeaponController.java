@@ -8,20 +8,24 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
+import ee.taltech.iti0202.gui.game.networking.server.ServerLogic;
 
 public class WeaponController {
 
+    private ServerLogic serverLogic;
     private Map<Integer, Body> weaponBodies;
     private Map<Integer, WeaponBody.WeaponBodyData> weapons;
     private Map<Integer, MultiplayerPlayerTweener> animations;
 
-    public WeaponController(Map<Integer, Body> weaponBodies, Map<Integer, WeaponBody.WeaponBodyData> weapons) {
+    public WeaponController(Map<Integer, Body> weaponBodies, Map<Integer, WeaponBody.WeaponBodyData> weapons, ServerLogic serverLogic) {
         this.weaponBodies = weaponBodies;
         this.weapons = weapons;
-        this.animations = new HashMap<>();
+        this.serverLogic = serverLogic;
+        animations = new HashMap<>();
     }
 
     public void addAnimation(int id, Weapon.Type type) {
@@ -41,14 +45,25 @@ public class WeaponController {
         }
     }
 
-    public void updateFireing(PlayerBody.PlayerBodyData playerBodyData) {
+    public void updateFiring(PlayerBody.PlayerBodyData playerBodyData) {
         if (playerBodyData.weapons[playerBodyData.currentWeaponIndex] == null) return;
+        Body body = weaponBodies.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
         WeaponBody.WeaponBodyData data = weapons.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
         MultiplayerPlayerTweener weaponTweener = animations.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
 
-        if (playerBodyData.isAiming && data.bulletHeat <= 0) {
+        if (playerBodyData.isAiming && data.bulletHeat <= 0) {  // TODO: Fix no shooting animation when aim moving
             weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.FIRE);
             data.bulletHeat = data.type.getData().getCoolDown();
+
+            if (serverLogic != null) {
+                for (Weapon.BulletInitData b : data.type.getData().generateBulletsShot(body.getTransform().getPosition() ,playerBodyData.aimAngle, Bullet.Type.BULLET)) {  //TODO: Bullet types..
+                    ee.taltech.iti0202.gui.game.networking.server.entity.Bullet bullet = new ee.taltech.iti0202.gui.game.networking.server.entity.Bullet();
+                    bullet.position = b.pos;
+                    bullet.velocity = b.velocity;
+                    bullet.type = b.type;
+                    serverLogic.addBullet(bullet);
+                }
+            }
         }
     }
 
