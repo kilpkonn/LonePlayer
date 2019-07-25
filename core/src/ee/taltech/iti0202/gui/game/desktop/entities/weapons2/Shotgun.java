@@ -8,6 +8,6 @@ public class Shotgun extends Weapon {
     public Shotgun(Body body, SpriteBatch sb) {
         super(body, sb, Type.SHOTGUN.getAnimationFile());
         setScale(0.1f);
-        setAnimationSpeed(50);
+        setAnimationSpeed(Type.SHOTGUN.getAnimationSpeed());
     }
 }

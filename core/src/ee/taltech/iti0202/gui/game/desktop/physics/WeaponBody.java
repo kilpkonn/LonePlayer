@@ -41,6 +41,7 @@ public class WeaponBody {
 
     public static class WeaponBodyData extends BodyData{
         public Weapon.Type type;
+        public float bulletHeat = 0;
         public boolean flippedAnimation;
         public boolean dropped = true;
 

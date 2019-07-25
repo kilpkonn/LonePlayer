@@ -7,6 +7,6 @@ public class Deagle extends Weapon {
     public Deagle(Body body, SpriteBatch sb) {
         super(body, sb, Type.DEAGLE.getAnimationFile());
         setScale(0.1f);
-        setAnimationSpeed(50);
+        setAnimationSpeed(Type.DEAGLE.getAnimationSpeed());
     }
 }

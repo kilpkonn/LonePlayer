@@ -8,6 +8,6 @@ public class M4 extends Weapon {
     public M4(Body body, SpriteBatch sb) {
         super(body, sb, Type.M4.getAnimationFile());
         setScale(0.1f);
-        setAnimationSpeed(50);
+        setAnimationSpeed(Type.M4.getAnimationSpeed());
     }
 }

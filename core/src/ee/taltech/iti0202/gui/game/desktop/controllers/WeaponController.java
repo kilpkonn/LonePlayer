@@ -33,6 +33,9 @@ public class WeaponController {
     }
 
     public void updateAnimations(float dt) {
+        for (WeaponBody.WeaponBodyData data : weapons.values()) {
+            if (data.bulletHeat > 0) data.bulletHeat -= dt;
+        }
         for (MultiplayerPlayerTweener weaponTweener : animations.values()) {
             weaponTweener.update(dt);
         }
@@ -40,8 +43,10 @@ public class WeaponController {
 
     public void updateFireing(PlayerBody.PlayerBodyData playerBodyData) {
         if (playerBodyData.weapons[playerBodyData.currentWeaponIndex] == null) return;
+        WeaponBody.WeaponBodyData data = weapons.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
         MultiplayerPlayerTweener weaponTweener = animations.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
-        if (playerBodyData.isAiming) {
+
+        if (playerBodyData.isAiming && data.bulletHeat <= 0) {
             weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.FIRE);
         } else {
             weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
