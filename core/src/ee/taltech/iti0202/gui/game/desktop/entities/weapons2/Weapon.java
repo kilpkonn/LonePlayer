@@ -34,7 +34,7 @@ public abstract class Weapon extends SpriteAnimation {
     public enum Type implements Serializable {
         DEAGLE ("images/bullets/deagle/deagle.scml", 50, WeaponData.DEAGLE),
         SHOTGUN ("images/bullets/shotgun/shotgun.scml", 50, WeaponData.SHOTGUN),
-        M4 ("images/bullets/m4/m4.scml", 50, WeaponData.M4);
+        M4 ("images/bullets/m4/m4.scml", 70, WeaponData.M4);
 
         private final String animationFile;
         private final int animationSpeed;

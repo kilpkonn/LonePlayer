@@ -3,14 +3,14 @@ package ee.taltech.iti0202.gui.game.desktop.entities.weapons2;
 public enum  WeaponData {
     DEAGLE (1f, 100),
     SHOTGUN (1.5f, 100),
-    M4 (0.2f , 300);
+    M4 (0.2f , 400);
 
     private final float coolDown;
     private final int bulletDmg;
 
-    WeaponData(float c, int speed) {
+    WeaponData(float c, int dmg) {
         coolDown = c;
-        bulletDmg = speed;
+        bulletDmg = dmg;
     }
 
     public float getCoolDown() {
