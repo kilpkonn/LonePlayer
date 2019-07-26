@@ -64,7 +64,7 @@ public class PlayerController {
         for (Map.Entry<Integer, PlayerBody.PlayerBodyData> entry : players.entrySet()) {
             Vector2 playerPos = playerBodies.get(entry.getValue().id).getPosition();
             Timeline.Key.Bone hand = animations.get(entry.getKey()).getBone("right_hand");
-            Vector2 handPos = new Vector2(playerPos.x + hand.position.x * 0.12f / PPM, playerPos.y + hand.position.y * 0.08f / PPM);  //0.08 is player model scale
+            Vector2 handPos = new Vector2(playerPos.x + hand.position.x * 0.08f / PPM, playerPos.y + hand.position.y * 0.08f / PPM);  //0.08 is player model scale
             float angle = (float) Math.toRadians(hand.angle);
 
             for (WeaponBody.WeaponBodyData weapon : entry.getValue().weapons) {

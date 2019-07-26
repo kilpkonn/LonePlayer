@@ -130,7 +130,6 @@ public class MultiplayerContactListener implements ContactListener {
                     if (data.weapons[i] == null) {
                         data.weapons[i] = weaponBodyData;
                         weaponBodyData.dropped = false;
-
                         filter.groupIndex = fa.getFilterData().groupIndex;
                         filter.categoryBits = fa.getFilterData().categoryBits;
                         filter.maskBits = mask;

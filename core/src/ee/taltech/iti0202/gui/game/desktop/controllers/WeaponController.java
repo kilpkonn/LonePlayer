@@ -46,7 +46,7 @@ public class WeaponController {
         }
     }
 
-    public void updateFiring(PlayerBody.PlayerBodyData playerBodyData) {  //TODO: hand pos is bad as it is now, need actual hand pos
+    public void updateFiring(PlayerBody.PlayerBodyData playerBodyData) {
         if (playerBodyData.weapons[playerBodyData.currentWeaponIndex] == null) return;
         Body body = weaponBodies.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
         WeaponBody.WeaponBodyData data = weapons.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
@@ -57,7 +57,7 @@ public class WeaponController {
             data.bulletHeat = data.type.getData().getCoolDown();
 
             if (serverLogic != null) {
-                for (Weapon.BulletInitData b : data.type.getData().generateBulletsShot(body.getPosition() ,playerBodyData.aimAngle, Bullet.Type.BULLET)) {  //TODO: Bullet types..
+                for (Weapon.BulletInitData b : data.type.getData().generateBulletsShot(body.getPosition(), playerBodyData.aimAngle, Bullet.Type.BULLET)) {  //TODO: Bullet types..
                     ee.taltech.iti0202.gui.game.networking.server.entity.Bullet bullet = new ee.taltech.iti0202.gui.game.networking.server.entity.Bullet();
                     bullet.position = b.pos;
                     bullet.velocity = b.velocity;
