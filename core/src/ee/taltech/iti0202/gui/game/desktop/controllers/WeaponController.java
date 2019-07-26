@@ -46,7 +46,7 @@ public class WeaponController {
         }
     }
 
-    public void updateFiring(PlayerBody.PlayerBodyData playerBodyData, Vector2 handPos) {  //TODO: hand pos is bad as it is now
+    public void updateFiring(PlayerBody.PlayerBodyData playerBodyData, Vector2 handPos) {  //TODO: hand pos is bad as it is now, need actual hand pos
         if (playerBodyData.weapons[playerBodyData.currentWeaponIndex] == null) return;
         // Body body = weaponBodies.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
         WeaponBody.WeaponBodyData data = weapons.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);

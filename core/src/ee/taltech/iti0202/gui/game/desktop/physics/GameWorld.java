@@ -203,7 +203,7 @@ public class GameWorld implements Disposable {
                 case "hitboxes":
                     fixtureDef.filter.categoryBits = TERRA_SQUARES;
                     fixtureDef.filter.maskBits =
-                            BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON;
+                            BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON | BIT_BULLET;
                     determineMapObject(layer, fixtureDef);
                     break;
             }
