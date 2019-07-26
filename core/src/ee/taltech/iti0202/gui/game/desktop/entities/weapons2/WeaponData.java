@@ -31,9 +31,9 @@ public enum  WeaponData {
     public Set<Weapon.BulletInitData> generateBulletsShot(Vector2 pos, float angle, Bullet.Type type) {
         Set<Weapon.BulletInitData> bullets = new HashSet<>();
         for (int i = 0; i < bulletsPerShot; i++) {
-            float x = (float) (Math.cos(angle) + Math.random() * 0.1 * 1000);
-            float y = (float) (Math.sin(angle) + Math.random() * 0.1 * 1000);
-            bullets.add(new Weapon.BulletInitData(pos, new Vector2(x, y), type));
+            float x = (float) (Math.cos(angle) + Math.random() * 0.1) * 1000f;
+            float y = (float) (Math.sin(angle) + Math.random() * 0.1) * 1000f;
+            bullets.add(new Weapon.BulletInitData(pos, new Vector2(x, y), angle, type));
         }
         return bullets;
     }

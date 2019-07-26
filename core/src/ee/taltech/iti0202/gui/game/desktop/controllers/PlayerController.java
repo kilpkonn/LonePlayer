@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.brashmonkey.spriter.Entity;
+import com.brashmonkey.spriter.Timeline;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,6 +14,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayer
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
+import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
@@ -23,6 +25,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_SIDE;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_DASH_FORCE_UP;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PLAYER_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
@@ -57,6 +60,17 @@ public class PlayerController {
     public void updateAnimations(float dt) {
         for (MultiplayerPlayerTweener playerTweener : animations.values()) {
             playerTweener.update(dt);
+        }
+        for (Map.Entry<Integer, PlayerBody.PlayerBodyData> entry : players.entrySet()) {
+            Vector2 playerPos = playerBodies.get(entry.getValue().id).getPosition();
+            Timeline.Key.Bone hand = animations.get(entry.getKey()).getBone("right_hand");
+            Vector2 handPos = new Vector2(playerPos.x + hand.position.x * 0.12f / PPM, playerPos.y + hand.position.y * 0.08f / PPM);  //0.08 is player model scale
+            float angle = (float) Math.toRadians(hand.angle);
+
+            for (WeaponBody.WeaponBodyData weapon : entry.getValue().weapons) {
+                if (weapon != null)
+                    weaponController.trySetWeaponTransform(weapon.id, handPos, angle);
+            }
         }
     }
 
@@ -230,7 +244,7 @@ public class PlayerController {
             data.aimAngle = aimAngle;
             return true;
         }
-        weaponController.updateFiring(data, playerBodies.get(id).getPosition());
+        weaponController.updateFiring(data);
         return false;
     }
 

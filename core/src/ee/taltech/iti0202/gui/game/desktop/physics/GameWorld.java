@@ -99,10 +99,10 @@ public class GameWorld implements Disposable {
         return newWeaponIdentifier;
     }
 
-    public int addBullet(Vector2 pos, Vector2 velocity, WeaponProjectile.Type type) {
+    public int addBullet(Vector2 pos, Vector2 velocity, float angle,  WeaponProjectile.Type type) {
         newBulletIdentifier++;
 
-        Body bullet = BulletBody.createBullet(world, pos, velocity, newBulletIdentifier, type);
+        Body bullet = BulletBody.createBullet(world, pos, velocity, angle, newBulletIdentifier, type);
         bulletBodies.put(newBulletIdentifier, bullet);
         bullets.put(newBulletIdentifier, (BulletBody.BulletBodyData) bullet.getUserData());
         return newBulletIdentifier;
@@ -169,7 +169,7 @@ public class GameWorld implements Disposable {
 
     public void updateBullet(Bullet bullet) {
         if (!bulletBodies.containsKey(bullet.bodyId)) {
-            Body bulletBody = BulletBody.createBullet(world, bullet.position, bullet.velocity, bullet.bodyId, bullet.type);  //todo: FIX BULLETS spawning at (0,0)
+            Body bulletBody = BulletBody.createBullet(world, bullet.position, bullet.velocity, bullet.angle, bullet.bodyId, bullet.type);
             bulletBodies.put(bullet.bodyId, bulletBody);
             bullets.put(bullet.bodyId, (BulletBody.BulletBodyData) bulletBody.getUserData());
             if (bullet.bodyId < newBulletIdentifier) newBulletIdentifier = bullet.bodyId;

@@ -35,14 +35,16 @@ public abstract class Weapon extends SpriteAnimation {
     }
 
     public static class BulletInitData {
-        public BulletInitData(Vector2 pos, Vector2 velocity, Bullet.Type type) {
+        public BulletInitData(Vector2 pos, Vector2 velocity, float angle, Bullet.Type type) {
             this.pos = pos;
             this.velocity = velocity;
+            this.angle = angle;
             this.type = type;
         }
 
         public Vector2 pos;
         public Vector2 velocity;
+        public float angle;
         public Bullet.Type type;
     }
 
