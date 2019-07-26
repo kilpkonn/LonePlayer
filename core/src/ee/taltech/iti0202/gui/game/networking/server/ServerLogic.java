@@ -133,8 +133,6 @@ public class ServerLogic implements Disposable {
             bullet.angle = body.getAngle();
             bullet.velocity = body.getLinearVelocity();
 
-            System.out.println(bullet.position);
-
             bullet.isHit = bodyData.isHit;
             bullet.type = bodyData.type;
             bullet.animation = animation.getCurrentAnimation();

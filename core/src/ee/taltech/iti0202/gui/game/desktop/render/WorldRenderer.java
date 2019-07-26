@@ -76,6 +76,10 @@ public class WorldRenderer implements Handler {
             weapon.update(dt);
         }
 
+        for (WeaponProjectile projectile : bullets.values()) {
+            projectile.update(dt);
+        }
+
         // Set camera
         if (playerToFollow != null) {
             Body playerLocation = gameWorld.getPlayerBodies().get(playerToFollow.bodyId);
