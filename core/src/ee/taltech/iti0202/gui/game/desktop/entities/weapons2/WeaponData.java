@@ -8,9 +8,9 @@ import java.util.Set;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.bullet.Bullet;
 
 public enum  WeaponData {
-    DEAGLE (1f, 1),
-    SHOTGUN (1.5f, 5),
-    M4 (0.2f , 1);
+    DEAGLE (0.8f, 1),
+    SHOTGUN (1f, 5),
+    M4 (0.15f , 1);
 
     private final float coolDown;
     private final int bulletsPerShot;
@@ -32,7 +32,7 @@ public enum  WeaponData {
         Set<Weapon.BulletInitData> bullets = new HashSet<>();
         for (int i = 0; i < bulletsPerShot; i++) {
             float x = (float) (Math.cos(angle) + Math.random() * 0.1) * 1000f;
-            float y = (float) -(Math.sin(angle) + Math.random() * 0.1) * 1000f;
+            float y = (float) (Math.sin(angle) + Math.random() * 0.1) * 1000f;
             //pos = new Vector2(pos.x + x * 0.01f, pos.y + y * 0.01f); // Spawn 0.1 s ahead to avoid collision with shooter
             bullets.add(new Weapon.BulletInitData(pos, new Vector2(x, y), angle, type));
         }

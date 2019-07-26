@@ -265,7 +265,7 @@ public class Multiplayer extends GameState {
         if (MyInput.isMouseDown(Game.settings.SHOOT)) {
             controls.isAiming = true;
             controls.aimingAngle = (float) Math.atan2(
-                    MyInput.getMouseLocation().y - (double) V_HEIGHT / 2,
+                    -MyInput.getMouseLocation().y + (double) V_HEIGHT / 2,
                     MyInput.getMouseLocation().x - (double) V_WIDTH / 2);
         }
     }

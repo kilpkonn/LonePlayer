@@ -82,7 +82,23 @@ public class MultiplayerContactListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
+        Fixture fa = contact.getFixtureA();
+        Fixture fb = contact.getFixtureB();
 
+        Object oa = fa.getUserData();
+        Object ob = fb.getUserData();
+
+        if (oa instanceof WeaponBody.WeaponBodyData) {
+            if (!((WeaponBody.WeaponBodyData) oa).dropped) {
+                contact.setEnabled(false);
+            }
+        }
+
+        if (ob instanceof WeaponBody.WeaponBodyData) {
+            if (!((WeaponBody.WeaponBodyData) ob).dropped) {
+                contact.setEnabled(false);
+            }
+        }
     }
 
     @Override
@@ -112,10 +128,10 @@ public class MultiplayerContactListener implements ContactListener {
                         data.weapons[i] = weaponBodyData;
                         weaponBodyData.dropped = false;
 
-                        filter.groupIndex = fb.getFilterData().groupIndex;
+                        /*filter.groupIndex = fb.getFilterData().groupIndex;
                         filter.categoryBits = fb.getFilterData().categoryBits;
                         filter.maskBits = mask;
-                        fb.setFilterData(filter);
+                        fb.setFilterData(filter);*/
                         break;
                     }
                 }
@@ -130,10 +146,10 @@ public class MultiplayerContactListener implements ContactListener {
                     if (data.weapons[i] == null) {
                         data.weapons[i] = weaponBodyData;
                         weaponBodyData.dropped = false;
-                        filter.groupIndex = fa.getFilterData().groupIndex;
+                        /*filter.groupIndex = fa.getFilterData().groupIndex;
                         filter.categoryBits = fa.getFilterData().categoryBits;
                         filter.maskBits = mask;
-                        fa.setFilterData(filter);
+                        fa.setFilterData(filter);*/
                         break;
                     }
                 }

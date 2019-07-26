@@ -34,7 +34,7 @@ public class Player2 extends SpriteAnimation {
                             ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
                             : (float) (Math.PI / 8));
             float flipped = isFlippedX() ? -(float) Math.PI / 4 + (float) Math.PI : 0;
-            rotateBone("right_shoulder", (((float) -Math.toDegrees(aimAngle + offset + flipped))));
+            rotateBone("right_shoulder", (((float) Math.toDegrees(aimAngle + offset + flipped))));
         }
 
         Timeline.Key.Bone hand = getBone("right_hand");
