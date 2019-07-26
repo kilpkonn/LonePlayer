@@ -7,7 +7,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.bullet.Bullet;
 
 public class WeaponProjectileBuilder {
     private Body body;
-    private SpriteBatch sb;
+    private SpriteBatch spriteBatch;
     private WeaponProjectile.Type type;
 
     public WeaponProjectileBuilder setBody(Body body) {
@@ -15,8 +15,8 @@ public class WeaponProjectileBuilder {
         return this;
     }
 
-    public WeaponProjectileBuilder setSb(SpriteBatch sb) {
-        this.sb = sb;
+    public WeaponProjectileBuilder setSpriteBatch(SpriteBatch spriteBatch) {
+        this.spriteBatch = spriteBatch;
         return this;
     }
 
@@ -28,7 +28,7 @@ public class WeaponProjectileBuilder {
     public WeaponProjectile createWeaponProjectile() {
         switch (type) {
             case BULLET:
-                return new Bullet(body, sb);
+                return new Bullet(body, spriteBatch);
         }
         return null;  // Never get here
     }

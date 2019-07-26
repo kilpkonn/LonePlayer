@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.controllers;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Entity;
 
@@ -45,9 +46,9 @@ public class WeaponController {
         }
     }
 
-    public void updateFiring(PlayerBody.PlayerBodyData playerBodyData) {
+    public void updateFiring(PlayerBody.PlayerBodyData playerBodyData, Vector2 handPos) {  //TODO: hand pos is bad as it is now
         if (playerBodyData.weapons[playerBodyData.currentWeaponIndex] == null) return;
-        Body body = weaponBodies.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
+        // Body body = weaponBodies.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
         WeaponBody.WeaponBodyData data = weapons.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
         MultiplayerPlayerTweener weaponTweener = animations.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
 
@@ -56,7 +57,7 @@ public class WeaponController {
             data.bulletHeat = data.type.getData().getCoolDown();
 
             if (serverLogic != null) {
-                for (Weapon.BulletInitData b : data.type.getData().generateBulletsShot(body.getTransform().getPosition() ,playerBodyData.aimAngle, Bullet.Type.BULLET)) {  //TODO: Bullet types..
+                for (Weapon.BulletInitData b : data.type.getData().generateBulletsShot(handPos ,playerBodyData.aimAngle, Bullet.Type.BULLET)) {  //TODO: Bullet types..
                     ee.taltech.iti0202.gui.game.networking.server.entity.Bullet bullet = new ee.taltech.iti0202.gui.game.networking.server.entity.Bullet();
                     bullet.position = b.pos;
                     bullet.velocity = b.velocity;

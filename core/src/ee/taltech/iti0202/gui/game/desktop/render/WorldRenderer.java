@@ -155,7 +155,7 @@ public class WorldRenderer implements Handler {
             if (!bullets.containsKey(bulletEntry.getKey())) {
                 bullets.put(bulletEntry.getKey(), new WeaponProjectileBuilder()
                 .setBody(bulletEntry.getValue())
-                .setSb(sb)
+                .setSpriteBatch(sb)
                 .setType(gameWorld.getBullets().get(bulletEntry.getKey()).type)
                 .createWeaponProjectile());
             }
