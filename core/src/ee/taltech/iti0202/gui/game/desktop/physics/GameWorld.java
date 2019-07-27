@@ -18,8 +18,10 @@ import com.badlogic.gdx.utils.Disposable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
@@ -62,6 +64,9 @@ public class GameWorld implements Disposable {
     private int newWeaponIdentifier;
     private int newBulletIdentifier;
 
+    private Set<Integer> weaponsRemoved = new HashSet<>();
+    private Set<Integer> bulletsRemoved = new HashSet<>();
+
     public GameWorld(String act, String map) {
         contactListener = new MultiplayerContactListener(players);
         world.setContactListener(contactListener);
@@ -73,6 +78,16 @@ public class GameWorld implements Disposable {
 
     public void update(float dt) {
         world.step(dt, 10, 2);
+        for (int id : contactListener.weaponsToRemove) {
+            removeWeapon(id);
+            weaponsRemoved.add(id);
+        }
+        for (int id : contactListener.bulletsToRemove) {
+            removeBullet(id);
+            bulletsRemoved.add(id);
+        }
+        contactListener.weaponsToRemove.clear();
+        contactListener.bulletsToRemove.clear();
     }
 
     public int addPlayer() {
@@ -239,6 +254,14 @@ public class GameWorld implements Disposable {
             world.createBody(bodyDef).createFixture(fixtureDef).setUserData(layer.getName());
             shape.dispose();
         }
+    }
+
+    public Set<Integer> getWeaponsRemoved() {
+        return weaponsRemoved;
+    }
+
+    public Set<Integer> getBulletsRemoved() {
+        return bulletsRemoved;
     }
 
     public Map<Integer, Body> getBulletBodies() {

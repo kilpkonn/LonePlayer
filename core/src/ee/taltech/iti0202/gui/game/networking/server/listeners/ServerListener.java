@@ -8,7 +8,6 @@ import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
 
 public class ServerListener extends Listener {
 

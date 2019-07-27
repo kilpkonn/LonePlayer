@@ -114,7 +114,7 @@ public class GameServer implements Disposable {
 
         Play.Weapons weapons = new Play.Weapons();
         int i = 0;
-        for (Weapon weapon : serverLogic.getWeapons()) {
+        for (Weapon weapon : serverLogic.getWeapons().values()) {
             weapons.weapons.add(weapon);
             i++;
             if (i >= 10) {
@@ -127,7 +127,7 @@ public class GameServer implements Disposable {
 
         Play.Bullets bullets = new Play.Bullets();
         i = 0;
-        for (Bullet bullet : serverLogic.getBullets()) {
+        for (Bullet bullet : serverLogic.getBullets().values()) {
             bullets.bullets.add(bullet);
             i++;
             if (i >= 15) {

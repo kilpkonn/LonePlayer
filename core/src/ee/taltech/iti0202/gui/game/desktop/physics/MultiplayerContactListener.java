@@ -3,21 +3,19 @@ package ee.taltech.iti0202.gui.game.desktop.physics;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
 
 public class MultiplayerContactListener implements ContactListener {
 
     public Map<Integer, PlayerBody.PlayerBodyData> players;
+    public Set<Integer> weaponsToRemove = new HashSet<>();
+    public Set<Integer> bulletsToRemove = new HashSet<>();
 
     public MultiplayerContactListener(Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.players = players;
@@ -31,7 +29,6 @@ public class MultiplayerContactListener implements ContactListener {
         Object oa = fa.getUserData();
         Object ob = fb.getUserData();
 
-        //if (oa != null && ob != null) {
 
         // detect bullet collision
         bulletDetection(fa, fb);
@@ -45,7 +42,8 @@ public class MultiplayerContactListener implements ContactListener {
 
         // detection happens when player goes outside of initial game border
         dmgDetection(oa, ob);
-        //}
+
+        borderDetection(oa, ob);
     }
 
     @Override
@@ -115,10 +113,29 @@ public class MultiplayerContactListener implements ContactListener {
         }
     }
 
+    private void borderDetection(Object oa, Object ob) {
+        if (oa == null || ob == null) return;
+        if (oa.equals("barrier")) {
+            if (ob instanceof WeaponBody.WeaponBodyData) {
+                weaponsToRemove.add(((WeaponBody.WeaponBodyData) ob).id);
+            } else if (ob instanceof BulletBody.BulletBodyData) {
+                bulletsToRemove.add(((BulletBody.BulletBodyData) ob).id);
+            }
+        }
+
+        if (ob.equals("barrier")) {
+            if (oa instanceof WeaponBody.WeaponBodyData) {
+                weaponsToRemove.add(((WeaponBody.WeaponBodyData) oa).id);
+            } else if (oa instanceof BulletBody.BulletBodyData) {
+                bulletsToRemove.add(((BulletBody.BulletBodyData) oa).id);
+            }
+        }
+    }
+
     private void weaponPickup(Object oa, Object ob, Fixture fa, Fixture fb) {
         // TODO: Seems to fail often when 1 weapon is already picked up
-        short mask = TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2 | BIT_BULLET;
-        Filter filter = new Filter();
+        //short mask = TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2 | BIT_BULLET;
+        //Filter filter = new Filter();
         if (oa != null && PlayerBody.class.equals(oa.getClass().getEnclosingClass()) && ob instanceof WeaponBody.WeaponBodyData) {
             PlayerBody.PlayerBodyData data = players.get(((BodyData) oa).id);
             WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) ob;
