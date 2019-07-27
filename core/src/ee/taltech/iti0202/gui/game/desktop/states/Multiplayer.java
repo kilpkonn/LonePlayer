@@ -194,7 +194,7 @@ public class Multiplayer extends GameState {
         worldRenderer.update(dt);
 
         if (playerToFollow != null) {
-            controls.id = playerToFollow.id;
+            controls.id = playerToFollow.bodyId;
             controls.dimension = dimension;
             controls.idle = !(controls.jump || controls.dashLeft || controls.dashRight || controls.moveLeft || controls.moveRight);
             Game.client.updatePlayerControls(controls);
