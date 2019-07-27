@@ -1,5 +1,6 @@
 package ee.taltech.iti0202.gui.game.desktop.physics;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
@@ -9,6 +10,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
 
 public class MultiplayerContactListener implements ContactListener {
@@ -38,10 +41,10 @@ public class MultiplayerContactListener implements ContactListener {
 
         groundDetection(oa, ob);
 
-        weaponPickup(oa, ob, fa, fa);
+        weaponPickup(oa, ob);
 
         // detection happens when player goes outside of initial game border
-        dmgDetection(oa, ob);
+        dmgDetection(oa, ob, fa.getBody(), fb.getBody());
 
         borderDetection(oa, ob);
     }
@@ -132,10 +135,7 @@ public class MultiplayerContactListener implements ContactListener {
         }
     }
 
-    private void weaponPickup(Object oa, Object ob, Fixture fa, Fixture fb) {
-        // TODO: Seems to fail often when 1 weapon is already picked up
-        //short mask = TERRA_SQUARES | BACKGROUND | TERRA_DIMENSION_1 | TERRA_DIMENSION_2 | BIT_BULLET;
-        //Filter filter = new Filter();
+    private void weaponPickup(Object oa, Object ob) {
         if (oa != null && PlayerBody.class.equals(oa.getClass().getEnclosingClass()) && ob instanceof WeaponBody.WeaponBodyData) {
             PlayerBody.PlayerBodyData data = players.get(((BodyData) oa).id);
             WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) ob;
@@ -144,11 +144,6 @@ public class MultiplayerContactListener implements ContactListener {
                     if (data.weapons[i] == null) {
                         data.weapons[i] = weaponBodyData;
                         weaponBodyData.dropped = false;
-
-                        /*filter.groupIndex = fb.getFilterData().groupIndex;
-                        filter.categoryBits = fb.getFilterData().categoryBits;
-                        filter.maskBits = mask;
-                        fb.setFilterData(filter);*/
                         break;
                     }
                 }
@@ -163,10 +158,6 @@ public class MultiplayerContactListener implements ContactListener {
                     if (data.weapons[i] == null) {
                         data.weapons[i] = weaponBodyData;
                         weaponBodyData.dropped = false;
-                        /*filter.groupIndex = fa.getFilterData().groupIndex;
-                        filter.categoryBits = fa.getFilterData().categoryBits;
-                        filter.maskBits = mask;
-                        fa.setFilterData(filter);*/
                         break;
                     }
                 }
@@ -183,22 +174,30 @@ public class MultiplayerContactListener implements ContactListener {
         }
     }
 
-    private void dmgDetection(Object oa, Object ob) {
+    private void dmgDetection(Object oa, Object ob, Body ba, Body bb) {
         if (oa == null || ob == null) {
             return;
         }
 
-        if (oa instanceof PlayerBody.PlayerBodyData) {
-            PlayerBody.PlayerBodyData player = players.get(((PlayerBody.PlayerBodyData) oa).id);
+        if (oa instanceof PlayerBody.PlayerBodyData || oa instanceof PlayerBody.PlayerFoot) {
+            PlayerBody.PlayerBodyData player = players.get(((BodyData) oa).id);
             if (ob.equals("barrier")) {
                 player.health = 0;
+            } else if (ob.equals("hitboxes")) {
+                if (Math.abs(ba.getLinearVelocity().y) > B2DVars.DMG_ON_LANDING_SPEED) {
+                    player.health -= Math.abs(ba.getLinearVelocity().y / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
+                }
             }
         }
 
-        if (ob instanceof PlayerBody.PlayerBodyData) {
-            PlayerBody.PlayerBodyData player = players.get(((PlayerBody.PlayerBodyData) ob).id);
+        if (ob instanceof PlayerBody.PlayerBodyData || ob instanceof PlayerBody.PlayerFoot) {
+            PlayerBody.PlayerBodyData player = players.get(((BodyData) ob).id);
             if (oa.equals("barrier")) {
                 player.health = 0;
+            } else if (oa.equals("hitboxes")) {
+                if (Math.abs(bb.getLinearVelocity().y) > B2DVars.DMG_ON_LANDING_SPEED) {
+                    player.health -= Math.abs(bb.getLinearVelocity().y / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
+                }
             }
         }
     }

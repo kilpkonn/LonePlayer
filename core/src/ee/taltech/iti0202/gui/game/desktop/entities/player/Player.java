@@ -106,13 +106,13 @@ public class Player extends SpriteAnimation {
 
         if (grounded && doneDmg.size() > 4) {
             doneDmg = new ArrayList<>();
-            if (Math.abs(velocity.y) > DMG_ON_LANDING) {
+            if (Math.abs(velocity.y) > DMG_ON_LANDING_SPEED) {
                 if (Math.abs(velocity.x) < ROLL_ON_LANDING_SPEED) {
                     health -=
                             Math.abs(
                                     velocity.y
                                             * Math.abs(velocity.y)
-                                            / DMG_ON_LANDING
+                                            / DMG_ON_LANDING_SPEED
                                             * DMG_MULTIPLIER);
                 }
                 Sound.playSoundOnce("sounds/jump/Jump " + new Random().nextInt(3) + ".ogg", 0.1f);

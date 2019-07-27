@@ -33,7 +33,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS_BASE_HP;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.CHECKPOINTS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_MULTIPLIER;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
@@ -75,21 +75,21 @@ public class Multiplayer extends GameState {
         switch (difficulty) {
             case EASY:
                 DMG_MULTIPLIER = 1;
-                DMG_ON_LANDING = 10;
+                DMG_ON_LANDING_SPEED = 6;
                 CHECKPOINTS = true;
                 BOSSES = false;
                 break;
 
             case HARD:
                 DMG_MULTIPLIER = 1.5f;
-                DMG_ON_LANDING = 9;
+                DMG_ON_LANDING_SPEED = 5;
                 CHECKPOINTS = true;
                 BOSSES = true;
                 break;
 
             case BRUTAL:
                 DMG_MULTIPLIER = 2;
-                DMG_ON_LANDING = 8;
+                DMG_ON_LANDING_SPEED = 4;
                 CHECKPOINTS = true;
                 BOSS_BASE_HP *= 2;
                 BOSSES = true;

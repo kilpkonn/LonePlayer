@@ -96,21 +96,21 @@ public class Play extends GameState {
         switch (difficulty) {
             case EASY:
                 DMG_MULTIPLIER = 1;
-                DMG_ON_LANDING = 10;
+                DMG_ON_LANDING_SPEED = 10;
                 CHECKPOINTS = true;
                 BOSSES = false;
                 break;
 
             case HARD:
                 DMG_MULTIPLIER = 1.5f;
-                DMG_ON_LANDING = 9;
+                DMG_ON_LANDING_SPEED = 9;
                 CHECKPOINTS = true;
                 BOSSES = true;
                 break;
 
             case BRUTAL:
                 DMG_MULTIPLIER = 2;
-                DMG_ON_LANDING = 8;
+                DMG_ON_LANDING_SPEED = 8;
                 CHECKPOINTS = true;
                 BOSS_BASE_HP *= 2;
                 BOSSES = true;
