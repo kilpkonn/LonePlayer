@@ -63,6 +63,7 @@ public class PlayerController {
         }
         for (Map.Entry<Integer, PlayerBody.PlayerBodyData> entry : players.entrySet()) {
             Vector2 playerPos = playerBodies.get(entry.getValue().id).getPosition();
+            if (!animations.containsKey(entry.getKey())) return;  //TODO: Better fix needed...
             Timeline.Key.Bone hand = animations.get(entry.getKey()).getBone("right_hand");
             Vector2 handPos = new Vector2(playerPos.x + hand.position.x * 0.08f / PPM, playerPos.y + hand.position.y * 0.08f / PPM);  //0.08 is player model scale
             float angle = (float) Math.toRadians(hand.angle);
@@ -75,6 +76,7 @@ public class PlayerController {
     }
 
     public boolean tryJump(int id) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
         MultiplayerPlayerTweener animation = animations.get(id);
@@ -99,6 +101,7 @@ public class PlayerController {
     }
 
     public boolean tryMoveLeft(int id) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
         MultiplayerPlayerTweener animation = animations.get(id);
@@ -116,6 +119,7 @@ public class PlayerController {
     }
 
     public boolean tryMoveRight(int id) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
         MultiplayerPlayerTweener animation = animations.get(id);
@@ -133,6 +137,7 @@ public class PlayerController {
     }
 
     public boolean tryDashLeft(int id) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
         MultiplayerPlayerTweener animation = animations.get(id);
@@ -152,6 +157,7 @@ public class PlayerController {
     }
 
     public boolean tryDashRight(int id) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
         MultiplayerPlayerTweener animation = animations.get(id);
@@ -172,6 +178,7 @@ public class PlayerController {
     }
 
     public boolean trySetIdle(int id) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
         MultiplayerPlayerTweener animation = animations.get(id);
@@ -185,6 +192,7 @@ public class PlayerController {
     }
 
     public boolean trySetDimension(int id, boolean dimension) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         Body body = playerBodies.get(id);
 
@@ -223,6 +231,7 @@ public class PlayerController {
     }
 
     public boolean trySetCurrentWeapon(int id, short index) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         if (data.currentWeaponIndex != index) {
             while (index >= data.weapons.length) {
@@ -238,6 +247,7 @@ public class PlayerController {
     }
 
     public boolean trySetAim(int id, boolean isAiming, float aimAngle) {
+        if (!players.containsKey(id)) return false;
         PlayerBody.PlayerBodyData data = players.get(id);
         if (data.isAiming != isAiming || (isAiming && data.aimAngle != aimAngle)) {
             data.isAiming = isAiming;

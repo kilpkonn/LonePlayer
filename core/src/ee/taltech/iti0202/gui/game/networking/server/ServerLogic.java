@@ -48,7 +48,7 @@ public class ServerLogic implements Disposable {
 
     public void addPlayer(Player player) {
         player.bodyId = gameWorld.addPlayer();
-        playerController.addAnimation(player.id);
+        playerController.addAnimation(player.bodyId);
     }
 
     public void addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type type) {
@@ -81,9 +81,16 @@ public class ServerLogic implements Disposable {
 
     private void updatePlayers(Set<Player> players) {
         for (Player player : players) {
-            Body body = gameWorld.getPlayerBodies().get(player.id);
-            PlayerBody.PlayerBodyData bodyData = gameWorld.getPlayers().get(player.id);
-            MultiplayerPlayerTweener animation = playerController.getAnimations().get(player.id);
+            Body body = gameWorld.getPlayerBodies().get(player.bodyId);
+            PlayerBody.PlayerBodyData bodyData = gameWorld.getPlayers().get(player.bodyId);
+            MultiplayerPlayerTweener animation = playerController.getAnimations().get(player.bodyId);
+
+            if (bodyData.health <= 0) {
+                gameWorld.removePlayer(player.bodyId);  //Player dead
+                playerController.getAnimations().remove(player.bodyId);
+                addPlayer(player);
+                return;
+            }
 
             player.wallJump = (short) bodyData.wallJump;
             player.health = (short) bodyData.health;

@@ -125,6 +125,10 @@ public class GameWorld implements Disposable {
 
     public boolean removePlayer(int id) {
         if (playerBodies.containsKey(id)) {
+            for (WeaponBody.WeaponBodyData weapon : players.get(id).weapons) {
+                if (weapon != null)
+                weapon.dropped = true;
+            }
             world.destroyBody(playerBodies.get(id));
             playerBodies.remove(id);
             players.remove(id);
