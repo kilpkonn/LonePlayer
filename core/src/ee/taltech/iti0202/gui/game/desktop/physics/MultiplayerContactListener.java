@@ -179,7 +179,7 @@ public class MultiplayerContactListener implements ContactListener {
             return;
         }
 
-        if (oa instanceof PlayerBody.PlayerBodyData || oa instanceof PlayerBody.PlayerFoot) {
+        if (oa instanceof PlayerBody.PlayerBodyData || oa instanceof PlayerBody.PlayerFoot) {  //TODO: Rewrite this
             PlayerBody.PlayerBodyData player = players.get(((BodyData) oa).id);
             if (ob.equals("barrier")) {
                 player.health = 0;
