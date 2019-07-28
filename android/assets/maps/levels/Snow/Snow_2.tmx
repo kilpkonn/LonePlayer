@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="32" tilewidth="128" tileheight="128" infinite="0" nextlayerid="21" nextobjectid="374">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="32" tilewidth="128" tileheight="128" infinite="0" nextlayerid="22" nextobjectid="434">
  <tileset firstgid="1" source="../../tilesets/gamerart2d-plains.tsx"/>
  <tileset firstgid="56" source="../../tilesets/gamerart2d-snow.tsx"/>
  <objectgroup id="12" name="barrier">
@@ -8,6 +8,66 @@
   <object id="111" x="0" y="0" width="128" height="4096"/>
   <object id="112" x="0" y="0" width="16384" height="128"/>
   <object id="373" x="0" y="3584" width="16384" height="512"/>
+ </objectgroup>
+ <objectgroup id="21" name="spawns">
+  <object id="374" x="1152" y="2816" width="768" height="128"/>
+  <object id="375" x="2304" y="2688" width="384" height="128"/>
+  <object id="376" x="2944" y="2432" width="384" height="128"/>
+  <object id="377" x="3584" y="2176" width="384" height="128"/>
+  <object id="378" x="4096" y="2176" width="128" height="128"/>
+  <object id="379" x="3840" y="1920" width="256" height="128"/>
+  <object id="380" x="4224" y="1792" width="128" height="128"/>
+  <object id="381" x="3968" y="1536" width="256" height="128"/>
+  <object id="382" x="4352" y="1408" width="128" height="128"/>
+  <object id="383" x="4096" y="1152" width="256" height="128"/>
+  <object id="384" x="4480" y="1024" width="128" height="128"/>
+  <object id="385" x="4608" y="768" width="128" height="128"/>
+  <object id="386" x="4736" y="512" width="256" height="128"/>
+  <object id="387" x="4992" y="256" width="640" height="128"/>
+  <object id="388" x="5632" y="512" width="256" height="128"/>
+  <object id="389" x="5888" y="768" width="128" height="128"/>
+  <object id="390" x="6016" y="1024" width="128" height="128"/>
+  <object id="391" x="6144" y="1408" width="128" height="128"/>
+  <object id="392" x="6272" y="1792" width="128" height="128"/>
+  <object id="393" x="6400" y="2176" width="128" height="128"/>
+  <object id="394" x="6656" y="896" width="253.091" height="94.9091"/>
+  <object id="395" x="7168" y="1280" width="128" height="128"/>
+  <object id="396" x="7296" y="1152" width="128" height="128"/>
+  <object id="397" x="7424" y="1024" width="128" height="128"/>
+  <object id="398" x="7552" y="896" width="128" height="128"/>
+  <object id="400" x="7680" y="768" width="128" height="128"/>
+  <object id="402" x="7808" y="512" width="256" height="128"/>
+  <object id="403" x="8064" y="384" width="384" height="128"/>
+  <object id="404" x="8448" y="256" width="640" height="256"/>
+  <object id="405" x="9088" y="512" width="384" height="128"/>
+  <object id="406" x="9472" y="640" width="256" height="128"/>
+  <object id="407" x="8960" y="1920" width="1408" height="128"/>
+  <object id="408" x="8320" y="3200" width="896" height="128"/>
+  <object id="409" x="9472" y="2816" width="256" height="128"/>
+  <object id="410" x="8960" y="2944" width="272" height="120"/>
+  <object id="411" x="8320" y="2944" width="256" height="128"/>
+  <object id="412" x="8192" y="2432" width="256" height="128"/>
+  <object id="413" x="8448" y="2176" width="256" height="128"/>
+  <object id="414" x="8576" y="2688" width="384" height="128"/>
+  <object id="415" x="7808" y="2816" width="132" height="84"/>
+  <object id="416" x="7552" y="2304" width="128" height="128"/>
+  <object id="417" x="7680" y="2560" width="128" height="128"/>
+  <object id="418" x="7936" y="2944" width="128" height="128"/>
+  <object id="419" x="9984" y="1024" width="256" height="128"/>
+  <object id="420" x="10240" y="1280" width="256" height="128"/>
+  <object id="421" x="10880" y="896" width="256" height="128"/>
+  <object id="422" x="10752" y="1152" width="128" height="128"/>
+  <object id="423" x="10624" y="1536" width="128" height="128"/>
+  <object id="424" x="11264" y="640" width="256" height="128"/>
+  <object id="425" x="11136" y="768" width="128" height="128"/>
+  <object id="426" x="11520" y="512" width="384" height="128"/>
+  <object id="427" x="11904" y="384" width="640" height="128"/>
+  <object id="428" x="12544" y="512" width="384" height="128"/>
+  <object id="429" x="12928" y="640" width="384" height="128"/>
+  <object id="430" x="13312" y="896" width="128" height="128"/>
+  <object id="431" x="13568" y="1280" width="138.061" height="129.091"/>
+  <object id="432" x="14336" y="1408" width="384" height="128"/>
+  <object id="433" x="14848" y="1024" width="1152" height="256"/>
  </objectgroup>
  <objectgroup id="13" name="hitboxes_1">
   <object id="357" x="2304" y="2944" width="382.667" height="56"/>
