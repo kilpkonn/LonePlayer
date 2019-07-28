@@ -56,7 +56,7 @@ public class GameWorld implements Disposable {
     private Map<Integer, BulletBody.BulletBodyData> bullets = new HashMap<>();
 
     private MultiplayerContactListener contactListener;
-    private List<Vector2> spawns = new ArrayList<>();
+    private List<RectangleMapObject> spawns = new ArrayList<>();
 
     private TiledMap tiledMap;
 
@@ -94,7 +94,7 @@ public class GameWorld implements Disposable {
         newPlayerIdentifier++;
 
         //Random spawn
-        Vector2 spawnCoordinates = spawns.get((int) Math.floor(Math.random() * spawns.size()));
+        Vector2 spawnCoordinates = generateRandomSpawnCoordinates();
 
         Body player = PlayerBody.createPlayer(world, spawnCoordinates, newPlayerIdentifier);
         playerBodies.put(newPlayerIdentifier, player);
@@ -106,7 +106,7 @@ public class GameWorld implements Disposable {
         newWeaponIdentifier++;
 
         //Random spawn, same as player
-        Vector2 spawnCoordinates = spawns.get((int) Math.floor(Math.random() * spawns.size()));
+        Vector2 spawnCoordinates = generateRandomSpawnCoordinates();
 
         Body weapon = WeaponBody.createWeapon(world, spawnCoordinates, newWeaponIdentifier, type);
         weaponBodies.put(newWeaponIdentifier, weapon);
@@ -200,6 +200,14 @@ public class GameWorld implements Disposable {
         body.setLinearVelocity(bullet.velocity);
     }
 
+    private Vector2 generateRandomSpawnCoordinates() {
+        Vector2 pos = new Vector2();
+        RectangleMapObject rect = spawns.get((int) Math.floor(Math.random() * spawns.size()));
+        pos.x = (rect.getRectangle().x + (float) Math.random() * rect.getRectangle().width) / PPM;
+        pos.y = (rect.getRectangle().y + (float) Math.random() * rect.getRectangle().height) / PPM;
+        return pos;
+    }
+
     private void createHitboxes(TiledMap tiledMap) {
         for (MapLayer layer : tiledMap.getLayers()) {
             FixtureDef fixtureDef = new FixtureDef();
@@ -226,6 +234,15 @@ public class GameWorld implements Disposable {
                             BIT_BOSSES | DIMENSION_1 | DIMENSION_2 | BIT_WEAPON | BIT_BULLET;
                     determineMapObject(layer, fixtureDef);
                     break;
+                case "spawns":
+                    for (MapObject object : layer.getObjects()) {
+                        if (object instanceof RectangleMapObject) {
+                            RectangleMapObject rect = (RectangleMapObject) object;
+                            if (layer.getName().equals("spawns")) {  //TODO: make spawns layers for other maps...
+                                spawns.add(rect);
+                            }
+                        }
+                    }
             }
         }
     }
@@ -233,16 +250,9 @@ public class GameWorld implements Disposable {
     private void determineMapObject(MapLayer layer, FixtureDef fixtureDef) {
         BodyDef bodyDef = new BodyDef();
         Shape shape;
-        Vector2 pos = new Vector2();
         for (MapObject object : layer.getObjects()) {
             if (object instanceof RectangleMapObject) {
-                RectangleMapObject rect = (RectangleMapObject) object;
-                shape = ShapesGreator.getRectangle(rect);
-                if (layer.getName().equals("hitboxes")) {  //TODO: make spawns layer
-                    pos.x = (rect.getRectangle().x + rect.getRectangle().width / 2) / PPM;
-                    pos.y = (rect.getRectangle().y + rect.getRectangle().height + 200) / PPM;
-                    spawns.add(pos.cpy());
-                }
+                shape = ShapesGreator.getRectangle((RectangleMapObject) object);
             } else if (object instanceof PolygonMapObject) {
                 shape = ShapesGreator.getPolygon((PolygonMapObject) object);
             } else if (object instanceof PolylineMapObject) {

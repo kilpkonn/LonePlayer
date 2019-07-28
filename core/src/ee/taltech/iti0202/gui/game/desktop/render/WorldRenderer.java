@@ -165,7 +165,6 @@ public class WorldRenderer implements Handler {
             }
             bullets.get(bulletEntry.getKey()).render(sb);
         }
-        //TODO: Render bullets, etc.
     }
 
     public void removePlayerAnimation(int id) {
