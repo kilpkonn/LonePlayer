@@ -168,6 +168,18 @@ public class WorldRenderer implements Handler {
         //TODO: Render bullets, etc.
     }
 
+    public void removePlayerAnimation(int id) {
+        players.remove(id);
+    }
+
+    public void removeWeaponAnimation(int id) {
+        weapons.remove(id);
+    }
+
+    public void removeBulletanimation(int id) {
+        bullets.remove(id);
+    }
+
     public void updatePlayerAnimation(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
         if (player.animation != null && players.containsKey(player.bodyId)) {
             Player2 p = players.get(player.bodyId);

@@ -180,12 +180,15 @@ public class Multiplayer extends GameState {
     public void removeEntities(Play.EntitiesToBeRemoved entities) {
         for (int id : entities.players) {
             gameWorld.removePlayer(id);
+            worldRenderer.removePlayerAnimation(id);
         }
         for (int id : entities.weapons) {
             gameWorld.removeWeapon(id);
+            worldRenderer.removeWeaponAnimation(id);
         }
         for (int id : entities.bullets) {
             gameWorld.removeBullet(id);
+            worldRenderer.removeBulletanimation(id);
         }
     }
 
