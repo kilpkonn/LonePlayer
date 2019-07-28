@@ -216,10 +216,10 @@ public class Multiplayer extends GameState {
             Game.client.updatePlayerControls(controls);
 
             // Update locally to be ready for next frame. Waiting for server reply is too slow.
-            /*playerToFollow.currentWeaponIndex = controls.currentWeapon;
+            playerToFollow.currentWeaponIndex = controls.currentWeapon;
             while (playerToFollow.currentWeaponIndex < 0 || playerToFollow.currentWeaponIndex > playerToFollow.weapons.length) {
                 playerToFollow.currentWeaponIndex += playerToFollow.weapons.length * ((playerToFollow.currentWeaponIndex < 0) ? 1 : -1);
-            }*/
+            }
         }
 
         hud.setPlayTime(playTime);

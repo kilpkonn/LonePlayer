@@ -51,6 +51,7 @@ public class PlayerController {
     }
 
     public void addAnimation(int id) {
+        if (animations.containsKey(id)) return;
         MultiplayerPlayerTweener tweener = new MultiplayerPlayerTweener(playerEntity);
         tweener.speed = 100;
         tweener.setAnimation(Player.PlayerAnimation.IDLE);
