@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="32" tilewidth="128" tileheight="128" infinite="0" nextlayerid="21" nextobjectid="187">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="32" tilewidth="128" tileheight="128" infinite="0" nextlayerid="22" nextobjectid="223">
  <tileset firstgid="1" name="gameart2d-desert" tilewidth="128" tileheight="128" tilecount="40" columns="5">
   <image source="../../tilesets/images/gameart2d-desert.png" width="640" height="1024"/>
   <tile id="2">
@@ -283,6 +283,43 @@
 0,0,0,56,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,60,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,56,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,53,60,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="21" name="spawns">
+  <object id="187" x="384" y="1280" width="1664" height="128"/>
+  <object id="188" x="2048" y="1664" width="512" height="128"/>
+  <object id="189" x="2176" y="1024" width="384" height="128"/>
+  <object id="190" x="2560" y="896" width="256" height="128"/>
+  <object id="191" x="2816" y="768" width="256" height="128"/>
+  <object id="192" x="3200" y="512" width="256" height="128"/>
+  <object id="193" x="3840" y="512" width="384" height="128"/>
+  <object id="194" x="2560" y="2048" width="512" height="128"/>
+  <object id="195" x="3072" y="2304" width="896" height="128"/>
+  <object id="196" x="4608" y="896" width="384" height="128"/>
+  <object id="197" x="4224" y="2432" width="384" height="128"/>
+  <object id="198" x="5504" y="1152" width="256" height="128"/>
+  <object id="199" x="4864" y="2432" width="384" height="128"/>
+  <object id="200" x="5632" y="2304" width="256" height="128"/>
+  <object id="201" x="6400" y="1536" width="256" height="128"/>
+  <object id="202" x="6400" y="2432" width="256" height="128"/>
+  <object id="203" x="7168" y="2304" width="896" height="128"/>
+  <object id="204" x="8192" y="2176" width="384" height="128"/>
+  <object id="205" x="8064" y="1792" width="256" height="128"/>
+  <object id="206" x="8576" y="1664" width="640" height="128"/>
+  <object id="207" x="8832" y="1280" width="256" height="128"/>
+  <object id="208" x="9216" y="1280" width="1536" height="128"/>
+  <object id="209" x="11008" y="1024" width="256" height="128"/>
+  <object id="210" x="11392" y="768" width="256" height="128"/>
+  <object id="211" x="10752" y="1664" width="256" height="128"/>
+  <object id="212" x="11008" y="1920" width="384" height="128"/>
+  <object id="213" x="11904" y="512" width="384" height="128"/>
+  <object id="214" x="12544" y="384" width="896" height="128"/>
+  <object id="215" x="11392" y="2176" width="1280" height="128"/>
+  <object id="216" x="12672" y="1920" width="384" height="128"/>
+  <object id="218" x="13056" y="1792" width="1152" height="128"/>
+  <object id="219" x="13824" y="640" width="256" height="128"/>
+  <object id="220" x="14336" y="896" width="256" height="128"/>
+  <object id="221" x="14208" y="1536" width="1152" height="128"/>
+  <object id="222" x="15360" y="1792" width="256" height="128"/>
+ </objectgroup>
  <layer id="18" name="bosses" width="128" height="32">
   <properties>
    <property name="size" type="int" value="4"/>
