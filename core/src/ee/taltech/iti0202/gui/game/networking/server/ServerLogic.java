@@ -16,6 +16,7 @@ import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
+import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
@@ -78,7 +79,7 @@ public class ServerLogic implements Disposable {
         playerController.trySetAim(controls.id, controls.isAiming, controls.aimingAngle);
     }
 
-    private void updatePlayers(Set<Player> players) {
+    private void updatePlayers(Set<Player> players, Play.EntitiesToBeRemoved entitiesRemoved) {
         for (Player player : players) {
             Body body = gameWorld.getPlayerBodies().get(player.bodyId);
             PlayerBody.PlayerBodyData bodyData = gameWorld.getPlayers().get(player.bodyId);
@@ -87,6 +88,7 @@ public class ServerLogic implements Disposable {
             if (bodyData.health <= 0) {
                 gameWorld.removePlayer(player.bodyId);  //Player dead
                 playerController.getAnimations().remove(player.bodyId);
+                entitiesRemoved.players.add(player.bodyId);
                 addPlayer(player);
                 return;
             }
@@ -114,9 +116,10 @@ public class ServerLogic implements Disposable {
         }
     }
 
-    private void updateWeapons(Map<Integer, Weapon> weapons) {
+    private void updateWeapons(Map<Integer, Weapon> weapons, Play.EntitiesToBeRemoved entitiesRemoved) {
         for (int id : gameWorld.getWeaponsRemoved()) {
             weapons.remove(id);
+            entitiesRemoved.weapons.add(id);
         }
         for (Weapon weapon : weapons.values()) {
             Body body = gameWorld.getWeaponBodies().get(weapon.bodyId);
@@ -134,9 +137,10 @@ public class ServerLogic implements Disposable {
         }
     }
 
-    private void updateBullets(Map<Integer, Bullet> bullets) {
+    private void updateBullets(Map<Integer, Bullet> bullets, Play.EntitiesToBeRemoved entitiesRemoved) {
         for (int id : gameWorld.getBulletsRemoved()) {
             bullets.remove(id);
+            entitiesRemoved.bullets.add(id);
         }
         for (Bullet bullet : bullets.values()) {
             Body body = gameWorld.getBulletBodies().get(bullet.bodyId);
@@ -201,11 +205,13 @@ public class ServerLogic implements Disposable {
                 weaponController.updateAnimations(dt);
                 bulletController.updateAnimations(dt);
 
-                updatePlayers(players);
-                updateWeapons(weapons);
-                updateBullets(bullets);
+                Play.EntitiesToBeRemoved entitiesRemoved = new Play.EntitiesToBeRemoved();
 
-                Game.server.updateWorld();
+                updatePlayers(players, entitiesRemoved);
+                updateWeapons(weapons, entitiesRemoved);
+                updateBullets(bullets, entitiesRemoved);
+
+                Game.server.updateWorld(entitiesRemoved);
 
                 try {
                     Thread.sleep(33);

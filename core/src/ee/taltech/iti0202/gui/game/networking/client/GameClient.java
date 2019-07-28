@@ -66,6 +66,7 @@ public class GameClient implements Disposable {
         kryo.register(Bullet.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet.Animation.class);
         kryo.register(WeaponProjectile.Type.class);
+        kryo.register(Play.EntitiesToBeRemoved.class);
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
@@ -129,6 +130,14 @@ public class GameClient implements Disposable {
         Gdx.app.postRunnable(() -> {
             if (GameStateManager.currentState() instanceof  Multiplayer) {
                 ((Multiplayer) GameStateManager.currentState()).updateBullets(bullets.bullets);
+            }
+        });
+    }
+
+    public void onEntitiesToBeRemoved(Play.EntitiesToBeRemoved entities) {
+        Gdx.app.postRunnable(() -> {
+            if (GameStateManager.currentState() instanceof Multiplayer) {
+                ((Multiplayer) GameStateManager.currentState()).removeEntities(entities);
             }
         });
     }

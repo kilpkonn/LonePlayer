@@ -73,13 +73,15 @@ public class GameServer implements Disposable {
         kryo.register(Bullet.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet.Animation.class);
         kryo.register(WeaponProjectile.Type.class);
+        kryo.register(Play.EntitiesToBeRemoved.class);
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
 
             BufferedReader sc =
                     new BufferedReader(new InputStreamReader(url_name.openStream()));
-            String address = sc.readLine().trim();  // InetAddress.getLocalHost().getHostAddress();
+            String address = sc.readLine().trim();  //
+            address =  InetAddress.getLocalHost().getHostAddress();
             server.bind(tcpPort, udpPort);
             //server.setPortAndIp(port, "192.168.0.254"); //address);  //TODO: Fix connecting issues via public ip
             connect = String.format("%s:%s|%s", address, tcpPort, udpPort);
@@ -106,7 +108,7 @@ public class GameServer implements Disposable {
         return new HashSet<>(players.values());
     }
 
-    public void updateWorld() {
+    public void updateWorld(Play.EntitiesToBeRemoved entitiesRemoved) {
         Play.Players players = new Play.Players();
         players.players = getPlayers();
 
@@ -137,6 +139,8 @@ public class GameServer implements Disposable {
             }
         }
         server.sendToAllUDP(bullets);
+
+        server.sendToAllUDP(entitiesRemoved);  //Use TCP instead?
     }
 
     public void updatePlayerName(int id, Lobby.NameChange nameChange) {

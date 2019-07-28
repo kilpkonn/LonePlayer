@@ -40,6 +40,8 @@ public class ClientListener extends Listener {
             client.onUpdateWeapons((Play.Weapons) object);
         } else if (object instanceof Play.Bullets) {
             client.onUpdateBullets((Play.Bullets) object);
+        } else if (object instanceof Play.EntitiesToBeRemoved) {
+            client.onEntitiesToBeRemoved((Play.EntitiesToBeRemoved) object);
         }
     }
 

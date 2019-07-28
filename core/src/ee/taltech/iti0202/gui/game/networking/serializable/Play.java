@@ -21,4 +21,10 @@ public class Play implements Serializable {
     public static class Bullets implements Serializable {
         public Set<Bullet> bullets = new HashSet<>();
     }
+
+    public static class EntitiesToBeRemoved implements Serializable {
+        public Set<Integer> players = new HashSet<>();
+        public Set<Integer> weapons = new HashSet<>();
+        public Set<Integer> bullets = new HashSet<>();
+    }
 }
