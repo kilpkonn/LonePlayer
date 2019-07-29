@@ -62,7 +62,7 @@ public class MultiplayerContactListener implements ContactListener {
         setWallJump(oa, ob, 0);
 
         PlayerBody.PlayerBodyData player;
-        if (oa instanceof PlayerBody.PlayerFoot) {
+        if (oa instanceof PlayerBody.PlayerFoot && !(ob instanceof WeaponBody.WeaponBodyData)) {
             player = players.get(((PlayerBody.PlayerFoot) oa).id);
 
             player.onGround = false;
@@ -70,7 +70,7 @@ public class MultiplayerContactListener implements ContactListener {
             // wallJump = 0;
             player.dash = true;
         }
-        if (ob instanceof PlayerBody.PlayerFoot) {
+        if (ob instanceof PlayerBody.PlayerFoot && !(oa instanceof WeaponBody.WeaponBodyData)) {
             player = players.get(((PlayerBody.PlayerFoot) ob).id);
 
             player.onGround = false;
@@ -108,10 +108,10 @@ public class MultiplayerContactListener implements ContactListener {
     }
 
     private void groundDetection(Object oa, Object ob) {
-        if (oa instanceof PlayerBody.PlayerFoot) {
+        if (oa instanceof PlayerBody.PlayerFoot && !(ob instanceof WeaponBody.WeaponBodyData)) {
             players.get(((BodyData) oa).id).onGround = true;
         }
-        if (ob instanceof PlayerBody.PlayerFoot) {
+        if (ob instanceof PlayerBody.PlayerFoot && !(oa instanceof WeaponBody.WeaponBodyData)) {
             players.get(((BodyData) ob).id).onGround = true;
         }
     }
