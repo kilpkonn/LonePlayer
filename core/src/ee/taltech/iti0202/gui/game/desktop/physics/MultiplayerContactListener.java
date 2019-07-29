@@ -39,7 +39,7 @@ public class MultiplayerContactListener implements ContactListener {
         // set wall jump
         setWallJump(oa, ob, 1);
 
-        groundDetection(oa, ob);
+        groundDetection(oa, ob, fa.getBody(), fb.getBody());
 
         weaponPickup(oa, ob);
 
@@ -107,12 +107,22 @@ public class MultiplayerContactListener implements ContactListener {
 
     }
 
-    private void groundDetection(Object oa, Object ob) {
+    private void groundDetection(Object oa, Object ob, Body ba, Body bb) {
         if (oa instanceof PlayerBody.PlayerFoot && !(ob instanceof WeaponBody.WeaponBodyData)) {
-            players.get(((BodyData) oa).id).onGround = true;
+            PlayerBody.PlayerBodyData data =  players.get(((BodyData) oa).id);
+            data.onGround = true;
+            if (Math.abs(ba.getLinearVelocity().y) > B2DVars.DMG_ON_LANDING_SPEED) {
+                data.health -= (int) Math.abs(ba.getLinearVelocity().y); // / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
+            }
+            System.out.println("Landed -> " + ba.getLinearVelocity());
         }
         if (ob instanceof PlayerBody.PlayerFoot && !(oa instanceof WeaponBody.WeaponBodyData)) {
-            players.get(((BodyData) ob).id).onGround = true;
+            PlayerBody.PlayerBodyData data =  players.get(((BodyData) ob).id);
+            data.onGround = true;
+            if (Math.abs(bb.getLinearVelocity().y) > B2DVars.DMG_ON_LANDING_SPEED) {
+                data.health -= (int) Math.abs(bb.getLinearVelocity().y); // / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
+            }
+            System.out.println("Landed -> " + bb.getLinearVelocity());
         }
     }
 
@@ -183,10 +193,6 @@ public class MultiplayerContactListener implements ContactListener {
             PlayerBody.PlayerBodyData player = players.get(((BodyData) oa).id);
             if (ob.equals("barrier")) {
                 player.health = 0;
-            } else if (ob.equals("hitboxes")) {
-                if (Math.abs(ba.getLinearVelocity().y) > B2DVars.DMG_ON_LANDING_SPEED) {
-                    player.health -= Math.abs(ba.getLinearVelocity().y / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
-                }
             }
         }
 
@@ -194,10 +200,6 @@ public class MultiplayerContactListener implements ContactListener {
             PlayerBody.PlayerBodyData player = players.get(((BodyData) ob).id);
             if (oa.equals("barrier")) {
                 player.health = 0;
-            } else if (oa.equals("hitboxes")) {
-                if (Math.abs(bb.getLinearVelocity().y) > B2DVars.DMG_ON_LANDING_SPEED) {
-                    player.health -= Math.abs(bb.getLinearVelocity().y / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
-                }
             }
         }
     }
