@@ -17,6 +17,8 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.PauseMenu;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
@@ -37,6 +39,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
@@ -47,6 +50,9 @@ public class Multiplayer extends GameState {
     private PlayerController playerController;
     private WeaponController weaponController;
     private Hud hud;
+
+    private PauseMenu pauseMenu;
+    private SettingsMenu settingsMenu;
 
     private Stage stage = new Stage(new ScreenViewport());
     private String act;
@@ -145,6 +151,18 @@ public class Multiplayer extends GameState {
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
 
         hud = new Hud(hudCam);
+
+        pauseMenu = new PauseMenu(
+                act,
+                map,
+                hudCam,
+                () -> {
+                    state = State.RUN;
+                    //draw.setGameFadeOut(false);
+                    //draw.setGameFadeDone(false);
+                },
+                () -> System.out.println("TODO: Remove this option"),
+                () -> state = State.SETTINGS);
     }
 
     public void updatePlayers(Set<Player> players) {
@@ -225,6 +243,10 @@ public class Multiplayer extends GameState {
         hud.setPlayTime(playTime);
         if (playerToFollow != null) hud.setHp(playerToFollow.health);
         hud.update(dt);
+
+        if (state != State.RUN) {  //TODO: make switch statement
+            pauseMenu.update(dt);
+        }
     }
 
     @Override
@@ -234,6 +256,10 @@ public class Multiplayer extends GameState {
         switch (state) {
             case RUN:
                 renderWorld();
+                break;
+            case PAUSE:
+                renderWorld();
+                pauseMenu.render(sb);
                 break;
         }
     }
@@ -283,6 +309,9 @@ public class Multiplayer extends GameState {
             controls.aimingAngle = (float) Math.atan2(
                     -MyInput.getMouseLocation().y + (double) V_HEIGHT / 2,
                     MyInput.getMouseLocation().x - (double) V_WIDTH / 2);
+        }
+        if (MyInput.isDown(Game.settings.ESC)) {
+            state = State.PAUSE;
         }
     }
 

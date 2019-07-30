@@ -3,8 +3,8 @@ package ee.taltech.iti0202.gui.game.desktop.controllers;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Entity;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
@@ -20,7 +20,7 @@ public class BulletController {
     public BulletController(Map<Integer, Body> bulletBodies, Map<Integer, BulletBody.BulletBodyData> bullets) {
         this.bulletBodies = bulletBodies;
         this.bullets = bullets;
-        animations = new HashMap<>();
+        animations = new ConcurrentHashMap<>();
     }
 
     public void addAnimation(int id, WeaponProjectile.Type type) {
