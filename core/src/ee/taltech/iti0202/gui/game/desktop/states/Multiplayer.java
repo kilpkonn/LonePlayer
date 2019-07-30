@@ -39,7 +39,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.UPDATE;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
@@ -158,8 +157,7 @@ public class Multiplayer extends GameState {
                 hudCam,
                 () -> {
                     state = State.RUN;
-                    //draw.setGameFadeOut(false);
-                    //draw.setGameFadeDone(false);
+                    hud.setGameFade(false);
                 },
                 () -> System.out.println("TODO: Remove this option"),
                 () -> state = State.SETTINGS);
@@ -312,6 +310,7 @@ public class Multiplayer extends GameState {
         }
         if (MyInput.isDown(Game.settings.ESC)) {
             state = State.PAUSE;
+            hud.setGameFade(true);
         }
     }
 

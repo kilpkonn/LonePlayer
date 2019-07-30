@@ -2,9 +2,11 @@ package ee.taltech.iti0202.gui.game.desktop.game_handlers.hud;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import ee.taltech.iti0202.gui.game.Game;
@@ -18,6 +20,12 @@ public class Hud {
     protected GameButton health;
     protected GameButton fps;
     protected GameButton time;
+
+    private boolean gameFadeDone = false;
+    private boolean gameFadeOut = false;
+    private float currentMenuFade;
+    private ShapeRenderer shapeRenderer = new ShapeRenderer();
+
     protected int hp;
     private float playTime;
 
@@ -58,6 +66,7 @@ public class Hud {
                         1));
 
         time.setText(Math.round(playTime * 10) / 10f + "s");
+        updateGameFade(dt);
     }
 
     public void render(SpriteBatch sb) {
@@ -69,19 +78,57 @@ public class Hud {
         health.render(sb);
         if (Game.settings.SHOW_FPS) fps.render(sb);
         time.render(sb);
+
+        if (currentMenuFade > 0) {
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(0, 0, 0, currentMenuFade);
+            shapeRenderer.rect(0, 0, B2DVars.V_WIDTH, B2DVars.V_HEIGHT);
+            shapeRenderer.end();
+        }
     }
 
     public void setHp(int hp) {
         this.hp = hp;
     }
 
+    public void setGameFade(boolean fadeOut) {
+        if (fadeOut != gameFadeOut) {
+            gameFadeOut = fadeOut;
+            gameFadeDone = false;
+        }
+    }
+
     public void setPlayTime(float playTime) {
         this.playTime = playTime;
+    }
+
+    public void updateGameFade(float dt) {
+        if (!gameFadeDone) {
+            if (gameFadeOut) {
+                if (currentMenuFade < B2DVars.MENU_FADE_AMOUNT) {
+                    currentMenuFade += (B2DVars.MENU_FADE_AMOUNT / B2DVars.MENU_FADE_TIME) * dt;
+                } else {
+                    currentMenuFade = B2DVars.MENU_FADE_AMOUNT;
+                    gameFadeDone = true;
+                }
+            } else {
+                if (currentMenuFade > 0) {
+                    currentMenuFade -= (B2DVars.MENU_FADE_AMOUNT / B2DVars.MENU_FADE_TIME) * dt;
+                } else {
+                    currentMenuFade = 0;
+                    gameFadeDone = true;
+                }
+            }
+        }
     }
 
     public void dispose() {
         health.dispose();
         fps.dispose();
         time.dispose();
+        shapeRenderer.dispose();
     }
 }
