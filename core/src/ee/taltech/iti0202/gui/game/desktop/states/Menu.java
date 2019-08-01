@@ -65,6 +65,13 @@ public class Menu extends GameState {
         cam.zoom = 1.0f;
 
         world = new World(new Vector2(0, -9.8f * 5), true);
+
+        game.getSound().stop();
+        game.setSound(
+                Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
+        game.getSound().setLooping(true);
+        game.getSound().play();
+        game.getSound().setVolume(0.2f);
     }
 
     private void addParallax(String path) {

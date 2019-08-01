@@ -164,12 +164,6 @@ public class Play extends GameState {
                 this::saveGame,
                 () -> playState = pauseState.SETTINGS,
                 () -> {
-                    game.getSound().stop();
-                    game.setSound(
-                            Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
-                    game.getSound().setLooping(true);
-                    game.getSound().play();
-                    game.getSound().setVolume(0.2f);
                     GameStateManager.pushState(GameStateManager.State.MENU);
                 });
 
