@@ -275,34 +275,34 @@ public class Multiplayer extends GameState {
 
         if (MyInput.isPressed(Game.settings.JUMP)) {
             controls.jump = true;
-            playerController.tryJump(playerToFollow.bodyId);
+            //playerController.tryJump(playerToFollow.bodyId);
         }
         if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
             controls.moveLeft = true;
-            playerController.tryMoveLeft(playerToFollow.bodyId);
+            //playerController.tryMoveLeft(playerToFollow.bodyId);
         }
         if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
             controls.moveRight = true;
-            playerController.tryDashRight(playerToFollow.bodyId);
+            //playerController.tryDashRight(playerToFollow.bodyId);
         }
         if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
             controls.dashLeft = true;
-            playerController.tryDashLeft(playerToFollow.id);
+            //playerController.tryDashLeft(playerToFollow.id);
         }
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             controls.dashRight = true;
-            playerController.tryDashRight(playerToFollow.bodyId);
+            //playerController.tryDashRight(playerToFollow.bodyId);
         }
         if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
             dimension = !dimension;
         }
         if (MyInput.isPressed(Game.settings.NEXT_WEAPON)) {
             controls.currentWeapon++;
-            playerController.trySetCurrentWeapon(playerToFollow.bodyId, controls.currentWeapon);
+            //playerController.trySetCurrentWeapon(playerToFollow.bodyId, controls.currentWeapon);
         }
         if (MyInput.isPressed(Game.settings.PREVIOUS_WEAPON)) {
             controls.currentWeapon--;
-            playerController.trySetCurrentWeapon(playerToFollow.bodyId, controls.currentWeapon);
+            //playerController.trySetCurrentWeapon(playerToFollow.bodyId, controls.currentWeapon);
         }
         if (MyInput.isMouseDown(Game.settings.SHOOT)) {
             controls.isAiming = true;

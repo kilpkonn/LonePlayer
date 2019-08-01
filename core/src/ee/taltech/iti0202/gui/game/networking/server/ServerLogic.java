@@ -6,6 +6,7 @@ import com.badlogic.gdx.utils.Disposable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.controllers.BulletController;
@@ -29,8 +30,8 @@ public class ServerLogic implements Disposable {
     private WeaponController weaponController;
     private BulletController bulletController;
 
-    private Map<Integer, Weapon> weapons = new HashMap<>();
-    private Map<Integer, Bullet> bullets = new HashMap<>();
+    private Map<Integer, Weapon> weapons = new ConcurrentHashMap<>();
+    private Map<Integer, Bullet> bullets = new ConcurrentHashMap<>();
 
     public void loadWorld(String act, String map) {
         if (gameWorld != null) gameWorld.dispose();
