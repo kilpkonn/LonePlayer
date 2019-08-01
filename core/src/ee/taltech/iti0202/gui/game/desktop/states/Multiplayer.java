@@ -15,6 +15,7 @@ import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.PauseMenu;
@@ -160,7 +161,8 @@ public class Multiplayer extends GameState {
                     hud.setGameFade(false);
                 },
                 () -> System.out.println("TODO: Remove this option"),
-                () -> state = State.SETTINGS);
+                () -> state = State.SETTINGS,
+                () -> GameStateManager.pushState(GameStateManager.State.MENU));
     }
 
     public void updatePlayers(Set<Player> players) {

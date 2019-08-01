@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
@@ -52,7 +53,8 @@ public class Play extends GameState {
 
     // LibGdx variables
     private World world = new World(new Vector2(0, GRAVITY), true);
-    @ToString.Exclude private Draw draw;
+    @ToString.Exclude
+    private Draw draw;
     private MyContactListener cl = new MyContactListener();
     private Box2DDebugRenderer b2dr = new Box2DDebugRenderer();
     private OrthographicCamera b2dcam = new OrthographicCamera();
@@ -60,11 +62,16 @@ public class Play extends GameState {
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
     // handlers
-    @ToString.Exclude private PlayerHandler playerHandler;
-    @ToString.Exclude private BossHander bossHander;
-    @ToString.Exclude private WeaponHandler weaponHandler;
-    @ToString.Exclude private CheckpointHandler checkpointHandler;
-    @ToString.Exclude private BulletHandler bulletHandler;
+    @ToString.Exclude
+    private PlayerHandler playerHandler;
+    @ToString.Exclude
+    private BossHander bossHander;
+    @ToString.Exclude
+    private WeaponHandler weaponHandler;
+    @ToString.Exclude
+    private CheckpointHandler checkpointHandler;
+    @ToString.Exclude
+    private BulletHandler bulletHandler;
     // States
     private GameProgress progress;
     private PauseMenu pauseMenu;
@@ -144,19 +151,27 @@ public class Play extends GameState {
         hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
         // create pause state
-        pauseMenu =
-                new PauseMenu(
-                        act,
-                        map,
-                        hudCam,
-                        () -> {
-                            playState = pauseState.RUN;
-                            draw.setGameFadeOut(false);
-                            draw.setGameFadeDone(false);
-                            UPDATE = true;
-                        },
-                        this::saveGame,
-                        () -> playState = pauseState.SETTINGS);
+        pauseMenu = new PauseMenu(
+                act,
+                map,
+                hudCam,
+                () -> {
+                    playState = pauseState.RUN;
+                    draw.setGameFadeOut(false);
+                    draw.setGameFadeDone(false);
+                    UPDATE = true;
+                },
+                this::saveGame,
+                () -> playState = pauseState.SETTINGS,
+                () -> {
+                    game.getSound().stop();
+                    game.setSound(
+                            Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
+                    game.getSound().setLooping(true);
+                    game.getSound().play();
+                    game.getSound().setVolume(0.2f);
+                    GameStateManager.pushState(GameStateManager.State.MENU);
+                });
 
         settingsMenu =
                 new SettingsMenu(
@@ -286,7 +301,7 @@ public class Play extends GameState {
         if (playerHandler.isNewPlayer()) {
             if (Math.abs(playerHandler.getPlayer().getPosition().x - cam.position.x / PPM) < 1
                     && Math.abs(playerHandler.getPlayer().getPosition().y - cam.position.y / PPM)
-                            < 1) playerHandler.setNewPlayer(false);
+                    < 1) playerHandler.setNewPlayer(false);
         } else handleInput();
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
@@ -313,15 +328,6 @@ public class Play extends GameState {
 
             case PAUSE:
                 pauseMenu.update(dt);
-                if (pauseMenu.done) {
-                    game.getSound().stop();
-                    game.setSound(
-                            Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
-                    game.getSound().setLooping(true);
-                    game.getSound().play();
-                    game.getSound().setVolume(0.2f);
-                    GameStateManager.pushState(GameStateManager.State.MENU);
-                }
                 break;
 
             case RESUME:
@@ -537,7 +543,7 @@ public class Play extends GameState {
                 B2DVars.PATH
                         + "saves/"
                         + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH)
-                                .format(new Date())
+                        .format(new Date())
                         + ".json");
     }
 
