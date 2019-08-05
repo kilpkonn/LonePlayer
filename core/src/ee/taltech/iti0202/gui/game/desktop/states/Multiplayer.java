@@ -18,7 +18,7 @@ import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.PauseMenu;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MultiplayerPauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
@@ -51,7 +51,7 @@ public class Multiplayer extends GameState {
     private WeaponController weaponController;
     private Hud hud;
 
-    private PauseMenu pauseMenu;
+    private MultiplayerPauseMenu pauseMenu;
     private SettingsMenu settingsMenu;
 
     private Stage stage = new Stage(new ScreenViewport());
@@ -152,7 +152,7 @@ public class Multiplayer extends GameState {
 
         hud = new Hud(hudCam);
 
-        pauseMenu = new PauseMenu(
+        pauseMenu = new MultiplayerPauseMenu(
                 act,
                 map,
                 hudCam,
@@ -160,7 +160,6 @@ public class Multiplayer extends GameState {
                     state = State.RUN;
                     hud.setGameFade(false);
                 },
-                () -> System.out.println("TODO: Remove this option"),
                 () -> state = State.SETTINGS,
                 () -> GameStateManager.pushState(GameStateManager.State.MENU));
     }
@@ -337,8 +336,6 @@ public class Multiplayer extends GameState {
         worldRenderer.render(sb);
 
         hud.render(sb);
-
-        //TODO: Render fade over hud
     }
 
     public void setPlayerToFollow(Player playerToFollow) {
