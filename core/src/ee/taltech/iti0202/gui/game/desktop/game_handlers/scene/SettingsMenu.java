@@ -20,7 +20,6 @@ public class SettingsMenu extends Scene {
 
     private float settingsXLocation = V_WIDTH / 2f;
     private float displayXLocation = V_WIDTH / 1.3f;
-    private Game game;
     private Runnable backFunc;
     private GameButton exitButton;
     private GameButton saveButton;
@@ -38,9 +37,8 @@ public class SettingsMenu extends Scene {
     private HashMap<GameButton, GameButton> keyBindButtons = new HashMap<>();
     private GameButton btnWaitingInput;
 
-    public SettingsMenu(OrthographicCamera cam, Game game, Runnable backFunc) {
+    public SettingsMenu(OrthographicCamera cam, Runnable backFunc) {
         super("", "", cam);
-        this.game = game;
         this.backFunc = backFunc;
 
         hudCam.update();

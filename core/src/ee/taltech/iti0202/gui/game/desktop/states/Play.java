@@ -170,7 +170,6 @@ public class Play extends GameState {
         settingsMenu =
                 new SettingsMenu(
                         hudCam,
-                        game,
                         () -> playState = pauseState.PAUSE);
 
         endMenu =

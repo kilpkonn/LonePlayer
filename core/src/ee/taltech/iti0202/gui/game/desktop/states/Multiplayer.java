@@ -162,6 +162,7 @@ public class Multiplayer extends GameState {
                 },
                 () -> state = State.SETTINGS,
                 () -> GameStateManager.pushState(GameStateManager.State.MENU));
+        settingsMenu = new SettingsMenu(hudCam, () -> state = State.PAUSE);
     }
 
     public void updatePlayers(Set<Player> players) {
@@ -215,6 +216,12 @@ public class Multiplayer extends GameState {
             case RUN:
                 handleRunInput();
                 break;
+            case PAUSE:
+                pauseMenu.handleInput();
+                break;
+            case SETTINGS:
+                settingsMenu.handleInput();
+                break;
         }
     }
 
@@ -243,8 +250,13 @@ public class Multiplayer extends GameState {
         if (playerToFollow != null) hud.setHp(playerToFollow.health);
         hud.update(dt);
 
-        if (state != State.RUN) {  //TODO: make switch statement
-            pauseMenu.update(dt);
+        switch (state) {
+            case PAUSE:
+                pauseMenu.update(dt);
+                break;
+            case SETTINGS:
+                settingsMenu.update(dt);
+                break;
         }
     }
 
@@ -260,12 +272,18 @@ public class Multiplayer extends GameState {
                 renderWorld();
                 pauseMenu.render(sb);
                 break;
+            case SETTINGS:
+                renderWorld();
+                settingsMenu.render(sb);
+                break;
         }
     }
 
     @Override
     public void dispose() {
         worldRenderer.dispose();
+        pauseMenu.dispose();
+        settingsMenu.dispose();
     }
 
     private void handleRunInput() {
