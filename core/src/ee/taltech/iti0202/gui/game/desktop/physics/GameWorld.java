@@ -78,16 +78,16 @@ public class GameWorld implements Disposable {
 
     public void update(float dt) {
         world.step(dt, 10, 2);
-        for (int id : contactListener.weaponsToRemove) {
+        for (int id : contactListener.getWeaponsToRemove()) {
             removeWeapon(id);
             weaponsRemoved.add(id);
         }
-        for (int id : contactListener.bulletsToRemove) {
+        for (int id : contactListener.getBulletsToRemove()) {
             removeBullet(id);
             bulletsRemoved.add(id);
         }
-        contactListener.weaponsToRemove.clear();
-        contactListener.bulletsToRemove.clear();
+        contactListener.getWeaponsToRemove().clear();
+        contactListener.getBulletsToRemove().clear();
     }
 
     public int addPlayer() {

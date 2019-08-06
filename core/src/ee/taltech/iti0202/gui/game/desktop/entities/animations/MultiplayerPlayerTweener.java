@@ -13,10 +13,14 @@ public class MultiplayerPlayerTweener extends PlayerTweener {
     private float influence;
     private float changeSpeed;
     private Stack<MultiplayerAnimation> animations = new Stack<>();
+    private Runnable onAnimationEndFunc;
 
     public MultiplayerPlayerTweener(Entity entity) {
         super(entity);
         getSecondPlayer().addListener(new MyPlayerListener(() -> {
+            if (onAnimationEndFunc != null) {
+                onAnimationEndFunc.run();
+            }
             while (!animations.isEmpty() && animations.peek().isToPlayOnce()) {
                 animations.pop();
             }
@@ -45,5 +49,9 @@ public class MultiplayerPlayerTweener extends PlayerTweener {
 
     public MultiplayerAnimation getCurrentAnimation() {
         return !animations.isEmpty() ? animations.peek() : null;
+    }
+
+    public void setOnAnimationEndFunc(Runnable onAnimationEndFunc) {
+        this.onAnimationEndFunc = onAnimationEndFunc;
     }
 }

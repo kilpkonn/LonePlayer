@@ -17,8 +17,8 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 public class MultiplayerContactListener implements ContactListener {
 
     public Map<Integer, PlayerBody.PlayerBodyData> players;
-    public Set<Integer> weaponsToRemove = new HashSet<>();
-    public Set<Integer> bulletsToRemove = new HashSet<>();
+    private Set<Integer> weaponsToRemove = new HashSet<>();
+    private Set<Integer> bulletsToRemove = new HashSet<>();
 
     public MultiplayerContactListener(Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.players = players;
@@ -225,4 +225,11 @@ public class MultiplayerContactListener implements ContactListener {
         }
     }
 
+    public Set<Integer> getWeaponsToRemove() {
+        return weaponsToRemove;
+    }
+
+    public Set<Integer> getBulletsToRemove() {
+        return bulletsToRemove;
+    }
 }
