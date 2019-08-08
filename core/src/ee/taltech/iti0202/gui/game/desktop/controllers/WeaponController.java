@@ -80,4 +80,8 @@ public class WeaponController {
     public Map<Integer, MultiplayerPlayerTweener> getAnimations() {
         return animations;
     }
+
+    public void removeWeapon(int id) {
+        animations.remove(id);
+    }
 }

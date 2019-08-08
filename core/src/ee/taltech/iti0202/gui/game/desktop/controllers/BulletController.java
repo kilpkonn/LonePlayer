@@ -32,12 +32,23 @@ public class BulletController {
     }
 
     public void updateAnimations(float dt) {
-        for (MultiplayerPlayerTweener weaponTweener : animations.values()) {
-            weaponTweener.update(dt);
+        for (Map.Entry<Integer, MultiplayerPlayerTweener> entry : animations.entrySet()) {
+            BulletBody.BulletBodyData data = bullets.get(entry.getKey());
+            //TODO: ATM get removed from word first upon hitting border
+            if (data != null && data.isHit && entry.getValue().getCurrentAnimation() != Bullet.Animation.HIT) {  //TODO: Some other way not to double push
+                entry.getValue().setAnimation(Bullet.Animation.HIT);
+                System.out.println("HIT");
+                entry.getValue().setOnAnimationEndFunc(() -> data.isToBeRemoved = true);
+            }
+            entry.getValue().update(dt);
         }
     }
 
     public Map<Integer, MultiplayerPlayerTweener> getAnimations() {
         return animations;
+    }
+
+    public void removeBullet(int id) {
+        animations.remove(id);
     }
 }

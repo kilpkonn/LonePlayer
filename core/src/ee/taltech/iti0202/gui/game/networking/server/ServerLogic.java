@@ -91,7 +91,7 @@ public class ServerLogic implements Disposable {
                 playerController.getAnimations().remove(player.bodyId);
                 entitiesRemoved.players.add(player.bodyId);
                 addPlayer(player);
-                return;
+                continue;
             }
 
             player.wallJump = (short) bodyData.wallJump;
@@ -120,6 +120,7 @@ public class ServerLogic implements Disposable {
     private void updateWeapons(Map<Integer, Weapon> weapons, Play.EntitiesToBeRemoved entitiesRemoved) {
         for (int id : gameWorld.getWeaponsRemoved()) {
             weapons.remove(id);
+            weaponController.removeWeapon(id);
             entitiesRemoved.weapons.add(id);
         }
         for (Weapon weapon : weapons.values()) {
@@ -141,12 +142,21 @@ public class ServerLogic implements Disposable {
     private void updateBullets(Map<Integer, Bullet> bullets, Play.EntitiesToBeRemoved entitiesRemoved) {
         for (int id : gameWorld.getBulletsRemoved()) {
             bullets.remove(id);
+            bulletController.removeBullet(id);
             entitiesRemoved.bullets.add(id);
         }
         for (Bullet bullet : bullets.values()) {
             Body body = gameWorld.getBulletBodies().get(bullet.bodyId);
             BulletBody.BulletBodyData bodyData = gameWorld.getBullets().get(bullet.bodyId);
             MultiplayerPlayerTweener animation = bulletController.getAnimations().get(bullet.bodyId);
+
+            if (bodyData.isToBeRemoved) {
+                gameWorld.removeBullet(bullet.bodyId);
+                bullets.remove(bullet.bodyId);
+                bulletController.removeBullet(bullet.bodyId);
+                entitiesRemoved.bullets.add(bullet.bodyId);
+                continue;
+            }
 
             bullet.position = body.getPosition();
             bullet.angle = body.getAngle();
@@ -202,6 +212,7 @@ public class ServerLogic implements Disposable {
                 start = System.currentTimeMillis();
 
                 gameWorld.update(dt);
+
                 playerController.updateAnimations(dt);
                 weaponController.updateAnimations(dt);
                 bulletController.updateAnimations(dt);

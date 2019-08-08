@@ -85,6 +85,7 @@ public class GameWorld implements Disposable {
         for (int id : contactListener.getBulletsToRemove()) {
             removeBullet(id);
             bulletsRemoved.add(id);
+            System.out.println("Removed: " + id);
         }
         contactListener.getWeaponsToRemove().clear();
         contactListener.getBulletsToRemove().clear();

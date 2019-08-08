@@ -34,7 +34,7 @@ public class MultiplayerContactListener implements ContactListener {
 
 
         // detect bullet collision
-        bulletDetection(fa, fb);
+        bulletDetection(oa, ob);
 
         // set wall jump
         setWallJump(oa, ob, 1);

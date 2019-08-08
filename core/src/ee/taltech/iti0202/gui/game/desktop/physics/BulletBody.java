@@ -61,6 +61,7 @@ public class BulletBody {
 
     public static class BulletBodyData extends BodyData {
         public boolean isHit;
+        public boolean isToBeRemoved = false;
         public WeaponProjectile.Type type;
         public BulletBodyData(int id, WeaponProjectile.Type type) {
             this.id = id;
