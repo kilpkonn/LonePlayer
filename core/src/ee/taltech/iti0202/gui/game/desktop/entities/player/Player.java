@@ -172,6 +172,16 @@ public class Player extends SpriteAnimation {
         }
 
         @Override
+        public float getScale() {
+            return 0.08f;
+        }
+
+        @Override
+        public int getSpeed() {
+            return 100;
+        }
+
+        @Override
         public boolean isToPlayOnce() {
             return toPlayOnce;
         }
@@ -180,7 +190,6 @@ public class Player extends SpriteAnimation {
         public String getName() {
             return this.name;
         }
-
 
         public String toString() {
             return this.name;

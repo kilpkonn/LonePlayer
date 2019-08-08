@@ -57,19 +57,34 @@ public class Bullet extends WeaponProjectile {
     }
 
     public enum Animation implements MultiplayerAnimation, Serializable {
-        FLY("fly", false),
-        HIT("hit", true);
+        FLY("fly", false, 50, 0.03f),
+        HIT("hit", true, 10, 1f);
 
         private final String name;
+        private final float scale;
+        private final int speed;
         private final boolean isToPlayOnce;
 
-        Animation(String s, boolean toPlayOnce) {
+        Animation(String s, boolean toPlayOnce, int sp, float sca) {
             name = s;
             isToPlayOnce = toPlayOnce;
+            speed = sp;
+            scale = sca;
         }
 
         public String toString() {
             return this.name;
+        }
+
+
+        @Override
+        public float getScale() {
+            return scale;
+        }
+
+        @Override
+        public int getSpeed() {
+            return speed;
         }
 
         @Override

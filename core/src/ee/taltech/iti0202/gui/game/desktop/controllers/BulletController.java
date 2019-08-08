@@ -37,7 +37,6 @@ public class BulletController {
             //TODO: ATM get removed from word first upon hitting border
             if (data != null && data.isHit && entry.getValue().getCurrentAnimation() != Bullet.Animation.HIT) {  //TODO: Some other way not to double push
                 entry.getValue().setAnimation(Bullet.Animation.HIT);
-                System.out.println("HIT");
                 entry.getValue().setOnAnimationEndFunc(() -> data.isToBeRemoved = true);
             }
             entry.getValue().update(dt);

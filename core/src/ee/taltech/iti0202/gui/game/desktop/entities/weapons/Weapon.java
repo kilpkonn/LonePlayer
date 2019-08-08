@@ -94,6 +94,16 @@ public abstract class Weapon extends SpriteAnimation {
 
 
         @Override
+        public float getScale() {
+            return 0.1f;
+        }
+
+        @Override
+        public int getSpeed() {
+            return 100;  //TODO: Remove duplicate code and use this
+        }
+
+        @Override
         public boolean isToPlayOnce() {
             return isToPlayOnce;
         }

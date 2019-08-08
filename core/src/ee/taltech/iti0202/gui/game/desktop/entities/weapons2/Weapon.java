@@ -8,7 +8,6 @@ import java.io.Serializable;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
-import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.bullet.Bullet;
 
 public abstract class Weapon extends SpriteAnimation {
@@ -21,6 +20,8 @@ public abstract class Weapon extends SpriteAnimation {
 
     public void setAnimation(MultiplayerAnimation animation) {
         setAnimation(animation.getName(), animation.isToPlayOnce());
+        setScale(animation.getScale());
+        setAnimationSpeed(animation.getSpeed());
     }
 
     @Override
