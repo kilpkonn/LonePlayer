@@ -27,7 +27,7 @@ public class BulletController {
         Entity entity = AnimationLoader.getData(type.getAnimationFile()).getEntity(0);
         MultiplayerPlayerTweener tweener = new MultiplayerPlayerTweener(entity);
         tweener.speed = 100;
-        tweener.setAnimation(Bullet.Animation.FLY);
+        tweener.setAnimation(WeaponProjectile.Animation.FLY);
         animations.put(id, tweener);
     }
 
@@ -35,8 +35,8 @@ public class BulletController {
         for (Map.Entry<Integer, MultiplayerPlayerTweener> entry : animations.entrySet()) {
             BulletBody.BulletBodyData data = bullets.get(entry.getKey());
             //TODO: ATM get removed from word first upon hitting border
-            if (data != null && data.isHit && entry.getValue().getCurrentAnimation() != Bullet.Animation.HIT) {  //TODO: Some other way not to double push
-                entry.getValue().setAnimation(Bullet.Animation.HIT);
+            if (data != null && data.isHit && entry.getValue().getCurrentAnimation() != WeaponProjectile.Animation.HIT) {  //TODO: Some other way not to double push
+                entry.getValue().setAnimation(WeaponProjectile.Animation.HIT);
                 entry.getValue().setOnAnimationEndFunc(() -> data.isToBeRemoved = true);
             }
             entry.getValue().update(dt);

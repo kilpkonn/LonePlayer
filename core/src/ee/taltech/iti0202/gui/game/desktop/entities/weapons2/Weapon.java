@@ -16,7 +16,7 @@ public class Weapon extends SpriteAnimation2 {
 
     public Weapon(Body body, String path) {
         super(body, path);
-        setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
+        setAnimation(Animation.DEFAULT);
     }
 
     public void setAnimation(MultiplayerAnimation animation) {
@@ -67,6 +67,54 @@ public class Weapon extends SpriteAnimation2 {
 
         public WeaponData getData() {
             return data;
+        }
+    }
+
+    public enum Animation implements MultiplayerAnimation, Serializable {
+        DEFAULT("default", false, 100, 0.1f, false),
+        FIRE("fire", true, 100, 0.1f, true);
+
+        private final String name;
+        private boolean isToPlayOnce;
+        private final float scale;
+        private final int speed;
+        private final boolean isHardSet;
+
+        Animation(String s, boolean playOnce, int sp, float sca, boolean hardSet) {
+            name = s;
+            isToPlayOnce = playOnce;
+            speed = sp;
+            scale = sca;
+            isHardSet = hardSet;
+        }
+
+        public String toString() {
+            return this.name;
+        }
+
+        @Override
+        public float getScale() {
+            return scale;
+        }
+
+        @Override
+        public int getSpeed() {
+            return speed;
+        }
+
+        @Override
+        public boolean isToPlayOnce() {
+            return isToPlayOnce;
+        }
+
+        @Override
+        public boolean isHardSet() {
+            return isHardSet;
+        }
+
+        @Override
+        public String getName() {
+            return name;
         }
     }
 }

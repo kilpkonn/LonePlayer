@@ -66,12 +66,12 @@ public class GameServer implements Disposable {
         kryo.register(PlayerControls.class);
         kryo.register(Entity.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation.class);
-        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.class);
+        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Animation.class);
         kryo.register(Weapon.class);
         kryo.register(int[].class);
         kryo.register(Play.Bullets.class);
         kryo.register(Bullet.class);
-        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet.Animation.class);
+        kryo.register(WeaponProjectile.Animation.class);
         kryo.register(WeaponProjectile.Type.class);
         kryo.register(Play.EntitiesToBeRemoved.class);
 

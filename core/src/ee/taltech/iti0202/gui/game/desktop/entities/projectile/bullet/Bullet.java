@@ -27,7 +27,7 @@ public class Bullet extends WeaponProjectile {
         this.world = world;
         this.body = body;
         this.spriteBatch = sb;
-        setAnimation(Animation.FLY.name, false);
+        setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile.Animation.FLY.getName(), false);
         setScale(0.03f);
         setAnimationSpeed(50);
         body.setUserData("bullet");
@@ -44,7 +44,7 @@ public class Bullet extends WeaponProjectile {
     }
 
     public void onHit() {
-        hardSetAnimation(Animation.HIT.name, true);
+        hardSetAnimation(ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile.Animation.HIT.getName(), true);
         setStopOnAnimationOver(true);
         setScale(1f);
         setAnimationSpeed(10);
@@ -54,53 +54,5 @@ public class Bullet extends WeaponProjectile {
 
     public boolean toBeRemoved() {
         return hit && isAnimationOver();
-    }
-
-    public enum Animation implements MultiplayerAnimation, Serializable {
-        FLY("fly", false, 50, 0.03f, true),
-        HIT("hit", true, 10, 1f, true);
-
-        private final String name;
-        private final boolean isToPlayOnce;
-        private final float scale;
-        private final int speed;
-        private final boolean isHardSet;
-
-        Animation(String s, boolean toPlayOnce, int sp, float sca, boolean hardSet) {
-            name = s;
-            isToPlayOnce = toPlayOnce;
-            speed = sp;
-            scale = sca;
-            isHardSet = hardSet;
-        }
-
-        public String toString() {
-            return this.name;
-        }
-
-        @Override
-        public float getScale() {
-            return scale;
-        }
-
-        @Override
-        public int getSpeed() {
-            return speed;
-        }
-
-        @Override
-        public boolean isToPlayOnce() {
-            return isToPlayOnce;
-        }
-
-        @Override
-        public boolean isHardSet() {
-            return isHardSet;
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
     }
 }

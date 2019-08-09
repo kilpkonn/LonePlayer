@@ -33,7 +33,7 @@ public class WeaponController {
         Entity entity = AnimationLoader.getData(type.getAnimationFile()).getEntity(0);
         MultiplayerPlayerTweener tweener = new MultiplayerPlayerTweener(entity);
         tweener.speed = 100;
-        tweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
+        tweener.setAnimation(Weapon.Animation.DEFAULT);
         animations.put(id, tweener);
     }
 
@@ -53,7 +53,7 @@ public class WeaponController {
         MultiplayerPlayerTweener weaponTweener = animations.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
 
         if (playerBodyData.isAiming && data.bulletHeat <= 0) {  // TODO: Fix no shooting animation when aim moving
-            weaponTweener.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.FIRE);
+            weaponTweener.setAnimation(Weapon.Animation.FIRE);
             data.bulletHeat = data.type.getData().getCoolDown();
 
             if (serverLogic != null) {
