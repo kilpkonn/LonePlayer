@@ -16,6 +16,7 @@ public class Weapon extends SpriteAnimation2 {
 
     public Weapon(Body body, String path) {
         super(body, path);
+        setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon.Animation.DEFAULT);
     }
 
     public void setAnimation(MultiplayerAnimation animation) {

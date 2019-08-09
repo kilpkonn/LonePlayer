@@ -6,12 +6,13 @@ import java.io.Serializable;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation2;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 
 public abstract class WeaponProjectile extends SpriteAnimation2 {
 
     public WeaponProjectile(Body body, String path) {
         super(body, path);
-        playerTweener.setScale(0f); //In case rendered before update
+        setAnimation(Bullet.Animation.FLY);
     }
 
     public void setAnimation(MultiplayerAnimation animation) {
