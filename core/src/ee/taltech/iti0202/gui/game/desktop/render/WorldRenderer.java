@@ -148,7 +148,6 @@ public class WorldRenderer implements Handler {
             if (!weapons.containsKey(weaponEntry.getKey())) {
                 weapons.put(weaponEntry.getKey(), new WeaponBuilder()
                         .setBody(weaponEntry.getValue())
-                        .setSpriteBatch(sb)
                         .setType(gameWorld.getWeapons().get(weaponEntry.getKey()).type)
                         .create());
             }

@@ -11,7 +11,7 @@ public abstract class WeaponProjectile extends SpriteAnimation2 {
 
     public WeaponProjectile(Body body, String path) {
         super(body, path);
-        //playerTweener.setScale(0f); //In case rendered before update
+        playerTweener.setScale(0f); //In case rendered before update
     }
 
     public void setAnimation(MultiplayerAnimation animation) {

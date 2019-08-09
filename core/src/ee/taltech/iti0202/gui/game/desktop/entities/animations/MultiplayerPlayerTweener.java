@@ -57,7 +57,7 @@ public class MultiplayerPlayerTweener extends PlayerTweener {
 
         setScale(animation.getScale());
         speed = animation.getSpeed();
-        System.out.println(getScale());
+        //System.out.println(getScale());
 
         changeSpeed = animation.isToPlayOnce() || animations.peek().isToPlayOnce() ? 2f : 1f;
     }

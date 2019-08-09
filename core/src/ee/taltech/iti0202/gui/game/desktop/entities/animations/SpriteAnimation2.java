@@ -72,4 +72,8 @@ public class SpriteAnimation2 {
     public boolean isFlippedX() {
         return playerTweener.flippedX() == -1;
     }
+
+    public Body getBody() {
+        return body;
+    }
 }
