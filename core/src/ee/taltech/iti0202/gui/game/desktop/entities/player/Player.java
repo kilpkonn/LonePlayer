@@ -187,6 +187,11 @@ public class Player extends SpriteAnimation {
         }
 
         @Override
+        public boolean isHardSet() {
+            return false;
+        }
+
+        @Override
         public String getName() {
             return this.name;
         }

@@ -5,5 +5,6 @@ public interface MultiplayerAnimation {
     float getScale();
     int getSpeed();
     boolean isToPlayOnce();
+    boolean isHardSet();
     String getName();
 }

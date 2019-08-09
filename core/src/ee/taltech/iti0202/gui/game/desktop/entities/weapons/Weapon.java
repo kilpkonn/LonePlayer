@@ -77,35 +77,45 @@ public abstract class Weapon extends SpriteAnimation {
     }
 
     public enum Animation implements MultiplayerAnimation, Serializable {
-        DEFAULT("default", false),
-        FIRE("fire", true);
+        DEFAULT("default", false, 100, 0.1f, false),
+        FIRE("fire", true, 100, 0.1f, true);
 
         private final String name;
         private boolean isToPlayOnce;
+        private final float scale;
+        private final int speed;
+        private final boolean isHardSet;
 
-        Animation(String s, boolean playOnce) {
+        Animation(String s, boolean playOnce, int sp, float sca, boolean hardSet) {
             name = s;
             isToPlayOnce = playOnce;
+            speed = sp;
+            scale = sca;
+            isHardSet = hardSet;
         }
 
         public String toString() {
             return this.name;
         }
 
-
         @Override
         public float getScale() {
-            return 0.1f;
+            return scale;
         }
 
         @Override
         public int getSpeed() {
-            return 100;  //TODO: Remove duplicate code and use this
+            return speed;
         }
 
         @Override
         public boolean isToPlayOnce() {
             return isToPlayOnce;
+        }
+
+        @Override
+        public boolean isHardSet() {
+            return isHardSet;
         }
 
         @Override

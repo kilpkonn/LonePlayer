@@ -40,9 +40,24 @@ public class MultiplayerPlayerTweener extends PlayerTweener {
 
     public void setAnimation(MultiplayerAnimation animation) {
         if (animations.isEmpty() || animations.peek() != animation)animations.push(animation);
-        influence = 0;
+
+        if (animation.isHardSet()) {
+            getFirstPlayer().setAnimation(animation.getName());
+            getSecondPlayer().setAnimation(animation.getName());
+            super.update(0f);
+            setScale(animation.getScale());
+            speed = animation.getSpeed();
+            influence = 1f;
+            return;
+        }
+
+        influence = 0f;
         getFirstPlayer().setAnimation(getSecondPlayer().getAnimation());
         getSecondPlayer().setAnimation(animation.getName());
+
+        setScale(animation.getScale());
+        speed = animation.getSpeed();
+        System.out.println(getScale());
 
         changeSpeed = animation.isToPlayOnce() || animations.peek().isToPlayOnce() ? 2f : 1f;
     }
