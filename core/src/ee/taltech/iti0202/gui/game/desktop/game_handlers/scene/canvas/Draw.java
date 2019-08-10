@@ -216,7 +216,7 @@ public class Draw implements Handler {
                 if (cell.getTile().getProperties().containsKey("animation")) {
                     Texture tex =
                             Game.res.getTexture(
-                                    "Player"); // TODO: <- Wut is dis? misleading names or obsolete?
+                                    "PlayerEntity"); // TODO: <- Wut is dis? misleading names or obsolete?
                     // // this is to
                     // make animated cells, like grass in the wind or so on
                     TextureRegion[] sprites = TextureRegion.split(tex, 32, 32)[0];

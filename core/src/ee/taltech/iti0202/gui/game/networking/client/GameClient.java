@@ -20,10 +20,11 @@ import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Entity;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
 public class GameClient implements Disposable {
 
@@ -50,7 +51,7 @@ public class GameClient implements Disposable {
         kryo.register(Lobby.Details.class);
         kryo.register(HashSet.class);
         kryo.register(B2DVars.GameDifficulty.class);
-        kryo.register(Player.class);
+        kryo.register(PlayerEntity.class);
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
         kryo.register(Play.Weapons.class);
@@ -60,10 +61,10 @@ public class GameClient implements Disposable {
         kryo.register(Entity.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.class);
         kryo.register(Weapon.Animation.class);
-        kryo.register(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon.class);
+        kryo.register(WeaponEntity.class);
         kryo.register(int[].class);
         kryo.register(Play.Bullets.class);
-        kryo.register(Bullet.class);
+        kryo.register(BulletEntity.class);
         kryo.register(WeaponProjectile.Animation.class);
         kryo.register(WeaponProjectile.Type.class);
         kryo.register(Play.EntitiesToBeRemoved.class);
@@ -84,7 +85,7 @@ public class GameClient implements Disposable {
         client.sendTCP(new Lobby.ActMapDifficulty(act, map, difficulty));
     }
 
-    public void kickPlayer(Player player) {
+    public void kickPlayer(PlayerEntity player) {
         client.sendTCP(new Lobby.Kick(player));
     }
 

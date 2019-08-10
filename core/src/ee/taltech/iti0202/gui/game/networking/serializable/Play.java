@@ -4,22 +4,22 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
 public class Play implements Serializable {
 
     public static class Players implements Serializable {
-        public Set<Player> players = new HashSet<>();
+        public Set<PlayerEntity> players = new HashSet<>();
     }
 
     public static class Weapons implements Serializable {
-        public Set<Weapon> weapons = new HashSet<>();
+        public Set<WeaponEntity> weapons = new HashSet<>();
     }
 
     public static class Bullets implements Serializable {
-        public Set<Bullet> bullets = new HashSet<>();
+        public Set<BulletEntity> bullets = new HashSet<>();
     }
 
     public static class EntitiesToBeRemoved implements Serializable {

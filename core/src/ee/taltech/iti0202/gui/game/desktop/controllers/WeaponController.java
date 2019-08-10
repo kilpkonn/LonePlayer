@@ -14,6 +14,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
 import ee.taltech.iti0202.gui.game.networking.server.ServerLogic;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
 
 public class WeaponController {
 
@@ -57,8 +58,8 @@ public class WeaponController {
             data.bulletHeat = data.type.getData().getCoolDown();
 
             if (serverLogic != null) {
-                for (Weapon.BulletInitData b : data.type.getData().generateBulletsShot(body.getPosition(), playerBodyData.aimAngle, Bullet.Type.BULLET)) {  //TODO: Bullet types..
-                    ee.taltech.iti0202.gui.game.networking.server.entity.Bullet bullet = new ee.taltech.iti0202.gui.game.networking.server.entity.Bullet();
+                for (Weapon.BulletInitData b : data.type.getData().generateBulletsShot(body.getPosition(), playerBodyData.aimAngle, Bullet.Type.BULLET)) {  //TODO: BulletEntity types..
+                    BulletEntity bullet = new BulletEntity();
                     bullet.position = b.pos;
                     bullet.velocity = b.velocity;
                     bullet.angle = b.angle;

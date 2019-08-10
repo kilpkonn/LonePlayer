@@ -26,10 +26,10 @@ import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SPEEDS;
@@ -69,7 +69,7 @@ public class Multiplayer extends GameState {
     private State state = State.RUN;
 
     private PlayerControls controls;
-    private Player playerToFollow;
+    private PlayerEntity playerToFollow;
     private boolean dimension = true;
 
     public Multiplayer(String act, String map, B2DVars.GameDifficulty difficulty) {
@@ -165,8 +165,8 @@ public class Multiplayer extends GameState {
         settingsMenu = new SettingsMenu(hudCam, () -> state = State.PAUSE);
     }
 
-    public void updatePlayers(Set<Player> players) {
-        for (Player player : players) {
+    public void updatePlayers(Set<PlayerEntity> players) {
+        for (PlayerEntity player : players) {
             if (player == null) continue;
 
             gameWorld.updatePlayer(player);
@@ -177,8 +177,8 @@ public class Multiplayer extends GameState {
         }
     }
 
-    public void updateWeapons(Set<Weapon> weapons) {
-        for (Weapon weapon : weapons) {
+    public void updateWeapons(Set<WeaponEntity> weapons) {
+        for (WeaponEntity weapon : weapons) {
             if (weapon == null) continue;
 
             gameWorld.updateWeapon(weapon);
@@ -186,8 +186,8 @@ public class Multiplayer extends GameState {
         }
     }
 
-    public void updateBullets(Set<Bullet> bullets) {
-        for (Bullet bullet : bullets) {
+    public void updateBullets(Set<BulletEntity> bullets) {
+        for (BulletEntity bullet : bullets) {
             if (bullet == null) continue;
 
             gameWorld.updateBullet(bullet);
@@ -356,7 +356,7 @@ public class Multiplayer extends GameState {
         hud.render(sb);
     }
 
-    public void setPlayerToFollow(Player playerToFollow) {
+    public void setPlayerToFollow(PlayerEntity playerToFollow) {
         this.playerToFollow = playerToFollow;
         playerController.addAnimation(playerToFollow.bodyId);
         worldRenderer.setPlayerToFollow(playerToFollow);

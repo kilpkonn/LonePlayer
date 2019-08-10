@@ -24,11 +24,11 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.Entity;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
 
 public class GameServer implements Disposable {
@@ -41,7 +41,7 @@ public class GameServer implements Disposable {
     private String map;
     private B2DVars.GameDifficulty difficulty;
 
-    private Map<Integer, Player> players = new HashMap<>();
+    private Map<Integer, PlayerEntity> players = new HashMap<>();
     private ServerLogic serverLogic = new ServerLogic();
 
     public GameServer() {
@@ -57,7 +57,7 @@ public class GameServer implements Disposable {
         kryo.register(Lobby.Details.class);
         kryo.register(HashSet.class);
         kryo.register(B2DVars.GameDifficulty.class);
-        kryo.register(Player.class);
+        kryo.register(PlayerEntity.class);
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
         kryo.register(Play.Weapons.class);
@@ -67,10 +67,10 @@ public class GameServer implements Disposable {
         kryo.register(Entity.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.class);
         kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Animation.class);
-        kryo.register(Weapon.class);
+        kryo.register(WeaponEntity.class);
         kryo.register(int[].class);
         kryo.register(Play.Bullets.class);
-        kryo.register(Bullet.class);
+        kryo.register(BulletEntity.class);
         kryo.register(WeaponProjectile.Animation.class);
         kryo.register(WeaponProjectile.Type.class);
         kryo.register(Play.EntitiesToBeRemoved.class);
@@ -104,7 +104,7 @@ public class GameServer implements Disposable {
         return String.format("127.0.0.1:%s|%s", tcpPort, udpPort);
     }
 
-    public Set<Player> getPlayers() {
+    public Set<PlayerEntity> getPlayers() {
         return new HashSet<>(players.values());
     }
 
@@ -116,7 +116,7 @@ public class GameServer implements Disposable {
 
         Play.Weapons weapons = new Play.Weapons();
         int i = 0;
-        for (Weapon weapon : serverLogic.getWeapons().values()) {
+        for (WeaponEntity weapon : serverLogic.getWeapons().values()) {
             weapons.weapons.add(weapon);
             i++;
             if (i >= 10) {
@@ -129,7 +129,7 @@ public class GameServer implements Disposable {
 
         Play.Bullets bullets = new Play.Bullets();
         i = 0;
-        for (Bullet bullet : serverLogic.getBullets().values()) {
+        for (BulletEntity bullet : serverLogic.getBullets().values()) {
             bullets.bullets.add(bullet);
             i++;
             if (i >= 15) {
@@ -144,7 +144,7 @@ public class GameServer implements Disposable {
     }
 
     public void updatePlayerName(int id, Lobby.NameChange nameChange) {
-        Player player = players.get(id);
+        PlayerEntity player = players.get(id);
         player.name = nameChange.newName;
         players.remove(id);
         players.put(id, player);
@@ -163,14 +163,14 @@ public class GameServer implements Disposable {
         updateLobbyDetails();
     }
 
-    public void updateConnection(int id, Player player) {
+    public void updateConnection(int id, PlayerEntity player) {
         players.put(id, player);
         updateLobbyDetails();
     }
 
     public void performHandshake(int id) {
         Handshake.Request request = new Handshake.Request();
-        for (Player player : players.values()) {
+        for (PlayerEntity player : players.values()) {
             request.names.add(player.name);
         }
         request.id = id;
@@ -195,7 +195,7 @@ public class GameServer implements Disposable {
             }
         }
 
-        for (Player player : getPlayers()) {
+        for (PlayerEntity player : getPlayers()) {
             serverLogic.addPlayer(player);
         }
 
@@ -225,7 +225,7 @@ public class GameServer implements Disposable {
         details.difficulty = difficulty;
         for (Connection con : server.getConnections()) {
             if (players.containsKey(con.getID())) {
-                Player player = players.get(con.getID());
+                PlayerEntity player = players.get(con.getID());
                 player.latency = con.getReturnTripTime();
                 details.players.add(player);
             }
@@ -235,7 +235,7 @@ public class GameServer implements Disposable {
 
     public Set<String> getNames() {
         Set<String> names = new HashSet<>();
-        for (Player player : players.values()) {
+        for (PlayerEntity player : players.values()) {
             names.add(player.name);
         }
         return names;

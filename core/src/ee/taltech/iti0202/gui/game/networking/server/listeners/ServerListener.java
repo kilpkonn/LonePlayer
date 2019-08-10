@@ -6,7 +6,7 @@ import com.esotericsoftware.kryonet.Listener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
 
 public class ServerListener extends Listener {
@@ -19,7 +19,7 @@ public class ServerListener extends Listener {
 
     @Override
     public void connected(Connection connection) {
-        System.out.println("Player connected from: " + connection.getRemoteAddressTCP());
+        System.out.println("PlayerEntity connected from: " + connection.getRemoteAddressTCP());
         server.performHandshake(connection.getID());
     }
 
@@ -36,7 +36,7 @@ public class ServerListener extends Listener {
                 server.performHandshake(connection.getID());
                 return;
             }
-            Player player = new Player(response.name, connection.getID());
+            PlayerEntity player = new PlayerEntity(response.name, connection.getID());
             server.updateConnection(connection.getID(), player);
         } else if (object instanceof Lobby.NameChange) {
             server.updatePlayerName(connection.getID(), (Lobby.NameChange) object);

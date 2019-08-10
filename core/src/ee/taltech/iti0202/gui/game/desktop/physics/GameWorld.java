@@ -26,8 +26,9 @@ import java.util.Set;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
@@ -158,7 +159,7 @@ public class GameWorld implements Disposable {
         return false;
     }
 
-    public void updatePlayer(Player player) {
+    public void updatePlayer(PlayerEntity player) {
         if (world.isLocked()) return;
         if (!playerBodies.containsKey(player.bodyId)) {
             Body playerBody = PlayerBody.createPlayer(world, player.position, player.bodyId);
@@ -174,7 +175,7 @@ public class GameWorld implements Disposable {
         playerBodyData.currentWeaponIndex = player.currentWeaponIndex;
     }
 
-    public void updateWeapon(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon weapon) {
+    public void updateWeapon(WeaponEntity weapon) {
         if (world.isLocked()) return;
         if (!weaponBodies.containsKey(weapon.bodyId)) {
             Body weaponBody = WeaponBody.createWeapon(world, weapon.position, weapon.bodyId, weapon.type);
@@ -187,7 +188,7 @@ public class GameWorld implements Disposable {
         body.setLinearVelocity(weapon.velocity);
     }
 
-    public void updateBullet(Bullet bullet) {
+    public void updateBullet(BulletEntity bullet) {
         if (world.isLocked()) return;
         if (!bulletBodies.containsKey(bullet.bodyId)) {
             Body bulletBody = BulletBody.createBullet(world, bullet.position, bullet.velocity, bullet.angle, bullet.bodyId, bullet.type);

@@ -16,12 +16,14 @@ import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player2.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectileBuilder;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.WeaponBuilder;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
@@ -48,7 +50,7 @@ public class WorldRenderer implements Handler {
     private Map<Integer, Player> players = new HashMap<>();
     private Map<Integer, ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon> weapons = new HashMap<>();
     private Map<Integer, WeaponProjectile> bullets = new HashMap<>();
-    private ee.taltech.iti0202.gui.game.networking.server.entity.Player playerToFollow;
+    private PlayerEntity playerToFollow;
 
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
         this.gameWorld = gameWorld;
@@ -72,7 +74,7 @@ public class WorldRenderer implements Handler {
             player.update(dt);
         }
 
-        for (ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon weapon : weapons.values()) {
+        for (Weapon weapon : weapons.values()) {
             weapon.update(dt);
         }
 
@@ -177,12 +179,12 @@ public class WorldRenderer implements Handler {
         bullets.remove(id);
     }
 
-    public void updatePlayerAnimation(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
+    public void updatePlayerAnimation(PlayerEntity player) {
         if (player.animation != null && players.containsKey(player.bodyId)) {
             Player p = players.get(player.bodyId);
             p.setAnimation(player.animation);
             p.setFlipX(player.flippedAnimation);
-            ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon[] weapons = new ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon[3];
+            Weapon[] weapons = new Weapon[3];
             for (int i = 0; i < weapons.length; i++) {
                 weapons[i] = this.weapons.get(player.weapons[i]);
             }
@@ -193,23 +195,23 @@ public class WorldRenderer implements Handler {
         }
     }
 
-    public void updateWeaponAnimation(Weapon weapon) {
+    public void updateWeaponAnimation(WeaponEntity weapon) {
         if (weapon.animation != null && weapons.containsKey(weapon.bodyId)) {
-            ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon w = weapons.get(weapon.bodyId);
+            Weapon w = weapons.get(weapon.bodyId);
             w.setAnimation(weapon.animation);
             w.isDropped = weapon.dropped;
             if (weapon.dropped) w.setFlipX(weapon.flippedAnimation);
         }
     }
 
-    public void updateBulletAnimation(Bullet bullet) {
+    public void updateBulletAnimation(BulletEntity bullet) {
         if (bullet.animation != null && bullets.containsKey(bullet.bodyId)) {
             WeaponProjectile b = bullets.get(bullet.bodyId);
             b.setAnimation(bullet.animation);
         }
     }
 
-    public void setPlayerToFollow(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
+    public void setPlayerToFollow(PlayerEntity player) {
         playerToFollow = player;
     }
 

@@ -3,7 +3,6 @@ package ee.taltech.iti0202.gui.game.networking.server;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -18,10 +17,10 @@ import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Bullet;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Weapon;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
 public class ServerLogic implements Disposable {
     private GameWorld gameWorld;
@@ -30,8 +29,8 @@ public class ServerLogic implements Disposable {
     private WeaponController weaponController;
     private BulletController bulletController;
 
-    private Map<Integer, Weapon> weapons = new ConcurrentHashMap<>();
-    private Map<Integer, Bullet> bullets = new ConcurrentHashMap<>();
+    private Map<Integer, WeaponEntity> weapons = new ConcurrentHashMap<>();
+    private Map<Integer, BulletEntity> bullets = new ConcurrentHashMap<>();
 
     public void loadWorld(String act, String map) {
         if (gameWorld != null) gameWorld.dispose();
@@ -41,26 +40,26 @@ public class ServerLogic implements Disposable {
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
     }
 
-    public void run(Set<Player> players) {
+    public void run(Set<PlayerEntity> players) {
         if (logicThread != null) logicThread.close();
         logicThread = new ServerLogicThread(players, weapons, bullets);
         logicThread.start();
     }
 
-    public void addPlayer(Player player) {
+    public void addPlayer(PlayerEntity player) {
         player.bodyId = gameWorld.addPlayer();
         playerController.addAnimation(player.bodyId);
     }
 
     public void addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type type) {
-        Weapon weapon = new Weapon();
+        WeaponEntity weapon = new WeaponEntity();
         weapon.bodyId = gameWorld.addWeapon(type);
         weapon.type = type;
         weaponController.addAnimation(weapon.bodyId, weapon.type);
         weapons.put(weapon.bodyId, weapon);
     }
 
-    public void addBullet(Bullet bullet) {
+    public void addBullet(BulletEntity bullet) {
         bullet.bodyId = gameWorld.addBullet(bullet.position, bullet.velocity, bullet.angle, bullet.type);
         bulletController.addAnimation(bullet.bodyId, bullet.type);
         bullets.put(bullet.bodyId, bullet);
@@ -80,14 +79,14 @@ public class ServerLogic implements Disposable {
         playerController.trySetAim(controls.id, controls.isAiming, controls.aimingAngle);
     }
 
-    private void updatePlayers(Set<Player> players, Play.EntitiesToBeRemoved entitiesRemoved) {
-        for (Player player : players) {
+    private void updatePlayers(Set<PlayerEntity> players, Play.EntitiesToBeRemoved entitiesRemoved) {
+        for (PlayerEntity player : players) {
             Body body = gameWorld.getPlayerBodies().get(player.bodyId);
             PlayerBody.PlayerBodyData bodyData = gameWorld.getPlayers().get(player.bodyId);
             MultiplayerPlayerTweener animation = playerController.getAnimations().get(player.bodyId);
 
             if (bodyData.health <= 0) {
-                gameWorld.removePlayer(player.bodyId);  //Player dead
+                gameWorld.removePlayer(player.bodyId);  //PlayerEntity dead
                 playerController.getAnimations().remove(player.bodyId);
                 entitiesRemoved.players.add(player.bodyId);
                 addPlayer(player);
@@ -117,13 +116,13 @@ public class ServerLogic implements Disposable {
         }
     }
 
-    private void updateWeapons(Map<Integer, Weapon> weapons, Play.EntitiesToBeRemoved entitiesRemoved) {
+    private void updateWeapons(Map<Integer, WeaponEntity> weapons, Play.EntitiesToBeRemoved entitiesRemoved) {
         for (int id : gameWorld.getWeaponsRemoved()) {
             weapons.remove(id);
             weaponController.removeWeapon(id);
             entitiesRemoved.weapons.add(id);
         }
-        for (Weapon weapon : weapons.values()) {
+        for (WeaponEntity weapon : weapons.values()) {
             Body body = gameWorld.getWeaponBodies().get(weapon.bodyId);
             WeaponBody.WeaponBodyData bodyData = gameWorld.getWeapons().get(weapon.bodyId);
             MultiplayerPlayerTweener animation = weaponController.getAnimations().get(weapon.bodyId);
@@ -139,13 +138,13 @@ public class ServerLogic implements Disposable {
         }
     }
 
-    private void updateBullets(Map<Integer, Bullet> bullets, Play.EntitiesToBeRemoved entitiesRemoved) {
+    private void updateBullets(Map<Integer, BulletEntity> bullets, Play.EntitiesToBeRemoved entitiesRemoved) {
         for (int id : gameWorld.getBulletsRemoved()) {
             bullets.remove(id);
             bulletController.removeBullet(id);
             entitiesRemoved.bullets.add(id);
         }
-        for (Bullet bullet : bullets.values()) {
+        for (BulletEntity bullet : bullets.values()) {
             Body body = gameWorld.getBulletBodies().get(bullet.bodyId);
             BulletBody.BulletBodyData bodyData = gameWorld.getBullets().get(bullet.bodyId);
             MultiplayerPlayerTweener animation = bulletController.getAnimations().get(bullet.bodyId);
@@ -172,11 +171,11 @@ public class ServerLogic implements Disposable {
         return gameWorld != null && playerController != null;
     }
 
-    public Map<Integer, Weapon> getWeapons() {
+    public Map<Integer, WeaponEntity> getWeapons() {
         return weapons;
     }
 
-    public Map<Integer, Bullet> getBullets() {
+    public Map<Integer, BulletEntity> getBullets() {
         return bullets;
     }
 
@@ -190,11 +189,11 @@ public class ServerLogic implements Disposable {
     public class ServerLogicThread extends Thread {
 
         private boolean running = true;
-        private Set<Player> players;
-        private Map<Integer, Weapon> weapons;
-        private Map<Integer, Bullet> bullets;
+        private Set<PlayerEntity> players;
+        private Map<Integer, WeaponEntity> weapons;
+        private Map<Integer, BulletEntity> bullets;
 
-        public ServerLogicThread(Set<Player> players, Map<Integer, Weapon> weapons, Map<Integer, Bullet> bullets) {
+        public ServerLogicThread(Set<PlayerEntity> players, Map<Integer, WeaponEntity> weapons, Map<Integer, BulletEntity> bullets) {
             this.players = players;
             this.weapons = weapons;
             this.bullets = bullets;

@@ -16,7 +16,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.TextFi
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
@@ -178,14 +178,14 @@ public class MatchmakingMenu extends Scene {
                 mapSelectionButton.setText(String.format("Map: %s - %s - %s", details.act, details.map.replace(".tmx", ""), details.difficulty));
             }
 
-            for (Player player : details.players) {
+            for (PlayerEntity player : details.players) {
                 addPlayer(player);
             }
         }
         playersCountLabel.setText("Players: " + playerNameButtons.size());
     }
 
-    private void addPlayer(Player player) {
+    private void addPlayer(PlayerEntity player) {
         ButtonGroup group = new ButtonGroup();
         GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
         GameButton lblPing = new GameButton(player.latency + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);

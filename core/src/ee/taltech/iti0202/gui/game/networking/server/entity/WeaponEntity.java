@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 
-public class Weapon extends Entity implements Serializable {
+public class WeaponEntity extends Entity implements Serializable {
     public float angle;
     public boolean flippedAnimation;
     public MultiplayerAnimation animation;

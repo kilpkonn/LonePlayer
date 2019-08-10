@@ -20,7 +20,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class Game extends ApplicationAdapter {
 
-    public static final String TITLE = "Lone Player";
+    public static final String TITLE = "Lone PlayerEntity";
     public static Content res;
     public static Settings settings;
     public static GameServer server;

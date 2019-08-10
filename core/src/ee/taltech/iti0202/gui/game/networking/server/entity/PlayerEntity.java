@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 
-public class Player extends Entity implements Serializable {
+public class PlayerEntity extends Entity implements Serializable {
 
-    public Player () {}
+    public PlayerEntity() {}
 
-    public Player(String name, int id) {
+    public PlayerEntity(String name, int id) {
         this.name = name;
         this.id = id;
     }
@@ -34,7 +34,7 @@ public class Player extends Entity implements Serializable {
 
     @Override
     public String toString() {
-        return "Player{" +
+        return "PlayerEntity{" +
                 "name='" + name + '\'' +
                 '}';
     }
