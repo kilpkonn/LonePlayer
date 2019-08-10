@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.Player2;
+import ee.taltech.iti0202.gui.game.desktop.entities.player2.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectileBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.WeaponBuilder;
@@ -45,7 +45,7 @@ public class WorldRenderer implements Handler {
     private boolean dimension = true;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
 
-    private Map<Integer, Player2> players = new HashMap<>();
+    private Map<Integer, Player> players = new HashMap<>();
     private Map<Integer, ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon> weapons = new HashMap<>();
     private Map<Integer, WeaponProjectile> bullets = new HashMap<>();
     private ee.taltech.iti0202.gui.game.networking.server.entity.Player playerToFollow;
@@ -68,7 +68,7 @@ public class WorldRenderer implements Handler {
     @Override
     public void update(float dt) {
 
-        for (Player2 player : players.values()) {
+        for (Player player : players.values()) {
             player.update(dt);
         }
 
@@ -136,10 +136,10 @@ public class WorldRenderer implements Handler {
         for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {  //TODO: Need simpler and faster method to render
             //Add missing players -> move to update?
             if (!players.containsKey(playerEntry.getKey())) {
-                players.put(playerEntry.getKey(), new Player2(playerEntry.getValue(), sb));
+                players.put(playerEntry.getKey(), new Player(playerEntry.getValue(), sb));
             }
             float opacity = playerEntry.getKey() == playerToFollow.bodyId ? 1 : 0.5f;
-            Player2 player =  players.get(playerEntry.getKey());
+            Player player =  players.get(playerEntry.getKey());
             player.setOpacity(opacity);
             player.render(sb);
         }
@@ -179,7 +179,7 @@ public class WorldRenderer implements Handler {
 
     public void updatePlayerAnimation(ee.taltech.iti0202.gui.game.networking.server.entity.Player player) {
         if (player.animation != null && players.containsKey(player.bodyId)) {
-            Player2 p = players.get(player.bodyId);
+            Player p = players.get(player.bodyId);
             p.setAnimation(player.animation);
             p.setFlipX(player.flippedAnimation);
             ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon[] weapons = new ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon[3];

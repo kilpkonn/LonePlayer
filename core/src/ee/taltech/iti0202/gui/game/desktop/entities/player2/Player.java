@@ -1,4 +1,4 @@
-package ee.taltech.iti0202.gui.game.desktop.entities.player;
+package ee.taltech.iti0202.gui.game.desktop.entities.player2;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
@@ -10,14 +10,14 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.Multiplaye
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
-public class Player2 extends SpriteAnimation {
+public class Player extends SpriteAnimation {
 
     private Weapon[] weapons = new Weapon[3];
     private int currentWeapon;
     private float aimAngle;
     private boolean isAiming = false;
 
-    public Player2(Body body, SpriteBatch sb) {
+    public Player(Body body, SpriteBatch sb) {
         super(body, sb, "images/player/rogue.scml");
         setScale(0.08f);
         setAnimationSpeed(100);
