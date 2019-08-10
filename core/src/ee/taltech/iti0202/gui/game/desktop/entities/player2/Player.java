@@ -5,6 +5,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Timeline;
 
+import java.io.Serializable;
+
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation2;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
@@ -19,10 +21,7 @@ public class Player extends SpriteAnimation2 {
 
     public Player(Body body) {
         super(body, "images/player/rogue.scml");
-        //setScale(0.08f);
-        //setAnimationSpeed(100);
-        //setHeightOffset(10);
-        setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation.IDLE);
+        setAnimation(PlayerAnimation.IDLE);
     }
 
     @Override
@@ -82,5 +81,53 @@ public class Player extends SpriteAnimation2 {
 
     public void setCurrentWeapon(int currentWeapon) {
         this.currentWeapon = currentWeapon;
+    }
+
+    public enum PlayerAnimation implements MultiplayerAnimation, Serializable {
+        RUN("run", false),
+        JUMP("jump", false),
+        IDLE("idle", false),
+        ROLL("roll", true),
+        ROLL2("roll2", true),
+        FACEPLANT("faceplant", false),
+        DASH("dash", true),
+        WAVE("wave", true);
+
+        private final String name;
+        private final boolean toPlayOnce;
+
+        PlayerAnimation(String s, boolean playOnce) {
+            name = s;
+            toPlayOnce = playOnce;
+        }
+
+        @Override
+        public float getScale() {
+            return 0.08f;
+        }
+
+        @Override
+        public int getSpeed() {
+            return 100;
+        }
+
+        @Override
+        public boolean isToPlayOnce() {
+            return toPlayOnce;
+        }
+
+        @Override
+        public boolean isHardSet() {
+            return false;
+        }
+
+        @Override
+        public String getName() {
+            return this.name;
+        }
+
+        public String toString() {
+            return this.name;
+        }
     }
 }

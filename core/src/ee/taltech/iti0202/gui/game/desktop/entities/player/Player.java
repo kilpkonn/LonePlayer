@@ -124,11 +124,11 @@ public class Player extends SpriteAnimation {
                 // Math.abs(velocity.x), 0),
                 // true); // Change to impulse?
                 Sound.playSoundOnce("sounds/jump/fall.ogg", 0.1f);
-                setAnimation(PlayerAnimation.ROLL2, true);
+                setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.ROLL2, true);
                 if (Math.abs(velocity.y) < ROLL_ON_LANDING_SPEED) {
                     health -= Math.abs(velocity.y / 2);
                     health = Math.max(health, 0);
-                    setAnimation(PlayerAnimation.FACEPLANT, true);
+                    setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.FACEPLANT, true);
                 }
             }
         }
@@ -138,8 +138,8 @@ public class Player extends SpriteAnimation {
         setAnimation(animation.getName(), animation.isToPlayOnce());
     }
 
-    public void setAnimation(PlayerAnimation animation, boolean playOnce) {
-        setAnimation(animation.name, playOnce);
+    public void setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation animation, boolean playOnce) {
+        setAnimation(animation.getName(), playOnce);
     }
 
     public void addWeapon(Weapon weapon) {
@@ -150,54 +150,6 @@ public class Player extends SpriteAnimation {
         this.currentWeapon = currentWeapon;
         if (!weapons.contains(currentWeapon)) {
             weapons.add(currentWeapon);
-        }
-    }
-
-    public enum PlayerAnimation implements MultiplayerAnimation, Serializable {
-        RUN("run", false),
-        JUMP("jump", false),
-        IDLE("idle", false),
-        ROLL("roll", true),
-        ROLL2("roll2", true),
-        FACEPLANT("faceplant", false),
-        DASH("dash", true),
-        WAVE("wave", true);
-
-        private final String name;
-        private final boolean toPlayOnce;
-
-        PlayerAnimation(String s, boolean playOnce) {
-            name = s;
-            toPlayOnce = playOnce;
-        }
-
-        @Override
-        public float getScale() {
-            return 0.08f;
-        }
-
-        @Override
-        public int getSpeed() {
-            return 100;
-        }
-
-        @Override
-        public boolean isToPlayOnce() {
-            return toPlayOnce;
-        }
-
-        @Override
-        public boolean isHardSet() {
-            return false;
-        }
-
-        @Override
-        public String getName() {
-            return this.name;
-        }
-
-        public String toString() {
-            return this.name;
         }
     }
 }

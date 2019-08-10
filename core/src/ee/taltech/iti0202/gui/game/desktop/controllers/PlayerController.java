@@ -12,7 +12,7 @@ import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.player2.Player;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
 

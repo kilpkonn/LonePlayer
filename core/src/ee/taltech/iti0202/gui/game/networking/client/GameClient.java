@@ -58,7 +58,7 @@ public class GameClient implements Disposable {
         kryo.register(Lobby.StartGame.class);
         kryo.register(PlayerControls.class);
         kryo.register(Entity.class);
-        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation.class);
+        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.class);
         kryo.register(Weapon.Animation.class);
         kryo.register(ee.taltech.iti0202.gui.game.networking.server.entity.Weapon.class);
         kryo.register(int[].class);
