@@ -19,7 +19,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import ee.taltech.iti0202.gui.game.desktop.entities.player2.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
@@ -61,12 +63,12 @@ public class GameServer implements Disposable {
         kryo.register(Vector2.class);
         kryo.register(Play.Players.class);
         kryo.register(Play.Weapons.class);
-        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.class);
+        kryo.register(Weapon.Type.class);
         kryo.register(Lobby.StartGame.class);
         kryo.register(PlayerControls.class);
         kryo.register(Entity.class);
-        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.class);
-        kryo.register(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Animation.class);
+        kryo.register(Player.PlayerAnimation.class);
+        kryo.register(Weapon.Animation.class);
         kryo.register(WeaponEntity.class);
         kryo.register(int[].class);
         kryo.register(Play.Bullets.class);

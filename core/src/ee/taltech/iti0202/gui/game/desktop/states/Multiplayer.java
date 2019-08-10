@@ -206,7 +206,7 @@ public class Multiplayer extends GameState {
         }
         for (int id : entities.bullets) {
             gameWorld.removeBullet(id);
-            worldRenderer.removeBulletanimation(id);
+            worldRenderer.removeBulletAnimation(id);
         }
     }
 
@@ -365,9 +365,7 @@ public class Multiplayer extends GameState {
     private enum State {
         PAUSE,
         RUN,
-        RESUME,
         SETTINGS,
         END,
-        DEFAULT,
     }
 }

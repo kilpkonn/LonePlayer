@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.player2.Player;
@@ -47,9 +48,9 @@ public class WorldRenderer implements Handler {
     private boolean dimension = true;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
 
-    private Map<Integer, Player> players = new HashMap<>();
-    private Map<Integer, ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon> weapons = new HashMap<>();
-    private Map<Integer, WeaponProjectile> bullets = new HashMap<>();
+    private Map<Integer, Player> players = new ConcurrentHashMap<>();
+    private Map<Integer, Weapon> weapons = new ConcurrentHashMap<>();
+    private Map<Integer, WeaponProjectile> bullets = new ConcurrentHashMap<>();
     private PlayerEntity playerToFollow;
 
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
@@ -156,7 +157,7 @@ public class WorldRenderer implements Handler {
         weapons.remove(id);
     }
 
-    public void removeBulletanimation(int id) {
+    public void removeBulletAnimation(int id) {
         bullets.remove(id);
     }
 
