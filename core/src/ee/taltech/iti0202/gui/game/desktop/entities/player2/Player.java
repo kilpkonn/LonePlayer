@@ -5,39 +5,40 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Timeline;
 
-import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation2;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 
-public class Player extends SpriteAnimation {
+public class Player extends SpriteAnimation2 {
 
     private Weapon[] weapons = new Weapon[3];
     private int currentWeapon;
     private float aimAngle;
     private boolean isAiming = false;
 
-    public Player(Body body, SpriteBatch sb) {
-        super(body, sb, "images/player/rogue.scml");
-        setScale(0.08f);
-        setAnimationSpeed(100);
-        setHeightOffset(10);
+    public Player(Body body) {
+        super(body, "images/player/rogue.scml");
+        //setScale(0.08f);
+        //setAnimationSpeed(100);
+        //setHeightOffset(10);
+        setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player.Player.PlayerAnimation.IDLE);
     }
 
     @Override
     public void update(float dt) {
         super.update(dt);
         if (isAiming) {
-            float offset = getCurrentAnimation().name.equals("run")
+            float offset = playerTweener.getCurrentAnimation().getName().equals("run")
                             ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
-                            : (getCurrentAnimation().name.equals("dash")
+                            : (playerTweener.getCurrentAnimation().getName().equals("dash")
                             ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
                             : (float) (Math.PI / 8));
             float flipped = isFlippedX() ? -(float) Math.PI / 4 + (float) Math.PI : 0;
-            rotateBone("right_shoulder", (((float) Math.toDegrees(aimAngle + offset + flipped))));
+            playerTweener.setBone("right_shoulder", (((float) Math.toDegrees(aimAngle + offset + flipped))));
         }
 
-        Timeline.Key.Bone hand = getBone("right_hand");
+        Timeline.Key.Bone hand = playerTweener.getBone("right_hand");
         for (Weapon weapon: weapons) {
             if (weapon != null) {
                 weapon.getBody().setTransform(
@@ -67,7 +68,7 @@ public class Player extends SpriteAnimation {
     }
 
     public void setAnimation(MultiplayerAnimation animation) {
-        setAnimation(animation.getName(), animation.isToPlayOnce());
+        playerTweener.setAnimation(animation);
     }
 
     public void setAiming(boolean isAiming, float aimAngle) {

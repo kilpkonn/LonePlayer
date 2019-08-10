@@ -136,7 +136,7 @@ public class WorldRenderer implements Handler {
         for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {  //TODO: Need simpler and faster method to render
             //Add missing players -> move to update?
             if (!players.containsKey(playerEntry.getKey())) {
-                players.put(playerEntry.getKey(), new Player(playerEntry.getValue(), sb));
+                players.put(playerEntry.getKey(), new Player(playerEntry.getValue()));
             }
             float opacity = playerEntry.getKey() == playerToFollow.bodyId ? 1 : 0.5f;
             Player player =  players.get(playerEntry.getKey());
