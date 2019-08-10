@@ -135,35 +135,16 @@ public class WorldRenderer implements Handler {
         renderer.setView(cam);
         renderer.render();
 
-        for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {  //TODO: Need simpler and faster method to render
-            //Add missing players -> move to update?
-            if (!players.containsKey(playerEntry.getKey())) {
-                players.put(playerEntry.getKey(), new Player(playerEntry.getValue()));
-            }
-            float opacity = playerEntry.getKey() == playerToFollow.bodyId ? 1 : 0.5f;
-            Player player =  players.get(playerEntry.getKey());
-            player.setOpacity(opacity);
+        for (Player player : players.values()) {
             player.render(sb);
         }
 
-        for (Map.Entry<Integer, Body> weaponEntry : gameWorld.getWeaponBodies().entrySet()) {
-            if (!weapons.containsKey(weaponEntry.getKey())) {
-                weapons.put(weaponEntry.getKey(), new WeaponBuilder()
-                        .setBody(weaponEntry.getValue())
-                        .setType(gameWorld.getWeapons().get(weaponEntry.getKey()).type)
-                        .create());
-            }
-            weapons.get(weaponEntry.getKey()).render(sb);
+        for (Weapon weapon : weapons.values()) {
+            weapon.render(sb);
         }
 
-        for (Map.Entry<Integer, Body> bulletEntry : gameWorld.getBulletBodies().entrySet()) {
-            if (!bullets.containsKey(bulletEntry.getKey())) {
-                bullets.put(bulletEntry.getKey(), new WeaponProjectileBuilder()
-                .setBody(bulletEntry.getValue())
-                .setType(gameWorld.getBullets().get(bulletEntry.getKey()).type)
-                .createWeaponProjectile());
-            }
-            bullets.get(bulletEntry.getKey()).render(sb);
+        for (WeaponProjectile bullet : bullets.values()) {
+            bullet.render(sb);
         }
     }
 
@@ -192,6 +173,12 @@ public class WorldRenderer implements Handler {
             p.setCurrentWeapon(player.currentWeaponIndex);
 
             p.setAiming(player.isAiming, player.aimAngle);
+        } else if (!players.containsKey(player.bodyId)) {
+            Player p = new Player(gameWorld.getPlayerBodies().get(player.bodyId));
+            float opacity = player.bodyId == playerToFollow.bodyId ? 1 : 0.5f;
+            p.setOpacity(opacity);
+
+            players.put(player.bodyId, p);
         }
     }
 
@@ -201,6 +188,14 @@ public class WorldRenderer implements Handler {
             w.setAnimation(weapon.animation);
             w.isDropped = weapon.dropped;
             if (weapon.dropped) w.setFlipX(weapon.flippedAnimation);
+        } else if (!weapons.containsKey(weapon.bodyId)) {
+            Weapon w = new WeaponBuilder()
+                    .setBody(gameWorld.getWeaponBodies().get(weapon.bodyId))
+                    .setType(weapon.type)
+                    .create();
+            w.isDropped = weapon.dropped;
+
+            weapons.put(weapon.bodyId, w);
         }
     }
 
@@ -208,6 +203,11 @@ public class WorldRenderer implements Handler {
         if (bullet.animation != null && bullets.containsKey(bullet.bodyId)) {
             WeaponProjectile b = bullets.get(bullet.bodyId);
             b.setAnimation(bullet.animation);
+        } else if (!bullets.containsKey(bullet.bodyId)) {
+            bullets.put(bullet.bodyId, new WeaponProjectileBuilder()
+                    .setBody(gameWorld.getBulletBodies().get(bullet.bodyId))
+                    .setType(bullet.type)
+                    .createWeaponProjectile());
         }
     }
 
