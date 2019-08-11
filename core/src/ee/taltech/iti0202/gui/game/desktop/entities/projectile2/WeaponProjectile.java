@@ -34,7 +34,7 @@ public abstract class WeaponProjectile extends SpriteAnimation2 {
 
     public enum Animation implements MultiplayerAnimation, Serializable {
         FLY("fly", false, 50, 0.03f, true),
-        HIT("hit", true, 10, 1f, true);
+        HIT("hit", true, 20, 1f, true);
 
         private final String name;
         private final boolean isToPlayOnce;

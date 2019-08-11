@@ -188,6 +188,7 @@ public class GameServer implements Disposable {
         Gdx.app.postRunnable(() -> {
             serverLogic.loadWorld(act, map);
         });
+        serverLogic.setDifficulty(difficulty);
 
         while (!serverLogic.isLoaded()) {
             try {

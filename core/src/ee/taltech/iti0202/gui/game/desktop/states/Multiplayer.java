@@ -79,7 +79,7 @@ public class Multiplayer extends GameState {
 
         System.out.println(String.format("Multiplayer game: %s - %s - %s", act, map, difficulty));
 
-        switch (difficulty) {  //TODO: Move to server
+        switch (difficulty) {
             case EASY:
                 DMG_MULTIPLIER = 1;
                 DMG_ON_LANDING_SPEED = 6;

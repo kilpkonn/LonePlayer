@@ -11,6 +11,7 @@ import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.controllers.BulletController;
 import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.BulletBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
@@ -21,6 +22,13 @@ import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
 import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
+
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS_BASE_HP;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.CHECKPOINTS;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_MULTIPLIER;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING_SPEED;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.GameDifficulty.EASY;
 
 public class ServerLogic implements Disposable {
     private GameWorld gameWorld;
@@ -38,6 +46,32 @@ public class ServerLogic implements Disposable {
         bulletController = new BulletController(gameWorld.getBulletBodies(), gameWorld.getBullets());
         weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons(), this);
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
+    }
+
+    public void setDifficulty(B2DVars.GameDifficulty difficulty) {
+        switch (difficulty) {
+            case EASY:
+                DMG_MULTIPLIER = 1;
+                DMG_ON_LANDING_SPEED = 6;
+                CHECKPOINTS = true;
+                BOSSES = false;
+                break;
+
+            case HARD:
+                DMG_MULTIPLIER = 1.5f;
+                DMG_ON_LANDING_SPEED = 5;
+                CHECKPOINTS = true;
+                BOSSES = true;
+                break;
+
+            case BRUTAL:
+                DMG_MULTIPLIER = 2;
+                DMG_ON_LANDING_SPEED = 4;
+                CHECKPOINTS = true;
+                BOSS_BASE_HP *= 2;
+                BOSSES = true;
+                break;
+        }
     }
 
     public void run(Set<PlayerEntity> players) {
