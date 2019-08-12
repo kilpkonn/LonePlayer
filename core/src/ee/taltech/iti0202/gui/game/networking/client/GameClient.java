@@ -1,18 +1,12 @@
 package ee.taltech.iti0202.gui.game.networking.client;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.entities.player2.Player;
-import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
-import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MatchmakingMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
@@ -21,11 +15,8 @@ import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
-import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
-import ee.taltech.iti0202.gui.game.networking.server.entity.Entity;
-import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
-import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.shared.SerializableClassesHandler;
 
 public class GameClient implements Disposable {

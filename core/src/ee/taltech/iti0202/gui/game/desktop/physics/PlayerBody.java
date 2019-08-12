@@ -78,25 +78,29 @@ public class PlayerBody {
         return body;
     }
 
-    public static class PlayerRightSide extends BodyData{
+    public static class PlayerData extends BodyData {
+
+    }
+
+    public static class PlayerRightSide extends PlayerData{
         public PlayerRightSide(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerLeftSide extends BodyData{
+    public static class PlayerLeftSide extends PlayerData{
         public PlayerLeftSide(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerFoot extends BodyData{
+    public static class PlayerFoot extends PlayerData{
         public PlayerFoot(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerBodyData extends BodyData{
+    public static class PlayerBodyData extends PlayerData{
         public int wallJump = 0;
         public int health = 100;
         public boolean dash = false;

@@ -146,7 +146,7 @@ public class MultiplayerContactListener implements ContactListener {
     }
 
     private void weaponPickup(Object oa, Object ob) {
-        if (oa != null && PlayerBody.class.equals(oa.getClass().getEnclosingClass()) && ob instanceof WeaponBody.WeaponBodyData) {
+        if (oa instanceof PlayerBody.PlayerData && ob instanceof WeaponBody.WeaponBodyData) {
             PlayerBody.PlayerBodyData data = players.get(((BodyData) oa).id);
             WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) ob;
             if (weaponBodyData.dropped) {
@@ -160,7 +160,7 @@ public class MultiplayerContactListener implements ContactListener {
             }
         }
 
-        if (ob != null && PlayerBody.class.equals(ob.getClass().getEnclosingClass()) && oa instanceof WeaponBody.WeaponBodyData) {
+        if (ob instanceof PlayerBody.PlayerData && oa instanceof WeaponBody.WeaponBodyData) {
             PlayerBody.PlayerBodyData data = players.get(((BodyData) ob).id);
             WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) oa;
             if (weaponBodyData.dropped) {
@@ -189,14 +189,14 @@ public class MultiplayerContactListener implements ContactListener {
             return;
         }
 
-        if (oa instanceof PlayerBody.PlayerBodyData || oa instanceof PlayerBody.PlayerFoot) {  //TODO: Rewrite this
+        if (oa instanceof PlayerBody.PlayerData) {  //TODO: Rewrite this?
             PlayerBody.PlayerBodyData player = players.get(((BodyData) oa).id);
             if (ob.equals("barrier")) {
                 player.health = 0;
             }
         }
 
-        if (ob instanceof PlayerBody.PlayerBodyData || ob instanceof PlayerBody.PlayerFoot) {
+        if (ob instanceof PlayerBody.PlayerData) {
             PlayerBody.PlayerBodyData player = players.get(((BodyData) ob).id);
             if (oa.equals("barrier")) {
                 player.health = 0;
