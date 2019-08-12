@@ -35,18 +35,24 @@ public class MultiplayerContactListener implements ContactListener {
 
         // detect bullet collision
         bulletDetection(oa, ob);
+        bulletDetection(ob, oa);
 
         // set wall jump
-        setWallJump(oa, ob, 1);
+        setWallJump(oa, 1);
+        setWallJump(ob, 1);
 
-        groundDetection(oa, ob, fa.getBody(), fb.getBody());
+        groundDetection(oa, ob, fa.getBody());
+        groundDetection(ob, oa, fb.getBody());
 
         weaponPickup(oa, ob);
+        weaponPickup(ob, oa);
 
         // detection happens when player goes outside of initial game border
         dmgDetection(oa, ob, fa.getBody(), fb.getBody());
+        dmgDetection(ob, oa, fb.getBody(), fa.getBody());
 
         borderDetection(oa, ob);
+        borderDetection(ob, oa);
     }
 
     @Override
@@ -59,7 +65,8 @@ public class MultiplayerContactListener implements ContactListener {
 
         //if (oa != null && ob != null) {
 
-        setWallJump(oa, ob, 0);
+        setWallJump(oa, 0);
+        setWallJump(ob, 0);
 
         PlayerBody.PlayerBodyData player;
         if (oa instanceof PlayerBody.PlayerFoot && !(ob instanceof WeaponBody.WeaponBodyData)) {
@@ -107,7 +114,7 @@ public class MultiplayerContactListener implements ContactListener {
 
     }
 
-    private void groundDetection(Object oa, Object ob, Body ba, Body bb) {
+    private void groundDetection(Object oa, Object ob, Body ba) {
         if (oa instanceof PlayerBody.PlayerFoot && !(ob instanceof WeaponBody.WeaponBodyData)) {
             PlayerBody.PlayerBodyData data =  players.get(((BodyData) oa).id);
             data.onGround = true;
@@ -115,14 +122,6 @@ public class MultiplayerContactListener implements ContactListener {
                 data.health -= (int) Math.abs(ba.getLinearVelocity().y); // / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
             }
             System.out.println("Landed -> " + ba.getLinearVelocity());
-        }
-        if (ob instanceof PlayerBody.PlayerFoot && !(oa instanceof WeaponBody.WeaponBodyData)) {
-            PlayerBody.PlayerBodyData data =  players.get(((BodyData) ob).id);
-            data.onGround = true;
-            if (Math.abs(bb.getLinearVelocity().y) > B2DVars.DMG_ON_LANDING_SPEED) {
-                data.health -= (int) Math.abs(bb.getLinearVelocity().y); // / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
-            }
-            System.out.println("Landed -> " + bb.getLinearVelocity());
         }
     }
 
@@ -135,34 +134,12 @@ public class MultiplayerContactListener implements ContactListener {
                 bulletsToRemove.add(((BulletBody.BulletBodyData) ob).id);
             }
         }
-
-        if (ob.equals("barrier")) {
-            if (oa instanceof WeaponBody.WeaponBodyData) {
-                weaponsToRemove.add(((WeaponBody.WeaponBodyData) oa).id);
-            } else if (oa instanceof BulletBody.BulletBodyData) {
-                bulletsToRemove.add(((BulletBody.BulletBodyData) oa).id);
-            }
-        }
     }
 
     private void weaponPickup(Object oa, Object ob) {
         if (oa instanceof PlayerBody.PlayerData && ob instanceof WeaponBody.WeaponBodyData) {
             PlayerBody.PlayerBodyData data = players.get(((BodyData) oa).id);
             WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) ob;
-            if (weaponBodyData.dropped) {
-                for (int i = 0; i < data.weapons.length; i++) {
-                    if (data.weapons[i] == null) {
-                        data.weapons[i] = weaponBodyData;
-                        weaponBodyData.dropped = false;
-                        break;
-                    }
-                }
-            }
-        }
-
-        if (ob instanceof PlayerBody.PlayerData && oa instanceof WeaponBody.WeaponBodyData) {
-            PlayerBody.PlayerBodyData data = players.get(((BodyData) ob).id);
-            WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) oa;
             if (weaponBodyData.dropped) {
                 for (int i = 0; i < data.weapons.length; i++) {
                     if (data.weapons[i] == null) {
@@ -183,13 +160,6 @@ public class MultiplayerContactListener implements ContactListener {
                 players.get(((PlayerBody.PlayerData) ob).id).health -= 10; //TODO: Different dmg.
             }
         }
-        if (ob instanceof BulletBody.BulletBodyData) {
-            ((BulletBody.BulletBodyData) ob).isHit = true;
-
-            if (oa instanceof PlayerBody.PlayerData) {
-                players.get(((PlayerBody.PlayerData) oa).id).health -= 10;
-            }
-        }
     }
 
     private void dmgDetection(Object oa, Object ob, Body ba, Body bb) {
@@ -203,18 +173,10 @@ public class MultiplayerContactListener implements ContactListener {
                 player.health = 0;
             }
         }
-
-        if (ob instanceof PlayerBody.PlayerData) {
-            PlayerBody.PlayerBodyData player = players.get(((BodyData) ob).id);
-            if (oa.equals("barrier")) {
-                player.health = 0;
-            }
-        }
     }
 
-    private void setWallJump(Object oa, Object ob, int i) {
+    private void setWallJump(Object oa, int i) {
         PlayerBody.PlayerBodyData playerA;
-        PlayerBody.PlayerBodyData playerB;
 
         if (oa instanceof PlayerBody.PlayerRightSide) {
             playerA = players.get(((PlayerBody.PlayerRightSide) oa).id);
@@ -222,14 +184,6 @@ public class MultiplayerContactListener implements ContactListener {
         } else if (oa instanceof PlayerBody.PlayerLeftSide) {
             playerA = players.get(((PlayerBody.PlayerLeftSide) oa).id);
             playerA.wallJump = i;
-        }
-
-        if (ob instanceof PlayerBody.PlayerRightSide) {
-            playerB = players.get(((PlayerBody.PlayerRightSide) ob).id);
-            playerB.wallJump = -1 * i;
-        } else if (ob instanceof PlayerBody.PlayerLeftSide) {
-            playerB = players.get(((PlayerBody.PlayerLeftSide) ob).id);
-            playerB.wallJump = i;
         }
     }
 
