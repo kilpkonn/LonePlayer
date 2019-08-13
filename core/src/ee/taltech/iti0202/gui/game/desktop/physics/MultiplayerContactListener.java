@@ -96,22 +96,25 @@ public class MultiplayerContactListener implements ContactListener {
         Object oa = fa.getUserData();
         Object ob = fb.getUserData();
 
-        if (oa instanceof WeaponBody.WeaponBodyData) {
-            if (!((WeaponBody.WeaponBodyData) oa).dropped) {
-                contact.setEnabled(false);
-            }
-        }
-
-        if (ob instanceof WeaponBody.WeaponBodyData) {
-            if (!((WeaponBody.WeaponBodyData) ob).dropped) {
-                contact.setEnabled(false);
-            }
-        }
+        checkForDisable(contact, oa, ob);
+        checkForDisable(contact, ob, oa);
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    private void checkForDisable(Contact contact, Object oa, Object ob) {
+        if (oa instanceof WeaponBody.WeaponBodyData) {
+            if (!((WeaponBody.WeaponBodyData) oa).dropped) {
+                contact.setEnabled(false);  //TODO: Seems to be broken
+            }
+        } else if (oa instanceof BulletBody.BulletBodyData && ob instanceof PlayerBody.PlayerData) {
+            if (((PlayerBody.PlayerData) ob).id == ((BulletBody.BulletBodyData) oa).shooterId) {
+                contact.setEnabled(false); //TODO: this no works
+            }
+        }
     }
 
     private void groundDetection(Object oa, Object ob, Body ba) {

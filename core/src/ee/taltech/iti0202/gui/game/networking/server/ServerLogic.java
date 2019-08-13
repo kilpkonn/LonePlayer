@@ -94,7 +94,7 @@ public class ServerLogic implements Disposable {
     }
 
     public void addBullet(BulletEntity bullet) {
-        bullet.bodyId = gameWorld.addBullet(bullet.position, bullet.velocity, bullet.angle, bullet.type);
+        bullet.bodyId = gameWorld.addBullet(bullet.position, bullet.velocity, bullet.angle, bullet.type, bullet.shooterId);
         bulletController.addAnimation(bullet.bodyId, bullet.type);
         bullets.put(bullet.bodyId, bullet);
     }

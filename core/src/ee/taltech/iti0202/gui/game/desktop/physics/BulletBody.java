@@ -22,7 +22,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class BulletBody {
 
-    public static Body createBullet(World world, Vector2 pos, Vector2 velocity, float angle, int id, WeaponProjectile.Type type) {
+    public static Body createBullet(World world, Vector2 pos, Vector2 velocity, float angle, int id, WeaponProjectile.Type type, int shooterId) {
         BodyDef bodyDef = new BodyDef();
         FixtureDef fixtureDef = new FixtureDef();
         CircleShape circle = new CircleShape();
@@ -51,7 +51,7 @@ public class BulletBody {
         bodyDef.linearVelocity.set(velocity);
         bodyDef.angle = angle;
 
-        BulletBodyData data = new BulletBodyData(id, type);
+        BulletBodyData data = new BulletBodyData(id, type, shooterId);
         Body body = world.createBody(bodyDef);
         body.setUserData(data);
         body.createFixture(fixtureDef).setUserData(data);
@@ -63,9 +63,11 @@ public class BulletBody {
         public boolean isHit;
         public boolean isToBeRemoved = false;
         public WeaponProjectile.Type type;
-        public BulletBodyData(int id, WeaponProjectile.Type type) {
+        public int shooterId;
+        public BulletBodyData(int id, WeaponProjectile.Type type, int shooterId) {
             this.id = id;
             this.type = type;
+            this.shooterId = shooterId;
         }
     }
 }

@@ -64,6 +64,7 @@ public class WeaponController {
                     bullet.velocity = b.velocity;
                     bullet.angle = b.angle;
                     bullet.type = b.type;
+                    bullet.shooterId = playerBodyData.id;
                     serverLogic.addBullet(bullet);
                 }
             }
