@@ -7,7 +7,9 @@ import com.badlogic.gdx.utils.Disposable;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.ButtonGroup;
@@ -23,19 +25,37 @@ public class Scoreboard implements Disposable {
     protected Set<PlayerEntity> players = new HashSet<>();
 
     protected Set<ButtonGroup> playerButtons = new HashSet<>();
+    protected Map<Integer, PlayerInfo> playerData = new HashMap<>();
+
+    private ButtonGroup header;
 
     private float timeSinceUpdate = 0;
     private float updateInterval = 1f; // sec
 
     public Scoreboard(OrthographicCamera cam) {
         this.cam = cam;
+
+        header = new ButtonGroup();
+        GameButton btn = new GameButton("Name", V_WIDTH / 6f, V_HEIGHT / 1.2f + 40);
+        GameButton lblPing = new GameButton("Ping", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f + 40);
+        GameButton lblKills = new GameButton("Kills", V_WIDTH * 2.5f / 6f, V_HEIGHT / 1.2f + 40);
+        GameButton lblDeaths = new GameButton("Deaths", V_WIDTH * 3f / 6f, V_HEIGHT / 1.2f + 40);
+
+        header.addButton(btn);
+        header.addButton(lblPing);
+        header.addButton(lblKills);
+        header.addButton(lblDeaths);
     }
 
     public void update(float dt) {
         timeSinceUpdate += dt;
+        header.update(new Vector2());
         if (timeSinceUpdate > updateInterval) {
-            for (ButtonGroup group : playerButtons) {
-                //TODO: Set kills...
+            for (PlayerEntity player : players) {
+                PlayerInfo info = playerData.get(player.id);
+                info.lblKills.setText(Integer.toString(player.kills));
+                info.lblDeaths.setText(Integer.toString(player.deaths));
+                info.lblPing.setText(Long.toString(player.latency));
             }
             timeSinceUpdate = 0;
         }
@@ -46,6 +66,7 @@ public class Scoreboard implements Disposable {
             group.dispose();
         }
         playerButtons.clear();
+        playerData.clear();
         ArrayList<PlayerEntity> sortedPlayers = new ArrayList<>(players);
         Collections.sort(sortedPlayers, (playerEntity, t1) -> {
             if (playerEntity.kills == t1.kills) return 0;
@@ -69,6 +90,8 @@ public class Scoreboard implements Disposable {
 
             group.update(new Vector2());
 
+            playerData.put(player.id, new PlayerInfo(btn, lblPing, lblKills, lblDeaths));
+
             playerButtons.add(group);
 
             i++;
@@ -78,8 +101,8 @@ public class Scoreboard implements Disposable {
     public void render(SpriteBatch sb) {
         cam.update();
         sb.setProjectionMatrix(cam.combined);
+        header.render(sb);
         for (ButtonGroup group : playerButtons) {
-            System.out.println("Render");
             group.render(sb);
         }
     }
@@ -97,6 +120,20 @@ public class Scoreboard implements Disposable {
     public void dispose() {
         for (ButtonGroup group : playerButtons) {
             group.dispose();
+        }
+    }
+
+    private class PlayerInfo {
+        private GameButton lblName;
+        private GameButton lblPing;
+        private GameButton lblKills;
+        private GameButton lblDeaths;
+
+        public PlayerInfo(GameButton lblName, GameButton lblPing, GameButton lblKills, GameButton lblDeaths) {
+            this.lblName = lblName;
+            this.lblPing = lblPing;
+            this.lblKills = lblKills;
+            this.lblDeaths = lblDeaths;
         }
     }
 }
