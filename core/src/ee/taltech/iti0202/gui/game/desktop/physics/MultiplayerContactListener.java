@@ -105,6 +105,10 @@ public class MultiplayerContactListener implements ContactListener {
 
     }
 
+    public void update(float dt) {
+
+    }
+
     private void checkForDisable(Contact contact, Object oa, Object ob) {
         if (oa instanceof WeaponBody.WeaponBodyData) {
             if (!((WeaponBody.WeaponBodyData) oa).dropped) {

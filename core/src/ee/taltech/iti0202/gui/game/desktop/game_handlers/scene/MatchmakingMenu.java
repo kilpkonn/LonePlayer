@@ -4,9 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import ee.taltech.iti0202.gui.game.Game;
@@ -178,7 +182,10 @@ public class MatchmakingMenu extends Scene {
                 mapSelectionButton.setText(String.format("Map: %s - %s - %s", details.act, details.map.replace(".tmx", ""), details.difficulty));
             }
 
-            for (PlayerEntity player : details.players) {
+            List<PlayerEntity> players = new ArrayList<>(details.players);
+            Collections.sort(players, (playerEntity, t1) -> playerEntity.name.compareTo(t1.name));
+
+            for (PlayerEntity player : players) {
                 addPlayer(player);
             }
         }
