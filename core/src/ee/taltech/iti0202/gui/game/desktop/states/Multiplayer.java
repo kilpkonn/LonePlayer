@@ -1,6 +1,7 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,6 +19,7 @@ import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Scoreboard;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MultiplayerPauseMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
@@ -50,6 +52,7 @@ public class Multiplayer extends GameState {
     private PlayerController playerController;
     private WeaponController weaponController;
     private Hud hud;
+    private Scoreboard scoreboard;
 
     private MultiplayerPauseMenu pauseMenu;
     private SettingsMenu settingsMenu;
@@ -151,6 +154,7 @@ public class Multiplayer extends GameState {
         playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
 
         hud = new Hud(hudCam);
+        scoreboard = new Scoreboard(hudCam);
 
         pauseMenu = new MultiplayerPauseMenu(
                 act,
@@ -175,6 +179,7 @@ public class Multiplayer extends GameState {
             }
             worldRenderer.updatePlayerAnimation(player);
         }
+        scoreboard.setPlayers(players);
     }
 
     public void updateWeapons(Set<WeaponEntity> weapons) {
@@ -249,6 +254,7 @@ public class Multiplayer extends GameState {
         hud.setPlayTime(playTime);
         if (playerToFollow != null) hud.setHp(playerToFollow.health);
         hud.update(dt);
+        scoreboard.update(dt);
 
         switch (state) {
             case PAUSE:
@@ -354,6 +360,10 @@ public class Multiplayer extends GameState {
         worldRenderer.render(sb);
 
         hud.render(sb);
+
+        if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {  //TODO: better check
+            scoreboard.render(sb);
+        }
     }
 
     public void setPlayerToFollow(PlayerEntity playerToFollow) {

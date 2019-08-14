@@ -31,7 +31,7 @@ public class Hud {
 
     public Hud(OrthographicCamera cam) {
         this.cam = cam;
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ScreenViewport());   // Ist this needed ?!?
 
         FreeTypeFontGenerator.FreeTypeFontParameter fontParameter =
                 new FreeTypeFontGenerator.FreeTypeFontParameter();
