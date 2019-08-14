@@ -161,10 +161,15 @@ public class MultiplayerContactListener implements ContactListener {
 
     private void bulletDetection(Object oa, Object ob) {
         if (oa instanceof BulletBody.BulletBodyData) {
-            ((BulletBody.BulletBodyData) oa).isHit = true;
+            BulletBody.BulletBodyData bullet = (BulletBody.BulletBodyData) oa;
+            bullet.isHit = true;
 
             if (ob instanceof PlayerBody.PlayerData) {
-                players.get(((PlayerBody.PlayerData) ob).id).health -= 10; //TODO: Different dmg.
+                PlayerBody.PlayerBodyData target = players.get(((PlayerBody.PlayerData) ob).id);
+                target.health -= 10; //TODO: Different dmg.
+                if (target.health < 0) {
+                    players.get(bullet.shooterId).kills++;
+                }
             }
         }
     }

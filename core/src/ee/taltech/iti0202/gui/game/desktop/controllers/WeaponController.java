@@ -53,7 +53,7 @@ public class WeaponController {
         WeaponBody.WeaponBodyData data = weapons.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
         MultiplayerPlayerTweener weaponTweener = animations.get(playerBodyData.weapons[playerBodyData.currentWeaponIndex].id);
 
-        if (playerBodyData.isAiming && data.bulletHeat <= 0) {  // TODO: Fix no shooting animation when aim moving
+        if (playerBodyData.isAiming && data.bulletHeat <= 0) {  // TODO: Fix no shooting animation when aim moving, null ptr?
             weaponTweener.setAnimation(Weapon.Animation.FIRE);
             data.bulletHeat = data.type.getData().getCoolDown();
 

@@ -9,18 +9,18 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.controllers.BulletController;
+import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.MultiplayerPlayerTweener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.BulletBody;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
 import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
-import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.physics.WeaponBody;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
 import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
-import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSSES;
@@ -28,7 +28,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.CHECKPOINTS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_MULTIPLIER;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING_SPEED;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.GameDifficulty.EASY;
 
 public class ServerLogic implements Disposable {
     private GameWorld gameWorld;
@@ -82,6 +81,7 @@ public class ServerLogic implements Disposable {
 
     public void addPlayer(PlayerEntity player) {
         player.bodyId = gameWorld.addPlayer();
+        gameWorld.getPlayers().get(player.bodyId).kills = player.kills;  //Keep kills
         playerController.addAnimation(player.bodyId);
     }
 
@@ -124,6 +124,7 @@ public class ServerLogic implements Disposable {
                 playerController.getAnimations().remove(player.bodyId);
                 entitiesRemoved.players.add(player.bodyId);
                 addPlayer(player);
+                player.deaths++;
                 continue;
             }
 
@@ -147,6 +148,8 @@ public class ServerLogic implements Disposable {
             player.currentWeaponIndex = (short) bodyData.currentWeaponIndex;
             player.isAiming = bodyData.isAiming;
             player.aimAngle = bodyData.aimAngle;
+
+            player.kills = (short) bodyData.kills;
         }
     }
 

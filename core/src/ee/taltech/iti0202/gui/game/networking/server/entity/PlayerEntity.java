@@ -32,8 +32,8 @@ public class PlayerEntity extends Entity implements Serializable {
     public MultiplayerAnimation animation;
     public boolean flippedAnimation = false;
 
-    public int kills = 0;
-    public int deaths = 0;
+    public short kills = 0;
+    public short deaths = 0;
 
     @Override
     public String toString() {
