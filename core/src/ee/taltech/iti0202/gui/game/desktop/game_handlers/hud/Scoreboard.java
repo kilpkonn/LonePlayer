@@ -28,12 +28,18 @@ public class Scoreboard implements Disposable {
     protected Map<Integer, PlayerInfo> playerData = new HashMap<>();
 
     private ButtonGroup header;
+    private GameButton background;
 
     private float timeSinceUpdate = 0;
     private float updateInterval = 1f; // sec
 
     public Scoreboard(OrthographicCamera cam) {
         this.cam = cam;
+
+        background = new GameButton("", V_WIDTH / 6f - 10, V_HEIGHT / 1.4f + 50);
+        background.setAutoScale(false);
+        background.setAcceptHover(false);
+        background.setSize(V_WIDTH / 1.6f, 40f);
 
         header = new ButtonGroup();
         GameButton btn = new GameButton("Name", V_WIDTH / 6f, V_HEIGHT / 1.4f + 40);
@@ -96,11 +102,13 @@ public class Scoreboard implements Disposable {
 
             i++;
         }
+        background.setSize(V_WIDTH / 1.6f, 40 * (i + 2));
     }
 
     public void render(SpriteBatch sb) {
         cam.update();
         sb.setProjectionMatrix(cam.combined);
+        background.renderBackground();
         header.render(sb);
         for (ButtonGroup group : playerButtons) {
             group.render(sb);
@@ -121,6 +129,8 @@ public class Scoreboard implements Disposable {
         for (ButtonGroup group : playerButtons) {
             group.dispose();
         }
+        header.dispose();
+        background.dispose();
     }
 
     private class PlayerInfo {

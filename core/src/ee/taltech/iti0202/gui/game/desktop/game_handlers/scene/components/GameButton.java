@@ -3,6 +3,7 @@ package ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -51,8 +52,7 @@ public class GameButton implements Disposable {
     }
 
     public void update(Vector2 mousePos) {
-        hoverOver =
-                (mousePos.x / SCALE >= x && mousePos.x / SCALE <= x + width)
+        hoverOver = (mousePos.x / SCALE >= x && mousePos.x / SCALE <= x + width)
                         && (V_HEIGHT - mousePos.y / SCALE >= y - height
                                 && V_HEIGHT - mousePos.y / SCALE <= y);
         if (hoverOver && onHover != null) {
@@ -128,10 +128,9 @@ public class GameButton implements Disposable {
         this.onHover = onHover;
     }
 
-    @Override
-    public void dispose() {
-        font.dispose();
-        System.gc();
+    public void setSize(float width, float height) {
+        this.width = width;
+        this.height = height;
     }
 
     protected void roundedRect(float x, float y, float width, float height, float radius){
@@ -151,6 +150,16 @@ public class GameButton implements Disposable {
         shapeRenderer.arc(x + radius, y - radius, radius, 90f, 90f);
     }
 
+    public void renderBackground() {
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer.setColor(new Color(0.01f, 0.01f, 0.01f, 0.5f));
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        roundedRect(x, y, width, height, 5f);
+        shapeRenderer.end();
+    }
+
     public void setAutoScale(boolean autoScale) {
         this.autoScale = autoScale;
     }
@@ -162,5 +171,11 @@ public class GameButton implements Disposable {
         } catch (Exception e) {
             System.out.println("Sound couldn't be located.");
         }
+    }
+
+    @Override
+    public void dispose() {
+        font.dispose();
+        System.gc();
     }
 }
