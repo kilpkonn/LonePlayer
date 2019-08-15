@@ -34,6 +34,7 @@ public class PlayerEntity extends Entity implements Serializable {
 
     public short kills = 0;
     public short deaths = 0;
+    public short damage = 0;
 
     @Override
     public String toString() {

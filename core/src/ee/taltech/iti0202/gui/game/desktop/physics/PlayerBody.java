@@ -116,6 +116,7 @@ public class PlayerBody {
         public float aimAngle;
 
         public int kills;
+        public int damage;
 
         public PlayerBodyData(int id) {
             this.id = id;

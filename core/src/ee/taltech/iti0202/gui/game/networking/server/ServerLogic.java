@@ -81,7 +81,9 @@ public class ServerLogic implements Disposable {
 
     public void addPlayer(PlayerEntity player) {
         player.bodyId = gameWorld.addPlayer();
-        gameWorld.getPlayers().get(player.bodyId).kills = player.kills;  //Keep kills
+        PlayerBody.PlayerBodyData bodyData = gameWorld.getPlayers().get(player.bodyId);
+        bodyData.kills = player.kills;  //Keep kills
+        bodyData.damage = player.damage; //Keep dmg
         playerController.addAnimation(player.bodyId);
     }
 
@@ -150,6 +152,7 @@ public class ServerLogic implements Disposable {
             player.aimAngle = bodyData.aimAngle;
 
             player.kills = (short) bodyData.kills;
+            player.damage = (short) bodyData.damage;
         }
     }
 

@@ -171,9 +171,11 @@ public class MultiplayerContactListener implements ContactListener {
 
             if (ob instanceof PlayerBody.PlayerData) {
                 PlayerBody.PlayerBodyData target = players.get(((PlayerBody.PlayerData) ob).id);
+                PlayerBody.PlayerBodyData shooter =  players.get(bullet.shooterId);
                 target.health -= 10; //TODO: Different dmg.
+                shooter.damage += 10;
                 if (target.health < 0) {
-                    players.get(bullet.shooterId).kills++;
+                    shooter.kills++;
                 }
             }
         }
