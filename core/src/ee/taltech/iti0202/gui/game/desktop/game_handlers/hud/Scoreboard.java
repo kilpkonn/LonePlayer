@@ -36,10 +36,10 @@ public class Scoreboard implements Disposable {
         this.cam = cam;
 
         header = new ButtonGroup();
-        GameButton btn = new GameButton("Name", V_WIDTH / 6f, V_HEIGHT / 1.2f + 40);
-        GameButton lblPing = new GameButton("Ping", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f + 40);
-        GameButton lblKills = new GameButton("Kills", V_WIDTH * 2.5f / 6f, V_HEIGHT / 1.2f + 40);
-        GameButton lblDeaths = new GameButton("Deaths", V_WIDTH * 3f / 6f, V_HEIGHT / 1.2f + 40);
+        GameButton btn = new GameButton("Name", V_WIDTH / 6f, V_HEIGHT / 1.4f + 40);
+        GameButton lblPing = new GameButton("Ping", V_WIDTH * 2 / 6f, V_HEIGHT / 1.4f + 40);
+        GameButton lblKills = new GameButton("Kills", V_WIDTH * 2.5f / 6f, V_HEIGHT / 1.4f + 40);
+        GameButton lblDeaths = new GameButton("Deaths", V_WIDTH * 3f / 6f, V_HEIGHT / 1.4f + 40);
 
         header.addButton(btn);
         header.addButton(lblPing);
@@ -76,10 +76,10 @@ public class Scoreboard implements Disposable {
         int i = 0;
         for (PlayerEntity player : sortedPlayers) {
             ButtonGroup group = new ButtonGroup();
-            GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.2f - i * 40);
-            GameButton lblPing = new GameButton(player.latency + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f - i * 40);
-            GameButton lblKills = new GameButton(Integer.toString(player.kills), V_WIDTH * 2.5f / 6f, V_HEIGHT / 1.2f - i * 40);
-            GameButton lblDeaths = new GameButton(Integer.toString(player.kills), V_WIDTH * 3f / 6f, V_HEIGHT / 1.2f - i * 40);
+            GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.4f - i * 40);
+            GameButton lblPing = new GameButton(player.latency + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.4f - i * 40);
+            GameButton lblKills = new GameButton(Integer.toString(player.kills), V_WIDTH * 2.5f / 6f, V_HEIGHT / 1.4f - i * 40);
+            GameButton lblDeaths = new GameButton(Integer.toString(player.kills), V_WIDTH * 3f / 6f, V_HEIGHT / 1.4f - i * 40);
 
             group.addButton(btn);
             group.addButton(lblPing);
@@ -129,7 +129,7 @@ public class Scoreboard implements Disposable {
         private GameButton lblKills;
         private GameButton lblDeaths;
 
-        public PlayerInfo(GameButton lblName, GameButton lblPing, GameButton lblKills, GameButton lblDeaths) {
+        PlayerInfo(GameButton lblName, GameButton lblPing, GameButton lblKills, GameButton lblDeaths) {
             this.lblName = lblName;
             this.lblPing = lblPing;
             this.lblKills = lblKills;

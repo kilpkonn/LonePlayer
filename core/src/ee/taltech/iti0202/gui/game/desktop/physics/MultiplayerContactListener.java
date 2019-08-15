@@ -20,6 +20,8 @@ public class MultiplayerContactListener implements ContactListener {
     private Set<Integer> weaponsToRemove = new HashSet<>();
     private Set<Integer> bulletsToRemove = new HashSet<>();
 
+    //private Set<Contact> contactsToDisable = new HashSet<>();
+
     public MultiplayerContactListener(Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.players = players;
     }
@@ -105,9 +107,11 @@ public class MultiplayerContactListener implements ContactListener {
 
     }
 
-    public void update(float dt) {
-
-    }
+    /*public void update(float dt) {
+        for (Contact c : contactsToDisable) {
+            c.setEnabled(false);
+        }
+    }*/
 
     private void checkForDisable(Contact contact, Object oa, Object ob) {
         if (oa instanceof WeaponBody.WeaponBodyData) {
@@ -117,6 +121,7 @@ public class MultiplayerContactListener implements ContactListener {
         } else if (oa instanceof BulletBody.BulletBodyData && ob instanceof PlayerBody.PlayerData) {
             if (((PlayerBody.PlayerData) ob).id == ((BulletBody.BulletBodyData) oa).shooterId) {
                 contact.setEnabled(false); //TODO: this no works
+                //contactsToDisable.add(contact);
             }
         }
     }

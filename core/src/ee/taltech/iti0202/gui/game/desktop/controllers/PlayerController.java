@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.brashmonkey.spriter.Animation;
 import com.brashmonkey.spriter.Entity;
 import com.brashmonkey.spriter.Timeline;
 
@@ -65,8 +66,10 @@ public class PlayerController {
         for (Map.Entry<Integer, PlayerBody.PlayerBodyData> entry : players.entrySet()) {
             Vector2 playerPos = playerBodies.get(entry.getValue().id).getPosition();
             if (!animations.containsKey(entry.getKey())) return;  //TODO: Better fix needed...
-            Timeline.Key.Bone hand = animations.get(entry.getKey()).getBone("right_hand");
-            Vector2 handPos = new Vector2(playerPos.x + hand.position.x * 0.08f / PPM, playerPos.y + hand.position.y * 0.08f / PPM);  //0.08 is player model scale
+            MultiplayerPlayerTweener animation = animations.get(entry.getKey());
+            Timeline.Key.Bone hand = animation.getBone("right_hand");
+            float scale = 0.08f; //0.08 is player model scale
+            Vector2 handPos = new Vector2(playerPos.x + hand.position.x * scale / PPM, playerPos.y + hand.position.y * scale / PPM);
             float angle = (float) Math.toRadians(hand.angle);
 
             for (WeaponBody.WeaponBodyData weapon : entry.getValue().weapons) {

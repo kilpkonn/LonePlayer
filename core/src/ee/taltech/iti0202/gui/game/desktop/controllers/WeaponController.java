@@ -60,7 +60,7 @@ public class WeaponController {
             if (serverLogic != null) {
                 for (Weapon.BulletInitData b : data.type.getData().generateBulletsShot(body.getPosition(), playerBodyData.aimAngle, Bullet.Type.BULLET)) {  //TODO: BulletEntity types..
                     BulletEntity bullet = new BulletEntity();
-                    bullet.position = b.pos;
+                    bullet.position = b.pos.add(b.velocity.cpy().scl(0.004f));  //Spawn 0.4s ahead to avoid self collision
                     bullet.velocity = b.velocity;
                     bullet.angle = b.angle;
                     bullet.type = b.type;

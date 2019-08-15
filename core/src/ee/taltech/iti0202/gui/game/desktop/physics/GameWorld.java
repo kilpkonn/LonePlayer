@@ -78,6 +78,7 @@ public class GameWorld implements Disposable {
     }
 
     public void update(float dt) {
+        //contactListener.update(dt);
         world.step(dt, 10, 2);
         for (int id : contactListener.getWeaponsToRemove()) {
             removeWeapon(id);
