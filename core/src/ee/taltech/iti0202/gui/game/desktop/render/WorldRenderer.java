@@ -174,9 +174,9 @@ public class WorldRenderer implements Handler {
             p.setCurrentWeapon(player.currentWeaponIndex);
 
             p.setAiming(player.isAiming, player.aimAngle);
-        } else if (!players.containsKey(player.bodyId)) {
+        } else if (!players.containsKey(player.bodyId) && playerToFollow != null) {
             Player p = new Player(gameWorld.getPlayerBodies().get(player.bodyId));
-            float opacity = player.bodyId == playerToFollow.bodyId ? 1 : 0.5f;
+            float opacity =  player.bodyId == playerToFollow.bodyId ? 1 : 0.5f;
             p.setOpacity(opacity);
 
             players.put(player.bodyId, p);

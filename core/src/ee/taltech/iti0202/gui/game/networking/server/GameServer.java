@@ -187,7 +187,8 @@ public class GameServer implements Disposable {
         System.out.println("Server world ready!");
     }
 
-    public void onUpdatePlayerControls(PlayerControls controls) {
+    public void onUpdatePlayerControls(PlayerControls controls, long latency) {
+        players.get(controls.id).latency = latency;
         serverLogic.updatePlayerControls(controls);
     }
 

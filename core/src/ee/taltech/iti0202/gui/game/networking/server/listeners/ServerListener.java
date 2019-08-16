@@ -47,7 +47,7 @@ public class ServerListener extends Listener {
         } else if (object instanceof Lobby.StartGame) {
             server.onStartGame();
         } else if (object instanceof PlayerControls) {
-            server.onUpdatePlayerControls((PlayerControls) object);
+            server.onUpdatePlayerControls((PlayerControls) object, connection.getReturnTripTime());
         }
     }
 
