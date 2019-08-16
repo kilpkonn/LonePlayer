@@ -90,6 +90,7 @@ public class Menu extends GameState {
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         parallaxBackground.setSpeed(50f);
         stage.addActor(parallaxBackground);
+        Game.setCursor(false);
     }
 
     @Override

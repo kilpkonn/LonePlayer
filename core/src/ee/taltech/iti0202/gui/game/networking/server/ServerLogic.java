@@ -102,17 +102,17 @@ public class ServerLogic implements Disposable {
     }
 
     public void updatePlayerControls(PlayerControls controls) {
-        if (controls.jump) playerController.tryJump(controls.id);
-        if (controls.moveLeft) playerController.tryMoveLeft(controls.id);
-        if (controls.moveRight) playerController.tryMoveRight(controls.id);
-        if (controls.dashLeft) playerController.tryDashLeft(controls.id);
-        if (controls.dashRight) playerController.tryDashRight(controls.id);
+        if (controls.jump) playerController.tryJump(controls.bodyId);
+        if (controls.moveLeft) playerController.tryMoveLeft(controls.bodyId);
+        if (controls.moveRight) playerController.tryMoveRight(controls.bodyId);
+        if (controls.dashLeft) playerController.tryDashLeft(controls.bodyId);
+        if (controls.dashRight) playerController.tryDashRight(controls.bodyId);
 
-        if (controls.idle) playerController.trySetIdle(controls.id);
+        if (controls.idle) playerController.trySetIdle(controls.bodyId);
 
-        playerController.trySetCurrentWeapon(controls.id, controls.currentWeapon);
-        playerController.trySetDimension(controls.id, controls.dimension);
-        playerController.trySetAim(controls.id, controls.isAiming, controls.aimingAngle);
+        playerController.trySetCurrentWeapon(controls.bodyId, controls.currentWeapon);
+        playerController.trySetDimension(controls.bodyId, controls.dimension);
+        playerController.trySetAim(controls.bodyId, controls.isAiming, controls.aimingAngle);
     }
 
     private void updatePlayers(Set<PlayerEntity> players, Play.EntitiesToBeRemoved entitiesRemoved) {

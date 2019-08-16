@@ -248,7 +248,7 @@ public class Play extends GameState {
         UPDATE = true;
         cam.zoom = 1;
 
-        setCursor(true);
+        Game.setCursor(true);
     }
 
     public Play(String act, String map, GameDifficulty difficulty) {
@@ -271,13 +271,13 @@ public class Play extends GameState {
                 playState = pauseState.PAUSE;
                 draw.setGameFadeOut(true);
                 draw.setGameFadeDone(false);
-                setCursor(false);
+                Game.setCursor(false);
             } else {
                 UPDATE = true;
                 playState = pauseState.RUN;
                 draw.setGameFadeOut(false);
                 draw.setGameFadeDone(false);
-                setCursor(true);
+                Game.setCursor(true);
             }
         }
     }
@@ -305,7 +305,7 @@ public class Play extends GameState {
             draw.setGameFadeDone(false);
             endMenu.setTime(playTime);
             playState = pauseState.END;
-            setCursor(false);
+            Game.setCursor(false);
         }
 
         draw.updateGameFade(dt);
@@ -538,19 +538,6 @@ public class Play extends GameState {
                         + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH)
                         .format(new Date())
                         + ".json");
-    }
-
-    private void setCursor(boolean crosshair) {
-        if (crosshair) {
-            Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/white_cross.png"));
-            Gdx.graphics.setCursor(
-                    Gdx.graphics.newCursor(pm, pm.getWidth() / 2, pm.getHeight() / 2));
-            pm.dispose();
-        } else {
-            Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/arrow.png"));
-            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
-            pm.dispose();
-        }
     }
 
     @Override

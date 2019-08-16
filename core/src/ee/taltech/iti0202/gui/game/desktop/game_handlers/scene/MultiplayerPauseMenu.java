@@ -5,7 +5,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import java.util.Arrays;
 import java.util.HashSet;
 
+import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.GameButton;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
@@ -41,7 +43,7 @@ public class MultiplayerPauseMenu extends Scene {
         resumeButton.setOnAction(resumeFunc);
 
         settingsButton.setOnAction(openSettingsFunc);
-        exitButton.setOnAction(exitFunc::run);
+        exitButton.setOnAction(exitFunc);
 
 
         buttons =
@@ -57,7 +59,11 @@ public class MultiplayerPauseMenu extends Scene {
     }
 
     @Override
-    public void handleInput() { }
+    public void handleInput() {
+        if (MyInput.isPressed(Game.settings.ESC)) {
+            resumeFunc.run();
+        }
+    }
 
     @Override
     protected void updateCurrentBlock(GameButton button) { }

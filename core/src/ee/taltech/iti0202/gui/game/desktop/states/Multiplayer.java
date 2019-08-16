@@ -167,6 +167,8 @@ public class Multiplayer extends GameState {
                 () -> state = State.SETTINGS,
                 () -> GameStateManager.pushState(GameStateManager.State.MENU));
         settingsMenu = new SettingsMenu(hudCam, () -> state = State.PAUSE);
+
+        Game.setCursor(true);
     }
 
     public void updatePlayers(Set<PlayerEntity> players) {
@@ -239,7 +241,8 @@ public class Multiplayer extends GameState {
         worldRenderer.update(dt);
 
         if (playerToFollow != null) {
-            controls.id = playerToFollow.bodyId;
+            controls.bodyId = playerToFollow.bodyId;
+            controls.id = playerToFollow.id;
             controls.dimension = dimension;
             controls.idle = !(controls.jump || controls.dashLeft || controls.dashRight || controls.moveLeft || controls.moveRight);
             Game.client.updatePlayerControls(controls);
@@ -263,6 +266,12 @@ public class Multiplayer extends GameState {
             case SETTINGS:
                 settingsMenu.update(dt);
                 break;
+        }
+
+        if (state == State.RUN) {
+            Game.setCursor(true);
+        } else {
+            Game.setCursor(false);
         }
     }
 
@@ -298,15 +307,15 @@ public class Multiplayer extends GameState {
 
         if (MyInput.isPressed(Game.settings.JUMP)) {
             controls.jump = true;
-            //playerController.tryJump(playerToFollow.bodyId);
+            //playerController.tryJump(playerToFollow.id);
         }
         if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
             controls.moveLeft = true;
-            //playerController.tryMoveLeft(playerToFollow.bodyId);
+            //playerController.tryMoveLeft(playerToFollow.id);
         }
         if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
             controls.moveRight = true;
-            //playerController.tryDashRight(playerToFollow.bodyId);
+            //playerController.tryDashRight(playerToFollow.id);
         }
         if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
             controls.dashLeft = true;
@@ -314,18 +323,18 @@ public class Multiplayer extends GameState {
         }
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             controls.dashRight = true;
-            //playerController.tryDashRight(playerToFollow.bodyId);
+            //playerController.tryDashRight(playerToFollow.id);
         }
         if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
             dimension = !dimension;
         }
         if (MyInput.isPressed(Game.settings.NEXT_WEAPON)) {
             controls.currentWeapon++;
-            //playerController.trySetCurrentWeapon(playerToFollow.bodyId, controls.currentWeapon);
+            //playerController.trySetCurrentWeapon(playerToFollow.id, controls.currentWeapon);
         }
         if (MyInput.isPressed(Game.settings.PREVIOUS_WEAPON)) {
             controls.currentWeapon--;
-            //playerController.trySetCurrentWeapon(playerToFollow.bodyId, controls.currentWeapon);
+            //playerController.trySetCurrentWeapon(playerToFollow.id, controls.currentWeapon);
         }
         if (MyInput.isMouseDown(Game.settings.SHOOT)) {
             controls.isAiming = true;
@@ -333,7 +342,7 @@ public class Multiplayer extends GameState {
                     -MyInput.getMouseLocation().y + (double) V_HEIGHT / 2,
                     MyInput.getMouseLocation().x - (double) V_WIDTH / 2);
         }
-        if (MyInput.isDown(Game.settings.ESC)) {
+        if (MyInput.isPressed(Game.settings.ESC)) {
             state = State.PAUSE;
             hud.setGameFade(true);
         }

@@ -20,7 +20,7 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class Game extends ApplicationAdapter {
 
-    public static final String TITLE = "Lone PlayerEntity";
+    public static final String TITLE = "Lone Player";
     public static Content res;
     public static Settings settings;
     public static GameServer server;
@@ -30,6 +30,7 @@ public class Game extends ApplicationAdapter {
     private OrthographicCamera hudCam;
     private Music sound;
     private GameStateManager gsm;
+    private static boolean isCrosshair = true;  //Set to false first!
     // private String readString;
     //
     // private Server aiServer;
@@ -175,6 +176,21 @@ public class Game extends ApplicationAdapter {
 
     public void setSound(Music sound) {
         this.sound = sound;
+    }
+
+    public static void setCursor(boolean crosshair) {
+        if (crosshair == isCrosshair) return;
+        if (crosshair) {
+            Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/white_cross.png"));
+            Gdx.graphics.setCursor(
+                    Gdx.graphics.newCursor(pm, pm.getWidth() / 2, pm.getHeight() / 2));
+            pm.dispose();
+        } else {
+            Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/arrow.png"));
+            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
+            pm.dispose();
+        }
+        isCrosshair = crosshair;
     }
 
     // public String getReadString() {
