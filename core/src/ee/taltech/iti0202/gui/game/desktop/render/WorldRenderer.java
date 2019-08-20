@@ -11,14 +11,21 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
-import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.player2.Player;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectile;
+import ee.taltech.iti0202.gui.game.desktop.entities.projectile2.WeaponProjectileBuilder;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon;
+import ee.taltech.iti0202.gui.game.desktop.entities.weapons2.WeaponBuilder;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.Animation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_FADE_AMOUNT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
 public class WorldRenderer implements Handler {
@@ -41,8 +48,10 @@ public class WorldRenderer implements Handler {
     private boolean dimension = true;
     private float currentDimensionFade = B2DVars.DIMENSION_FADE_AMOUNT;
 
-    private Map<Integer, Player> players = new HashMap<>();
-    private ee.taltech.iti0202.gui.game.networking.server.player.Player playerToFollow;
+    private Map<Integer, Player> players = new ConcurrentHashMap<>();
+    private Map<Integer, Weapon> weapons = new ConcurrentHashMap<>();
+    private Map<Integer, WeaponProjectile> bullets = new ConcurrentHashMap<>();
+    private PlayerEntity playerToFollow;
 
     public WorldRenderer(GameWorld gameWorld, OrthographicCamera cam) {
         this.gameWorld = gameWorld;
@@ -66,6 +75,14 @@ public class WorldRenderer implements Handler {
             player.update(dt);
         }
 
+        for (Weapon weapon : weapons.values()) {
+            weapon.update(dt);
+        }
+
+        for (WeaponProjectile projectile : bullets.values()) {
+            projectile.update(dt);
+        }
+
         // Set camera
         if (playerToFollow != null) {
             Body playerLocation = gameWorld.getPlayerBodies().get(playerToFollow.bodyId);
@@ -83,8 +100,13 @@ public class WorldRenderer implements Handler {
             cam.update();
         }
 
-        if (!dimensionFadeDone) {
-            if (dimension) {
+        if (playerToFollow != null && dimension != playerToFollow.dimension) {
+            dimensionFadeDone = false;
+            dimension = playerToFollow.dimension;
+        }
+
+        if (playerToFollow != null && !dimensionFadeDone) {
+            if (playerToFollow.dimension) {
                 if (currentDimensionFade > 0) {
                     currentDimensionFade -=
                             (B2DVars.DIMENSION_FADE_AMOUNT / B2DVars.DIMENSION_FADE_TIME) * dt;
@@ -110,31 +132,87 @@ public class WorldRenderer implements Handler {
     @Override
     public void render(SpriteBatch sb) {
         // render animations
-         sb.setProjectionMatrix(cam.combined);
+        sb.setProjectionMatrix(cam.combined);
         renderer.setView(cam);
         renderer.render();
-        /*renderer.getBatch().begin();
-        if (animatedCells != null)
-            for (TiledMapTileLayer.Cell cell : animatedCells.keySet())
-                cell.setTile(new StaticTiledMapTile(animatedCells.get(cell).getFrame()));
-        if (background != null) renderer.renderTileLayer(background);
-        if (foreground != null) renderer.renderTileLayer(foreground);
-        if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
-        if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
-        renderer.getBatch().end();*/
 
-        for (Map.Entry<Integer, Body> playerEntry : gameWorld.getPlayerBodies().entrySet()) {
-            //Add missing players -> move to update?
-            if (!players.containsKey(playerEntry.getKey())) {
-                players.put(playerEntry.getKey(), new Player(playerEntry.getValue(), sb));
-            }
-
-            players.get(playerEntry.getKey()).render(sb);
+        for (Player player : players.values()) {
+            player.render(sb);
         }
-        //TODO: Render player, bullets, etc.
+
+        for (Weapon weapon : weapons.values()) {
+            weapon.render(sb);
+        }
+
+        for (WeaponProjectile bullet : bullets.values()) {
+            bullet.render(sb);
+        }
     }
 
-    public void setPlayerToFollow(ee.taltech.iti0202.gui.game.networking.server.player.Player player) {
+    public void removePlayerAnimation(int id) {
+        players.remove(id);
+    }
+
+    public void removeWeaponAnimation(int id) {
+        weapons.remove(id);
+    }
+
+    public void removeBulletAnimation(int id) {
+        bullets.remove(id);
+    }
+
+    public void updatePlayerAnimation(PlayerEntity player) {
+        if (player.animation != null && players.containsKey(player.bodyId)) {
+            Player p = players.get(player.bodyId);
+            p.setAnimation(player.animation);
+            p.setFlipX(player.flippedAnimation);
+            Weapon[] weapons = new Weapon[3];
+            for (int i = 0; i < weapons.length; i++) {
+                weapons[i] = this.weapons.get(player.weapons[i]);
+            }
+            p.setWeapons(weapons);
+            p.setCurrentWeapon(player.currentWeaponIndex);
+
+            p.setAiming(player.isAiming, player.aimAngle);
+        } else if (!players.containsKey(player.bodyId) && playerToFollow != null) {
+            Player p = new Player(gameWorld.getPlayerBodies().get(player.bodyId));
+            float opacity =  player.bodyId == playerToFollow.bodyId ? 1 : 0.5f;
+            p.setOpacity(opacity);
+
+            players.put(player.bodyId, p);
+        }
+    }
+
+    public void updateWeaponAnimation(WeaponEntity weapon) {
+        if (weapon.animation != null && weapons.containsKey(weapon.bodyId)) {
+            Weapon w = weapons.get(weapon.bodyId);
+            w.setAnimation(weapon.animation);
+            w.isDropped = weapon.dropped;
+            if (weapon.dropped) w.setFlipX(weapon.flippedAnimation);
+        } else if (!weapons.containsKey(weapon.bodyId)) {
+            Weapon w = new WeaponBuilder()
+                    .setBody(gameWorld.getWeaponBodies().get(weapon.bodyId))
+                    .setType(weapon.type)
+                    .create();
+            w.isDropped = weapon.dropped;
+
+            weapons.put(weapon.bodyId, w);
+        }
+    }
+
+    public void updateBulletAnimation(BulletEntity bullet) {
+        if (bullet.animation != null && bullets.containsKey(bullet.bodyId)) {
+            WeaponProjectile b = bullets.get(bullet.bodyId);
+            b.setAnimation(bullet.animation);
+        } else if (!bullets.containsKey(bullet.bodyId)) {
+            bullets.put(bullet.bodyId, new WeaponProjectileBuilder()
+                    .setBody(gameWorld.getBulletBodies().get(bullet.bodyId))
+                    .setType(bullet.type)
+                    .createWeaponProjectile());
+        }
+    }
+
+    public void setPlayerToFollow(PlayerEntity player) {
         playerToFollow = player;
     }
 
@@ -144,13 +222,11 @@ public class WorldRenderer implements Handler {
         switch (type) {
             case "dimension_1":
                 layer.setVisible(true);
-                layer.setOpacity(dimension ? 1f : 1 - DIMENSION_FADE_AMOUNT);
                 dimension_1 = layer;
                 break;
 
             case "dimension_2":
                 layer.setVisible(true);
-                layer.setOpacity(dimension ? 1 - DIMENSION_FADE_AMOUNT : 1f);
                 dimension_2 = layer;
                 break;
 

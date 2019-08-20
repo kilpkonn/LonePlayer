@@ -1,33 +1,37 @@
 package ee.taltech.iti0202.gui.game.desktop.states;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
 import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.controllers.WeaponController;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Hud;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.hud.Scoreboard;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.MultiplayerPauseMenu;
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.SettingsMenu;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.animations.ParallaxBackground;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.physics.GameWorld;
-import ee.taltech.iti0202.gui.game.desktop.physics.PlayerBody;
-import ee.taltech.iti0202.gui.game.desktop.physics.PlayerController;
+import ee.taltech.iti0202.gui.game.desktop.controllers.PlayerController;
 import ee.taltech.iti0202.gui.game.desktop.render.WorldRenderer;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
-import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.serializable.Play;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND_SPEEDS;
@@ -35,16 +39,23 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS_BASE_HP;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.CHECKPOINTS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_MULTIPLIER;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DMG_ON_LANDING_SPEED;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.MAIN_SCREENS;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
 public class Multiplayer extends GameState {
 
     private GameWorld gameWorld;
+    private WorldRenderer worldRenderer;
     private PlayerController playerController;
+    private WeaponController weaponController;
     private Hud hud;
-    private OrthogonalTiledMapRenderer renderer;
+    private Scoreboard scoreboard;
+
+    private MultiplayerPauseMenu pauseMenu;
+    private SettingsMenu settingsMenu;
 
     private Stage stage = new Stage(new ScreenViewport());
     private String act;
@@ -55,18 +66,14 @@ public class Multiplayer extends GameState {
     private Texture backgroundTexture;
     private ParallaxBackground parallaxBackground;
     private float backgroundSpeed;
-    // Boss logic, helpful variables
-    private float playTime = 0;
-    private boolean loading = true;
 
-    private WorldRenderer worldRenderer;
+    private float playTime = 0;
 
     private State state = State.RUN;
 
-    private boolean shouldUpdate = false;
     private PlayerControls controls;
-    private Player playerToFollow;
-    private Set<Player> tmpPlayers = new HashSet<>();
+    private PlayerEntity playerToFollow;
+    private boolean dimension = true;
 
     public Multiplayer(String act, String map, B2DVars.GameDifficulty difficulty) {
         this.act = act;
@@ -78,21 +85,21 @@ public class Multiplayer extends GameState {
         switch (difficulty) {
             case EASY:
                 DMG_MULTIPLIER = 1;
-                DMG_ON_LANDING = 10;
+                DMG_ON_LANDING_SPEED = 6;
                 CHECKPOINTS = true;
                 BOSSES = false;
                 break;
 
             case HARD:
                 DMG_MULTIPLIER = 1.5f;
-                DMG_ON_LANDING = 9;
+                DMG_ON_LANDING_SPEED = 5;
                 CHECKPOINTS = true;
                 BOSSES = true;
                 break;
 
             case BRUTAL:
                 DMG_MULTIPLIER = 2;
-                DMG_ON_LANDING = 8;
+                DMG_ON_LANDING_SPEED = 4;
                 CHECKPOINTS = true;
                 BOSS_BASE_HP *= 2;
                 BOSSES = true;
@@ -143,17 +150,70 @@ public class Multiplayer extends GameState {
 
         gameWorld = new GameWorld(act, map);
         worldRenderer = new WorldRenderer(gameWorld, cam);
-        playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers());
+        weaponController = new WeaponController(gameWorld.getWeaponBodies(), gameWorld.getWeapons(), null);
+        playerController = new PlayerController(gameWorld.getPlayerBodies(), gameWorld.getPlayers(), weaponController);
 
-        hud = new Hud(cam);
+        hud = new Hud(hudCam);
+        scoreboard = new Scoreboard(hudCam);
+
+        pauseMenu = new MultiplayerPauseMenu(
+                act,
+                map,
+                hudCam,
+                () -> {
+                    state = State.RUN;
+                    hud.setGameFade(false);
+                },
+                () -> state = State.SETTINGS,
+                () -> GameStateManager.pushState(GameStateManager.State.MENU));
+        settingsMenu = new SettingsMenu(hudCam, () -> state = State.PAUSE);
+
+        Game.setCursor(true);
     }
 
-    public void updatePlayers(Set<Player> players) {
-        for (Player player : players) {
+    public void updatePlayers(Set<PlayerEntity> players) {
+        for (PlayerEntity player : players) {
+            if (player == null) continue;
+
             gameWorld.updatePlayer(player);
-            if (playerToFollow == null && player.id == Game.client.id) {
+            if (player.id == Game.client.id) {
                 setPlayerToFollow(player);
             }
+            worldRenderer.updatePlayerAnimation(player);
+        }
+        scoreboard.setPlayers(players);
+    }
+
+    public void updateWeapons(Set<WeaponEntity> weapons) {
+        for (WeaponEntity weapon : weapons) {
+            if (weapon == null) continue;
+
+            gameWorld.updateWeapon(weapon);
+            worldRenderer.updateWeaponAnimation(weapon);
+        }
+    }
+
+    public void updateBullets(Set<BulletEntity> bullets) {
+        for (BulletEntity bullet : bullets) {
+            if (bullet == null) continue;
+
+            gameWorld.updateBullet(bullet);
+            worldRenderer.updateBulletAnimation(bullet);
+        }
+    }
+
+    public void removeEntities(Play.EntitiesToBeRemoved entities) {
+        for (int id : entities.players) {
+            gameWorld.removePlayer(id);
+            worldRenderer.removePlayerAnimation(id);
+        }
+        for (int id : entities.weapons) {
+            gameWorld.removeWeapon(id);
+            worldRenderer.removeWeaponAnimation(id);
+        }
+        for (int id : entities.bullets) {
+            gameWorld.removeBullet(id);
+            worldRenderer.removeBulletAnimation(id);
         }
     }
 
@@ -163,20 +223,55 @@ public class Multiplayer extends GameState {
             case RUN:
                 handleRunInput();
                 break;
+            case PAUSE:
+                pauseMenu.handleInput();
+                break;
+            case SETTINGS:
+                settingsMenu.handleInput();
+                break;
         }
     }
 
     @Override
     public void update(float dt) {
-        updatePlayers(tmpPlayers);
+        playTime += dt;
+
         handleInput();
         gameWorld.update(dt);
         worldRenderer.update(dt);
 
-        if (shouldUpdate) {
+        if (playerToFollow != null) {
+            controls.bodyId = playerToFollow.bodyId;
             controls.id = playerToFollow.id;
+            controls.dimension = dimension;
+            controls.idle = !(controls.jump || controls.dashLeft || controls.dashRight || controls.moveLeft || controls.moveRight);
             Game.client.updatePlayerControls(controls);
-            shouldUpdate = false;
+
+            // Update locally to be ready for next frame. Waiting for server reply is too slow.
+            playerToFollow.currentWeaponIndex = controls.currentWeapon;
+            while (playerToFollow.currentWeaponIndex < 0 || playerToFollow.currentWeaponIndex > playerToFollow.weapons.length) {
+                playerToFollow.currentWeaponIndex += playerToFollow.weapons.length * ((playerToFollow.currentWeaponIndex < 0) ? 1 : -1);
+            }
+        }
+
+        hud.setPlayTime(playTime);
+        if (playerToFollow != null) hud.setHp(playerToFollow.health);
+        hud.update(dt);
+        scoreboard.update(dt);
+
+        switch (state) {
+            case PAUSE:
+                pauseMenu.update(dt);
+                break;
+            case SETTINGS:
+                settingsMenu.update(dt);
+                break;
+        }
+
+        if (state == State.RUN) {
+            Game.setCursor(true);
+        } else {
+            Game.setCursor(false);
         }
     }
 
@@ -188,35 +283,68 @@ public class Multiplayer extends GameState {
             case RUN:
                 renderWorld();
                 break;
+            case PAUSE:
+                renderWorld();
+                pauseMenu.render(sb);
+                break;
+            case SETTINGS:
+                renderWorld();
+                settingsMenu.render(sb);
+                break;
         }
     }
 
     @Override
     public void dispose() {
         worldRenderer.dispose();
+        pauseMenu.dispose();
+        settingsMenu.dispose();
     }
 
     private void handleRunInput() {
         controls = new PlayerControls();
+        if (playerToFollow != null) controls.currentWeapon = playerToFollow.currentWeaponIndex;
+
         if (MyInput.isPressed(Game.settings.JUMP)) {
             controls.jump = true;
-            shouldUpdate = true;  //TODO: Something better here
+            //playerController.tryJump(playerToFollow.id);
         }
         if (MyInput.isDown(Game.settings.MOVE_LEFT)) {
             controls.moveLeft = true;
-            shouldUpdate = true;
+            //playerController.tryMoveLeft(playerToFollow.id);
         }
         if (MyInput.isDown(Game.settings.MOVE_RIGHT)) {
             controls.moveRight = true;
-            shouldUpdate = true;
+            //playerController.tryDashRight(playerToFollow.id);
         }
         if (MyInput.isPressed(Game.settings.MOVE_LEFT)) {
             controls.dashLeft = true;
-            shouldUpdate = true;
+            //playerController.tryDashLeft(playerToFollow.id);
         }
         if (MyInput.isPressed(Game.settings.MOVE_RIGHT)) {
             controls.dashRight = true;
-            shouldUpdate = true;
+            //playerController.tryDashRight(playerToFollow.id);
+        }
+        if (MyInput.isPressed(Game.settings.CHANGE_DIMENSION)) {
+            dimension = !dimension;
+        }
+        if (MyInput.isPressed(Game.settings.NEXT_WEAPON)) {
+            controls.currentWeapon++;
+            //playerController.trySetCurrentWeapon(playerToFollow.id, controls.currentWeapon);
+        }
+        if (MyInput.isPressed(Game.settings.PREVIOUS_WEAPON)) {
+            controls.currentWeapon--;
+            //playerController.trySetCurrentWeapon(playerToFollow.id, controls.currentWeapon);
+        }
+        if (MyInput.isMouseDown(Game.settings.SHOOT)) {
+            controls.isAiming = true;
+            controls.aimingAngle = (float) Math.atan2(
+                    -MyInput.getMouseLocation().y + (double) V_HEIGHT / 2,
+                    MyInput.getMouseLocation().x - (double) V_WIDTH / 2);
+        }
+        if (MyInput.isPressed(Game.settings.ESC)) {
+            state = State.PAUSE;
+            hud.setGameFade(true);
         }
     }
 
@@ -242,20 +370,21 @@ public class Multiplayer extends GameState {
 
         hud.render(sb);
 
-        //TODO: Render fade over hud
+        if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {  //TODO: better check
+            scoreboard.render(sb);
+        }
     }
 
-    public void setPlayerToFollow(Player playerToFollow) {
+    public void setPlayerToFollow(PlayerEntity playerToFollow) {
         this.playerToFollow = playerToFollow;
+        playerController.addAnimation(playerToFollow.bodyId);
         worldRenderer.setPlayerToFollow(playerToFollow);
     }
 
     private enum State {
         PAUSE,
         RUN,
-        RESUME,
         SETTINGS,
         END,
-        DEFAULT,
     }
 }

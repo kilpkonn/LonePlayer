@@ -57,7 +57,7 @@ public class PlayerHandler implements Handler {
         current_force = player.getBody().getLinearVelocity();
 
         if (!MyInput.isDown(-1) && cl.isPlayerOnGround()) {
-            player.setAnimation(Player.PlayerAnimation.IDLE);
+            player.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.IDLE);
         }
         if (playState == Play.pauseState.RUN) {
             // player jump / double jump / dash
@@ -69,7 +69,7 @@ public class PlayerHandler implements Handler {
                                     new Vector2(0, PLAYER_DASH_FORCE_UP),
                                     tempPlayerLocation,
                                     true); // .applyForceToCenter(0, PLAYER_DASH_FORCE_UP, true);
-                    player.setAnimation(Player.PlayerAnimation.JUMP);
+                    player.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.JUMP);
                 } else if (cl.getWallJump() != 0) {
                     Sound.playSoundOnce("sounds/jump/flaunch.ogg", 0.07f);
                     System.out.println("Walljump");
@@ -88,7 +88,7 @@ public class PlayerHandler implements Handler {
                             .applyLinearImpulse(
                                     new Vector2(0, PLAYER_DASH_FORCE_UP), tempPlayerLocation, true);
                     cl.setDoubleJump(false);
-                    player.setAnimation(Player.PlayerAnimation.ROLL, true);
+                    player.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.ROLL, true);
                 }
             }
 
@@ -106,7 +106,7 @@ public class PlayerHandler implements Handler {
                 if (current_force.x > -MAX_SPEED) {
                     if (cl.isPlayerOnGround()) {
                         player.getBody().applyForceToCenter(-PLAYER_SPEED, 0, true);
-                        player.setAnimation(Player.PlayerAnimation.RUN);
+                        player.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.RUN);
                     } else {
                         player.getBody().applyForceToCenter(-PLAYER_SPEED * 1.25f, 0, true);
                     }
@@ -131,7 +131,7 @@ public class PlayerHandler implements Handler {
                                         true);
                     }
                     cl.setDash(false);
-                    player.setAnimation(Player.PlayerAnimation.DASH);
+                    player.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.DASH);
                 }
                 player.setFlipX(true);
             }
@@ -149,7 +149,7 @@ public class PlayerHandler implements Handler {
                 }
                 if (current_force.x < MAX_SPEED) {
                     if (cl.isPlayerOnGround()) {
-                        player.setAnimation(Player.PlayerAnimation.RUN);
+                        player.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.RUN);
                         player.getBody().applyForceToCenter(PLAYER_SPEED, 0, true);
                     } else {
                         player.getBody().applyForceToCenter(PLAYER_SPEED * 1.25f, 0, true);
@@ -174,7 +174,7 @@ public class PlayerHandler implements Handler {
                                         true);
                     }
                     cl.setDash(false);
-                    player.setAnimation(Player.PlayerAnimation.DASH);
+                    player.setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.DASH);
                 }
                 player.setFlipX(false);
             }

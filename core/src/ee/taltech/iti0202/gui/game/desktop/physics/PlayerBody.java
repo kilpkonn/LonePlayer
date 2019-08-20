@@ -10,44 +10,29 @@ import com.badlogic.gdx.physics.box2d.World;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BACKGROUND;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BOSSES;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_BULLET;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WEAPON;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BIT_WORM;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_1;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.FRICTION;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_1;
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_DIMENSION_2;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.TERRA_SQUARES;
 
-public class PlayerBody extends Body {
-
-    public PlayerBody(World world, long addr) {
-        super(world, addr);
-    }
+public class PlayerBody {
 
     public static Body createPlayer(World world, Vector2 pos, int id) {
         BodyDef bodyDef = new BodyDef();
-        short mask;
-        // TODO: Make masks work, make usable when re-spawning
-        if (true) { //(draw.isDimension()) {
-            mask =
-                    BIT_BOSSES
-                            | BIT_WORM
-                            | DIMENSION_1
-                            | DIMENSION_2
-                            | TERRA_SQUARES
-                            | BACKGROUND
-                            | TERRA_DIMENSION_1;
-        } else {
-            mask =
-                    BIT_BOSSES
-                            | BIT_WORM
-                            | DIMENSION_1
-                            | DIMENSION_2
-                            | TERRA_SQUARES
-                            | BACKGROUND
-                            | TERRA_DIMENSION_2;
-        }
+        short mask = BIT_BOSSES
+                | BIT_WORM
+                | DIMENSION_1
+                | DIMENSION_2
+                | TERRA_SQUARES
+                | BACKGROUND
+                | TERRA_DIMENSION_1
+                | BIT_BULLET
+                | BIT_WEAPON;
         bodyDef.position.set(pos);
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         Body body = world.createBody(bodyDef);
@@ -90,42 +75,48 @@ public class PlayerBody extends Body {
         fixtureDef.isSensor = true;
         body.createFixture(fixtureDef).setUserData(new PlayerFoot(id));
 
-        //body.setTransform(pos, 0);
-
         return body;
     }
 
-    public static class PlayerRightSide {
-        public int id;
+    public static class PlayerData extends BodyData {
 
+    }
+
+    public static class PlayerRightSide extends PlayerData{
         public PlayerRightSide(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerLeftSide {
-        public int id;
-
+    public static class PlayerLeftSide extends PlayerData{
         public PlayerLeftSide(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerFoot {
-        public int id;
-
+    public static class PlayerFoot extends PlayerData{
         public PlayerFoot(int id) {
             this.id = id;
         }
     }
 
-    public static class PlayerBodyData {
-        public int id;
+    public static class PlayerBodyData extends PlayerData{
         public int wallJump = 0;
         public int health = 100;
         public boolean dash = false;
         public boolean onGround = false;
         public boolean doubleJump = false;
+        public boolean dimension = true;
+        public int currentWeaponIndex;
+
+        public boolean flippedAnimation = false;
+        public WeaponBody.WeaponBodyData[] weapons = new WeaponBody.WeaponBodyData[3];
+
+        public boolean isAiming;
+        public float aimAngle;
+
+        public int kills;
+        public int damage;
 
         public PlayerBodyData(int id) {
             this.id = id;

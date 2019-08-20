@@ -18,12 +18,12 @@ public class PauseMenu extends Scene {
     private Runnable resumeFunc;
     private Runnable saveFunc;
     private Runnable openSettingsFunc;
+    private Runnable exitFunc;
     private GameButton exitButton;
     private GameButton settingsButton;
     private GameButton resumeButton;
     private GameButton saveButton;
     private GameButton saveAndExitButton;
-    public boolean done = false;
 
     public PauseMenu(
             String act,
@@ -31,11 +31,13 @@ public class PauseMenu extends Scene {
             OrthographicCamera cam,
             Runnable resumeFunc,
             Runnable saveFunc,
-            Runnable openSettingsFunc) {
+            Runnable openSettingsFunc,
+            Runnable exitFunc) {
         super(act, map, cam);
         this.resumeFunc = resumeFunc;
         this.saveFunc = saveFunc;
         this.openSettingsFunc = openSettingsFunc;
+        this.exitFunc = exitFunc;
 
         hudCam.update();
 
@@ -53,7 +55,7 @@ public class PauseMenu extends Scene {
         });
 
         settingsButton.setOnAction(openSettingsFunc);
-        exitButton.setOnAction(() -> done = true);
+        exitButton.setOnAction(exitFunc::run);
 
 
         buttons =

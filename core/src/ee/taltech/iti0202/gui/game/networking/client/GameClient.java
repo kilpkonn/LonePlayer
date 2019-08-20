@@ -1,13 +1,10 @@
 package ee.taltech.iti0202.gui.game.networking.client;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 
 import java.io.IOException;
-import java.util.HashSet;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
@@ -18,8 +15,9 @@ import ee.taltech.iti0202.gui.game.networking.client.listeners.ClientListener;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
-import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
+import ee.taltech.iti0202.gui.game.networking.shared.SerializableClassesHandler;
 
 public class GameClient implements Disposable {
 
@@ -37,23 +35,11 @@ public class GameClient implements Disposable {
         int tcpPort = Integer.parseInt(connect.substring(connect.indexOf(":") + 1, connect.indexOf("|")).trim());
         int udpPort = Integer.parseInt(connect.substring(connect.indexOf("|") + 1).trim());
 
-        Kryo kryo = client.getKryo();
-        kryo.register(Handshake.Request.class);
-        kryo.register(Handshake.Response.class);
-        kryo.register(Lobby.ActMapDifficulty.class);
-        kryo.register(Lobby.Kick.class);
-        kryo.register(Lobby.NameChange.class);
-        kryo.register(Lobby.Details.class);
-        kryo.register(HashSet.class);
-        kryo.register(B2DVars.GameDifficulty.class);
-        kryo.register(Player.class);
-        kryo.register(Vector2.class);
-        kryo.register(Play.Players.class);
-        kryo.register(Lobby.StartGame.class);
-        kryo.register(PlayerControls.class);
+        SerializableClassesHandler.registerClasses(client.getKryo());
 
         try {
             client.connect(timeout, address, tcpPort, udpPort);
+            client.setKeepAliveUDP(5000);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,7 +53,7 @@ public class GameClient implements Disposable {
         client.sendTCP(new Lobby.ActMapDifficulty(act, map, difficulty));
     }
 
-    public void kickPlayer(Player player) {
+    public void kickPlayer(PlayerEntity player) {
         client.sendTCP(new Lobby.Kick(player));
     }
 
@@ -97,6 +83,30 @@ public class GameClient implements Disposable {
         Gdx.app.postRunnable(() -> {
             if (GameStateManager.currentState() instanceof Multiplayer) {
                 ((Multiplayer) GameStateManager.currentState()).updatePlayers(players.players);
+            }
+        });
+    }
+
+    public void onUpdateWeapons(Play.Weapons weapons) {
+        Gdx.app.postRunnable(() -> {
+            if (GameStateManager.currentState() instanceof Multiplayer) {
+                ((Multiplayer) GameStateManager.currentState()).updateWeapons(weapons.weapons);
+            }
+        });
+    }
+
+    public void onUpdateBullets(Play.Bullets bullets) {
+        Gdx.app.postRunnable(() -> {
+            if (GameStateManager.currentState() instanceof  Multiplayer) {
+                ((Multiplayer) GameStateManager.currentState()).updateBullets(bullets.bullets);
+            }
+        });
+    }
+
+    public void onEntitiesToBeRemoved(Play.EntitiesToBeRemoved entities) {
+        Gdx.app.postRunnable(() -> {
+            if (GameStateManager.currentState() instanceof Multiplayer) {
+                ((Multiplayer) GameStateManager.currentState()).removeEntities(entities);
             }
         });
     }

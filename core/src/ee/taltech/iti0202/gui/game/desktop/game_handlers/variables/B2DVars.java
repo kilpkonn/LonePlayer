@@ -22,7 +22,7 @@ public class B2DVars {
     public static final float MAX_LOAD_TIME = 3f; // 3 seconds
     public static final float MIN_FPS_EXPECTED = 60f; // or 60 fps
     public static boolean DEBUG = false;
-    public static final boolean JAR = false;
+    public static final boolean JAR = false   ;
     // bosses
     public static final String BOSS = "1";
     public static final int gotHitBySnek = 1;
@@ -81,7 +81,7 @@ public class B2DVars {
     public static float PLAYER_ANIMATION_CHANGE_SPEED = 0.5f;
     public static float ROLL_ON_LANDING_SPEED = 3;
     public static float DMG_MULTIPLIER = 3;
-    public static float DMG_ON_LANDING = 7;
+    public static float DMG_ON_LANDING_SPEED = 7;
     public static boolean CHECKPOINTS = true;
     public static boolean BOSSES = true;
     public static boolean UPDATE = true;

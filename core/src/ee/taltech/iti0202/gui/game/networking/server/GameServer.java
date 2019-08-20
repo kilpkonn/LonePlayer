@@ -1,15 +1,14 @@
 package ee.taltech.iti0202.gui.game.networking.server;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
@@ -22,9 +21,12 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.networking.serializable.Handshake;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.serializable.Play;
+import ee.taltech.iti0202.gui.game.networking.server.entity.BulletEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
+import ee.taltech.iti0202.gui.game.networking.server.entity.WeaponEntity;
 import ee.taltech.iti0202.gui.game.networking.server.listeners.ServerListener;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
-import ee.taltech.iti0202.gui.game.networking.server.player.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerControls;
+import ee.taltech.iti0202.gui.game.networking.shared.SerializableClassesHandler;
 
 public class GameServer implements Disposable {
     private int tcpPort = 55000;
@@ -36,36 +38,24 @@ public class GameServer implements Disposable {
     private String map;
     private B2DVars.GameDifficulty difficulty;
 
-    private Map<Integer, Player> players = new HashMap<>();
+    private Map<Integer, PlayerEntity> players = new HashMap<>();
     private ServerLogic serverLogic = new ServerLogic();
 
     public GameServer() {
         server = new Server();
         server.start();
 
-        Kryo kryo = server.getKryo();
-        kryo.register(Handshake.Request.class);
-        kryo.register(Handshake.Response.class);
-        kryo.register(Lobby.ActMapDifficulty.class);
-        kryo.register(Lobby.Kick.class);
-        kryo.register(Lobby.NameChange.class);
-        kryo.register(Lobby.Details.class);
-        kryo.register(HashSet.class);
-        kryo.register(B2DVars.GameDifficulty.class);
-        kryo.register(Player.class);
-        kryo.register(Vector2.class);
-        kryo.register(Play.Players.class);
-        kryo.register(Lobby.StartGame.class);
-        kryo.register(PlayerControls.class);
+        SerializableClassesHandler.registerClasses(server.getKryo());
 
         try {
             URL url_name = new URL("http://bot.whatismyipaddress.com");
 
             BufferedReader sc =
                     new BufferedReader(new InputStreamReader(url_name.openStream()));
-            String address = sc.readLine().trim(); //InetAddress.getLocalHost().getHostAddress();
+            String address = sc.readLine().trim();  //
+            address =  InetAddress.getLocalHost().getHostAddress();
             server.bind(tcpPort, udpPort);
-            //server.setPortAndIp(port, "192.168.0.254"); //address);
+            //server.setPortAndIp(port, "192.168.0.254"); //address);  //TODO: Fix connecting issues via public ip
             connect = String.format("%s:%s|%s", address, tcpPort, udpPort);
         } catch (UnknownHostException e) {
             System.out.println(e.getMessage());
@@ -86,19 +76,47 @@ public class GameServer implements Disposable {
         return String.format("127.0.0.1:%s|%s", tcpPort, udpPort);
     }
 
-    public Set<Player> getPlayers() {
+    public Set<PlayerEntity> getPlayers() {
         return new HashSet<>(players.values());
     }
 
-    public void updateWorld() {
+    public void updateWorld(Play.EntitiesToBeRemoved entitiesRemoved) {
         Play.Players players = new Play.Players();
         players.players = getPlayers();
 
         server.sendToAllUDP(players);
+
+        Play.Weapons weapons = new Play.Weapons();
+        int i = 0;
+        for (WeaponEntity weapon : serverLogic.getWeapons().values()) {
+            weapons.weapons.add(weapon);
+            i++;
+            if (i >= 10) {
+                server.sendToAllUDP(weapons);
+                i = 0;
+                weapons.weapons.clear();
+            }
+        }
+        server.sendToAllUDP(weapons);
+
+        Play.Bullets bullets = new Play.Bullets();
+        i = 0;
+        for (BulletEntity bullet : serverLogic.getBullets().values()) {
+            bullets.bullets.add(bullet);
+            i++;
+            if (i >= 15) {
+                server.sendToAllUDP(bullets);
+                i = 0;
+                bullets.bullets.clear();
+            }
+        }
+        server.sendToAllUDP(bullets);
+
+        server.sendToAllUDP(entitiesRemoved);  //Use TCP instead?
     }
 
     public void updatePlayerName(int id, Lobby.NameChange nameChange) {
-        Player player = players.get(id);
+        PlayerEntity player = players.get(id);
         player.name = nameChange.newName;
         players.remove(id);
         players.put(id, player);
@@ -117,14 +135,14 @@ public class GameServer implements Disposable {
         updateLobbyDetails();
     }
 
-    public void updateConnection(int id, Player player) {
+    public void updateConnection(int id, PlayerEntity player) {
         players.put(id, player);
         updateLobbyDetails();
     }
 
     public void performHandshake(int id) {
         Handshake.Request request = new Handshake.Request();
-        for (Player player : players.values()) {
+        for (PlayerEntity player : players.values()) {
             request.names.add(player.name);
         }
         request.id = id;
@@ -140,6 +158,7 @@ public class GameServer implements Disposable {
         Gdx.app.postRunnable(() -> {
             serverLogic.loadWorld(act, map);
         });
+        serverLogic.setDifficulty(difficulty);
 
         while (!serverLogic.isLoaded()) {
             try {
@@ -149,8 +168,14 @@ public class GameServer implements Disposable {
             }
         }
 
-        for (Player player : getPlayers()) {
+        for (PlayerEntity player : getPlayers()) {
             serverLogic.addPlayer(player);
+        }
+
+        for (int i = 0; i < 5; i++) {
+            serverLogic.addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.M4);
+            serverLogic.addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.DEAGLE);
+            serverLogic.addWeapon(ee.taltech.iti0202.gui.game.desktop.entities.weapons2.Weapon.Type.SHOTGUN);
         }
         Lobby.StartGame data = new Lobby.StartGame();
         data.details.act = act;
@@ -159,14 +184,11 @@ public class GameServer implements Disposable {
         server.sendToAllTCP(data);
 
         serverLogic.run(getPlayers());
-        System.out.println("Server word ready!");
+        System.out.println("Server world ready!");
     }
 
-    public void onUpdatePlayer(Player player) {
-        serverLogic.setPlayer(player);
-    }
-
-    public void onUpdatePlayerControls(PlayerControls controls) {
+    public void onUpdatePlayerControls(PlayerControls controls, long latency) {
+        players.get(controls.id).latency = latency;
         serverLogic.updatePlayerControls(controls);
     }
 
@@ -177,7 +199,7 @@ public class GameServer implements Disposable {
         details.difficulty = difficulty;
         for (Connection con : server.getConnections()) {
             if (players.containsKey(con.getID())) {
-                Player player = players.get(con.getID());
+                PlayerEntity player = players.get(con.getID());
                 player.latency = con.getReturnTripTime();
                 details.players.add(player);
             }
@@ -187,7 +209,7 @@ public class GameServer implements Disposable {
 
     public Set<String> getNames() {
         Set<String> names = new HashSet<>();
-        for (Player player : players.values()) {
+        for (PlayerEntity player : players.values()) {
             names.add(player.name);
         }
         return names;

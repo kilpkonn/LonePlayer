@@ -4,11 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.ButtonGroup;
@@ -17,7 +19,7 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.components.TextFi
 import ee.taltech.iti0202.gui.game.networking.client.GameClient;
 import ee.taltech.iti0202.gui.game.networking.serializable.Lobby;
 import ee.taltech.iti0202.gui.game.networking.server.GameServer;
-import ee.taltech.iti0202.gui.game.networking.server.player.Player;
+import ee.taltech.iti0202.gui.game.networking.server.entity.PlayerEntity;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
@@ -77,7 +79,11 @@ public class MatchmakingMenu extends Scene {
             if (Game.client != null) Game.client.updateName();
         });
 
-        startButton.setOnAction(() -> Game.client.startGame());
+        startButton.setOnAction(() -> {
+            if (act != null && map != null) {
+                Game.client.startGame();
+            }
+        });
         connectButton.setOnAction(() -> {
             if (Game.client == null) {
                 Game.client = new GameClient(connectTextField.getText(), this);
@@ -175,14 +181,17 @@ public class MatchmakingMenu extends Scene {
                 mapSelectionButton.setText(String.format("Map: %s - %s - %s", details.act, details.map.replace(".tmx", ""), details.difficulty));
             }
 
-            for (Player player : details.players) {
+            List<PlayerEntity> players = new ArrayList<>(details.players);
+            Collections.sort(players, (playerEntity, t1) -> playerEntity.name.compareTo(t1.name));
+
+            for (PlayerEntity player : players) {
                 addPlayer(player);
             }
         }
         playersCountLabel.setText("Players: " + playerNameButtons.size());
     }
 
-    private void addPlayer(Player player) {
+    private void addPlayer(PlayerEntity player) {
         ButtonGroup group = new ButtonGroup();
         GameButton btn = new GameButton(player.name, V_WIDTH / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);
         GameButton lblPing = new GameButton(player.latency + "ms", V_WIDTH * 2 / 6f, V_HEIGHT / 1.2f - 120 - playerNameButtons.size() * 40);

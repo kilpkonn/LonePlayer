@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="32" tilewidth="128" tileheight="128" infinite="0" nextlayerid="21" nextobjectid="244">
+<map version="1.2" tiledversion="1.2.2" orientation="orthogonal" renderorder="right-down" width="128" height="32" tilewidth="128" tileheight="128" infinite="0" nextlayerid="22" nextobjectid="296">
  <tileset firstgid="1" name="gameart2d-desert" tilewidth="128" tileheight="128" tilecount="40" columns="5">
   <image source="../../tilesets/images/gameart2d-desert.png" width="640" height="1024"/>
   <tile id="2">
@@ -187,6 +187,57 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="21" name="spawns">
+  <object id="244" x="384" y="3200" width="768" height="128"/>
+  <object id="245" x="1280" y="3072" width="256" height="128"/>
+  <object id="246" x="1664" y="2816" width="384" height="128"/>
+  <object id="247" x="2432" y="2688" width="384" height="128"/>
+  <object id="248" x="3328" y="2816" width="256" height="128"/>
+  <object id="249" x="4224" y="2944" width="384" height="128"/>
+  <object id="250" x="5248" y="2944" width="384" height="128"/>
+  <object id="251" x="5760" y="2816" width="256" height="128"/>
+  <object id="252" x="6144" y="2688" width="256" height="128"/>
+  <object id="253" x="6400" y="2432" width="256" height="128"/>
+  <object id="254" x="7168" y="2432" width="640" height="128"/>
+  <object id="255" x="8064" y="2432" width="256" height="128"/>
+  <object id="256" x="8576" y="2688" width="256" height="128"/>
+  <object id="257" x="8960" y="2944" width="256" height="128"/>
+  <object id="258" x="9216" y="3200" width="256" height="128"/>
+  <object id="259" x="9472" y="3456" width="896" height="128"/>
+  <object id="260" x="10624" y="3200" width="896" height="128"/>
+  <object id="261" x="11648" y="3072" width="384" height="128"/>
+  <object id="262" x="11776" y="1024" width="256" height="128"/>
+  <object id="263" x="11264" y="384" width="384" height="128"/>
+  <object id="264" x="12160" y="384" width="384" height="128"/>
+  <object id="265" x="12160" y="1024" width="256" height="128"/>
+  <object id="266" x="12672" y="512" width="384" height="128"/>
+  <object id="267" x="10752" y="512" width="384" height="128"/>
+  <object id="268" x="12672" y="1152" width="256" height="128"/>
+  <object id="269" x="13184" y="1408" width="256" height="128"/>
+  <object id="270" x="13184" y="640" width="256" height="128"/>
+  <object id="271" x="13696" y="896" width="256" height="128"/>
+  <object id="272" x="13440" y="768" width="256" height="128"/>
+  <object id="273" x="14080" y="1152" width="384" height="128"/>
+  <object id="274" x="13696" y="1664" width="256" height="128"/>
+  <object id="275" x="14208" y="1920" width="256" height="128"/>
+  <object id="276" x="14592" y="1408" width="256" height="128"/>
+  <object id="280" x="14976" y="1536" width="256" height="128"/>
+  <object id="281" x="15360" y="1664" width="256" height="128"/>
+  <object id="282" x="15744" y="1792" width="256" height="128"/>
+  <object id="283" x="14976" y="1920" width="640" height="128"/>
+  <object id="284" x="9984" y="640" width="256" height="128"/>
+  <object id="285" x="8960" y="640" width="256" height="128"/>
+  <object id="286" x="7808" y="512" width="896" height="128"/>
+  <object id="287" x="6144" y="896" width="1152" height="128"/>
+  <object id="288" x="256" y="384" width="1152" height="128"/>
+  <object id="289" x="1536" y="640" width="384" height="128"/>
+  <object id="290" x="2560" y="640" width="384" height="128"/>
+  <object id="291" x="3200" y="512" width="256" height="128"/>
+  <object id="292" x="3840" y="640" width="256" height="128"/>
+  <object id="293" x="4352" y="768" width="256" height="128"/>
+  <object id="294" x="5248" y="768" width="256" height="128"/>
+  <object id="295" x="2048" y="512" width="384" height="128"/>
+ </objectgroup>
  <layer id="8" name="background" width="128" height="32">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

@@ -126,20 +126,12 @@ public class SpriteAnimation {
         this.heightOffset = offset;
     }
 
-    public void setWidthOffset(float widthOffset) {
-        this.widthOffset = widthOffset;
-    }
-
     public Body getBody() {
         return body;
     }
 
     public Vector2 getPosition() {
         return body.getPosition();
-    }
-
-    public Vector2 getVelocity() {
-        return body.getLinearVelocity();
     }
 
     public boolean isAnimationOver() {

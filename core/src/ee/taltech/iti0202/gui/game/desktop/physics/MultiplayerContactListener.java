@@ -7,13 +7,20 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
+
 
 public class MultiplayerContactListener implements ContactListener {
 
     public Map<Integer, PlayerBody.PlayerBodyData> players;
-    private HashMap<Body, Body> collidedBullets = new HashMap<>();
+    private Set<Integer> weaponsToRemove = new HashSet<>();
+    private Set<Integer> bulletsToRemove = new HashSet<>();
+
+    //private Set<Contact> contactsToDisable = new HashSet<>();
 
     public MultiplayerContactListener(Map<Integer, PlayerBody.PlayerBodyData> players) {
         this.players = players;
@@ -27,19 +34,27 @@ public class MultiplayerContactListener implements ContactListener {
         Object oa = fa.getUserData();
         Object ob = fb.getUserData();
 
-        //if (oa != null && ob != null) {
 
         // detect bullet collision
-        bulletDetection(fa, fb);
+        bulletDetection(oa, ob);
+        bulletDetection(ob, oa);
 
         // set wall jump
-        setWallJump(oa, ob, 1);
+        setWallJump(oa, 1);
+        setWallJump(ob, 1);
 
-        groundDetection(oa, ob);
+        groundDetection(oa, ob, fa.getBody());
+        groundDetection(ob, oa, fb.getBody());
+
+        weaponPickup(oa, ob);
+        weaponPickup(ob, oa);
 
         // detection happens when player goes outside of initial game border
-        dmgDetection(oa, ob);
-        //}
+        dmgDetection(oa, ob, fa.getBody(), fb.getBody());
+        dmgDetection(ob, oa, fb.getBody(), fa.getBody());
+
+        borderDetection(oa, ob);
+        borderDetection(ob, oa);
     }
 
     @Override
@@ -52,10 +67,11 @@ public class MultiplayerContactListener implements ContactListener {
 
         //if (oa != null && ob != null) {
 
-        setWallJump(oa, ob, 0);
+        setWallJump(oa, 0);
+        setWallJump(ob, 0);
 
         PlayerBody.PlayerBodyData player;
-        if (oa instanceof PlayerBody.PlayerFoot) {
+        if (oa instanceof PlayerBody.PlayerFoot && !(ob instanceof WeaponBody.WeaponBodyData)) {
             player = players.get(((PlayerBody.PlayerFoot) oa).id);
 
             player.onGround = false;
@@ -63,7 +79,7 @@ public class MultiplayerContactListener implements ContactListener {
             // wallJump = 0;
             player.dash = true;
         }
-        if (ob instanceof PlayerBody.PlayerFoot) {
+        if (ob instanceof PlayerBody.PlayerFoot && !(oa instanceof WeaponBody.WeaponBodyData)) {
             player = players.get(((PlayerBody.PlayerFoot) ob).id);
 
             player.onGround = false;
@@ -76,7 +92,14 @@ public class MultiplayerContactListener implements ContactListener {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
+        Fixture fa = contact.getFixtureA();
+        Fixture fb = contact.getFixtureB();
 
+        Object oa = fa.getUserData();
+        Object ob = fb.getUserData();
+
+        checkForDisable(contact, oa, ob);
+        checkForDisable(contact, ob, oa);
     }
 
     @Override
@@ -84,49 +107,95 @@ public class MultiplayerContactListener implements ContactListener {
 
     }
 
-    private void groundDetection(Object oa, Object ob) {
-        if (oa instanceof PlayerBody.PlayerFoot) {
-            players.get(((PlayerBody.PlayerFoot) oa).id).onGround = true;
+    /*public void update(float dt) {
+        for (Contact c : contactsToDisable) {
+            c.setEnabled(false);
         }
-        if (ob instanceof PlayerBody.PlayerFoot) {
-            players.get(((PlayerBody.PlayerFoot) ob).id).onGround = true;
+    }*/
+
+    private void checkForDisable(Contact contact, Object oa, Object ob) {
+        if (oa instanceof WeaponBody.WeaponBodyData) {
+            if (!((WeaponBody.WeaponBodyData) oa).dropped) {
+                contact.setEnabled(false);  //TODO: Seems to be broken
+            }
+        } else if (oa instanceof BulletBody.BulletBodyData && ob instanceof PlayerBody.PlayerData) {
+            if (((PlayerBody.PlayerData) ob).id == ((BulletBody.BulletBodyData) oa).shooterId) {
+                contact.setEnabled(false); //TODO: this no works
+                //contactsToDisable.add(contact);
+            }
         }
     }
 
-    private void bulletDetection(Fixture fa, Fixture fb) {
-        /*if (fa.getUserData() == null && fb.getUserData() == null) {
-            return;
+    private void groundDetection(Object oa, Object ob, Body ba) {
+        if (oa instanceof PlayerBody.PlayerFoot && !(ob instanceof WeaponBody.WeaponBodyData)) {
+            PlayerBody.PlayerBodyData data =  players.get(((BodyData) oa).id);
+            data.onGround = true;
+            if (Math.abs(ba.getLinearVelocity().y) > B2DVars.DMG_ON_LANDING_SPEED) {
+                data.health -= (int) Math.abs(ba.getLinearVelocity().y); // / B2DVars.DMG_ON_LANDING_SPEED * B2DVars.DMG_MULTIPLIER);
+            }
+            System.out.println("Landed -> " + ba.getLinearVelocity());
         }
-        if (fa.getUserData().toString().endsWith("bullet")) {
-            collidedBullets.put(fa.getBody(), fb.getBody());
-        } else if (fb.getUserData().toString().endsWith("bullet")) {
-            collidedBullets.put(fb.getBody(), fa.getBody());
-        }*/
     }
 
-    private void dmgDetection(Object oa, Object ob) {
+    private void borderDetection(Object oa, Object ob) {
+        if (oa == null || ob == null) return;
+        if (oa.equals("barrier")) {
+            if (ob instanceof WeaponBody.WeaponBodyData) {
+                weaponsToRemove.add(((WeaponBody.WeaponBodyData) ob).id);
+            } else if (ob instanceof BulletBody.BulletBodyData) {
+                bulletsToRemove.add(((BulletBody.BulletBodyData) ob).id);
+            }
+        }
+    }
+
+    private void weaponPickup(Object oa, Object ob) {
+        if (oa instanceof PlayerBody.PlayerData && ob instanceof WeaponBody.WeaponBodyData) {
+            PlayerBody.PlayerBodyData data = players.get(((BodyData) oa).id);
+            WeaponBody.WeaponBodyData weaponBodyData = (WeaponBody.WeaponBodyData) ob;
+            if (weaponBodyData.dropped) {
+                for (int i = 0; i < data.weapons.length; i++) {
+                    if (data.weapons[i] == null) {
+                        data.weapons[i] = weaponBodyData;
+                        weaponBodyData.dropped = false;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    private void bulletDetection(Object oa, Object ob) {
+        if (oa instanceof BulletBody.BulletBodyData) {
+            BulletBody.BulletBodyData bullet = (BulletBody.BulletBodyData) oa;
+            bullet.isHit = true;
+
+            if (ob instanceof PlayerBody.PlayerData) {
+                PlayerBody.PlayerBodyData target = players.get(((PlayerBody.PlayerData) ob).id);
+                PlayerBody.PlayerBodyData shooter =  players.get(bullet.shooterId);
+                target.health -= 10; //TODO: Different dmg.
+                shooter.damage += 10;
+                if (target.health < 0) {
+                    shooter.kills++;
+                }
+            }
+        }
+    }
+
+    private void dmgDetection(Object oa, Object ob, Body ba, Body bb) {
         if (oa == null || ob == null) {
             return;
         }
 
-        if (oa instanceof PlayerBody.PlayerBodyData) {
-            PlayerBody.PlayerBodyData player = players.get(((PlayerBody.PlayerBodyData) oa).id);
+        if (oa instanceof PlayerBody.PlayerData) {  //TODO: Rewrite this?
+            PlayerBody.PlayerBodyData player = players.get(((BodyData) oa).id);
             if (ob.equals("barrier")) {
-                player.health = 0;
-            }
-        }
-
-        if (ob instanceof PlayerBody.PlayerBodyData) {
-            PlayerBody.PlayerBodyData player = players.get(((PlayerBody.PlayerBodyData) ob).id);
-            if (oa.equals("barrier")) {
                 player.health = 0;
             }
         }
     }
 
-    private void setWallJump(Object oa, Object ob, int i) {
+    private void setWallJump(Object oa, int i) {
         PlayerBody.PlayerBodyData playerA;
-        PlayerBody.PlayerBodyData playerB;
 
         if (oa instanceof PlayerBody.PlayerRightSide) {
             playerA = players.get(((PlayerBody.PlayerRightSide) oa).id);
@@ -135,14 +204,13 @@ public class MultiplayerContactListener implements ContactListener {
             playerA = players.get(((PlayerBody.PlayerLeftSide) oa).id);
             playerA.wallJump = i;
         }
-
-        if (ob instanceof PlayerBody.PlayerRightSide) {
-            playerB = players.get(((PlayerBody.PlayerRightSide) ob).id);
-            playerB.wallJump = -1 * i;
-        } else if (ob instanceof PlayerBody.PlayerLeftSide) {
-            playerB = players.get(((PlayerBody.PlayerLeftSide) ob).id);
-            playerB.wallJump = i;
-        }
     }
 
+    public Set<Integer> getWeaponsToRemove() {
+        return weaponsToRemove;
+    }
+
+    public Set<Integer> getBulletsToRemove() {
+        return bulletsToRemove;
+    }
 }

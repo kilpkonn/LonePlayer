@@ -48,7 +48,7 @@ public class Menu extends GameState {
         levelSelectionMenu = new LevelSelectionMenu(cam,
                 () -> menuState = state.MAIN,
                 (a, m, d) -> GameStateManager.pushState(GameStateManager.State.PLAY, a, m, d));
-        settingsMenu = new SettingsMenu(cam, game, () -> menuState = state.MAIN);
+        settingsMenu = new SettingsMenu(cam, () -> menuState = state.MAIN);
         loadGameMenu = new LoadGameMenu(cam, () -> menuState = state.MAIN);
         matchmakingMenu = new MatchmakingMenu(cam, () -> menuState = state.MAIN);
         mainMenuScene =
@@ -65,6 +65,13 @@ public class Menu extends GameState {
         cam.zoom = 1.0f;
 
         world = new World(new Vector2(0, -9.8f * 5), true);
+
+        game.getSound().stop();
+        game.setSound(
+                Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
+        game.getSound().setLooping(true);
+        game.getSound().play();
+        game.getSound().setVolume(0.2f);
     }
 
     private void addParallax(String path) {
@@ -83,6 +90,7 @@ public class Menu extends GameState {
         parallaxBackground.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         parallaxBackground.setSpeed(50f);
         stage.addActor(parallaxBackground);
+        Game.setCursor(false);
     }
 
     @Override

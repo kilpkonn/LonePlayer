@@ -12,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
@@ -52,7 +53,8 @@ public class Play extends GameState {
 
     // LibGdx variables
     private World world = new World(new Vector2(0, GRAVITY), true);
-    @ToString.Exclude private Draw draw;
+    @ToString.Exclude
+    private Draw draw;
     private MyContactListener cl = new MyContactListener();
     private Box2DDebugRenderer b2dr = new Box2DDebugRenderer();
     private OrthographicCamera b2dcam = new OrthographicCamera();
@@ -60,11 +62,16 @@ public class Play extends GameState {
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
     // handlers
-    @ToString.Exclude private PlayerHandler playerHandler;
-    @ToString.Exclude private BossHander bossHander;
-    @ToString.Exclude private WeaponHandler weaponHandler;
-    @ToString.Exclude private CheckpointHandler checkpointHandler;
-    @ToString.Exclude private BulletHandler bulletHandler;
+    @ToString.Exclude
+    private PlayerHandler playerHandler;
+    @ToString.Exclude
+    private BossHander bossHander;
+    @ToString.Exclude
+    private WeaponHandler weaponHandler;
+    @ToString.Exclude
+    private CheckpointHandler checkpointHandler;
+    @ToString.Exclude
+    private BulletHandler bulletHandler;
     // States
     private GameProgress progress;
     private PauseMenu pauseMenu;
@@ -96,21 +103,21 @@ public class Play extends GameState {
         switch (difficulty) {
             case EASY:
                 DMG_MULTIPLIER = 1;
-                DMG_ON_LANDING = 10;
+                DMG_ON_LANDING_SPEED = 10;
                 CHECKPOINTS = true;
                 BOSSES = false;
                 break;
 
             case HARD:
                 DMG_MULTIPLIER = 1.5f;
-                DMG_ON_LANDING = 9;
+                DMG_ON_LANDING_SPEED = 9;
                 CHECKPOINTS = true;
                 BOSSES = true;
                 break;
 
             case BRUTAL:
                 DMG_MULTIPLIER = 2;
-                DMG_ON_LANDING = 8;
+                DMG_ON_LANDING_SPEED = 8;
                 CHECKPOINTS = true;
                 BOSS_BASE_HP *= 2;
                 BOSSES = true;
@@ -144,24 +151,25 @@ public class Play extends GameState {
         hudCam.setToOrtho(false, V_WIDTH / PPM, V_HEIGHT / PPM);
 
         // create pause state
-        pauseMenu =
-                new PauseMenu(
-                        act,
-                        map,
-                        hudCam,
-                        () -> {
-                            playState = pauseState.RUN;
-                            draw.setGameFadeOut(false);
-                            draw.setGameFadeDone(false);
-                            UPDATE = true;
-                        },
-                        this::saveGame,
-                        () -> playState = pauseState.SETTINGS);
+        pauseMenu = new PauseMenu(
+                act,
+                map,
+                hudCam,
+                () -> {
+                    playState = pauseState.RUN;
+                    draw.setGameFadeOut(false);
+                    draw.setGameFadeDone(false);
+                    UPDATE = true;
+                },
+                this::saveGame,
+                () -> playState = pauseState.SETTINGS,
+                () -> {
+                    GameStateManager.pushState(GameStateManager.State.MENU);
+                });
 
         settingsMenu =
                 new SettingsMenu(
                         hudCam,
-                        game,
                         () -> playState = pauseState.PAUSE);
 
         endMenu =
@@ -240,7 +248,7 @@ public class Play extends GameState {
         UPDATE = true;
         cam.zoom = 1;
 
-        setCursor(true);
+        Game.setCursor(true);
     }
 
     public Play(String act, String map, GameDifficulty difficulty) {
@@ -263,13 +271,13 @@ public class Play extends GameState {
                 playState = pauseState.PAUSE;
                 draw.setGameFadeOut(true);
                 draw.setGameFadeDone(false);
-                setCursor(false);
+                Game.setCursor(false);
             } else {
                 UPDATE = true;
                 playState = pauseState.RUN;
                 draw.setGameFadeOut(false);
                 draw.setGameFadeDone(false);
-                setCursor(true);
+                Game.setCursor(true);
             }
         }
     }
@@ -286,7 +294,7 @@ public class Play extends GameState {
         if (playerHandler.isNewPlayer()) {
             if (Math.abs(playerHandler.getPlayer().getPosition().x - cam.position.x / PPM) < 1
                     && Math.abs(playerHandler.getPlayer().getPosition().y - cam.position.y / PPM)
-                            < 1) playerHandler.setNewPlayer(false);
+                    < 1) playerHandler.setNewPlayer(false);
         } else handleInput();
 
         if (UPDATE) world.step(dt, 10, 2); // recommended values
@@ -297,7 +305,7 @@ public class Play extends GameState {
             draw.setGameFadeDone(false);
             endMenu.setTime(playTime);
             playState = pauseState.END;
-            setCursor(false);
+            Game.setCursor(false);
         }
 
         draw.updateGameFade(dt);
@@ -313,15 +321,6 @@ public class Play extends GameState {
 
             case PAUSE:
                 pauseMenu.update(dt);
-                if (pauseMenu.done) {
-                    game.getSound().stop();
-                    game.setSound(
-                            Gdx.audio.newMusic(Gdx.files.internal(PATH + "sounds/intro.ogg")));
-                    game.getSound().setLooping(true);
-                    game.getSound().play();
-                    game.getSound().setVolume(0.2f);
-                    GameStateManager.pushState(GameStateManager.State.MENU);
-                }
                 break;
 
             case RESUME:
@@ -537,21 +536,8 @@ public class Play extends GameState {
                 B2DVars.PATH
                         + "saves/"
                         + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH)
-                                .format(new Date())
+                        .format(new Date())
                         + ".json");
-    }
-
-    private void setCursor(boolean crosshair) {
-        if (crosshair) {
-            Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/white_cross.png"));
-            Gdx.graphics.setCursor(
-                    Gdx.graphics.newCursor(pm, pm.getWidth() / 2, pm.getHeight() / 2));
-            pm.dispose();
-        } else {
-            Pixmap pm = new Pixmap(Gdx.files.local(PATH + "images/crosshair/arrow.png"));
-            Gdx.graphics.setCursor(Gdx.graphics.newCursor(pm, 0, 0));
-            pm.dispose();
-        }
     }
 
     @Override

@@ -20,22 +20,18 @@ public class MyPlayerTweener extends PlayerTweener {
         super(entity);
         getSecondPlayer()
                 .addListener(
-                        new MyPlayerListener(
-                                new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (playingOnce) {
-                                            playingOnce = false;
-                                            if (prevAnimation != null && !stopOnAnimOver) {
-                                                setAnimation(prevAnimation.name, false);
-                                            }
-                                            influence = 1;
+                        new MyPlayerListener(() -> {
+                                    if (playingOnce) {
+                                        playingOnce = false;
+                                        if (prevAnimation != null && !stopOnAnimOver) {
+                                            setAnimation(prevAnimation.name, false);
                                         }
+                                        influence = 1;
+                                    }
 
-                                        if (stopOnAnimOver) {
-                                            speed = 0;
-                                            animOver = true;
-                                        }
+                                    if (stopOnAnimOver) {
+                                        speed = 0;
+                                        animOver = true;
                                     }
                                 }));
     }

@@ -4,14 +4,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Timeline;
+
 import ee.taltech.iti0202.gui.game.Game;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
+import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,7 +32,7 @@ public class Player extends SpriteAnimation {
 
     public Player(Body body, SpriteBatch sb) {
         super(body, sb, "images/player/rogue.scml");
-        System.out.println("new Player");
+        System.out.println("new PlayerEntity");
         setScale(0.08f);
         setAnimationSpeed(100);
         setHeightOffset(10);
@@ -65,16 +68,14 @@ public class Player extends SpriteAnimation {
                 getCurrentAnimation().name.equals("run")
                         ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
                         : (getCurrentAnimation().name.equals("dash")
-                                ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
-                                : (float) (Math.PI / 8));
+                        ? (isFlippedX() ? (float) 0 : (float) (Math.PI / 4))
+                        : (float) (Math.PI / 8));
         float flipped = isFlippedX() ? -(float) Math.PI / 4 + (float) Math.PI : 0;
-        float angle =
-                (float)
-                                Math.atan2(
-                                        MyInput.getMouseLocation().y - (double) V_HEIGHT / 2,
-                                        MyInput.getMouseLocation().x - (double) V_WIDTH / 2)
-                        + flipped
-                        + offset;
+        float angle = (float) Math.atan2(
+                MyInput.getMouseLocation().y - (double) V_HEIGHT / 2,
+                MyInput.getMouseLocation().x - (double) V_WIDTH / 2)
+                + flipped
+                + offset;
 
         rotateBone("right_shoulder", (((float) -Math.toDegrees(angle))));
     }
@@ -105,13 +106,13 @@ public class Player extends SpriteAnimation {
 
         if (grounded && doneDmg.size() > 4) {
             doneDmg = new ArrayList<>();
-            if (Math.abs(velocity.y) > DMG_ON_LANDING) {
+            if (Math.abs(velocity.y) > DMG_ON_LANDING_SPEED) {
                 if (Math.abs(velocity.x) < ROLL_ON_LANDING_SPEED) {
                     health -=
                             Math.abs(
                                     velocity.y
                                             * Math.abs(velocity.y)
-                                            / DMG_ON_LANDING
+                                            / DMG_ON_LANDING_SPEED
                                             * DMG_MULTIPLIER);
                 }
                 Sound.playSoundOnce("sounds/jump/Jump " + new Random().nextInt(3) + ".ogg", 0.1f);
@@ -123,22 +124,22 @@ public class Player extends SpriteAnimation {
                 // Math.abs(velocity.x), 0),
                 // true); // Change to impulse?
                 Sound.playSoundOnce("sounds/jump/fall.ogg", 0.1f);
-                setAnimation(PlayerAnimation.ROLL2, true);
+                setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.ROLL2, true);
                 if (Math.abs(velocity.y) < ROLL_ON_LANDING_SPEED) {
                     health -= Math.abs(velocity.y / 2);
                     health = Math.max(health, 0);
-                    setAnimation(PlayerAnimation.FACEPLANT, true);
+                    setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation.FACEPLANT, true);
                 }
             }
         }
     }
 
-    public void setAnimation(PlayerAnimation animation) {
-        setAnimation(animation.name, false);
+    public void setAnimation(MultiplayerAnimation animation) {
+        setAnimation(animation.getName(), animation.isToPlayOnce());
     }
 
-    public void setAnimation(PlayerAnimation animation, boolean playOnce) {
-        setAnimation(animation.name, playOnce);
+    public void setAnimation(ee.taltech.iti0202.gui.game.desktop.entities.player2.Player.PlayerAnimation animation, boolean playOnce) {
+        setAnimation(animation.getName(), playOnce);
     }
 
     public void addWeapon(Weapon weapon) {
@@ -149,27 +150,6 @@ public class Player extends SpriteAnimation {
         this.currentWeapon = currentWeapon;
         if (!weapons.contains(currentWeapon)) {
             weapons.add(currentWeapon);
-        }
-    }
-
-    public enum PlayerAnimation {
-        RUN("run"),
-        JUMP("jump"),
-        IDLE("idle"),
-        ROLL("roll"),
-        ROLL2("roll2"),
-        FACEPLANT("faceplant"),
-        DASH("dash"),
-        WAVE("wave");
-
-        private final String name;
-
-        PlayerAnimation(String s) {
-            name = s;
-        }
-
-        public String toString() {
-            return this.name;
         }
     }
 }
