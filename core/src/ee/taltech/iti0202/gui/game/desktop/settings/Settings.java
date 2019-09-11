@@ -24,6 +24,8 @@ public class Settings {
     public int NEXT_WEAPON = Input.Keys.E;
     @SerializedName("previous_weapon")
     public int PREVIOUS_WEAPON = Input.Keys.Q;
+    @SerializedName("tab")
+    public int TAB = Input.Keys.TAB;
 
     @SerializedName("enable_dev_maps")
     public boolean ENABLE_DEV_MAPS = false;

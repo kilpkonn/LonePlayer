@@ -248,7 +248,7 @@ public class GameWorld implements Disposable {
                     for (MapObject object : layer.getObjects()) {
                         if (object instanceof RectangleMapObject) {
                             RectangleMapObject rect = (RectangleMapObject) object;
-                            if (layer.getName().equals("spawns")) {  //TODO: make spawns layers for other maps...
+                            if (layer.getName().equals("spawns")) {
                                 spawns.add(rect);
                             }
                         }

@@ -56,7 +56,6 @@ project(":desktop") {
         compile "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-desktop"
         compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
         compile 'com.google.code.gson:gson:2.8.5'
-        compile 'net.corpwar.lib:corpnet:2.0.0'
     }
 }
 
@@ -97,7 +96,6 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-x86_64"
         implementation "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
         implementation 'com.google.code.gson:gson:2.8.5'
-        implementation 'net.corpwar.lib:corpnet:2.0.0'
 
     }
 }
@@ -117,7 +115,6 @@ project(":ios") {
         implementation "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-ios"
         implementation "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-ios"
         implementation 'com.google.code.gson:gson:2.8.5'
-        implementation 'net.corpwar.lib:corpnet:2.0.0'
 
     }
 }

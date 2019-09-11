@@ -370,7 +370,7 @@ public class Multiplayer extends GameState {
 
         hud.render(sb);
 
-        if (Gdx.input.isKeyPressed(Input.Keys.TAB)) {  //TODO: better check
+        if (MyInput.isDown(Game.settings.TAB)) {
             scoreboard.render(sb);
         }
     }
