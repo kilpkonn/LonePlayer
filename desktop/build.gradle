@@ -6,10 +6,6 @@ project.ext.mainClassName = "ee.taltech.iti0202.gui.game.desktop.DesktopLauncher
 project.ext.assetsDir = new File("../android/assets")
 
 
-dependencies {
-    compile 'ch.qos.logback:logback-classic:1.2.3'
-}
-
 apply plugin: 'gradle-one-jar'
 
 buildscript {
