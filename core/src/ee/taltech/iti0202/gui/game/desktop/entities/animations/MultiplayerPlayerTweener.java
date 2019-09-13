@@ -3,6 +3,8 @@ package ee.taltech.iti0202.gui.game.desktop.entities.animations;
 import com.brashmonkey.spriter.Entity;
 import com.brashmonkey.spriter.PlayerTweener;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
@@ -12,7 +14,7 @@ public class MultiplayerPlayerTweener extends PlayerTweener {
 
     private float influence;
     private float changeSpeed;
-    private Stack<MultiplayerAnimation> animations = new Stack<>();
+    private Deque<MultiplayerAnimation> animations = new ArrayDeque<>();
     private Runnable onAnimationEndFunc;
 
     public MultiplayerPlayerTweener(Entity entity) {
@@ -58,7 +60,7 @@ public class MultiplayerPlayerTweener extends PlayerTweener {
         setScale(animation.getScale());
         speed = animation.getSpeed();
 
-        changeSpeed = animation.isToPlayOnce() || animations.peek().isToPlayOnce() ? 2f : 1f;
+        changeSpeed = animation.isToPlayOnce() || animations.getLast().isToPlayOnce() ? 2f : 1f;
     }
 
     public MultiplayerAnimation getCurrentAnimation() {

@@ -8,16 +8,18 @@ import ee.taltech.iti0202.gui.game.desktop.states.Multiplayer;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Stack;
 
 public class GameStateManager {
 
     private static Game game;
-    private static Stack<GameState> gameStates;
+    private static Deque<GameState> gameStates;
 
     public GameStateManager(Game newGame) {
         game = newGame;
-        gameStates = new Stack<>();
+        gameStates = new ArrayDeque<>();
         pushState(State.MENU);
     }
 
@@ -30,11 +32,11 @@ public class GameStateManager {
     }
 
     public static void update(float dt) {
-        gameStates.peek().update(dt);
+        gameStates.getLast().update(dt);
     }
 
     public static void render() {
-        gameStates.peek().render();
+        gameStates.getLast().render();
     }
 
     private static GameState getState(State state) {
