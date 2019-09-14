@@ -3,8 +3,13 @@ package ee.taltech.iti0202.gui.game.desktop.entities.animations;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.brashmonkey.spriter.Data;
+import com.brashmonkey.spriter.FileReference;
 import com.brashmonkey.spriter.LibGdx.LibGdxDrawer;
 import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
+import com.brashmonkey.spriter.Mainline;
+import com.brashmonkey.spriter.Timeline;
+
+import java.util.Iterator;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
@@ -44,6 +49,12 @@ public class SpriteAnimation2 {
         playerTweener.update(dt);
         playerTweener.setPosition(body.getPosition().x * PPM, body.getPosition().y * PPM);
         playerTweener.setAngle((float) Math.toDegrees(body.getAngle()));
+
+        /*Iterator<Timeline.Key.Object> iter =  playerTweener.objectIterator();
+        while (iter.hasNext()) {
+            Timeline.Key.Object bone = iter.next();
+            bone.ref.set(0, 0);
+        }*/
     }
 
     public void render(SpriteBatch sb) {
