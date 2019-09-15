@@ -3,9 +3,7 @@ package ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
-import lombok.Builder;
 
-@Builder
 public class SnowWorm extends Worm {
 
     private Body body;

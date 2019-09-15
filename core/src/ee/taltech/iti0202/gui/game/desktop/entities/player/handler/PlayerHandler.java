@@ -16,18 +16,15 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
 import ee.taltech.iti0202.gui.game.desktop.states.Play;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
-import lombok.Data;
-import lombok.ToString;
 
 import java.util.Random;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound.playSoundOnce;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
-@Data
 public class PlayerHandler implements Handler {
 
-    @ToString.Exclude private Play play;
+    private Play play;
     private Player player;
     private GameProgress progress;
     private SpriteBatch spriteBatch;
@@ -253,13 +250,13 @@ public class PlayerHandler implements Handler {
         if (cl.getDeathState() == 0) {
             player.update(dt);
 
-        } else if (getGracePeriod() == 0) {
+        } else if (gracePeriod == 0) {
             if (cl.getDeathState() == 2) {
                 player.setHealth(player.getHealth() - gotHitBySnek * 10);
                 playSoundOnce("sounds/aww/aw0" + new Random().nextInt(6) + ".ogg");
             }
             if (cl.getDeathState() == 3) {
-                if (!isNewPlayer()) player.setHealth(0); // TODO: Fix instant death on load game
+                if (!newPlayer) player.setHealth(0); // TODO: Fix instant death on load game
             } else {
                 String a = new Random().nextBoolean() ? "a" : "b";
                 playSoundOnce("sounds/hit/sword-1" + a + ".ogg", 0.05f);
@@ -288,10 +285,48 @@ public class PlayerHandler implements Handler {
         if (gracePeriod > 0) gracePeriod -= 1;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public boolean isNewPlayer() {
+        return newPlayer;
+    }
+
+    public void setNewPlayer(boolean newPlayer) {
+        this.newPlayer = newPlayer;
+    }
+
+    public Checkpoint getCheckpoint() {
+        return checkpoint;
+    }
+
+    public void setCheckpoint(Checkpoint checkpoint) {
+        this.checkpoint = checkpoint;
+    }
+
+    public Vector2 getInitPlayerLocation() {
+        return initPlayerLocation;
+    }
+
+    public void setInitPlayerLocation(Vector2 initPlayerLocation) {
+        this.initPlayerLocation = initPlayerLocation;
+    }
+
+    public Vector2 getTempPlayerLocation() {
+        return tempPlayerLocation;
+    }
+
     @Override
     public void render(SpriteBatch sb) {
 
         // draw player
         if (player != null) player.render(sb);
     }
+
+
 }

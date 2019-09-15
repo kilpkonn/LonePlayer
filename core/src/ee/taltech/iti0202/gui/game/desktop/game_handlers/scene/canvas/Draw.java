@@ -36,7 +36,6 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.bleeding.Bleeding
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import ee.taltech.iti0202.gui.game.desktop.states.shapes.ShapesGreator;
-import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +44,6 @@ import java.util.Map;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
-@Data
 public class Draw implements Handler {
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map
@@ -141,7 +139,8 @@ public class Draw implements Handler {
                     determineMapObject(layer);
                     break;
                 default:
-                    readVertices((TiledMapTileLayer) layer, defaultSpawn);
+                    if (layer instanceof TiledMapTileLayer)
+                        readVertices((TiledMapTileLayer) layer, defaultSpawn);
             }
         }
         if (!defaultSpawn) {
@@ -474,5 +473,57 @@ public class Draw implements Handler {
             shapeRenderer.rect(0, 0, B2DVars.V_WIDTH, B2DVars.V_HEIGHT);
             shapeRenderer.end();
         }
+    }
+
+    public void setDimensionFadeDone(boolean dimensionFadeDone) {
+        this.dimensionFadeDone = dimensionFadeDone;
+    }
+
+    public void setDimension(boolean dimension) {
+        this.dimension = dimension;
+    }
+
+    public void setGameFadeDone(boolean gameFadeDone) {
+        this.gameFadeDone = gameFadeDone;
+    }
+
+    public void setGameFadeOut(boolean gameFadeOut) {
+        this.gameFadeOut = gameFadeOut;
+    }
+
+    public boolean isDimension() {
+        return dimension;
+    }
+
+    public WeaponHandler getWeaponHandler() {
+        return weaponHandler;
+    }
+
+    public void setPlayerHandler(PlayerHandler playerHandler) {
+        this.playerHandler = playerHandler;
+    }
+
+    public void setBossHander(BossHander bossHander) {
+        this.bossHander = bossHander;
+    }
+
+    public void setCheckpointHandler(CheckpointHandler checkpointHandler) {
+        this.checkpointHandler = checkpointHandler;
+    }
+
+    public void setBulletHandler(BulletHandler bulletHandler) {
+        this.bulletHandler = bulletHandler;
+    }
+
+    public void setWeaponHandler(WeaponHandler weaponHandler) {
+        this.weaponHandler = weaponHandler;
+    }
+
+    public PlayerHandler getPlayerHandler() {
+        return playerHandler;
+    }
+
+    public BulletHandler getBulletHandler() {
+        return bulletHandler;
     }
 }

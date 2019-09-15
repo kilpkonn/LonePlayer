@@ -11,18 +11,12 @@ import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.Multiplaye
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
 public class Player extends SpriteAnimation {
 
     private int health;
@@ -151,5 +145,21 @@ public class Player extends SpriteAnimation {
         if (!weapons.contains(currentWeapon)) {
             weapons.add(currentWeapon);
         }
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public List<Weapon> getWeapons() {
+        return weapons;
+    }
+
+    public Weapon getCurrentWeapon() {
+        return currentWeapon;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 }

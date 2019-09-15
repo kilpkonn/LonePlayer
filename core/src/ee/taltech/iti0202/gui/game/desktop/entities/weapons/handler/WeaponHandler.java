@@ -7,12 +7,9 @@ import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.Weapon;
 import ee.taltech.iti0202.gui.game.desktop.entities.weapons.loader.WeaponLoader;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
-import lombok.Data;
-
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 public class WeaponHandler implements Handler {
 
     private final World world;
@@ -62,5 +59,9 @@ public class WeaponHandler implements Handler {
         addWeapon(weapon);
         player.setCurrentWeapon(weapon);
         return weapon;
+    }
+
+    public World getWorld() {
+        return world;
     }
 }

@@ -35,9 +35,6 @@ import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.GameProgress;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -45,15 +42,12 @@ import java.util.*;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound.playSoundOnce;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
 public class Play extends GameState {
 
     // Play is the root node for most of the action
 
     // LibGdx variables
     private World world = new World(new Vector2(0, GRAVITY), true);
-    @ToString.Exclude
     private Draw draw;
     private MyContactListener cl = new MyContactListener();
     private Box2DDebugRenderer b2dr = new Box2DDebugRenderer();
@@ -62,15 +56,10 @@ public class Play extends GameState {
     private Hud hud;
     private OrthogonalTiledMapRenderer renderer;
     // handlers
-    @ToString.Exclude
     private PlayerHandler playerHandler;
-    @ToString.Exclude
     private BossHander bossHander;
-    @ToString.Exclude
     private WeaponHandler weaponHandler;
-    @ToString.Exclude
     private CheckpointHandler checkpointHandler;
-    @ToString.Exclude
     private BulletHandler bulletHandler;
     // States
     private GameProgress progress;
@@ -315,7 +304,7 @@ public class Play extends GameState {
             case RUN:
                 updateProps(dt);
                 hud.setHp(draw.getPlayerHandler().getPlayer().getHealth());
-                hud.setPlayTime(getPlayTime());
+                hud.setPlayTime(playTime);
                 hud.update(dt);
                 break;
 
@@ -473,7 +462,7 @@ public class Play extends GameState {
 
         hud.render(sb);
 
-        if (DEBUG) getB2dr().render(world, getB2dcam().combined);
+        if (DEBUG) b2dr.render(world, b2dcam.combined);
 
         draw.renderFade();
     }
@@ -538,6 +527,10 @@ public class Play extends GameState {
                         + new SimpleDateFormat("dd-MM-YYYY_HH-mm-ss", Locale.ENGLISH)
                         .format(new Date())
                         + ".json");
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     @Override

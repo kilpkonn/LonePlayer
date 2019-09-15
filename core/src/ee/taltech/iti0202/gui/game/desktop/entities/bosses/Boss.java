@@ -7,11 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
 public class Boss extends SpriteAnimation {
 
     protected PlayerHandler playerHandler;
@@ -186,6 +182,14 @@ public class Boss extends SpriteAnimation {
 
     protected float minmax(float f, float max) {
         return Math.min(Math.max(f, -max), max);
+    }
+
+    public boolean isDecider() {
+        return decider;
+    }
+
+    public void setDecider(boolean decider) {
+        this.decider = decider;
     }
 
     public enum Part {

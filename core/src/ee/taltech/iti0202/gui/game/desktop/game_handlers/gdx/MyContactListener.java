@@ -1,13 +1,11 @@
 package ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx;
 
 import com.badlogic.gdx.physics.box2d.*;
-import lombok.Data;
 
 import java.util.HashMap;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS;
 
-@Data
 public class MyContactListener implements ContactListener {
 
     private boolean playerOnGround = false;
@@ -182,5 +180,57 @@ public class MyContactListener implements ContactListener {
         initSpawn = false;
         newCheckpoint = false;
         curCheckpoint = new_vec;
+    }
+
+    public boolean isPlayerOnGround() {
+        return playerOnGround;
+    }
+
+    public int getWallJump() {
+        return wallJump;
+    }
+
+    public boolean isDash() {
+        return dash;
+    }
+
+    public void setWallJump(int wallJump) {
+        this.wallJump = wallJump;
+    }
+
+    public boolean isDoubleJump() {
+        return doubleJump;
+    }
+
+    public void setDash(boolean dash) {
+        this.dash = dash;
+    }
+
+    public void setDeathState(short deathState) {
+        this.deathState = deathState;
+    }
+
+    public void setDoubleJump(boolean doubleJump) {
+        this.doubleJump = doubleJump;
+    }
+
+    public short getDeathState() {
+        return deathState;
+    }
+
+    public boolean isEnd() {
+        return end;
+    }
+
+    public boolean isNewCheckpoint() {
+        return newCheckpoint;
+    }
+
+    public HashMap<Body, Body> getCollidedBullets() {
+        return collidedBullets;
+    }
+
+    public boolean isInitSpawn() {
+        return initSpawn;
     }
 }

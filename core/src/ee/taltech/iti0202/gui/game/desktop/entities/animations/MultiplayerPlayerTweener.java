@@ -5,7 +5,6 @@ import com.brashmonkey.spriter.PlayerTweener;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.Stack;
 
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;

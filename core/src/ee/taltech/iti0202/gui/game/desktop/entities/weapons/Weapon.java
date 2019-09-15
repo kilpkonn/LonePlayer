@@ -5,21 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 
-import java.io.Serializable;
-
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.SpriteAnimation;
-import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.MultiplayerAnimation;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.loader.BulletLoader;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.scene.canvas.Draw;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
 public abstract class Weapon extends SpriteAnimation {
 
     protected World world;

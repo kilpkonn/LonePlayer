@@ -5,7 +5,6 @@ import com.brashmonkey.spriter.Mainline.Key.BoneRef;
 import com.brashmonkey.spriter.Mainline.Key.ObjectRef;
 import com.brashmonkey.spriter.Timeline.Key.Bone;
 import com.brashmonkey.spriter.Timeline.Key.Object;
-import lombok.Data;
 
 import java.util.HashMap;
 
@@ -16,9 +15,7 @@ import java.util.HashMap;
  *
  * @author Trixt0r
  */
-@Data
 public class Animation {
-
     public final Mainline mainline;
     public final int id, length;
     public final String name;

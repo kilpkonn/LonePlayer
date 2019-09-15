@@ -5,9 +5,7 @@ import com.badlogic.gdx.utils.Array;
 import ee.taltech.iti0202.gui.game.desktop.entities.Handler;
 import ee.taltech.iti0202.gui.game.desktop.entities.projectile.bullet.Bullet;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
-import lombok.Data;
 
-@Data
 public class BulletHandler implements Handler {
     private Array<Bullet> bulletArray = new Array<>();
     private MyContactListener cl;
@@ -38,5 +36,9 @@ public class BulletHandler implements Handler {
         for (Bullet bullet : bulletArray) {
             bullet.render(spriteBatch);
         }
+    }
+
+    public Array<Bullet> getBulletArray() {
+        return bulletArray;
     }
 }

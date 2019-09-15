@@ -9,9 +9,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic.HydraLo
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic.SnowManLogic;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.logic.WormLogic;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
-import lombok.Data;
 
-@Data
 public class BossHander implements Handler {
 
     private MyContactListener cl;
@@ -45,5 +43,13 @@ public class BossHander implements Handler {
         for (BossLogic logic : LogicHandlers) {
             logic.render(spriteBatch);
         }
+    }
+
+    public Array<BossLogic> getLogicHandlers() {
+        return LogicHandlers;
+    }
+
+    public MyContactListener getCl() {
+        return cl;
     }
 }

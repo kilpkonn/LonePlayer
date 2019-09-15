@@ -5,11 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
-@Data
 public class HydraLogic extends BossLogic {
     private int takingTurnsBase = 10; // how long one boss attacks
     private int currentlyActiveBoss = 0;
@@ -24,7 +20,7 @@ public class HydraLogic extends BossLogic {
         totalHealth = health;
         speed = 2;
         System.out.println(totalHealth);
-        setPlantBossSize(bossArray.size);
+        PlantBossSize = bossArray.size;
     }
 
     @Override
@@ -44,9 +40,9 @@ public class HydraLogic extends BossLogic {
         super.updateHP(dt);
         if (health / totalHealth <= 0.50) {
             if (health / totalHealth > 0.10) {
-                setSpeed(3);
+                speed = 3;
             } else if (health / totalHealth > 0) {
-                setSpeed(4);
+                speed = 4;
             } else {
                 updateDeath(dt);
             }

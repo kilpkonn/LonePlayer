@@ -9,13 +9,11 @@ import com.brashmonkey.spriter.LibGdx.LibGdxDrawer;
 import com.brashmonkey.spriter.LibGdx.LibGdxLoader;
 import com.brashmonkey.spriter.Timeline;
 import ee.taltech.iti0202.gui.game.desktop.entities.animations.loader.AnimationLoader;
-import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PPM;
 
-@AllArgsConstructor
 public class SpriteAnimation {
 
     protected Body body;

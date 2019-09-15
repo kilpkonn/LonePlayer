@@ -7,9 +7,7 @@ import ee.taltech.iti0202.gui.game.desktop.entities.checkpoints.Checkpoint;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.sound.Sound;
-import lombok.Data;
 
-@Data
 public class CheckpointHandler implements Handler {
     private Array<Checkpoint> checkpointList = new Array<>();
 
@@ -77,5 +75,9 @@ public class CheckpointHandler implements Handler {
             for (Checkpoint checkpoint : checkpointList) {
                 checkpoint.render(spriteBatch);
             }
+    }
+
+    public Array<Checkpoint> getCheckpointList() {
+        return checkpointList;
     }
 }

@@ -8,22 +8,24 @@ import com.badlogic.gdx.utils.Array;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.handler.BossHander;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.joints.BossHelper;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.plantworm.PlantWormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowMan;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.snowman.SnowManProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.MagmaWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.MagmaWormBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.SnowWorm;
+import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.SnowWormBuilder;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.worm.WormProperties;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.BodyEditorLoader;
 import ee.taltech.iti0202.gui.game.desktop.states.gameprogress.BossData;
-import lombok.Data;
 
 import java.util.List;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
 
-@Data
 public class BossLoader {
 
     private SpriteBatch spriteBatch;
@@ -161,14 +163,14 @@ public class BossLoader {
                 body.createFixture(alias.getFdef());
                 bossLoader.attachFixture(body, "snowman", alias.getFdef(), 1f * size);
                 Boss boss =
-                        SnowMan.builder()
-                                .playerHandler(playerHandler)
-                                .body(body)
-                                .spriteBatch(spriteBatch)
-                                .type(type)
-                                .xOffset(0)
-                                .yOffset(0)
-                                .build();
+                        new SnowManBuilder()
+                                .setPlayerHandler(playerHandler)
+                                .setBody(body)
+                                .setSb(spriteBatch)
+                                .setType(type)
+                                .setX(0)
+                                .setY(0)
+                                .createSnowMan();
                 boss.getBody().setUserData(BOSS);
                 for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);
                 bossHander.addSnowMan(boss);
@@ -184,16 +186,16 @@ public class BossLoader {
         bossLoader.attachFixture(
                 body, part.toString(), alias.getFdef(), part.equals(PlantWorm.Part.BODY) ? 1f : 2f);
         Boss boss =
-                PlantWorm.builder()
-                        .playerHandler(playerHandler)
-                        .body(body)
-                        .spriteBatch(spriteBatch)
-                        .type(BOSS)
-                        .part(part)
-                        .xOffset(x)
-                        .yOffset(y)
-                        .time(0)
-                        .build();
+                new PlantWormBuilder()
+                        .setPlayerHandler(playerHandler)
+                        .setBody(body)
+                        .setSb(spriteBatch)
+                        .setType(BOSS)
+                        .setPart(part)
+                        .setX(x)
+                        .setY(y)
+                        .setTime(0)
+                        .createPlantWorm();
         for (Fixture fixture : boss.getBody().getFixtureList())
             fixture.setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
         boss.getBody().setUserData(part.equals(PlantWorm.Part.CLAW_HEAD) ? BOSS + BOSS : BOSS);
@@ -208,26 +210,26 @@ public class BossLoader {
         bossLoader.attachFixture(body, part.toString() + size, alias.getFdef(), size);
         Boss boss =
                 snowTheme
-                        ? SnowWorm.builder()
-                                .playerHandler(playerHandler)
-                                .body(body)
-                                .spriteBatch(spriteBatch)
-                                .type(BOSS)
-                                .part(part)
-                                .size(size)
-                                .xOffset(50 * size)
-                                .yOffset(50 * size)
-                                .build()
-                        : MagmaWorm.builder()
-                                .playerHandler(playerHandler)
-                                .body(body)
-                                .spriteBatch(spriteBatch)
-                                .type(BOSS)
-                                .part(part)
-                                .size(size)
-                                .xOffset(50 * size)
-                                .yOffset(50 * size)
-                                .build();
+                        ? new SnowWormBuilder()
+                                .setPlayerHandler(playerHandler)
+                                .setBody(body)
+                                .setSb(spriteBatch)
+                                .setType(BOSS)
+                                .setPart(part)
+                                .setSize(size)
+                                .setX(50 * size)
+                                .setY(50 * size)
+                                .createSnowWorm()
+                        : new MagmaWormBuilder()
+                                .setPlayerHandler(playerHandler)
+                                .setBody(body)
+                                .setSb(spriteBatch)
+                                .setType(BOSS)
+                                .setPart(part)
+                                .setSize(size)
+                                .setX(50 * size)
+                                .setY(50 * size)
+                                .createMagmaWorm();
         boss.setDecider(decider);
         boss.getBody().setUserData(BOSS);
         for (Fixture fixture : boss.getBody().getFixtureList()) fixture.setUserData(BOSS);

@@ -6,11 +6,9 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.utils.Array;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.MyContactListener;
-import lombok.Data;
 
 import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.BOSS_BASE_HP;
 
-@Data
 public abstract class BossLogic {
     protected Array<Array<Boss>> BossBossArray = new Array<>();
     protected Array<Boss> bossArray = new Array<>();
@@ -92,5 +90,13 @@ public abstract class BossLogic {
                 fixture.refilter();
             }
         }
+    }
+
+    public String getLogic() {
+        return logic;
+    }
+
+    public Array<Boss> getBossArray() {
+        return bossArray;
     }
 }

@@ -7,13 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import ee.taltech.iti0202.gui.game.desktop.entities.bosses.Boss;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.Player;
 import ee.taltech.iti0202.gui.game.desktop.entities.player.handler.PlayerHandler;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
-@Builder
-@Data
 public class PlantWorm extends Boss {
 
     private final float max_speed = 3;
