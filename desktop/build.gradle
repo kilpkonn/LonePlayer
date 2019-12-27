@@ -17,7 +17,12 @@ buildscript {
     }
 }
 
-task dist(type: Jar) {
+task copyAssets(type: Copy) {
+    from file("../android/assets")
+    into file("$buildDir/libs/assets")
+}
+
+task dist(type: Jar, dependsOn: copyAssets) {
     from files(sourceSets.main.output.classesDirs)
     from files(sourceSets.main.output.resourcesDir)
     from { configurations.compile.collect { zipTree(it) } }
