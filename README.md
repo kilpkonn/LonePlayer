@@ -6,10 +6,10 @@
 You find yourself on a prehistoric planet with nothing but your trusty M4 and Deagle.
 You have 2 choises, either die or die with putting out a fight.
 <p align="center">
-    <img src="./readme/menu.png" width="50%">
-    <img src="./readme/snow.png" width="50%">
-    <img src="./readme/desert.png" width="50%">
-    <img src="./readme/plains.png" width="50%">
+    <img src="./readme/menu.png" width="45%">
+    <img src="./readme/snow.png" width="45%">
+    <img src="./readme/desert.png" width="45%">
+    <img src="./readme/plains.png" width="45%">
 </p>
 
 ## Controls
