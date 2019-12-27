@@ -47,10 +47,8 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 public class Draw implements Handler {
 
     ////////////////////////////////////////////////////////////////////    Read and draw the map
-    // ////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////
 
-    // @ToString.Exclude
-    // private Play play;
     private PlayerHandler playerHandler;
     private BossHander bossHander;
     private CheckpointHandler checkpointHandler;
@@ -75,7 +73,6 @@ public class Draw implements Handler {
     private float currentMenuFade;
 
     public Draw(SpriteBatch sb, World world, String act, String map) {
-        // this.play = play;
         this.spriteBatch = sb;
         this.bdef = new BodyDef();
         this.fdef = new FixtureDef();
@@ -458,12 +455,6 @@ public class Draw implements Handler {
 
     public void renderFade() {
         if (currentMenuFade > 0) {
-            /*renderer.getBatch().setColor(0, 0, 0, 1);
-            if (background != null) renderer.renderTileLayer(background);
-            if (foreground != null) renderer.renderTileLayer(foreground);
-            if (dimension_1 != null) renderer.renderTileLayer(dimension_1);
-            if (dimension_2 != null) renderer.renderTileLayer(dimension_2);
-            renderer.getBatch().setColor(1, 1, 1, 1 - currentMenuFade);*/
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
