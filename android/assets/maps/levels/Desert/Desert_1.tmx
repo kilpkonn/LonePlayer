@@ -13,7 +13,6 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="41" source="../../tilesets/gamerart2d-plains.tsx"/>
  <objectgroup id="12" name="barrier">
   <object id="109" x="16256" y="0" width="128" height="4096"/>
   <object id="110" x="0" y="3968" width="16384" height="128"/>
