@@ -144,8 +144,7 @@ public class ServerLogic implements Disposable {
             player.flippedAnimation = bodyData.flippedAnimation;
 
             for (int i = 0; i < player.weapons.length; i++) {
-                if (bodyData.weapons[i] != null)
-                    player.weapons[i] = bodyData.weapons[i].id;
+                player.weapons[i] = bodyData.weapons[i] != null ? bodyData.weapons[i].id : -1;
             }
             player.currentWeaponIndex = (short) bodyData.currentWeaponIndex;
             player.isAiming = bodyData.isAiming;

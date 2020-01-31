@@ -131,7 +131,7 @@ public class GameWorld implements Disposable {
         if (playerBodies.containsKey(id)) {
             for (WeaponBody.WeaponBodyData weapon : players.get(id).weapons) {
                 if (weapon != null)
-                weapon.dropped = true;
+                    weapon.dropped = true;
             }
             players.get(id).weapons = new WeaponBody.WeaponBodyData[3];
             world.destroyBody(playerBodies.get(id));

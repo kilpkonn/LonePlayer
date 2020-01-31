@@ -168,7 +168,8 @@ public class WorldRenderer implements Handler {
             p.setFlipX(player.flippedAnimation);
             Weapon[] weapons = new Weapon[3];
             for (int i = 0; i < weapons.length; i++) {
-                weapons[i] = this.weapons.get(player.weapons[i]);
+                if (player.weapons[i] >= 0)
+                    weapons[i] = this.weapons.get(player.weapons[i]);
             }
             p.setWeapons(weapons);
             p.setCurrentWeapon(player.currentWeaponIndex);
