@@ -15,10 +15,6 @@ import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVar
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
-        if (JAR) {
-            B2DVars.PATH = "assets/";
-        }
-
         final LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
 
         Settings settings = new Settings().load(PATH + "settings/settings.json");

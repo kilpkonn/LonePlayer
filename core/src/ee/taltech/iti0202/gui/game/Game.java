@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.Content;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.GameStateManager;
 import ee.taltech.iti0202.gui.game.desktop.game_handlers.gdx.input.MyInput;
@@ -45,30 +46,30 @@ public class Game extends ApplicationAdapter {
     public void create() {
 
         // set up relative paths for devices
-        if (!JAR) {
-            switch (Gdx.app.getType()) {
-                case Android:
-                    // android specific code
-                    B2DVars.SCALE = 2;
-                    B2DVars.PATH = "";
-                    B2DVars.V_WIDTH = Gdx.graphics.getWidth() / 2;
-                    B2DVars.V_HEIGHT = Gdx.graphics.getHeight() / 2;
-                    break;
-                case Desktop:
-                    // desktop specific code
-                    B2DVars.PATH = "android/assets/";
+        // if (!JAR) {
+        switch (Gdx.app.getType()) {
+            case Android:
+                // android specific code
+                B2DVars.SCALE = 2;
+                B2DVars.PATH = "";
+                B2DVars.V_WIDTH = Gdx.graphics.getWidth() / 2;
+                B2DVars.V_HEIGHT = Gdx.graphics.getHeight() / 2;
+                break;
+            case Desktop:
+                // desktop specific code
+                // B2DVars.PATH = "android/assets/";
 
-                    break;
-                case HeadlessDesktop:
-                    break;
-                case Applet:
-                    break;
-                case WebGL:
-                    break;
-                case iOS:
-                    break;
-            }
+                break;
+            case HeadlessDesktop:
+                break;
+            case Applet:
+                break;
+            case WebGL:
+                break;
+            case iOS:
+                break;
         }
+        //}
 
         //B2DVars.PATH = "assets/";
 
@@ -164,11 +165,14 @@ public class Game extends ApplicationAdapter {
         }
     }
 
-    public void pause() {}
+    public void pause() {
+    }
 
-    public void resume() {}
+    public void resume() {
+    }
 
-    public void setForegroundFPS(int value) {}
+    public void setForegroundFPS(int value) {
+    }
 
     public Music getSound() {
         return sound;
