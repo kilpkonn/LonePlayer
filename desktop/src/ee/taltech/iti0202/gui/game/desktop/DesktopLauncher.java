@@ -3,15 +3,19 @@ package ee.taltech.iti0202.gui.game.desktop;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars;
-import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.*;
+import ee.taltech.iti0202.gui.game.Game;
+import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
+
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.DEBUG;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.PATH;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.SCALE;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_HEIGHT;
+import static ee.taltech.iti0202.gui.game.desktop.game_handlers.variables.B2DVars.V_WIDTH;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {

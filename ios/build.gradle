@@ -1,10 +1,10 @@
 sourceSets.main.java.srcDirs = ["src/"]
 
-sourceCompatibility = '1.7'
+sourceCompatibility = '1.8'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-    mainClassName = "ee.taltech.iti0202.gui.IOSLauncher"
+    mainClassName = 'ee.taltech.iti0202.gui.IOSLauncher'
 }
 
 launchIPhoneSimulator.dependsOn build

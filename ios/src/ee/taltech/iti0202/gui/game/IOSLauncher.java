@@ -1,11 +1,13 @@
-package ee.taltech.iti0202.gui;
+package ee.taltech.iti0202.gui.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplication;
 import com.badlogic.gdx.backends.iosrobovm.IOSApplicationConfiguration;
-import ee.taltech.iti0202.gui.game.Game;
-import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
+
 import org.robovm.apple.foundation.NSAutoreleasePool;
 import org.robovm.apple.uikit.UIApplication;
+
+import ee.taltech.iti0202.gui.game.desktop.settings.Settings;
 
 public class IOSLauncher extends IOSApplication.Delegate {
     public static void main(String[] argv) {
