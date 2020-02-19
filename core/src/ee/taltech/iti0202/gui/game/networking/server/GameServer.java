@@ -48,11 +48,12 @@ public class GameServer implements Disposable {
         SerializableClassesHandler.registerClasses(server.getKryo());
 
         try {
-            URL url_name = new URL("http://bot.whatismyipaddress.com");
+           /* URL url_name = new URL("http://bot.whatismyipaddress.com");
 
             BufferedReader sc =
-                    new BufferedReader(new InputStreamReader(url_name.openStream()));
-            String address = sc.readLine().trim();  //
+                    new BufferedReader(new InputStreamReader(url_name.openStream()));*/
+
+            String address; // = sc.readLine().trim();  //
             address =  InetAddress.getLocalHost().getHostAddress();
             server.bind(tcpPort, udpPort);
             //server.setPortAndIp(port, "192.168.0.254"); //address);  //TODO: Fix connecting issues via public ip
@@ -60,8 +61,6 @@ public class GameServer implements Disposable {
         } catch (UnknownHostException e) {
             System.out.println(e.getMessage());
             //TODO: Some actual error handling
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
