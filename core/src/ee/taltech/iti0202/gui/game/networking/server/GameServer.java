@@ -53,7 +53,7 @@ public class GameServer implements Disposable {
             BufferedReader sc =
                     new BufferedReader(new InputStreamReader(url_name.openStream()));*/
 
-            String address; // = sc.readLine().trim();  //
+            String address; // = sc.readLine().trim();
             address =  InetAddress.getLocalHost().getHostAddress();
             server.bind(tcpPort, udpPort);
             //server.setPortAndIp(port, "192.168.0.254"); //address);  //TODO: Fix connecting issues via public ip

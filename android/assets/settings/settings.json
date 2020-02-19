@@ -7,9 +7,10 @@
   "next_weapon": 33,
   "previous_weapon": 45,
   "escape_button": 131,
+  "tab": 61,
   "enable_dev_maps": false,
-  "show_fps": false,
+  "show_fps": true,
   "max_fps": 300,
-  "enable_vsync": true,
+  "enable_vsync": false,
   "name": ""
 }
