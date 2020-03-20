@@ -25,17 +25,19 @@ task copyAssets(type: Copy) {
     into file("$buildDir/libs/assets")
 }
 
-task dist(type: Jar, dependsOn: copyAssets) {
-    from files(sourceSets.main.output.classesDirs)
-    from files(sourceSets.main.output.resourcesDir)
-    from { configurations.compile.collect { zipTree(it) } }
-
+task dist(type: Jar) {
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
+    dependsOn configurations.runtimeClasspath
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    with jar
 }
 
 dist.dependsOn classes
+dist.dependsOn copyAssets
 
 task javaPackager(type: Exec, dependsOn: dist) {
     workingDir project.projectDir
